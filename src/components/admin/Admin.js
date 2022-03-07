@@ -1,16 +1,16 @@
 import React from 'react'
 import Layout from "../layout/Layout";
 
-export const ListApprenant = () => {
+export const Admin = () => {
     return(
         <Layout>
             <div>
                 <h3>
-                    Je suis un apprenant...
+                    Je suis un admin...
                 </h3>
             </div>
         </Layout>
     )
 }
 
-export default ListApprenant;
+export default Admin;
