@@ -5,14 +5,22 @@ import logo from "../../assets/images/logoODC.png";
 import { InputAdornment, OutlinedInput, Stack, IconButton, Button } from '@mui/material';
 import { PersonOutline, VisibilityOff } from '@material-ui/icons';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import React from 'react';
+import React, { useState } from 'react';
+import AuthService from '../../core/service/AuthService';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 
-const Login = () => {
+const Login = (props) => {
+
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   const [values, setValues] = React.useState({
     showPassword: false,
   });
+
+  const [ open, setOpen] = React.useState(false);
 
   const handleClickShowPassword = () => {
     setValues({
@@ -20,6 +28,26 @@ const Login = () => {
       showPassword: !values.showPassword,
     });
   };
+
+  const handleUsernameChange = (event) => {
+    setUsername(event.target.value);
+  }
+  const handlePasswordChange = (event) => {
+      setPassword(event.target.value);
+  }
+
+
+  const handleLogin = (event) => {
+    event.preventDefault();
+    setOpen(true);
+    AuthService.login(username, password).then(
+    (res) => {
+      props.history.push("/visites");
+    }
+    ).catch((e)=>{
+      console.log("Login ou Mot de Passe Incorrecte!!!")
+    });
+}
 
   const classes = LoginStyle();
 
@@ -61,6 +89,8 @@ const Login = () => {
                       <PersonOutline></PersonOutline>
                     </InputAdornment>}
 
+                  onChange={handleUsernameChange}
+
                 />
               </FormControl>
 
@@ -84,6 +114,7 @@ const Login = () => {
                       </IconButton>
                     </InputAdornment>
                   }
+                  onChange={handlePasswordChange}
                 >
 
                 </OutlinedInput>
@@ -102,7 +133,7 @@ const Login = () => {
               </div>
 
               {/* Se connecter */}
-              <Button style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained">Se connecter</Button>
+              <Button style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}>Se connecter</Button>
             </Stack>
 
           </Box>
@@ -110,6 +141,12 @@ const Login = () => {
         <Box style={{ zIndex: 1 }} className={classes.pageGreen}>
 
         </Box>
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={open}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
 
       </Grid>
 
