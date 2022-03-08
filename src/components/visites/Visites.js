@@ -151,37 +151,38 @@ export const Visites = () => {
             field: 'id',
             headerClassName: 'super-app-theme--header'
             ,
-            headerName: 'ID'
+            headerName: 'ID',
+            flex: 1
         },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
-            width: 320
+            flex: 1
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
-            width: 220
+            flex: 1
         },
         {
             field: 'cni',
             headerClassName: 'super-app-theme--header',
             headerName: 'Cni',
-            width: 220
+            flex: 1
         },
         {
             field: 'dateEntree',
             headerClassName: 'super-app-theme--header',
             headerName: 'Entree',
-            width: 175
+            flex: 1
         },
         {
             field: 'dateSortie',
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
-            width: 175
+            flex: 1,
         },
 
     ]
