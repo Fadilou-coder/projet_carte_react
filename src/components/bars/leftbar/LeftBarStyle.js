@@ -9,18 +9,20 @@ export const LeftBarStyle = makeStyles(theme => ({
     },
     drawerPaper: {
         width: "240px",
+        display: "flex",
+        alignItems: "center",
         backgroundColor: themeGeneral.palette.primary.white,
         color: themeGeneral.palette.primary.white,
     },
     logoDiv: {
-        borderBottom: '1px solid #004d40',
-        padding: theme.spacing(4),
+        borderBottom: '1px solid #138A8A',
+        padding: "45px 5px 30px 5px",
         "& .MuiAvatar-img": {
             color: 'transparent',
             width: "100%",
             height: "100%",
-            display:"flex",
-            
+            display: "flex",
+
             /* object-fit: cover; */
             textAlign: 'center',
             textIndent: '10000px',
@@ -28,28 +30,32 @@ export const LeftBarStyle = makeStyles(theme => ({
         }
     },
     logoStyle: {
-        width: theme.spacing(16),
+        width: "100%",
         height: theme.spacing(10)
     },
     active: {
-        backgroundColor: themeGeneral.palette.primary.main,
-        borderBottom: '1px solid #004d40',
+        backgroundColor: "#D3FFFF",
+        borderBottom: '1px solid #138A8A',
+        borderRight: '1px solid #138A8A',
+        borderLeft: '1px solid #138A8A',
+
+
         "& .MuiTypography-displayBlock ": {
             display: 'block',
             fontSize: "20px",
-            color: "#ffb300"
-        }
-    },
+            color: "#138A8A"
+        },    }
+    ,
     notActive: {
-        borderBottom: '1px solid #004d40',
+        borderBottom: '1px solid #138A8A',
         "& .MuiTypography-displayBlock ": {
             display: 'block',
             fontSize: "20px",
-            color: "#ffb300"
+            color: "#696969"
         }
     },
     linkIcon: {
-        color: '#ffb300'
+        color: '#138A8A'
     }
 
 }))
