@@ -8,6 +8,7 @@ import Login from './components/login1/Login';
 import Navbar from './components/navbar/Navbar';
 import AddStructure from './components/structure/AddStructure';
 import AddAdmin from './components/admin/AddAdmin';
+import AddApprenant from './components/apprenant/AddApprenant';
 
 
 
@@ -26,6 +27,7 @@ function App() {
                   <Route path="/navbar" component={Navbar} />
                   <Route path="/admin" component={AddAdmin} />
                   <Route path="/addstructures" component={AddStructure} />
+                  <Route path="/apprenant" component={AddApprenant} />
               </Switch>
             {/*</Layout>*/}
         </Router>

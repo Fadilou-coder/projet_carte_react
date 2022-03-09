@@ -1,7 +1,5 @@
 import React from "react";
 import { Grid } from "@material-ui/core";
-import Paper from '@mui/material/Paper';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import AdminStyle from "./AdminStyle";
 import { FormControl, Typography } from "@material-ui/core";
@@ -15,11 +13,6 @@ function AddAdmin() {
     
     const [structure, setStructure] = React.useState('');
    
-    const Item = styled(Paper)(({ theme }) => ({
-        ...theme.typography.body2,
-        padding: theme.spacing(1),
-        color: theme.palette.text.secondary,
-      }));
     
       const handleChange = (event) => {
     setStructure(event.target.value);

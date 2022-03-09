@@ -1,7 +1,7 @@
 import {makeStyles} from "@material-ui/core";
 import themeGeneral from '../theme'
 
-const AdminStyle =makeStyles((theme) => ({
+const ApprenantStyle =makeStyles((theme) => ({
 
    
    
@@ -104,4 +104,4 @@ const AdminStyle =makeStyles((theme) => ({
     }
 }));
 
-export default AdminStyle;
+export default ApprenantStyle;

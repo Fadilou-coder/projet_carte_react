@@ -2,7 +2,7 @@ import React from 'react';
 import {AppBar, Toolbar, IconButton, Avatar} from "@material-ui/core";
 import {TopbarStyle} from "./TopbarStyle";
 import MenuIcon from '@material-ui/icons/Menu'
-import styled from "styled-components";
+import { styled } from '@mui/material/styles';
 import {Typography} from "@mui/material";
 
 const Topbar = ({funcSetIsMobile}) => {
