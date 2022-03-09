@@ -27,7 +27,10 @@ export const TopbarStyle = makeStyles(theme => ({
         },
     },
     avatar: {
-        marginLeft: "93%",
+        marginLeft: "62%",
         color: themeGeneral.palette.primary.white,
+        [theme.breakpoints.up('sm')] : {
+            marginLeft: '84%',
+        },
     }
 }))

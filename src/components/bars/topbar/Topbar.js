@@ -2,8 +2,6 @@ import React from 'react';
 import {AppBar, Toolbar, IconButton, Avatar} from "@material-ui/core";
 import {TopbarStyle} from "./TopbarStyle";
 import MenuIcon from '@material-ui/icons/Menu'
-import logoSonatel from "../../../assets/images/logoSonatel.png"
-import navLogo from "../../../assets/images/navLogo.jpeg"
 import styled from "styled-components";
 import {Typography} from "@mui/material";
 
@@ -29,11 +27,6 @@ const Topbar = ({funcSetIsMobile}) => {
                        className={classes.topbarContent}>
                        <MenuIcon/>
                    </IconButton>
-                    <div className={classes.topbarContent}>
-                        <Avatar variant="square" alt="Sonatel Academy"
-                        src={logoSonatel} className={classes.topbarLogo}
-                        />
-                    </div>
                     <div className={classes.avatar}>
                         <AvatarContainer>
                             <AvatarLabel>
@@ -45,16 +38,6 @@ const Topbar = ({funcSetIsMobile}) => {
                                 <Typography variant="body2">Baye Niass</Typography>
                             </AvatarLabel>
                         </AvatarContainer>
-                       {/* <Avatar
-                            sx={{
-                                height: 50,
-                                width: 50,
-                                ml: 1,
-                            }}
-                            src={navLogo}
-                        >
-                             <UserCircleIcon fontSize="small" />
-                        </Avatar>*/}
                     </div>
                 </Toolbar>
             </AppBar>
