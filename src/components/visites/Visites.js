@@ -14,10 +14,25 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { useDemoData } from "@mui/x-data-grid-generator";
+// import { useDemoData } from "@mui/x-data-grid-generator";
 
 export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("apprenant");
+
+    // Custom tOOLBAR dATAGRID
+    // function CustomToolbar() {
+    //     return (
+    //         <GridToolbarContainer>
+    //             <GridToolbarExport printOptions={{
+    //                 hideFooter: true,
+    //                 hideToolbar: true,
+                    
+    //             }}
+    //             />
+    //         </GridToolbarContainer>
+    //     );
+    // }
+
 
     // Date du jour 
     const [value, setValue] = React.useState(new Date());
@@ -151,6 +166,7 @@ export const Visites = () => {
             field: 'id',
             headerClassName: 'super-app-theme--header'
             ,
+            align: 'center',
             headerName: 'ID',
             flex: 1
         },
@@ -287,12 +303,14 @@ export const Visites = () => {
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
-                            backgroundColor: '#44C3CF',
+                            backgroundColor: '#44C3CF'
                         },
                     }} className={classes.tableau}>
 
                         <div style={{ width: "100%" }}>
-                            <h1> Liste du {value.toLocaleString("fr-FR").split(',')[0]}</h1>
+                            {/* <h3 style={{ color:"#44C3CF" }}> Liste du {value.toLocaleString("fr-FR").split(',')[0]}</h3> */}
+                            <h2 style={{ color: "#44C3CF" }}> Liste du {value.toDateString()}</h2>
+
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
@@ -302,9 +320,12 @@ export const Visites = () => {
                                 rowsPerPageOptions={[5, 10, 20]}
                                 components={{
                                     Pagination: CustomPagination,
+                                    // Toolbar: CustomToolbar,
                                 }}
                                 rows={data}
                                 columns={columns}
+                                
+                                disableVirtualization
                             />
                         </div>
 
