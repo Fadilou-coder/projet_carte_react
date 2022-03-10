@@ -7,6 +7,7 @@ import { OutlinedInput, Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import {makeStyles} from "@material-ui/core";
+import Layout from "../layout/Layout";
 
 
 function AddAdmin() {
@@ -33,13 +34,14 @@ function AddAdmin() {
 
     return(
         <React.Fragment>
+            <Layout>
              <Box>
                 <Grid container spacing={2} >
                     <Grid item xs={12} sm={12} md={12}>
-                        <Typography  variant="h4" className={classes.textTypo}>
-                                        Ajouter un admin               
+                        <Typography  variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
+                                        AJOUTER UN ADMIN              
                         </Typography>
-                        <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left" }} />
+                        <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
                             <Grid  container className={classes.subContainer}>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
@@ -139,11 +141,20 @@ function AddAdmin() {
                                         <Grid xs={12} sm={12} md={4}  item className={styles.gridStyle}>
                                         </Grid>
                                     </Grid>
-                                    <Button variant="contained" style={{backgroundColor: "#05888A", fontFamily: "Arial", fontSize: "20px", marginTop: "10px"}}>AJOUTER</Button>
+                                    <Button variant="contained" sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", fontSize: "20px", 
+                                                    marginTop: "10px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
+                                            >AJOUTER</Button>
                                 </Grid>
                             </Grid>                            
                 </Grid>
             </Box>
+            </Layout>
         </React.Fragment>
     )
 

@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@date-io/date-fns": "^2.13.1",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@material-ui/icons": "^4.11.2",
@@ -10,6 +11,8 @@
     "@mui/lab": "5.0.0-alpha.45",
     "@mui/material": "^5.4.4",
     "@mui/styles": "^5.4.4",
+    "@mui/x-data-grid": "^5.6.0",
+    "@mui/x-data-grid-generator": "^5.6.0",
     "@react-pdf-viewer/core": "2.4.1",
     "@react-pdf-viewer/default-layout": "^2.10.1",
     "@reduxjs/toolkit": "^1.6.2",

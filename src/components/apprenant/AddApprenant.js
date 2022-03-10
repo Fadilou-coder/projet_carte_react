@@ -15,6 +15,7 @@ import Stack from '@mui/material/Stack';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Avatar from '@mui/material/Avatar';
 import imgAvatar from '../../assets/images/avatar.jpg';
+import Layout from "../layout/Layout";
 
 
 
@@ -65,13 +66,14 @@ function AddApprenant() {
 
     return(
         <React.Fragment>
+            <Layout>
              <Box>
                 <Grid container spacing={2} >
                     <Grid item xs={12} sm={12} md={12}>
-                        <Typography  variant="h4" className={classes.textTypo}>
-                                        Ajouter un apprenant               
+                        <Typography  variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
+                                        AJOUTER UN APPRENANT              
                         </Typography>
-                        <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left" }} />
+                        <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
                             <Grid  container className={classes.subContainer}>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
@@ -253,11 +255,20 @@ function AddApprenant() {
                                                 </Grid>
                                             </Grid>
 
-                                    <Button variant="contained" style={{backgroundColor: "#05888A", fontFamily: "Arial", fontSize: "20px", marginTop: "10px"}}>Enregistrer et Imprimer carte</Button>
+                                    <Button variant="contained" sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", fontSize: "20px", 
+                                                    marginTop: "10px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
+                                            >Enregistrer et Imprimer carte</Button>
                                 </Grid>
                             </Grid>                            
                 </Grid>
             </Box>
+            </Layout>
         </React.Fragment>
     )
 

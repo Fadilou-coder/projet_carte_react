@@ -16,6 +16,10 @@ const theme = createTheme({
             labelColor:"#756F86"
         }
     },
+
+    typography: {
+        fontFamily: 'Open Sans, Arial',
+      }
 });
 
 export default theme;

@@ -10,17 +10,13 @@ const ApprenantStyle =makeStyles((theme) => ({
         border: "2px solid #E5E5E5",
         backgroundColor: themeGeneral.palette.primary.white,
         borderRadius: "20px",
-        width:"80%",
-        paddingTop: "10px",
-        marginLeft: "3%",
+        width:"100%",
         boxShadow: "5px 5px 5px grey"
     },
     textTypo:{
-        fontWeight:"bold",
         fontFamily: "Arial",
         color: themeGeneral.palette.primary.black,
-        fontSize: "40px",
-        marginTop: "50px"
+        fontSize: "40px"
     },
     // gridStyle:{
     //     paddingLeft:"50px",

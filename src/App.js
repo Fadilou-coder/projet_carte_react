@@ -1,5 +1,7 @@
 import './App.css';
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+
+
 import Visites from "./components/visites/Visites";
 import ListApprenant from "./components/apprenant/ListApprenant";
 import Admin from "./components/admin/Admin";
@@ -18,6 +20,7 @@ function App() {
         <Router>
            {/* <Layout>*/}
               <Switch>
+
                   <Route exact path="/" component={Login}/>
                   <Route  path="/login" component={Login}/>
                   <Route  path="/visites" component={Visites}/>
@@ -25,9 +28,9 @@ function App() {
                   <Route  path="/liste_apprenants" component={ListApprenant}/>
                   <Route  path="/structures" component={Structure}/>
                   <Route path="/navbar" component={Navbar} />
-                  <Route path="/admin" component={AddAdmin} />
+                  <Route path="/add_admin" component={AddAdmin} />
                   <Route path="/addstructures" component={AddStructure} />
-                  <Route path="/apprenant" component={AddApprenant} />
+                  <Route path="/add_apprenant" component={AddApprenant} />
               </Switch>
             {/*</Layout>*/}
         </Router>
