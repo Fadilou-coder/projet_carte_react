@@ -1,4 +1,4 @@
-import { DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
+import { AddCircleOutlined, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
 import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
 
 import {
@@ -27,8 +27,12 @@ export const ListApprenant = () => {
 
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
 
-    const classes1 = ListApprenantStyle();
 
+
+
+
+
+    const classes1 = ListApprenantStyle();
 
     // Custom Pagination
     function CustomPagination() {
@@ -49,57 +53,83 @@ export const ListApprenant = () => {
             />
         );
     }
-
-
     // Tableau Row and Column qu'on a defini ici
 
     const data = [
         {
             id: 1,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'Fadilou',
+            prenom: 'SY',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'Pikine',
+            telephone: '77 777 77 77'
 
         },
         {
             id: 2,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'cbag',
+            prenom: 'cbag',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'Guediawaye',
+            telephone: '77 777 77 77'
         },
         {
             id: 3,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'FAYE',
+            prenom: 'Omar',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'THIES',
+            telephone: '77 777 77 77'
 
         },
         {
             id: 4,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'SYLLA',
+            prenom: 'Mamadou',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'Golf',
+            telephone: '77 777 77 77'
 
         },
         {
             id: 5,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'GUEYE',
+            prenom: 'Asna',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'Touba',
+            telephone: '77 777 77 77'
 
         },
         {
             id: 6,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'cbag',
+            prenom: 'cbag',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'Guediawaye',
+            telephone: '77 777 77 77'
 
         },
         {
             id: 7,
-            prenom: "Fadilou",
-            nom: "Sy",
-            numero_etudiant: "1234567"
+            nom: 'cbag',
+            prenom: 'cbag',
+            numero_etudiant: '20200354',
+            referentiel: 'Developpeur Web',
+            date_naiss: '02/02/2000',
+            adresse: 'Guediawaye',
+            telephone: '77 777 77 77'
         },
 
     ];
@@ -137,6 +167,10 @@ export const ListApprenant = () => {
 
     ]
 
+    // Show detail Apprenant
+    let [apprenant, setApprenant] = React.useState(
+        data[0]
+    );
 
     // Pour cocher les cases dont  la valeur blocked est egale à true
     //     const [selectionModel, setSelectionModel] = React.useState(() =>
@@ -155,12 +189,14 @@ export const ListApprenant = () => {
                 <Box style={{ width: "100%" }}>
                     {/* Gestion de l'entete de la liste des Reservations */}
 
-                    <Box sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
+                    <Box
+                        marginBottom={1}
+                        sx={{
+                            display: "flex",
+                            justifyContent: "space-between"
 
-                    }} spacing={2}
+
+                        }} spacing={2}
                     >
 
                         <Stack
@@ -168,7 +204,7 @@ export const ListApprenant = () => {
                             spacing={5}
                             justifyContent="center"
                             alignItems="center"
-                            marginBottom={4}
+
 
                         >
                             <div style={{
@@ -205,7 +241,15 @@ export const ListApprenant = () => {
                                 </Select>
                             </div>
                         </Stack>
-
+                        <Box textAlign="right" marginTop="20px">
+                            <Button
+                                variant="contained"
+                                sx={{ backgroundColor: "#138A8A", marginRight:"35px", fontWeight: "bolder" }}
+                                endIcon={<AddCircleOutlined />}
+                            >
+                                Ajouter
+                            </Button>
+                        </Box>
 
                     </Box>
 
@@ -232,7 +276,9 @@ export const ListApprenant = () => {
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
                                             //   alert(event.target.value.id)
-                                            console.log(params.row.id)
+                                            console.log(params.row)
+                                            setApprenant(params.row);
+
                                         }
                                     }}
 
@@ -275,23 +321,25 @@ export const ListApprenant = () => {
                                 <div className={classes1.infoUser}>
                                     <div style={{ width: "70%" }}>
                                         <Typography variant="h4" style={{ fontWeight: "bold" }}>
-                                            Ahmed BA
+                                            {/* Ahmed BA */}
+                                            {apprenant.nom} {apprenant.prenom}
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Numero d'etudiant: 20200354
+                                            Numero d'etudiant: {apprenant.numero_etudiant}
                                         </Typography>
 
                                         <Typography style={{ fontWeight: "normal" }}>
-                                            Réferentiel: Developpeur Web
+                                            Réferentiel: {apprenant.referentiel}
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Date et lieu de naissance: xx/xx/xxxx
+                                            Date et lieu de naissance: {apprenant.date_naiss}
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Adresse: xxxxxxxxxxxxxx
+                                            {/* Adresse: xxxxxxxxxxxxxx */}
+                                            Adresse:   {apprenant.adresse}
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Telephone: xxxxxxxxxxxxxx
+                                            Telephone: {apprenant.telephone}
                                         </Typography>
 
 
@@ -331,7 +379,7 @@ export const ListApprenant = () => {
                                             width: "30%",
                                             // height:"10vh",
                                             marginLeft: "00px",
-                                            textAlign:"center"
+                                            textAlign: "center"
 
                                         }}
                                     >
