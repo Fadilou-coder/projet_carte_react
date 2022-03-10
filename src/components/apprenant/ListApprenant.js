@@ -1,6 +1,6 @@
-import { AddCircleOutlined, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
+import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
 import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
-
+import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
     gridPageCountSelector,
@@ -244,7 +244,18 @@ export const ListApprenant = () => {
                         <Box textAlign="right" marginTop="20px">
                             <Button
                                 variant="contained"
-                                sx={{ backgroundColor: "#138A8A", marginRight:"35px", fontWeight: "bolder" }}
+                                style={{
+
+                                }}
+                                sx={{
+                                    backgroundColor: "#138A8A",
+                                    marginRight: "35px",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#F48322',
+                                        opacity: [0.9, 0.8, 0.7],
+                                    }
+                                }}
                                 endIcon={<AddCircleOutlined />}
                             >
                                 Ajouter
@@ -276,7 +287,7 @@ export const ListApprenant = () => {
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
                                             //   alert(event.target.value.id)
-                                            console.log(params.row)
+                                            console.log(event)
                                             setApprenant(params.row);
 
                                         }
@@ -322,24 +333,102 @@ export const ListApprenant = () => {
                                     <div style={{ width: "70%" }}>
                                         <Typography variant="h4" style={{ fontWeight: "bold" }}>
                                             {/* Ahmed BA */}
-                                            {apprenant.nom} {apprenant.prenom}
+                                            <Stack spacing={2} direction="row">
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.nom}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.prenom}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Numero d'etudiant: {apprenant.numero_etudiant}
+                                            <Stack direction="row" spacing={1} >
+                                                <div>
+                                                    Numero d'etudiant:
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.numero_etudiant}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
 
                                         <Typography style={{ fontWeight: "normal" }}>
-                                            Réferentiel: {apprenant.referentiel}
+                                            <Stack spacing={1} direction="row">
+                                                <div>Réferentiel:</div>
+                                                <EasyEdit
+                                                    type="select"
+                                                    options={[
+                                                        {label: 'Developpeur Web et Mobile', value: 'one'},
+                                                        {label: 'Data Scientist', value: 'two'},
+                                                        {label: 'Reference Digital', value: 'trois'}
+
+                                                    ]}
+                                                    value={apprenant.referentiel}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Date et lieu de naissance: {apprenant.date_naiss}
+
+                                            <Stack spacing={1} direction="row">
+                                                <div> Date de naissance:
+
+                                                </div>
+                                                <EasyEdit
+                                                    type="date"
+                                                    value={apprenant.date_naiss}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack> 
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
                                             {/* Adresse: xxxxxxxxxxxxxx */}
-                                            Adresse:   {apprenant.adresse}
+                                            <Stack spacing={1} direction="row">
+                                                <div> 
+                                                Adresse: 
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.adresse}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack> 
+                                              
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Telephone: {apprenant.telephone}
+                                        <Stack spacing={1} direction="row">
+                                                <div> 
+                                                Telephone:
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.telephone}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack> 
+                                             
                                         </Typography>
 
 
@@ -392,7 +481,15 @@ export const ListApprenant = () => {
                             <Box textAlign="right" marginTop="20px">
                                 <Button
                                     variant="contained"
-                                    sx={{ backgroundColor: "#138A8A", padding: "2vh 2vw", fontWeight: "bolder" }}
+                                    sx={{
+                                        backgroundColor: "#138A8A",
+                                        padding: "2vh 2vw",
+                                        fontWeight: "bolder",
+                                        '&:hover': {
+                                            backgroundColor: '#F48322',
+                                            opacity: [0.9, 0.8, 0.7],
+                                        }
+                                    }}
                                     endIcon={<DocumentScannerOutlined />}
                                 >
                                     Impression
