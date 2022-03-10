@@ -1,6 +1,5 @@
 import {makeStyles} from "@material-ui/core";
 import themeGeneral from "../../theme";
-import vectorNavBar from '../../../assets/images/vectorNavBar.jpeg'
 
 export const TopbarStyle = makeStyles(theme => ({
     topbar: {
@@ -8,7 +7,10 @@ export const TopbarStyle = makeStyles(theme => ({
             marginLeft: '200px',
         },
        /* backgroundColor: themeGeneral.palette.primary.black,*/
-        backgroundImage:`url(${vectorNavBar})`,
+        // backgroundImage:`url(${vectorNavBar})`,
+        backgroundColor:themeGeneral.palette.primary.light,
+        boxShadow:"none !important",
+        color:'black',
         backgroundRepeat: "no-repeat",
         backgroundSize:"cover",
         top: 0,
@@ -27,10 +29,20 @@ export const TopbarStyle = makeStyles(theme => ({
         },
     },
     avatar: {
-        marginLeft: "62%",
+        // marginLeft: "62%",
         color: themeGeneral.palette.primary.white,
         [theme.breakpoints.up('sm')] : {
-            marginLeft: '84%',
+            // marginLeft: '84%',
         },
-    }
+    },
+    mysearch: {
+        width : "1000vw",
+        [theme.breakpoints.down('xs')] : {
+            display:"none",
+        },
+        
+    },
+
+
+   
 }))

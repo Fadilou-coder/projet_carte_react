@@ -1,53 +1,61 @@
-import {makeStyles} from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import themeGeneral from '../../theme'
 
 export const LeftBarStyle = makeStyles(theme => ({
     drawer: {
-        [theme.breakpoints.up('sm')] : {
-            width: "200px"
+        [theme.breakpoints.up('sm')]: {
+            width: "240px"
         }
     },
     drawerPaper: {
-        width: "200px",
+        width: "240px",
+        display: "flex",
+        alignItems: "center",
         backgroundColor: themeGeneral.palette.primary.white,
         color: themeGeneral.palette.primary.white,
     },
     logoDiv: {
-      borderBottom: '1px solid #004d40',
-        padding: theme.spacing(4),
+        borderBottom: '1px solid #138A8A',
+        padding: "45px 5px 30px 5px",
         "& .MuiAvatar-img": {
-    color: 'transparent',
-    width: "100%",
-    height: "100%",
-    /* object-fit: cover; */
-    textAlign: 'center',
-    textIndent: '10000px',
-    objectFit: 'fill',
-}
+            color: 'transparent',
+            width: "100%",
+            height: "100%",
+            display: "flex",
+
+            /* object-fit: cover; */
+            textAlign: 'center',
+            textIndent: '10000px',
+            objectFit: 'fill',
+        }
     },
     logoStyle: {
-        width: theme.spacing(16),
+        width: "100%",
         height: theme.spacing(10)
     },
-    active : {
-        backgroundColor: themeGeneral.palette.primary.main,
-        borderBottom: '1px solid #004d40',
+    active: {
+        backgroundColor: "#D3FFFF",
+        borderBottom: '1px solid #138A8A',
+        borderRight: '1px solid #138A8A',
+        borderLeft: '1px solid #138A8A',
+
+
         "& .MuiTypography-displayBlock ": {
             display: 'block',
             fontSize: "20px",
-            color: "#ffb300"
+            color: "#138A8A"
+        },    }
+    ,
+    notActive: {
+        borderBottom: '1px solid #138A8A',
+        "& .MuiTypography-displayBlock ": {
+            display: 'block',
+            fontSize: "20px",
+            color: "#696969"
         }
     },
-    notActive: {
-        borderBottom: '1px solid #004d40',
-        "& .MuiTypography-displayBlock ": {
-        display: 'block',
-        fontSize: "20px",
-        color: "#ffb300"
-}
-    },
-    linkIcon : {
-        color: '#ffb300'
+    linkIcon: {
+        color: '#138A8A'
     }
 
 }))
