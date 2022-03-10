@@ -12,15 +12,15 @@ import React from 'react'
 import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ListApprenantStyle";
-
 import pp from "../../assets/images/ppuser.png";
 import odc from "../../assets/images/odc.jpeg";
-import codeqr from "../../assets/images/qrcode.png";
+import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
 
 import { Typography } from '@material-ui/core';
 
+var QRCode = require('qrcode.react');
 
 export const ListApprenant = () => {
 
@@ -71,7 +71,7 @@ export const ListApprenant = () => {
             id: 2,
             nom: 'cbag',
             prenom: 'cbag',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200355',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Guediawaye',
@@ -81,7 +81,7 @@ export const ListApprenant = () => {
             id: 3,
             nom: 'FAYE',
             prenom: 'Omar',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200356',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'THIES',
@@ -92,7 +92,7 @@ export const ListApprenant = () => {
             id: 4,
             nom: 'SYLLA',
             prenom: 'Mamadou',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200357',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Golf',
@@ -103,7 +103,7 @@ export const ListApprenant = () => {
             id: 5,
             nom: 'GUEYE',
             prenom: 'Asna',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200358',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Touba',
@@ -114,7 +114,7 @@ export const ListApprenant = () => {
             id: 6,
             nom: 'cbag',
             prenom: 'cbag',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200359',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Guediawaye',
@@ -372,9 +372,9 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type="select"
                                                     options={[
-                                                        {label: 'Developpeur Web et Mobile', value: 'one'},
-                                                        {label: 'Data Scientist', value: 'two'},
-                                                        {label: 'Reference Digital', value: 'trois'}
+                                                        { label: 'Developpeur Web et Mobile', value: 'one' },
+                                                        { label: 'Data Scientist', value: 'two' },
+                                                        { label: 'Reference Digital', value: 'trois' }
 
                                                     ]}
                                                     value={apprenant.referentiel}
@@ -397,13 +397,13 @@ export const ListApprenant = () => {
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
-                                            </Stack> 
+                                            </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
                                             {/* Adresse: xxxxxxxxxxxxxx */}
                                             <Stack spacing={1} direction="row">
-                                                <div> 
-                                                Adresse: 
+                                                <div>
+                                                    Adresse:
                                                 </div>
                                                 <EasyEdit
                                                     type={Types.TEXT}
@@ -412,13 +412,13 @@ export const ListApprenant = () => {
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
-                                            </Stack> 
-                                              
+                                            </Stack>
+
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                        <Stack spacing={1} direction="row">
-                                                <div> 
-                                                Telephone:
+                                            <Stack spacing={1} direction="row">
+                                                <div>
+                                                    Telephone:
                                                 </div>
                                                 <EasyEdit
                                                     type={Types.TEXT}
@@ -427,8 +427,8 @@ export const ListApprenant = () => {
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
-                                            </Stack> 
-                                             
+                                            </Stack>
+
                                         </Typography>
 
 
@@ -467,12 +467,28 @@ export const ListApprenant = () => {
                                         style={{
                                             width: "30%",
                                             // height:"10vh",
-                                            marginLeft: "00px",
                                             textAlign: "center"
 
                                         }}
                                     >
-                                        <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} />
+                                        {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
+                                        <QRCode
+                                            value={apprenant.numero_etudiant}
+                                            size={90}
+                                            bgColor={"#ffffff"}
+                                            fgColor={"#138A8A"}
+                                            level={"H"}
+                                            includeMargin={false}
+                                            renderAs={"svg"}
+                                            imageSettings={{
+                                                src: `${logosonatel}`,
+                                                x: null,
+                                                y: null,
+                                                height: 30,
+                                                width: 30,
+                                                excavate: false,
+                                            }}
+                                        />
                                     </div>
 
 
