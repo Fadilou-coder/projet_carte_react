@@ -253,7 +253,6 @@ export const ListApprenant = () => {
                                     fontWeight: "bolder",
                                     '&:hover': {
                                         backgroundColor: '#F48322',
-                                        opacity: [0.9, 0.8, 0.7],
                                     }
                                 }}
                                 endIcon={<AddCircleOutlined />}
@@ -319,7 +318,7 @@ export const ListApprenant = () => {
                                     width: "95%",
                                     height: "100%",
                                     borderRadius: "10px",
-                                    border: "1px solid green",
+                                    border: "1px solid #138A8A",
                                     boxShadow: "2",
                                     padding: "2px 10px 10px 20px",
 
@@ -503,7 +502,6 @@ export const ListApprenant = () => {
                                         fontWeight: "bolder",
                                         '&:hover': {
                                             backgroundColor: '#F48322',
-                                            opacity: [0.9, 0.8, 0.7],
                                         }
                                     }}
                                     endIcon={<DocumentScannerOutlined />}

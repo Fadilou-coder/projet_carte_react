@@ -15,26 +15,23 @@ import {
     useGridSelector,
 } from '@mui/x-data-grid';
 // import { useDemoData } from "@mui/x-data-grid-generator";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+
+
 
 export const Visites = () => {
+
+    //=======================================================
+    // ========== Trier par Apprenant ou Visiteur  ==========
+    // ======================================================
     const [visiteur, setVisiteur] = React.useState("apprenant");
 
-    // Custom tOOLBAR dATAGRID
-    // function CustomToolbar() {
-    //     return (
-    //         <GridToolbarContainer>
-    //             <GridToolbarExport printOptions={{
-    //                 hideFooter: true,
-    //                 hideToolbar: true,
-                    
-    //             }}
-    //             />
-    //         </GridToolbarContainer>
-    //     );
-    // }
-
-
-    // Date du jour 
+    //=======================================================
+    // ===== Pour savoir sur quelle date on verifie =========
+    // ===== Les presences des admins et visiteurs ==========
+    // ======================================================
     const [value, setValue] = React.useState(new Date());
 
     // Custom Pagination
@@ -57,9 +54,9 @@ export const Visites = () => {
         );
     }
 
-
-    // Tableau Row and Column qu'on a defini ici
-
+    //============================================================================
+    //  ====== Definition des donnees pour la table et la generation du pdf ======
+    // ===========================================================================
     const data = [
         {
             id: 1,
@@ -202,11 +199,39 @@ export const Visites = () => {
         },
 
     ]
-    // const { data } = useDemoData({
-    //     dataSet: "Employee",
-    //     rowLength: 100,
-    //     maxColumns: 6
-    // });
+
+
+    // =====================================================
+    // ======= Fonction qui permet la generation du Pdf ====
+    // =====================================================
+    const exportPDF = () => {
+
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "portrait"; // portrait or landscape
+
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+
+        doc.setFontSize(15);
+
+        const title = "Liste du " + value.toDateString();
+        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
+
+        const dat = data.map(elt => [elt.prenom, elt.nom, elt.cni, elt.dateEntree, elt.dateSortie]);
+
+        let content = {
+            startY: 50,
+            head: headers,
+            body: dat
+        };
+
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save("report.pdf")
+    }
+
+
     const classes = VisiteStyle();
     return (
         <Layout>
@@ -214,8 +239,10 @@ export const Visites = () => {
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
-                    {/* Gestion de l'entete de la liste des Reservations */}
 
+                    {/* 
+                        Dans cettte partie, on a la partie du triage et de l'impressiono
+                    */}
                     <Box sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -224,16 +251,14 @@ export const Visites = () => {
                     }} spacing={2}
                     >
 
-                        <Stack
-                            direction="row" spacing={5} justifyContent="center" alignItems="center"
-
-                        >
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
+                        <Stack direction="row" spacing={5} justifyContent="center" alignItems="center">
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                    color: "gray"
+                                }}
                             >
                                 <FilterAltOutlined></FilterAltOutlined>
                                 Filtre
@@ -293,13 +318,21 @@ export const Visites = () => {
                                 variant="contained"
                                 sx={{ backgroundColor: "#138A8A", padding: "2vh 2vw", fontWeight: "bolder" }}
                                 endIcon={<DocumentScannerOutlined />}
+                                onClick={(params, event) => {
+                                    exportPDF();
+                                }}
                             >
                                 Impression
                             </Button>
+
                         </div>
 
                     </Box>
 
+
+                    {/*
+                        Nous avons ici le tableau des visite effectuées durant une journée 
+                     */}
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
@@ -324,7 +357,7 @@ export const Visites = () => {
                                 }}
                                 rows={data}
                                 columns={columns}
-                                
+
                                 disableVirtualization
                             />
                         </div>

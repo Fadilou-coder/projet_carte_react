@@ -8,6 +8,8 @@ import Admin from "./components/admin/Admin";
 import Structure from "./components/structure/Structure";
 import Login from './components/login1/Login';
 
+
+
 function App() {
   return (
       <>
@@ -21,6 +23,7 @@ function App() {
                   <Route  path="/admins" component={Admin}/>
                   <Route  path="/liste_apprenants" component={ListApprenant}/>
                   <Route  path="/structures" component={Structure}/>
+
 
               </Switch>
             {/*</Layout>*/}
