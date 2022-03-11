@@ -1,6 +1,6 @@
-import { AddCircleOutlined, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
+import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
 import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
-
+import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
     gridPageCountSelector,
@@ -12,15 +12,15 @@ import React from 'react'
 import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ListApprenantStyle";
-
 import pp from "../../assets/images/ppuser.png";
 import odc from "../../assets/images/odc.jpeg";
-import codeqr from "../../assets/images/qrcode.png";
+import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 
+var QRCode = require('qrcode.react');
 
 
 export const ListApprenant = () => {
@@ -72,7 +72,7 @@ export const ListApprenant = () => {
             id: 2,
             nom: 'cbag',
             prenom: 'cbag',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200355',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Guediawaye',
@@ -82,7 +82,7 @@ export const ListApprenant = () => {
             id: 3,
             nom: 'FAYE',
             prenom: 'Omar',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200356',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'THIES',
@@ -93,7 +93,7 @@ export const ListApprenant = () => {
             id: 4,
             nom: 'SYLLA',
             prenom: 'Mamadou',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200357',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Golf',
@@ -104,7 +104,7 @@ export const ListApprenant = () => {
             id: 5,
             nom: 'GUEYE',
             prenom: 'Asna',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200358',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Touba',
@@ -115,7 +115,7 @@ export const ListApprenant = () => {
             id: 6,
             nom: 'cbag',
             prenom: 'cbag',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200359',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Guediawaye',
@@ -136,13 +136,6 @@ export const ListApprenant = () => {
     ];
 
     const columns = [
-        {
-            field: 'id',
-            headerClassName: 'super-app-theme--header',
-            align: 'center',
-            headerName: 'ID',
-            flex: 1
-        },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
@@ -249,15 +242,19 @@ export const ListApprenant = () => {
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
+                                style={{
+
+                                }}
+                                sx={{
+                                    backgroundColor: "#138A8A",
+                                    marginRight: "35px",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#F48322',
+                                    }
+                                }}
                                 endIcon={<AddCircleOutlined />}
                                 onClick={RedirectAddApprenant}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
                             >
                                 Ajouter
                             </Button>
@@ -282,13 +279,13 @@ export const ListApprenant = () => {
                                     sx={{ boxShadow: "30px", width: "100%" }}
 
                                     autoHeight
-                                    pageSize={6}
+                                    pageSize={10}
                                     rowsPerPageOptions={[5, 10, 20]}
 
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
                                             //   alert(event.target.value.id)
-                                            console.log(params.row)
+                                            console.log(event)
                                             setApprenant(params.row);
 
                                         }
@@ -320,7 +317,7 @@ export const ListApprenant = () => {
                                     width: "95%",
                                     height: "100%",
                                     borderRadius: "10px",
-                                    border: "1px solid green",
+                                    border: "1px solid #138A8A",
                                     boxShadow: "2",
                                     padding: "2px 10px 10px 20px",
 
@@ -334,24 +331,102 @@ export const ListApprenant = () => {
                                     <div style={{ width: "70%" }}>
                                         <Typography variant="h4" style={{ fontWeight: "bold" }}>
                                             {/* Ahmed BA */}
-                                            {apprenant.nom} {apprenant.prenom}
+                                            <Stack spacing={2} direction="row">
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.nom}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.prenom}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Numero d'etudiant: {apprenant.numero_etudiant}
+                                            <Stack direction="row" spacing={1} >
+                                                <div>
+                                                    Numero d'etudiant:
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.numero_etudiant}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
 
                                         <Typography style={{ fontWeight: "normal" }}>
-                                            Réferentiel: {apprenant.referentiel}
+                                            <Stack spacing={1} direction="row">
+                                                <div>Réferentiel:</div>
+                                                <EasyEdit
+                                                    type="select"
+                                                    options={[
+                                                        { label: 'Developpeur Web et Mobile', value: 'one' },
+                                                        { label: 'Data Scientist', value: 'two' },
+                                                        { label: 'Reference Digital', value: 'trois' }
+
+                                                    ]}
+                                                    value={apprenant.referentiel}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Date et lieu de naissance: {apprenant.date_naiss}
+
+                                            <Stack spacing={1} direction="row">
+                                                <div> Date de naissance:
+
+                                                </div>
+                                                <EasyEdit
+                                                    type="date"
+                                                    value={apprenant.date_naiss}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
                                             {/* Adresse: xxxxxxxxxxxxxx */}
-                                            Adresse:   {apprenant.adresse}
+                                            <Stack spacing={1} direction="row">
+                                                <div>
+                                                    Adresse:
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.adresse}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
+
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            Telephone: {apprenant.telephone}
+                                            <Stack spacing={1} direction="row">
+                                                <div>
+                                                    Telephone:
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.telephone}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
+
                                         </Typography>
 
 
@@ -390,12 +465,28 @@ export const ListApprenant = () => {
                                         style={{
                                             width: "30%",
                                             // height:"10vh",
-                                            marginLeft: "00px",
                                             textAlign: "center"
 
                                         }}
                                     >
-                                        <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} />
+                                        {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
+                                        <QRCode
+                                            value={apprenant.numero_etudiant}
+                                            size={90}
+                                            bgColor={"#ffffff"}
+                                            fgColor={"#138A8A"}
+                                            level={"H"}
+                                            includeMargin={false}
+                                            renderAs={"svg"}
+                                            imageSettings={{
+                                                src: `${logosonatel}`,
+                                                x: null,
+                                                y: null,
+                                                height: 30,
+                                                width: 30,
+                                                excavate: false,
+                                            }}
+                                        />
                                     </div>
 
 
@@ -404,15 +495,15 @@ export const ListApprenant = () => {
                             <Box textAlign="right" marginTop="20px">
                                 <Button
                                     variant="contained"
+                                    sx={{
+                                        backgroundColor: "#138A8A",
+                                        padding: "2vh 2vw",
+                                        fontWeight: "bolder",
+                                        '&:hover': {
+                                            backgroundColor: '#F48322',
+                                        }
+                                    }}
                                     endIcon={<DocumentScannerOutlined />}
-                                    sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                    marginTop: "10px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
                                     >
                                     Impression
                                 </Button>

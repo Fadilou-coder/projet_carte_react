@@ -45,6 +45,7 @@ const Login = (props) => {
       props.history.push("/visites");
     }
     ).catch((e)=>{
+      setOpen(true);
       console.log("Login ou Mot de Passe Incorrecte!!!")
     });
 }
@@ -54,7 +55,6 @@ const Login = (props) => {
   return (
     <>
       <Grid container className={classes.loginpage}>
-
 
         <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2 }} className={classes.loginContent}>
 
