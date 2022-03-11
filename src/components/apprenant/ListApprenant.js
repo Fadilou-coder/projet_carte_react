@@ -17,10 +17,11 @@ import odc from "../../assets/images/odc.jpeg";
 import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
-
+import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 
 var QRCode = require('qrcode.react');
+
 
 export const ListApprenant = () => {
 
@@ -136,13 +137,6 @@ export const ListApprenant = () => {
 
     const columns = [
         {
-            field: 'id',
-            headerClassName: 'super-app-theme--header',
-            align: 'center',
-            headerName: 'ID',
-            flex: 1
-        },
-        {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
@@ -176,7 +170,11 @@ export const ListApprenant = () => {
     //     const [selectionModel, setSelectionModel] = React.useState(() =>
     //     data.filter((r) => r.blocked = true).map((r) => r.id),
     //   );
+    let history = useHistory();
 
+    function RedirectAddApprenant() {
+        history.push("/add_apprenant");
+      }
 
     const classes = VisiteStyle();
     return (
@@ -241,22 +239,21 @@ export const ListApprenant = () => {
                                 </Select>
                             </div>
                         </Stack>
-                        <Box textAlign="right" marginTop="20px">
+                        <Box textAlign="right">
                             <Button
                                 variant="contained"
                                 style={{
 
                                 }}
-                                sx={{
-                                    backgroundColor: "#138A8A",
-                                    marginRight: "35px",
-                                    fontWeight: "bolder",
-                                    '&:hover': {
-                                        backgroundColor: '#F48322',
-                                        opacity: [0.9, 0.8, 0.7],
-                                    }
-                                }}
                                 endIcon={<AddCircleOutlined />}
+                                onClick={RedirectAddApprenant}
+                                sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", fontSize: "20px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
                             >
                                 Ajouter
                             </Button>
@@ -497,17 +494,16 @@ export const ListApprenant = () => {
                             <Box textAlign="right" marginTop="20px">
                                 <Button
                                     variant="contained"
-                                    sx={{
-                                        backgroundColor: "#138A8A",
-                                        padding: "2vh 2vw",
-                                        fontWeight: "bolder",
-                                        '&:hover': {
-                                            backgroundColor: '#F48322',
-                                            opacity: [0.9, 0.8, 0.7],
-                                        }
-                                    }}
                                     endIcon={<DocumentScannerOutlined />}
-                                >
+                                    sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", fontSize: "20px", 
+                                                    marginTop: "10px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
+                                    >
                                     Impression
                                 </Button>
                             </Box>

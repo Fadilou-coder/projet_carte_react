@@ -1,34 +1,22 @@
 import {makeStyles} from "@material-ui/core";
+import imagePromo from "../../assets/images/Rectangle7img.jpg"
 import themeGeneral from '../theme'
 
-const AdminStyle =makeStyles((theme) => ({
+const StructureStyle =makeStyles((theme) => ({
 
    
    
     subContainer:{
+        display:"flex",
+        justifyContent:"center",
         padding:themeGeneral.spacing(1),
-        border: "2px solid #E5E5E5",
-        backgroundColor: themeGeneral.palette.primary.white,
-        borderRadius: "20px",
-        width:"100%",
-        boxShadow: "5px 5px 5px grey"
     },
     textTypo:{
+        fontWeight:"bold",
         fontFamily: "Arial",
         color: themeGeneral.palette.primary.black,
-    },
-    // gridStyle:{
-    //     paddingLeft:"50px",
-    //     [theme.breakpoints.down("sm")]: {
-    //         paddingLeft:"0px",
-    //     }
-    // },
-    labelText:{
-        fontWeight:"normal",
-        fontFamily: "Arial",
-        color: themeGeneral.palette.primary.black,
-        fontSize: "20px",
-        marginBottom: "2px"
+        fontSize: "40px",
+        marginTop: "50px"
     },
     textContainer:{
         zIndex:3,
@@ -45,13 +33,6 @@ const AdminStyle =makeStyles((theme) => ({
     },
     connexion:{
         textAlign:"center"
-    },
-    btnAdd:{
-        width:"200px",
-        backgroundColor: themeGeneral.palette.primary.main,
-        fontWeight:"normal",
-        fontFamily: "Arial",
-        fontSize: "50px",
     },
     logoAndText:{
         display:"flex",
@@ -84,11 +65,6 @@ const AdminStyle =makeStyles((theme) => ({
         fontWeight: 'bold',
         marginBottom: theme.spacing(1),
     },
-    gridContainer: {
-        padding: "5px",
-        border: "1px solid #E5E5E5",
-        borderRadius: "5px"
-    },
     footer:{
         zIndex:1,
         position: "absolute",
@@ -96,14 +72,7 @@ const AdminStyle =makeStyles((theme) => ({
         /* width: "99.6%",*/
         top:"58.5%",
         bottom:"56%"
-    },
-
-    btnPrimary:{
-        backgroundColor: "#05888A", 
-        fontFamily: "Arial", 
-        fontSize: "20px", 
-        marginTop: "10px",
     }
 }));
 
-export default AdminStyle;
+export default StructureStyle;

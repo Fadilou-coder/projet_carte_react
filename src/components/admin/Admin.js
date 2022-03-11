@@ -1,9 +1,12 @@
-import { Box, Stack } from '@mui/material';
+import { Button, Box, Stack } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes } from '@mui/icons-material';
 import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
 import VisiteStyle from "../visites/VisiteStyle";
+import { AddCircleOutlined } from '@mui/icons-material';
+import { useHistory } from "react-router-dom";
+import { Typography } from '@material-ui/core';
 import {
     DataGrid,
     gridPageCountSelector,
@@ -16,6 +19,13 @@ export const Admin = () => {
 
 
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
+
+    let history = useHistory();
+
+    function RedirectAddAdmin() {
+        history.push("/add_admin");
+      }
+
 
 
     // Custom Pagination
@@ -110,13 +120,6 @@ export const Admin = () => {
 
     const columns = [
         {
-            field: 'id',
-            headerClassName: 'super-app-theme--header',
-            align: 'center',
-            headerName: 'ID',
-            flex: 1
-        },
-        {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
@@ -172,6 +175,9 @@ export const Admin = () => {
     const classes = VisiteStyle();
     return (
         <Layout>
+            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                LISTE DES ADMINISTRATEURS
+            </Typography>
 
             <Box sx={{}} className={classes.visitePage} >
 
@@ -228,7 +234,22 @@ export const Admin = () => {
                             </div>
                         </Stack>
 
-
+                        <Box textAlign="right">
+                            <Button
+                                variant="contained"
+                                endIcon={<AddCircleOutlined />}
+                                onClick={RedirectAddAdmin}
+                                sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", fontSize: "20px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
+                            >
+                                Ajouter
+                            </Button>
+                        </Box>
                     </Box>
 
                     <Box sx={{

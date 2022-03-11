@@ -7,6 +7,12 @@ import ListApprenant from "./components/apprenant/ListApprenant";
 import Admin from "./components/admin/Admin";
 import Structure from "./components/structure/Structure";
 import Login from './components/login1/Login';
+import Navbar from './components/navbar/Navbar';
+import AddStructure from './components/structure/AddStructure';
+import AddAdmin from './components/admin/AddAdmin';
+import AddApprenant from './components/apprenant/AddApprenant';
+
+
 
 function App() {
   return (
@@ -21,7 +27,10 @@ function App() {
                   <Route  path="/admins" component={Admin}/>
                   <Route  path="/liste_apprenants" component={ListApprenant}/>
                   <Route  path="/structures" component={Structure}/>
-
+                  <Route path="/navbar" component={Navbar} />
+                  <Route path="/add_admin" component={AddAdmin} />
+                  <Route path="/addstructures" component={AddStructure} />
+                  <Route path="/add_apprenant" component={AddApprenant} />
               </Switch>
             {/*</Layout>*/}
         </Router>

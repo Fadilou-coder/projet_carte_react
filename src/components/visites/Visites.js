@@ -1,5 +1,5 @@
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material';
-import { Box, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -7,6 +7,14 @@ import DatePicker from '@mui/lab/DatePicker';
 import React from 'react'
 import Layout from "../layout/Layout";
 import VisiteStyle from "./VisiteStyle";
+import { AddCircleOutlined } from '@mui/icons-material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { FormControl, Typography } from "@material-ui/core";
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur } from './VisiteService'
+
 import {
     DataGrid,
     gridPageCountSelector,
@@ -18,24 +26,20 @@ import {
 
 export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("apprenant");
+    const [visites, setVisites] = React.useState([]);
 
-    // Custom tOOLBAR dATAGRID
-    // function CustomToolbar() {
-    //     return (
-    //         <GridToolbarContainer>
-    //             <GridToolbarExport printOptions={{
-    //                 hideFooter: true,
-    //                 hideToolbar: true,
-                    
-    //             }}
-    //             />
-    //         </GridToolbarContainer>
-    //     );
-    // }
+
 
 
     // Date du jour 
     const [value, setValue] = React.useState(new Date());
+
+    React.useEffect(()=>{
+        ListAllVisite().then(res => {
+            setVisites(res.data);
+        });
+    
+   }, [])
 
     // Custom Pagination
     function CustomPagination() {
@@ -58,159 +62,112 @@ export const Visites = () => {
     }
 
 
-    // Tableau Row and Column qu'on a defini ici
-
-    const data = [
-        {
-            id: 1,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 2,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 3,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 4,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 5,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 6,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 7,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        }, {
-            id: 8,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 9,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-
-        {
-            id: 10,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 11,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-
-        {
-            id: 12,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-
-    ];
-
     const columns = [
-        {
-            field: 'id',
-            headerClassName: 'super-app-theme--header'
-            ,
-            align: 'center',
-            headerName: 'ID',
-            flex: 1
-        },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.visiteur) {
+                  return params.row.visiteur.prenom
+                } else if(params.row.apprenant) {
+                    return params.row.apprenant.prenom
+                }
+            }
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.visiteur) {
+                  return params.row.visiteur.nom
+                } else if(params.row.apprenant) {
+                    return params.row.apprenant.nom
+                }
+            }
         },
         {
             field: 'cni',
             headerClassName: 'super-app-theme--header',
             headerName: 'Cni',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.visiteur) {
+                  return params.row.visiteur.cni
+                } else if(params.row.apprenant) {
+                    return params.row.apprenant.cni
+                }
+            }
         },
         {
             field: 'dateEntree',
             headerClassName: 'super-app-theme--header',
             headerName: 'Entree',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.dateEntree) {
+                  return params.row.dateEntree.substr(11, 5)
+                } 
+            }
         },
         {
             field: 'dateSortie',
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
+            valueGetter: (params) => {
+                if (params.row.dateSortie) {
+                  return params.row.dateSortie.substr(11, 5)
+                } 
+            }
         },
 
     ]
-    // const { data } = useDemoData({
-    //     dataSet: "Employee",
-    //     rowLength: 100,
-    //     maxColumns: 6
-    // });
     const classes = VisiteStyle();
+
+    
+
+      const [open, setOpen] = React.useState(false);
+
+      const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+
+      const chargerVisites = (value) => {
+          setVisiteur(value)
+          if (value === "") {
+              ListAllVisite().then(res => {
+                setVisites(res.data);
+              })
+          }else if (value === "apprenant") {
+              ListVisitesApp().then(res => {
+                setVisites(res.data)
+              })
+          }else if (value === "visiteur") {
+              ListVisitesVisteur().then(res => {
+                setVisites(res.data)
+              })
+          }
+            alert(value);
+      }
+    
+    
+
+
+
     return (
         <Layout>
-
+            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                LISTE DES VISITEURS
+            </Typography>
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
@@ -271,7 +228,7 @@ export const Visites = () => {
                                 <Select
                                     value={visiteur}
                                     style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
-                                    onChange={(event) => setVisiteur(event.target.value)}
+                                    onChange={(event) => chargerVisites(event.target.value)}
                                     className={classes.visiteur}
 
                                     startAdornment={
@@ -291,8 +248,32 @@ export const Visites = () => {
                         <div>
                             <Button
                                 variant="contained"
-                                sx={{ backgroundColor: "#138A8A", padding: "2vh 2vw", fontWeight: "bolder" }}
+                                endIcon={<AddCircleOutlined />}
+                                onClick={handleClickOpen}
+                                sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", 
+                                                    fontSize: "20px", 
+                                                    marginRight: "10px",
+                                                    marginTop: "10px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
+                            >
+                                AJOUTER
+                            </Button>
+                            <Button
+                                variant="contained"
                                 endIcon={<DocumentScannerOutlined />}
+                                sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", fontSize: "20px", 
+                                                    marginTop: "10px", 
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
                             >
                                 Impression
                             </Button>
@@ -308,7 +289,6 @@ export const Visites = () => {
                     }} className={classes.tableau}>
 
                         <div style={{ width: "100%" }}>
-                            {/* <h3 style={{ color:"#44C3CF" }}> Liste du {value.toLocaleString("fr-FR").split(',')[0]}</h3> */}
                             <h2 style={{ color: "#44C3CF" }}> Liste du {value.toDateString()}</h2>
 
                             <DataGrid
@@ -322,7 +302,7 @@ export const Visites = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-                                rows={data}
+                                rows={visites}
                                 columns={columns}
                                 
                                 disableVirtualization
@@ -333,6 +313,72 @@ export const Visites = () => {
 
                 </Box>
             </Box>
+
+            <div>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
+                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float:"left", marginLeft:"15px" }} />
+                    <DialogContent>
+                        <Grid>
+                            <FormControl fullWidth>
+                                <label className={classes.labelText}>Prenom</label>
+                                <OutlinedInput 
+                                id="prenom"
+                                type="text"
+                                variant="outlined" 
+                                placeholder="Ex:Omar" 
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid mt={2}>
+                            <FormControl fullWidth>
+                                <label className={classes.labelText}>Nom</label>
+                                <OutlinedInput 
+                                id="nom"
+                                type="text"
+                                variant="outlined" 
+                                placeholder="Ex:DIOP" 
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid mt={2}>
+                            <FormControl fullWidth>
+                                <label className={classes.labelText}>Telephone</label>
+                                <OutlinedInput 
+                                id="telephone"
+                                type="text"
+                                variant="outlined" 
+                                placeholder="Ex:77 777 77 77" 
+                                />
+                            </FormControl>
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose}
+                        sx={{backgroundColor: "#BE0101", 
+                        fontFamily: "Arial", fontSize: "20px", 
+                        marginTop: "10px",
+                        color: "#FFFFFF",
+                        '&:hover':{
+                            backgroundColor:"#F32018", 
+                            pointer:"cursor"
+                        }
+                    }}
+                    >ANNULER</Button>
+                    <Button onClick={handleClose}
+                        sx={{backgroundColor: "#05888A", 
+                        fontFamily: "Arial", fontSize: "20px", 
+                        marginTop: "10px",
+                        color: "#FFFFFF",
+                        '&:hover':{
+                            backgroundColor:"#F48322", 
+                            pointer:"cursor"
+                        }
+                    }}
+                    >AJOUTER</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
 
         </Layout>
     )

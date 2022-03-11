@@ -1,4 +1,4 @@
-import { makeStyles } from "@mui/styles";
+import {makeStyles} from "@material-ui/core";
 import bg from "../../assets/images/bg.jpeg";
 // import themeGeneral from '../theme';
 
