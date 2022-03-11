@@ -49,6 +49,7 @@ export const Visites = () => {
             setVisites(res.data);
         });
     
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
     // Custom Pagination

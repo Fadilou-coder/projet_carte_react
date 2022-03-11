@@ -10,10 +10,7 @@ import Login from './components/login1/Login';
 import AddStructure from './components/structure/AddStructure';
 import AddAdmin from './components/admin/AddAdmin';
 import AddApprenant from './components/apprenant/AddApprenant';
-
-
-
-
+import Layout from "./components/layout/Layout";
 
 function App() {
   return (
@@ -21,7 +18,7 @@ function App() {
         <Router>
            {/* <Layout>*/}
               <Switch>
-
+                  <Route path="/layout" component={Layout}/>
                   <Route exact path="/" component={Login}/>
                   <Route  path="/login" component={Login}/>
                   <Route  path="/visites" component={Visites}/>

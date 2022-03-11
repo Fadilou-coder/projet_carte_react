@@ -1,4 +1,4 @@
-import { Button, Box, Stack } from '@mui/material';
+import {Box, Button, Stack} from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes } from '@mui/icons-material';
@@ -13,7 +13,13 @@ import {
     gridPageSelector,
     useGridApiContext,
     useGridSelector,
+    GridApi,
+    GridCellValue
 } from '@mui/x-data-grid';
+
+import Checkbox from '@mui/material/Checkbox';
+
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 export const Admin = () => {
 
@@ -159,7 +165,27 @@ export const Admin = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Blocked ?',
             editable: true,
-            flex: 1
+            flex: 1,
+            sortable: false,
+            renderCell: (params) => {
+                const onClick = (e) => {
+                    e.stopPropagation(); // don't select this row after clicking
+
+                    const api: GridApi = params.api;
+                    const thisRow: Record<string, GridCellValue> = {};
+
+                    api
+                        .getAllColumns()
+                        .filter((c) => c.field !== "__check__" && !!c)
+                        .forEach(
+                            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+                        );
+
+                    return alert(JSON.stringify(thisRow, null, 4));
+                };
+
+                return <Checkbox {...label} />;
+            }
         },
 
 
@@ -267,7 +293,7 @@ export const Admin = () => {
                                 sx={{ boxShadow: "30px", width: "100%" }}
 
                                 autoHeight
-                                pageSize={6}
+                                pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
                                 components={{
                                     Pagination: CustomPagination,
@@ -279,6 +305,9 @@ export const Admin = () => {
                                 // selectionModel={selectionModel}
                                 // onSelectionModelChange={setSelectionModel}
                                 disableVirtualization
+/*
+                                checkboxSelection
+*/
                             />
                         </div>
 

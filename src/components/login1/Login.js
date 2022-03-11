@@ -56,7 +56,6 @@ const Login = (props) => {
     <>
       <Grid container className={classes.loginpage}>
 
-
         <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2 }} className={classes.loginContent}>
 
           <h1 className={classes.titre}>
