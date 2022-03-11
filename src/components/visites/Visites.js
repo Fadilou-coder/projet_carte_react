@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import React from 'react'
+import React from 'react';
 import Layout from "../layout/Layout";
 import VisiteStyle from "./VisiteStyle";
 import { AddCircleOutlined } from '@mui/icons-material';
@@ -13,7 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, Typography } from "@material-ui/core";
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur } from './VisiteService'
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur } from './VisiteService';
 
 import {
     DataGrid,
@@ -23,23 +23,33 @@ import {
     useGridSelector,
 } from '@mui/x-data-grid';
 // import { useDemoData } from "@mui/x-data-grid-generator";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+
+
 
 export const Visites = () => {
-    const [visiteur, setVisiteur] = React.useState("apprenant");
+
+    //=======================================================
+    // ========== Trier par Apprenant ou Visiteur  ==========
+    // ======================================================
+    const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
 
 
-
-
-    // Date du jour 
-    const [value, setValue] = React.useState(new Date());
+    //=======================================================
+    // ===== Pour savoir sur quelle date on verifie =========
+    // ===== Les presences des admins et visiteurs ==========
+    // ======================================================
+    const [date, setDate] = React.useState(new Date());
 
     React.useEffect(()=>{
-        ListAllVisite().then(res => {
+        ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
             setVisites(res.data);
         });
     
-   }, [])
+   }, []);
 
     // Custom Pagination
     function CustomPagination() {
@@ -70,9 +80,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.prenom
+                  return params.row.visiteur.prenom;
                 } else if(params.row.apprenant) {
-                    return params.row.apprenant.prenom
+                    return params.row.apprenant.prenom;
                 }
             }
         },
@@ -83,9 +93,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.nom
+                  return params.row.visiteur.nom;
                 } else if(params.row.apprenant) {
-                    return params.row.apprenant.nom
+                    return params.row.apprenant.nom;
                 }
             }
         },
@@ -96,9 +106,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.cni
+                  return params.row.visiteur.cni;
                 } else if(params.row.apprenant) {
-                    return params.row.apprenant.cni
+                    return params.row.apprenant.cni;
                 }
             }
         },
@@ -109,7 +119,7 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
-                  return params.row.dateEntree.substr(11, 5)
+                  return params.row.dateEntree.substr(11, 5);
                 } 
             }
         },
@@ -120,12 +130,50 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
-                  return params.row.dateSortie.substr(11, 5)
+                  return params.row.dateSortie.substr(11, 5);
                 } 
             }
         },
 
-    ]
+    ];
+
+
+    // =====================================================
+    // ======= Fonction qui permet la generation du Pdf ====
+    // =====================================================
+    const exportPDF = () => {
+
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "landscape"; // portrait or landscape
+
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+
+        doc.setFontSize(15);
+
+        const title = "Liste du " + date.toDateString();
+        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
+
+        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom, 
+                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom, 
+                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni, 
+                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null, 
+                                        elt.dateSortie ? elt.dateSortie.substr(11,5): null, ]
+                                );
+
+        let content = {
+            startY: 50,
+            head: headers,
+            body: dat
+        };
+
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save("report.pdf");
+    };
+
+
     const classes = VisiteStyle();
 
     
@@ -141,23 +189,23 @@ export const Visites = () => {
       };
 
 
-      const chargerVisites = (value) => {
-          setVisiteur(value)
+      function chargerVisites (ndate, value){
+          setVisiteur(value);
+          setDate(ndate);
           if (value === "") {
-              ListAllVisite().then(res => {
+              ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data);
               })
           }else if (value === "apprenant") {
-              ListVisitesApp().then(res => {
+              ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
               })
           }else if (value === "visiteur") {
-              ListVisitesVisteur().then(res => {
+              ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
               })
           }
-            alert(value);
-      }
+      };
     
     
 
@@ -171,8 +219,10 @@ export const Visites = () => {
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
-                    {/* Gestion de l'entete de la liste des Reservations */}
 
+                    {/* 
+                        Dans cettte partie, on a la partie du triage et de l'impressiono
+                    */}
                     <Box sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -181,16 +231,14 @@ export const Visites = () => {
                     }} spacing={2}
                     >
 
-                        <Stack
-                            direction="row" spacing={5} justifyContent="center" alignItems="center"
-
-                        >
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
+                        <Stack direction="row" spacing={5} justifyContent="center" alignItems="center">
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                    color: "gray"
+                                }}
                             >
                                 <FilterAltOutlined></FilterAltOutlined>
                                 Filtre
@@ -201,9 +249,10 @@ export const Visites = () => {
                                     <DatePicker
                                         inputFormat="dd/MM/yyy"
                                         className={classes.visiteur}
-                                        value={value}
+                                        value={date}
                                         onChange={(newValue) => {
-                                            setValue(newValue);
+                                            console.log(newValue);
+                                            chargerVisites(newValue, visiteur)
                                         }}
                                         renderInput={(params) => {
                                             return (
@@ -228,7 +277,7 @@ export const Visites = () => {
                                 <Select
                                     value={visiteur}
                                     style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
-                                    onChange={(event) => chargerVisites(event.target.value)}
+                                    onChange={(event) => chargerVisites(date, event.target.value)}
                                     className={classes.visiteur}
 
                                     startAdornment={
@@ -237,7 +286,7 @@ export const Visites = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value="">
+                                    <MenuItem value={""}>
                                         <em>Tous</em>
                                     </MenuItem>
                                     <MenuItem value={"apprenant"}>Apprenant</MenuItem>
@@ -254,7 +303,6 @@ export const Visites = () => {
                                                     fontFamily: "Arial", 
                                                     fontSize: "20px", 
                                                     marginRight: "10px",
-                                                    marginTop: "10px", 
                                                         '&:hover':{
                                                             backgroundColor:"#F48322", 
                                                             pointer:"cursor"
@@ -266,21 +314,29 @@ export const Visites = () => {
                             <Button
                                 variant="contained"
                                 endIcon={<DocumentScannerOutlined />}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                    marginTop: "10px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
+                                onClick={(params, event) => {
+                                    exportPDF();
+                                }}
+                                sx={{
+                                        backgroundColor: "#138A8A",
+                                        fontSize: "20px",
+                                        fontWeight: "bolder",
+                                        '&:hover': {
+                                            backgroundColor: '#F48322',
+                                        }
+                                    }}
                             >
                                 Impression
                             </Button>
+
                         </div>
 
                     </Box>
 
+
+                    {/*
+                        Nous avons ici le tableau des visite effectuées durant une journée 
+                     */}
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
@@ -289,14 +345,14 @@ export const Visites = () => {
                     }} className={classes.tableau}>
 
                         <div style={{ width: "100%" }}>
-                            <h2 style={{ color: "#44C3CF" }}> Liste du {value.toDateString()}</h2>
+                            <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
 
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
 
                                 autoHeight
-                                pageSize={6}
+                                pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
                                 components={{
                                     Pagination: CustomPagination,
@@ -304,7 +360,7 @@ export const Visites = () => {
                                 }}
                                 rows={visites}
                                 columns={columns}
-                                
+
                                 disableVirtualization
                             />
                         </div>
@@ -381,7 +437,7 @@ export const Visites = () => {
             </div>
 
         </Layout>
-    )
-}
+    );
+};
 
 export default Visites;

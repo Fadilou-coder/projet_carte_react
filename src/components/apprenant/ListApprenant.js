@@ -245,15 +245,16 @@ export const ListApprenant = () => {
                                 style={{
 
                                 }}
+                                sx={{
+                                    backgroundColor: "#138A8A",
+                                    marginRight: "35px",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#F48322',
+                                    }
+                                }}
                                 endIcon={<AddCircleOutlined />}
                                 onClick={RedirectAddApprenant}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
                             >
                                 Ajouter
                             </Button>
@@ -316,7 +317,7 @@ export const ListApprenant = () => {
                                     width: "95%",
                                     height: "100%",
                                     borderRadius: "10px",
-                                    border: "1px solid green",
+                                    border: "1px solid #138A8A",
                                     boxShadow: "2",
                                     padding: "2px 10px 10px 20px",
 
@@ -494,15 +495,15 @@ export const ListApprenant = () => {
                             <Box textAlign="right" marginTop="20px">
                                 <Button
                                     variant="contained"
+                                    sx={{
+                                        backgroundColor: "#138A8A",
+                                        padding: "2vh 2vw",
+                                        fontWeight: "bolder",
+                                        '&:hover': {
+                                            backgroundColor: '#F48322',
+                                        }
+                                    }}
                                     endIcon={<DocumentScannerOutlined />}
-                                    sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                    marginTop: "10px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
                                     >
                                     Impression
                                 </Button>
