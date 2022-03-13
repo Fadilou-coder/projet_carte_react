@@ -13,8 +13,6 @@ import {
     gridPageSelector,
     useGridApiContext,
     useGridSelector,
-    GridApi,
-    GridCellValue
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';

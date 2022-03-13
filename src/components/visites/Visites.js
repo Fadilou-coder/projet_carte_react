@@ -13,7 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, Typography } from "@material-ui/core";
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur } from './VisiteService';
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService';
 
 import {
     DataGrid,
@@ -37,6 +37,14 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
 
+    const [values, setValues] = React.useState({
+        Cni: '',
+        prenom: '',
+        nom: '',
+        numTelephone: '',
+
+    });
+
 
     //=======================================================
     // ===== Pour savoir sur quelle date on verifie =========
@@ -46,7 +54,7 @@ export const Visites = () => {
 
     React.useEffect(()=>{
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data);
+            setVisites(res.data.reverse());
         });
     
    // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -207,6 +215,33 @@ export const Visites = () => {
               })
           }
       };
+
+
+      const AjouterVisites = () => {
+        SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
+            handleClose();
+            if (visiteur === "") {
+                ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data);
+                })
+            }else if (visiteur === "apprenant") {
+                ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }else if (visiteur === "visiteur") {
+                ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }
+            setValues({
+                Cni: '',
+                prenom: '',
+                nom: '',
+                numTelephone: '',
+        
+            })
+        });
+      }
     
     
 
@@ -378,12 +413,31 @@ export const Visites = () => {
                     <DialogContent>
                         <Grid>
                             <FormControl fullWidth>
+                                <label className={classes.labelText}>CNI</label>
+                                <OutlinedInput 
+                                    id="cni"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:1 123 1234 12345" 
+                                    onChange={(event)=>{
+                                        setValues({...values,cni: event.target.value})
+                                    }}
+                                    value={values.cni}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid  mt={2}>
+                            <FormControl fullWidth>
                                 <label className={classes.labelText}>Prenom</label>
                                 <OutlinedInput 
-                                id="prenom"
-                                type="text"
-                                variant="outlined" 
-                                placeholder="Ex:Omar" 
+                                    id="prenom"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:Omar" 
+                                    onChange={(event)=>{
+                                        setValues({...values,prenom: event.target.value})
+                                    }}
+                                    value={values.prenom}
                                 />
                             </FormControl>
                         </Grid>
@@ -391,10 +445,14 @@ export const Visites = () => {
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Nom</label>
                                 <OutlinedInput 
-                                id="nom"
-                                type="text"
-                                variant="outlined" 
-                                placeholder="Ex:DIOP" 
+                                    id="nom"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:DIOP" 
+                                    onChange={(event)=>{
+                                        setValues({...values,nom: event.target.value})
+                                    }}
+                                    value={values.nom}
                                 />
                             </FormControl>
                         </Grid>
@@ -402,10 +460,14 @@ export const Visites = () => {
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Telephone</label>
                                 <OutlinedInput 
-                                id="telephone"
-                                type="text"
-                                variant="outlined" 
-                                placeholder="Ex:77 777 77 77" 
+                                    id="telephone"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:777777777" 
+                                    onChange={(event)=>{
+                                        setValues({...values,numTelephone: event.target.value})
+                                    }}
+                                    value={values.numTelephone}
                                 />
                             </FormControl>
                         </Grid>
@@ -422,7 +484,7 @@ export const Visites = () => {
                         }
                     }}
                     >ANNULER</Button>
-                    <Button onClick={handleClose}
+                    <Button onClick={AjouterVisites}
                         sx={{backgroundColor: "#05888A", 
                         fontFamily: "Arial", fontSize: "20px", 
                         marginTop: "10px",
