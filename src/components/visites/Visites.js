@@ -25,11 +25,16 @@ import {
 // import { useDemoData } from "@mui/x-data-grid-generator";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import Skeleton from '@mui/material/Skeleton';
+
 
 
 
 
 export const Visites = () => {
+
+    // Definition boolean pour le chargement des données
+    const [isLoaded, setIsloaded] = React.useState(false);
 
     //=======================================================
     // ========== Trier par Apprenant ou Visiteur  ==========
@@ -52,13 +57,15 @@ export const Visites = () => {
     // ======================================================
     const [date, setDate] = React.useState(new Date());
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
             setVisites(res.data.reverse());
+            setIsloaded(true);
+
         });
-    
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Custom Pagination
     function CustomPagination() {
@@ -88,11 +95,14 @@ export const Visites = () => {
             headerName: 'Prenom',
             flex: 1,
             valueGetter: (params) => {
+
                 if (params.row.visiteur) {
-                  return params.row.visiteur.prenom;
-                } else if(params.row.apprenant) {
+                    return params.row.visiteur.prenom;
+                } else if (params.row.apprenant) {
                     return params.row.apprenant.prenom;
                 }
+
+                setIsloaded(true);
             }
         },
         {
@@ -102,8 +112,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.nom;
-                } else if(params.row.apprenant) {
+                    return params.row.visiteur.nom;
+                } else if (params.row.apprenant) {
                     return params.row.apprenant.nom;
                 }
             }
@@ -115,8 +125,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.cni;
-                } else if(params.row.apprenant) {
+                    return params.row.visiteur.cni;
+                } else if (params.row.apprenant) {
                     return params.row.apprenant.cni;
                 }
             }
@@ -128,8 +138,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
-                  return params.row.dateEntree.substr(11, 5);
-                } 
+                    return params.row.dateEntree.substr(11, 5);
+                }
             }
         },
         {
@@ -139,8 +149,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
-                  return params.row.dateSortie.substr(11, 5);
-                } 
+                    return params.row.dateSortie.substr(11, 5);
+                }
             }
         },
 
@@ -164,12 +174,14 @@ export const Visites = () => {
         const title = "Liste du " + date.toDateString();
         const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
 
-        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom, 
-                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom, 
-                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni, 
-                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null, 
-                                        elt.dateSortie ? elt.dateSortie.substr(11,5): null, ]
-                                );
+        const dat = visites.map(elt => [
+            elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
+            elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom,
+            elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni,
+            elt.dateEntree ? elt.dateEntree.substr(11, 5) : null,
+            elt.dateSortie ? elt.dateSortie.substr(11, 5) : null,
+        ]
+        );
 
         let content = {
             startY: 50,
@@ -185,32 +197,32 @@ export const Visites = () => {
 
     const classes = VisiteStyle();
 
-    
 
-      const [open, setOpen] = React.useState(false);
 
-      const handleClickOpen = () => {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
         setOpen(true);
-      };
-    
-      const handleClose = () => {
+    };
+
+    const handleClose = () => {
         setOpen(false);
-      };
+    };
 
 
-      function chargerVisites (ndate, value){
-          setVisiteur(value);
-          setDate(ndate);
-          if (value === "") {
-              ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
+    function chargerVisites(ndate, value) {
+        setVisiteur(value);
+        setDate(ndate);
+        if (value === "") {
+            ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data);
-              })
-          }else if (value === "apprenant") {
-              ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
+            })
+        } else if (value === "apprenant") {
+            ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
-              })
-          }else if (value === "visiteur") {
-              ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
+            })
+        } else if (value === "visiteur") {
+            ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
               })
           }
@@ -335,15 +347,16 @@ export const Visites = () => {
                                 variant="contained"
                                 endIcon={<AddCircleOutlined />}
                                 onClick={handleClickOpen}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", 
-                                                    fontSize: "20px", 
-                                                    marginRight: "10px",
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
+                                sx={{
+                                    backgroundColor: "#05888A",
+                                    fontFamily: "Arial",
+                                    fontSize: "20px",
+                                    marginRight: "10px",
+                                    '&:hover': {
+                                        backgroundColor: "#F48322",
+                                        pointer: "cursor"
+                                    }
+                                }}
                             >
                                 AJOUTER
                             </Button>
@@ -354,13 +367,13 @@ export const Visites = () => {
                                     exportPDF();
                                 }}
                                 sx={{
-                                        backgroundColor: "#138A8A",
-                                        fontSize: "20px",
-                                        fontWeight: "bolder",
-                                        '&:hover': {
-                                            backgroundColor: '#F48322',
-                                        }
-                                    }}
+                                    backgroundColor: "#138A8A",
+                                    fontSize: "20px",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#F48322',
+                                    }
+                                }}
                             >
                                 Impression
                             </Button>
@@ -386,7 +399,7 @@ export const Visites = () => {
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
-
+                                onLoad
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
@@ -396,7 +409,7 @@ export const Visites = () => {
                                 }}
                                 rows={visites}
                                 columns={columns}
-
+                                loading={isLoaded}
                                 disableVirtualization
                             />
                         </div>
@@ -409,7 +422,7 @@ export const Visites = () => {
             <div>
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
-                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float:"left", marginLeft:"15px" }} />
+                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
                     <DialogContent>
                         <Grid>
                             <FormControl fullWidth>
