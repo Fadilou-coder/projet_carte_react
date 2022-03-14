@@ -19,6 +19,7 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
+import { ListAllApprenant } from './ApprenantService';
 
 var QRCode = require('qrcode.react');
 
@@ -28,6 +29,20 @@ export const ListApprenant = () => {
 
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
 
+
+    // Initialisation des données des apprenants
+    const [apprenants, setApprenants] = React.useState([]);
+
+
+
+    React.useEffect(() => {
+        ListAllApprenant().then(res => {
+            setApprenants(res.data);
+            console.log(res.data)
+        });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
 
 
@@ -61,77 +76,13 @@ export const ListApprenant = () => {
             id: 1,
             nom: 'Fadilou',
             prenom: 'SY',
-            numero_etudiant: '20200350',
+            code: '20200354',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Pikine',
             telephone: '77 777 77 77'
 
-        },
-        {
-            id: 2,
-            nom: 'cbag',
-            prenom: 'cbag',
-            numero_etudiant: '20200355',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'Guediawaye',
-            telephone: '77 777 77 77'
-        },
-        {
-            id: 3,
-            nom: 'FAYE',
-            prenom: 'Omar',
-            numero_etudiant: '20200356',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'THIES',
-            telephone: '77 777 77 77'
-
-        },
-        {
-            id: 4,
-            nom: 'SYLLA',
-            prenom: 'Mamadou',
-            numero_etudiant: '20200357',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'Golf',
-            telephone: '77 777 77 77'
-
-        },
-        {
-            id: 5,
-            nom: 'GUEYE',
-            prenom: 'Asna',
-            numero_etudiant: '20200358',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'Touba',
-            telephone: '77 777 77 77'
-
-        },
-        {
-            id: 6,
-            nom: 'cbag',
-            prenom: 'cbag',
-            numero_etudiant: '20200359',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'Guediawaye',
-            telephone: '77 777 77 77'
-
-        },
-        {
-            id: 7,
-            nom: 'cbag',
-            prenom: 'cbag',
-            numero_etudiant: '20200354',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'Guediawaye',
-            telephone: '77 777 77 77'
-        },
+        }
 
     ];
 
@@ -151,7 +102,7 @@ export const ListApprenant = () => {
             flex: 1
         },
         {
-            field: 'numero_etudiant',
+            field: 'code',
             headerClassName: 'super-app-theme--header',
             headerName: 'Numero Etudiant',
             editable: true,
@@ -174,7 +125,7 @@ export const ListApprenant = () => {
 
     function RedirectAddApprenant() {
         history.push("/add_apprenant");
-      }
+    }
 
     const classes = VisiteStyle();
     return (
@@ -295,7 +246,7 @@ export const ListApprenant = () => {
                                         Pagination: CustomPagination,
                                         // Toolbar: CustomToolbar,
                                     }}
-                                    rows={data}
+                                    rows={apprenants}
                                     columns={columns}
                                     // checkboxSelection
                                     // selectionModel={selectionModel}
@@ -356,7 +307,7 @@ export const ListApprenant = () => {
                                                 </div>
                                                 <EasyEdit
                                                     type={Types.TEXT}
-                                                    value={apprenant.numero_etudiant}
+                                                    value={apprenant.code}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -385,12 +336,20 @@ export const ListApprenant = () => {
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
 
                                             <Stack spacing={1} direction="row">
-                                                <div> Date de naissance:
+                                                <div>
+                                                    Date de naissance:
 
                                                 </div>
                                                 <EasyEdit
                                                     type="date"
-                                                    value={apprenant.date_naiss}
+                                                    value={apprenant.dateNaissance}
+                                                    onSave={(val) => console.log(val)}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.lieuNaissance}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -405,7 +364,7 @@ export const ListApprenant = () => {
                                                 </div>
                                                 <EasyEdit
                                                     type={Types.TEXT}
-                                                    value={apprenant.adresse}
+                                                    value={apprenant.addresse}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -420,7 +379,7 @@ export const ListApprenant = () => {
                                                 </div>
                                                 <EasyEdit
                                                     type={Types.TEXT}
-                                                    value={apprenant.telephone}
+                                                    value={apprenant.phone}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -471,7 +430,7 @@ export const ListApprenant = () => {
                                     >
                                         {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
                                         <QRCode
-                                            value={apprenant.numero_etudiant}
+                                            value={apprenant.code}
                                             size={90}
                                             bgColor={"#ffffff"}
                                             fgColor={"#138A8A"}
@@ -504,7 +463,7 @@ export const ListApprenant = () => {
                                         }
                                     }}
                                     endIcon={<DocumentScannerOutlined />}
-                                    >
+                                >
                                     Impression
                                 </Button>
                             </Box>
@@ -517,5 +476,4 @@ export const ListApprenant = () => {
         </Layout >
     )
 }
-
 export default ListApprenant;
