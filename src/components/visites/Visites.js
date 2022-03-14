@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from "../layout/Layout";
 import VisiteStyle from "./VisiteStyle";
 import { AddCircleOutlined } from '@mui/icons-material';
@@ -37,7 +37,6 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
 
-
     //=======================================================
     // ===== Pour savoir sur quelle date on verifie =========
     // ===== Les presences des admins et visiteurs ==========
@@ -48,7 +47,7 @@ export const Visites = () => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
             setVisites(res.data);
         });
-    
+
    // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
@@ -121,7 +120,7 @@ export const Visites = () => {
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
                   return params.row.dateEntree.substr(11, 5);
-                } 
+                }
             }
         },
         {
@@ -132,7 +131,7 @@ export const Visites = () => {
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
                   return params.row.dateSortie.substr(11, 5);
-                } 
+                }
             }
         },
 
@@ -156,10 +155,10 @@ export const Visites = () => {
         const title = "Liste du " + date.toDateString();
         const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
 
-        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom, 
-                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom, 
-                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni, 
-                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null, 
+        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
+                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom,
+                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni,
+                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null,
                                         elt.dateSortie ? elt.dateSortie.substr(11,5): null, ]
                                 );
 
@@ -170,21 +169,19 @@ export const Visites = () => {
         };
 
         doc.text(title, marginLeft, 40);
-        doc.autoTable(content);
+        doc.autoTable(content)
         doc.save("report.pdf");
     };
 
 
     const classes = VisiteStyle();
 
-    
-
       const [open, setOpen] = React.useState(false);
 
       const handleClickOpen = () => {
         setOpen(true);
       };
-    
+
       const handleClose = () => {
         setOpen(false);
       };
@@ -207,8 +204,8 @@ export const Visites = () => {
               })
           }
       };
-    
-    
+
+
 
 
 
@@ -221,7 +218,7 @@ export const Visites = () => {
 
                 <Box style={{ width: "100%" }}>
 
-                    {/* 
+                    {/*
                         Dans cettte partie, on a la partie du triage et de l'impressiono
                     */}
                     <Box sx={{
@@ -251,10 +248,10 @@ export const Visites = () => {
                                         inputFormat="dd/MM/yyy"
                                         className={classes.visiteur}
                                         value={date}
-                                        onChange={(newValue) => {
-                                            console.log(newValue);
-                                            chargerVisites(newValue, visiteur)
-                                        }}
+                                            onChange={(newValue) => {
+                                                console.log(newValue);
+                                                chargerVisites(newValue, visiteur)
+                                            }}
                                         renderInput={(params) => {
                                             return (
                                                 <TextField
@@ -300,12 +297,12 @@ export const Visites = () => {
                                 variant="contained"
                                 endIcon={<AddCircleOutlined />}
                                 onClick={handleClickOpen}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", 
-                                                    fontSize: "20px", 
+                                sx={{backgroundColor: "#05888A",
+                                                    fontFamily: "Arial",
+                                                    fontSize: "20px",
                                                     marginRight: "10px",
                                                         '&:hover':{
-                                                            backgroundColor:"#F48322", 
+                                                            backgroundColor:"#F48322",
                                                             pointer:"cursor"
                                                         }
                                                     }}
@@ -336,7 +333,7 @@ export const Visites = () => {
 
 
                     {/*
-                        Nous avons ici le tableau des visite effectuées durant une journée 
+                        Nous avons ici le tableau des visite effectuées durant une journée
                      */}
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
@@ -379,56 +376,56 @@ export const Visites = () => {
                         <Grid>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Prenom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                 id="prenom"
                                 type="text"
-                                variant="outlined" 
-                                placeholder="Ex:Omar" 
+                                variant="outlined"
+                                placeholder="Ex:Omar"
                                 />
                             </FormControl>
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Nom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                 id="nom"
                                 type="text"
-                                variant="outlined" 
-                                placeholder="Ex:DIOP" 
+                                variant="outlined"
+                                placeholder="Ex:DIOP"
                                 />
                             </FormControl>
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Telephone</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                 id="telephone"
                                 type="text"
-                                variant="outlined" 
-                                placeholder="Ex:77 777 77 77" 
+                                variant="outlined"
+                                placeholder="Ex:77 777 77 77"
                                 />
                             </FormControl>
                         </Grid>
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleClose}
-                        sx={{backgroundColor: "#BE0101", 
-                        fontFamily: "Arial", fontSize: "20px", 
+                        sx={{backgroundColor: "#BE0101",
+                        fontFamily: "Arial", fontSize: "20px",
                         marginTop: "10px",
                         color: "#FFFFFF",
                         '&:hover':{
-                            backgroundColor:"#F32018", 
+                            backgroundColor:"#F32018",
                             pointer:"cursor"
                         }
                     }}
                     >ANNULER</Button>
                     <Button onClick={handleClose}
-                        sx={{backgroundColor: "#05888A", 
-                        fontFamily: "Arial", fontSize: "20px", 
+                        sx={{backgroundColor: "#05888A",
+                        fontFamily: "Arial", fontSize: "20px",
                         marginTop: "10px",
                         color: "#FFFFFF",
                         '&:hover':{
-                            backgroundColor:"#F48322", 
+                            backgroundColor:"#F48322",
                             pointer:"cursor"
                         }
                     }}

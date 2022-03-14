@@ -61,7 +61,7 @@ export const ListApprenant = () => {
             id: 1,
             nom: 'Fadilou',
             prenom: 'SY',
-            numero_etudiant: '20200354',
+            numero_etudiant: '20200350',
             referentiel: 'Developpeur Web',
             date_naiss: '02/02/2000',
             adresse: 'Pikine',
