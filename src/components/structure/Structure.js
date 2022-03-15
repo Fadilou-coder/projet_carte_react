@@ -1,33 +1,46 @@
 
-import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material';
-import { Box, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
+import { Box, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
 import React from 'react'
 import Layout from "../layout/Layout";
 import StructureStyle from "./StructureStyle";
 import Paper from '@material-ui/core/Paper';
-import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 
 import {
-    DataGrid,
+    DataGrid, GridApi, GridCellValue,
     gridPageCountSelector,
     gridPageSelector,
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { useDemoData } from "@mui/x-data-grid-generator";
+import {ListAllVisite} from "../visites/VisiteService";
+import {Addstructure, ListAllStructure} from "./StructureService";
+import {Typography} from "@material-ui/core";
+import Checkbox from "@mui/material/Checkbox";
+
+
 
 export const Structure = () => {
-    const [structure, setStructure] = React.useState("apprenant");
 
-    // Date du jour
-    const [value, setValue] = React.useState(new Date());
+    const [structure, setStructure] = React.useState([]);
+    const [nomStructure, setNomStructure] = React.useState({ nomStructure: ''});
+    React.useEffect(()=> {
+            ListAllStructure().then(response => {setStructure(response.data)})
+        }, []
+        );
+    function AddStructure (){
+        Addstructure(nomStructure).then(response => {
+            ListAllStructure().then(response => {setStructure(response.data)})
+            setNomStructure({ nomStructure: ''});
+        });
+    }
+
+    function BloquerSstructure() {
+
+    }
+
+
 
     // Custom Pagination
     function CustomPagination() {
@@ -49,99 +62,43 @@ export const Structure = () => {
         );
     }
 
-
-    // Tableau Row and Column qu'on a defini ici
-
-    const data = [
-        {
-            id: 1,
-
-            nom: "Phoenix",
-
-        },
-        {
-            id: 2,
-            nom: "Phoenix",
-
-        },
-        {
-            id: 3,
-            nom: "Phoenix",
-        },
-        {
-            id: 4,
-            nom: "Phoenix",
-
-        },
-        {
-            id: 5,
-            prenom: "Fadilou",
-            nom: "Phoenix",
-
-        },
-        {
-            id: 6,
-            prenom: "Fadilou",
-            nom: "Phoenix",
-
-        },
-        {
-            id: 7,
-            nom: "Phoenix",
-
-        }, {
-            id: 8,
-            nom: "Phoenix",
-
-        },
-        {
-            id: 9,
-            nom: "Phoenix",
-
-
-        },
-
-        {
-            id: 10,
-            nom: "Phoenix",
-
-        },
-        {
-            id: 11,
-            nom: "Phoenix",
-
-        },
-
-        {
-            id: 12,
-            nom: "Phoenix",
-
-        },
-
-    ];
-
     const columns = [
         {
-            field: 'id',
-            headerClassName: 'super-app-theme--header'
-            ,
-            headerName: 'ID',
+            field: 'nomStructure',
+            headerClassName: 'super-app-theme--header',
+            headerName: 'Nom Stucture',
             flex: 1
         },
         {
-            field: 'nom',
+            field: 'blocked',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Nom',
-            flex: 1
+            headerName: 'Blocked ?',
+            editable: true,
+            flex: 1,
+            sortable: false,
+            renderCell: (params) => {
+                const onClick = (e) => {
+                    e.stopPropagation(); // don't select this row after clicking
+
+                    const api: GridApi = params.api;
+                    const thisRow: Record<string, GridCellValue> = {};
+
+                    api
+                        .getAllColumns()
+                        .filter((c) => c.field !== "__check__" && !!c)
+                        .forEach(
+                            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
+                        );
+
+                    return alert(JSON.stringify(thisRow, null, 4));
+                };
+
+                return <Button variant="contained" style={{backgroundColor: 'red'}} onClick={AddStructure}>Bloquer</Button>;
+            }
         },
 
 
     ]
-    // const { data } = useDemoData({
-    //     dataSet: "Employee",
-    //     rowLength: 100,
-    //     maxColumns: 6
-    // });
     const classes = StructureStyle();
     return (
         <Layout>
@@ -177,8 +134,11 @@ export const Structure = () => {
                          className={classes.tableau}>
 
                         <div style={{ width:"50%" }}>
+                            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                                LISTE DES VISITEURS
+                            </Typography>
 
-                            <h1>SONATEL ACADEMY: LISTE DES STRUCTURES</h1>
+
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" ,}}
@@ -189,14 +149,16 @@ export const Structure = () => {
                                 components={{
                                     Pagination: CustomPagination,
                                 }}
-                                rows={data}
+                                rows={structure}
                                 columns={columns}
                             />
                         </div>
 
                         <div style={{marginLeft:"100px",width:"40%",}}><div>
 
-                            <h1>AJOUTER STRUCTURES</h1>
+                            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                                LISTE DES VISITEURS
+                            </Typography>
 
                         </div>
                             <Paper className={classes.paper}>
@@ -205,10 +167,20 @@ export const Structure = () => {
                                     <Grid item xs>
                                     </Grid>
                                 </Grid>
-                                <TextField id="outlined-basic" label="Nom structure" variant="outlined" style={{width:"100%",height:"100%",}}/>
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Nom structure"
+                                    variant="outlined"
+                                    style={{width:"100%",height:"100%",}}
+                                    value={nomStructure.nomStructure}
+                                    onChange={(event) => setNomStructure({
+                                        ...nomStructure,
+                                        nomStructure: event.target.value
+                                    })}
+                                />
                             </Paper>
-                            <div>
-                                <Button variant="contained" style={{marginTop: "50px",margin: 'auto', display: "flex", backgroundColor: '#44C3CF'}}>AJOUTER</Button>
+                            <div style={{marginTop: "20px"}}>
+                                <Button disabled={nomStructure.nomStructure === ''} variant="contained" style={{marginTop: "50px",margin: 'auto', display: "flex", backgroundColor: '#44C3CF'}} onClick={AddStructure}>AJOUTER</Button>
 
                             </div>
                         </div>

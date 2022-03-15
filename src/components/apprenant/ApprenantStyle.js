@@ -1,7 +1,7 @@
 import {makeStyles} from "@material-ui/core";
 import themeGeneral from '../theme'
 
-const AdminStyle =makeStyles((theme) => ({
+const ApprenantStyle =makeStyles((theme) => ({
 
    
    
@@ -16,6 +16,7 @@ const AdminStyle =makeStyles((theme) => ({
     textTypo:{
         fontFamily: "Arial",
         color: themeGeneral.palette.primary.black,
+        fontSize: "40px"
     },
     // gridStyle:{
     //     paddingLeft:"50px",
@@ -96,14 +97,7 @@ const AdminStyle =makeStyles((theme) => ({
         /* width: "99.6%",*/
         top:"58.5%",
         bottom:"56%"
-    },
-
-    btnPrimary:{
-        backgroundColor: "#05888A", 
-        fontFamily: "Arial", 
-        fontSize: "20px", 
-        marginTop: "10px",
     }
 }));
 
-export default AdminStyle;
+export default ApprenantStyle;

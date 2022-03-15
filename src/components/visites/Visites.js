@@ -1,12 +1,20 @@
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material';
-import { Box, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import React from 'react'
+import React from 'react';
 import Layout from "../layout/Layout";
 import VisiteStyle from "./VisiteStyle";
+import { AddCircleOutlined } from '@mui/icons-material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { FormControl, Typography } from "@material-ui/core";
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur } from './VisiteService';
+
 import {
     DataGrid,
     gridPageCountSelector,
@@ -14,13 +22,35 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { useDemoData } from "@mui/x-data-grid-generator";
+// import { useDemoData } from "@mui/x-data-grid-generator";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
+
+
+
 
 export const Visites = () => {
-    const [visiteur, setVisiteur] = React.useState("apprenant");
 
-    // Date du jour 
-    const [value, setValue] = React.useState(new Date());
+    //=======================================================
+    // ========== Trier par Apprenant ou Visiteur  ==========
+    // ======================================================
+    const [visiteur, setVisiteur] = React.useState("");
+    const [visites, setVisites] = React.useState([]);
+
+
+    //=======================================================
+    // ===== Pour savoir sur quelle date on verifie =========
+    // ===== Les presences des admins et visiteurs ==========
+    // ======================================================
+    const [date, setDate] = React.useState(new Date());
+
+    React.useEffect(()=>{
+        ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+            setVisites(res.data);
+        });
+    
+   // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, []);
 
     // Custom Pagination
     function CustomPagination() {
@@ -43,163 +73,157 @@ export const Visites = () => {
     }
 
 
-    // Tableau Row and Column qu'on a defini ici
-
-    const data = [
-        {
-            id: 1,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 2,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 3,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 4,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 5,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 6,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 7,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        }, {
-            id: 8,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 9,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-
-        {
-            id: 10,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-        {
-            id: 11,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-
-        {
-            id: 12,
-            prenom: "Fadilou",
-            nom: "Sy",
-            cni: "13456789012",
-            dateEntree: "12h:33mn",
-            dateSortie: "20h:44mn"
-        },
-
-    ];
-
     const columns = [
-        {
-            field: 'id',
-            headerClassName: 'super-app-theme--header'
-            ,
-            headerName: 'ID',
-            flex: 1
-        },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.visiteur) {
+                  return params.row.visiteur.prenom;
+                } else if(params.row.apprenant) {
+                    return params.row.apprenant.prenom;
+                }
+            }
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.visiteur) {
+                  return params.row.visiteur.nom;
+                } else if(params.row.apprenant) {
+                    return params.row.apprenant.nom;
+                }
+            }
         },
         {
             field: 'cni',
             headerClassName: 'super-app-theme--header',
             headerName: 'Cni',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.visiteur) {
+                  return params.row.visiteur.cni;
+                } else if(params.row.apprenant) {
+                    return params.row.apprenant.cni;
+                }
+            }
         },
         {
             field: 'dateEntree',
             headerClassName: 'super-app-theme--header',
             headerName: 'Entree',
-            flex: 1
+            flex: 1,
+            valueGetter: (params) => {
+                if (params.row.dateEntree) {
+                  return params.row.dateEntree.substr(11, 5);
+                } 
+            }
         },
         {
             field: 'dateSortie',
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
+            valueGetter: (params) => {
+                if (params.row.dateSortie) {
+                  return params.row.dateSortie.substr(11, 5);
+                } 
+            }
         },
 
-    ]
-    // const { data } = useDemoData({
-    //     dataSet: "Employee",
-    //     rowLength: 100,
-    //     maxColumns: 6
-    // });
+    ];
+
+
+    // =====================================================
+    // ======= Fonction qui permet la generation du Pdf ====
+    // =====================================================
+    const exportPDF = () => {
+
+        const unit = "pt";
+        const size = "A4"; // Use A1, A2, A3 or A4
+        const orientation = "landscape"; // portrait or landscape
+
+        const marginLeft = 40;
+        const doc = new jsPDF(orientation, unit, size);
+
+        doc.setFontSize(15);
+
+        const title = "Liste du " + date.toDateString();
+        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
+
+        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom, 
+                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom, 
+                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni, 
+                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null, 
+                                        elt.dateSortie ? elt.dateSortie.substr(11,5): null, ]
+                                );
+
+        let content = {
+            startY: 50,
+            head: headers,
+            body: dat
+        };
+
+        doc.ext(title, marginLeft, 40);
+        doc.autoTable(content);
+        doc.save("report.pdf");
+    };
+
+
     const classes = VisiteStyle();
+
+    
+
+      const [open, setOpen] = React.useState(false);
+
+      const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+      };
+
+
+      function chargerVisites (ndate, value){
+          setVisiteur(value);
+          setDate(ndate);
+          if (value === "") {
+              ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
+                setVisites(res.data);
+              })
+          }else if (value === "apprenant") {
+              ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
+                setVisites(res.data)
+              })
+          }else if (value === "visiteur") {
+              ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
+                setVisites(res.data)
+              })
+          }
+      };
+    
+    
+
+
+
     return (
         <Layout>
-
+            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                LISTE DES VISITEURS
+            </Typography>
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
-                    {/* Gestion de l'entete de la liste des Reservations */}
 
+                    {/* 
+                        Dans cettte partie, on a la partie du triage et de l'impressiono
+                    */}
                     <Box sx={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -208,16 +232,14 @@ export const Visites = () => {
                     }} spacing={2}
                     >
 
-                        <Stack
-                            direction="row" spacing={5} justifyContent="center" alignItems="center"
-
-                        >
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
+                        <Stack direction="row" spacing={5} justifyContent="center" alignItems="center">
+                            <div
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                    color: "gray"
+                                }}
                             >
                                 <FilterAltOutlined></FilterAltOutlined>
                                 Filtre
@@ -228,9 +250,10 @@ export const Visites = () => {
                                     <DatePicker
                                         inputFormat="dd/MM/yyy"
                                         className={classes.visiteur}
-                                        value={value}
+                                        value={date}
                                         onChange={(newValue) => {
-                                            setValue(newValue);
+                                            console.log(newValue);
+                                            chargerVisites(newValue, visiteur)
                                         }}
                                         renderInput={(params) => {
                                             return (
@@ -255,7 +278,7 @@ export const Visites = () => {
                                 <Select
                                     value={visiteur}
                                     style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
-                                    onChange={(event) => setVisiteur(event.target.value)}
+                                    onChange={(event) => chargerVisites(date, event.target.value)}
                                     className={classes.visiteur}
 
                                     startAdornment={
@@ -264,7 +287,7 @@ export const Visites = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value="">
+                                    <MenuItem value={""}>
                                         <em>Tous</em>
                                     </MenuItem>
                                     <MenuItem value={"apprenant"}>Apprenant</MenuItem>
@@ -275,36 +298,71 @@ export const Visites = () => {
                         <div>
                             <Button
                                 variant="contained"
-                                sx={{ backgroundColor: "#138A8A", padding: "2vh 2vw", fontWeight: "bolder" }}
+                                endIcon={<AddCircleOutlined />}
+                                onClick={handleClickOpen}
+                                sx={{backgroundColor: "#05888A", 
+                                                    fontFamily: "Arial", 
+                                                    fontSize: "20px", 
+                                                    marginRight: "10px",
+                                                        '&:hover':{
+                                                            backgroundColor:"#F48322", 
+                                                            pointer:"cursor"
+                                                        }
+                                                    }}
+                            >
+                                AJOUTER
+                            </Button>
+                            <Button
+                                variant="contained"
                                 endIcon={<DocumentScannerOutlined />}
+                                onClick={(params, event) => {
+                                    exportPDF();
+                                }}
+                                sx={{
+                                        backgroundColor: "#138A8A",
+                                        fontSize: "20px",
+                                        fontWeight: "bolder",
+                                        '&:hover': {
+                                            backgroundColor: '#F48322',
+                                        }
+                                    }}
                             >
                                 Impression
                             </Button>
+
                         </div>
 
                     </Box>
 
+
+                    {/*
+                        Nous avons ici le tableau des visite effectuées durant une journée 
+                     */}
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
-                            backgroundColor: '#44C3CF',
+                            backgroundColor: '#44C3CF'
                         },
                     }} className={classes.tableau}>
 
                         <div style={{ width: "100%" }}>
-                            <h1> Liste du {value.toLocaleString("fr-FR").split(',')[0]}</h1>
+                            <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
+
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
 
                                 autoHeight
-                                pageSize={6}
+                                pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
                                 components={{
                                     Pagination: CustomPagination,
+                                    // Toolbar: CustomToolbar,
                                 }}
-                                rows={data}
+                                rows={visites}
                                 columns={columns}
+
+                                disableVirtualization
                             />
                         </div>
 
@@ -313,8 +371,74 @@ export const Visites = () => {
                 </Box>
             </Box>
 
+            <div>
+                <Dialog open={open} onClose={handleClose}>
+                    <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
+                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float:"left", marginLeft:"15px" }} />
+                    <DialogContent>
+                        <Grid>
+                            <FormControl fullWidth>
+                                <label className={classes.labelText}>Prenom</label>
+                                <OutlinedInput 
+                                id="prenom"
+                                type="text"
+                                variant="outlined" 
+                                placeholder="Ex:Omar" 
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid mt={2}>
+                            <FormControl fullWidth>
+                                <label className={classes.labelText}>Nom</label>
+                                <OutlinedInput 
+                                id="nom"
+                                type="text"
+                                variant="outlined" 
+                                placeholder="Ex:DIOP" 
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid mt={2}>
+                            <FormControl fullWidth>
+                                <label className={classes.labelText}>Telephone</label>
+                                <OutlinedInput 
+                                id="telephone"
+                                type="text"
+                                variant="outlined" 
+                                placeholder="Ex:77 777 77 77" 
+                                />
+                            </FormControl>
+                        </Grid>
+                    </DialogContent>
+                    <DialogActions>
+                    <Button onClick={handleClose}
+                        sx={{backgroundColor: "#BE0101", 
+                        fontFamily: "Arial", fontSize: "20px", 
+                        marginTop: "10px",
+                        color: "#FFFFFF",
+                        '&:hover':{
+                            backgroundColor:"#F32018", 
+                            pointer:"cursor"
+                        }
+                    }}
+                    >ANNULER</Button>
+                    <Button onClick={handleClose}
+                        sx={{backgroundColor: "#05888A", 
+                        fontFamily: "Arial", fontSize: "20px", 
+                        marginTop: "10px",
+                        color: "#FFFFFF",
+                        '&:hover':{
+                            backgroundColor:"#F48322", 
+                            pointer:"cursor"
+                        }
+                    }}
+                    >AJOUTER</Button>
+                    </DialogActions>
+                </Dialog>
+            </div>
+
         </Layout>
-    )
-}
+    );
+};
 
 export default Visites;

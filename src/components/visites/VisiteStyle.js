@@ -1,6 +1,6 @@
 
-import { makeStyles } from "@mui/styles";
-// import themeGeneral from '../theme';
+import {makeStyles} from "@material-ui/core";
+ import themeGeneral from '../theme';
 
 const VisiteStyle = makeStyles(({
 
@@ -12,7 +12,18 @@ const VisiteStyle = makeStyles(({
     },
     tableau: {
         boxShadow: "2000px"
-    }
+    },
+    textTypo:{
+        fontFamily: "Arial",
+        color: themeGeneral.palette.primary.black,
+    },
+    labelText:{
+        fontWeight:"normal",
+        fontFamily: "Arial",
+        color: themeGeneral.palette.primary.black,
+        fontSize: "20px",
+        marginBottom: "2px"
+    },
 
     
 
