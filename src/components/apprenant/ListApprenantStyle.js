@@ -73,31 +73,8 @@ const ApprenantStyle =makeStyles((theme) => ({
     item: {
         marginBottom: theme.spacing(3),
         display: "flex",
-        alignContent: 'space-evenly'
-    },
-    passwordbli:{
-        float:'left',
-    },
-    gridFormBtn: {
-        background: themeGeneral.palette.primary.vert,
-        color:themeGeneral.palette.primary.white,
-        width:"60%",
-        fontWeight: 'bold',
-        marginBottom: theme.spacing(1),
-    },
-    gridContainer: {
-        padding: "5px",
-        border: "1px solid #E5E5E5",
-        borderRadius: "5px"
-    },
-    footer:{
-        zIndex:1,
-        position: "absolute",
-        width: "100%",
-        /* width: "99.6%",*/
-        top:"58.5%",
-        bottom:"56%"
-    }
-}));
+        justifyContent:"space-between",
 
+    }
+}))
 export default ApprenantStyle;

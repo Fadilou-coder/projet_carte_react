@@ -13,7 +13,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, Typography } from "@material-ui/core";
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur } from './VisiteService';
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService';
 
 import {
     DataGrid,
@@ -25,17 +25,30 @@ import {
 // import { useDemoData } from "@mui/x-data-grid-generator";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
+import Skeleton from '@mui/material/Skeleton';
+
 
 
 
 
 export const Visites = () => {
 
+    // Definition boolean pour le chargement des données
+    const [isLoaded, setIsloaded] = React.useState(false);
+
     //=======================================================
     // ========== Trier par Apprenant ou Visiteur  ==========
     // ======================================================
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
+
+    const [values, setValues] = React.useState({
+        Cni: '',
+        prenom: '',
+        nom: '',
+        numTelephone: '',
+
+    });
 
 
     //=======================================================
@@ -44,13 +57,14 @@ export const Visites = () => {
     // ======================================================
     const [date, setDate] = React.useState(new Date());
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data);
+            setVisites(res.data.reverse());
+
         });
-    
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     // Custom Pagination
     function CustomPagination() {
@@ -80,11 +94,14 @@ export const Visites = () => {
             headerName: 'Prenom',
             flex: 1,
             valueGetter: (params) => {
+
                 if (params.row.visiteur) {
-                  return params.row.visiteur.prenom;
-                } else if(params.row.apprenant) {
+                    return params.row.visiteur.prenom;
+                } else if (params.row.apprenant) {
                     return params.row.apprenant.prenom;
                 }
+
+                setIsloaded(true);
             }
         },
         {
@@ -94,8 +111,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.nom;
-                } else if(params.row.apprenant) {
+                    return params.row.visiteur.nom;
+                } else if (params.row.apprenant) {
                     return params.row.apprenant.nom;
                 }
             }
@@ -107,8 +124,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.cni;
-                } else if(params.row.apprenant) {
+                    return params.row.visiteur.cni;
+                } else if (params.row.apprenant) {
                     return params.row.apprenant.cni;
                 }
             }
@@ -120,8 +137,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
-                  return params.row.dateEntree.substr(11, 5);
-                } 
+                    return params.row.dateEntree.substr(11, 5);
+                }
             }
         },
         {
@@ -131,8 +148,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
-                  return params.row.dateSortie.substr(11, 5);
-                } 
+                    return params.row.dateSortie.substr(11, 5);
+                }
             }
         },
 
@@ -156,12 +173,14 @@ export const Visites = () => {
         const title = "Liste du " + date.toDateString();
         const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
 
-        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom, 
-                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom, 
-                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni, 
-                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null, 
-                                        elt.dateSortie ? elt.dateSortie.substr(11,5): null, ]
-                                );
+        const dat = visites.map(elt => [
+            elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
+            elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom,
+            elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni,
+            elt.dateEntree ? elt.dateEntree.substr(11, 5) : null,
+            elt.dateSortie ? elt.dateSortie.substr(11, 5) : null,
+        ]
+        );
 
         let content = {
             startY: 50,
@@ -177,36 +196,63 @@ export const Visites = () => {
 
     const classes = VisiteStyle();
 
-    
 
-      const [open, setOpen] = React.useState(false);
 
-      const handleClickOpen = () => {
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
         setOpen(true);
-      };
-    
-      const handleClose = () => {
+    };
+
+    const handleClose = () => {
         setOpen(false);
-      };
+    };
 
 
-      function chargerVisites (ndate, value){
-          setVisiteur(value);
-          setDate(ndate);
-          if (value === "") {
-              ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
+    function chargerVisites(ndate, value) {
+        setVisiteur(value);
+        setDate(ndate);
+        if (value === "") {
+            ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data);
-              })
-          }else if (value === "apprenant") {
-              ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
+            })
+        } else if (value === "apprenant") {
+            ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
-              })
-          }else if (value === "visiteur") {
-              ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
+            })
+        } else if (value === "visiteur") {
+            ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
               })
           }
       };
+
+
+      const AjouterVisites = () => {
+        SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
+            handleClose();
+            if (visiteur === "") {
+                ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data);
+                })
+            }else if (visiteur === "apprenant") {
+                ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }else if (visiteur === "visiteur") {
+                ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }
+            setValues({
+                Cni: '',
+                prenom: '',
+                nom: '',
+                numTelephone: '',
+        
+            })
+        });
+      }
     
     
 
@@ -300,15 +346,16 @@ export const Visites = () => {
                                 variant="contained"
                                 endIcon={<AddCircleOutlined />}
                                 onClick={handleClickOpen}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", 
-                                                    fontSize: "20px", 
-                                                    marginRight: "10px",
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
+                                sx={{
+                                    backgroundColor: "#05888A",
+                                    fontFamily: "Arial",
+                                    fontSize: "20px",
+                                    marginRight: "10px",
+                                    '&:hover': {
+                                        backgroundColor: "#F48322",
+                                        pointer: "cursor"
+                                    }
+                                }}
                             >
                                 AJOUTER
                             </Button>
@@ -319,13 +366,13 @@ export const Visites = () => {
                                     exportPDF();
                                 }}
                                 sx={{
-                                        backgroundColor: "#138A8A",
-                                        fontSize: "20px",
-                                        fontWeight: "bolder",
-                                        '&:hover': {
-                                            backgroundColor: '#F48322',
-                                        }
-                                    }}
+                                    backgroundColor: "#138A8A",
+                                    fontSize: "20px",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#F48322',
+                                    }
+                                }}
                             >
                                 Impression
                             </Button>
@@ -351,7 +398,7 @@ export const Visites = () => {
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
-
+                                onLoad
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
@@ -361,7 +408,7 @@ export const Visites = () => {
                                 }}
                                 rows={visites}
                                 columns={columns}
-
+                                loading={isLoaded}
                                 disableVirtualization
                             />
                         </div>
@@ -374,16 +421,35 @@ export const Visites = () => {
             <div>
                 <Dialog open={open} onClose={handleClose}>
                     <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
-                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float:"left", marginLeft:"15px" }} />
+                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
                     <DialogContent>
                         <Grid>
                             <FormControl fullWidth>
+                                <label className={classes.labelText}>CNI</label>
+                                <OutlinedInput 
+                                    id="cni"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:1 123 1234 12345" 
+                                    onChange={(event)=>{
+                                        setValues({...values,cni: event.target.value})
+                                    }}
+                                    value={values.cni}
+                                />
+                            </FormControl>
+                        </Grid>
+                        <Grid  mt={2}>
+                            <FormControl fullWidth>
                                 <label className={classes.labelText}>Prenom</label>
                                 <OutlinedInput 
-                                id="prenom"
-                                type="text"
-                                variant="outlined" 
-                                placeholder="Ex:Omar" 
+                                    id="prenom"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:Omar" 
+                                    onChange={(event)=>{
+                                        setValues({...values,prenom: event.target.value})
+                                    }}
+                                    value={values.prenom}
                                 />
                             </FormControl>
                         </Grid>
@@ -391,10 +457,14 @@ export const Visites = () => {
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Nom</label>
                                 <OutlinedInput 
-                                id="nom"
-                                type="text"
-                                variant="outlined" 
-                                placeholder="Ex:DIOP" 
+                                    id="nom"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:DIOP" 
+                                    onChange={(event)=>{
+                                        setValues({...values,nom: event.target.value})
+                                    }}
+                                    value={values.nom}
                                 />
                             </FormControl>
                         </Grid>
@@ -402,10 +472,14 @@ export const Visites = () => {
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Telephone</label>
                                 <OutlinedInput 
-                                id="telephone"
-                                type="text"
-                                variant="outlined" 
-                                placeholder="Ex:77 777 77 77" 
+                                    id="telephone"
+                                    type="text"
+                                    variant="outlined" 
+                                    placeholder="Ex:777777777" 
+                                    onChange={(event)=>{
+                                        setValues({...values,numTelephone: event.target.value})
+                                    }}
+                                    value={values.numTelephone}
                                 />
                             </FormControl>
                         </Grid>
@@ -422,7 +496,7 @@ export const Visites = () => {
                         }
                     }}
                     >ANNULER</Button>
-                    <Button onClick={handleClose}
+                    <Button onClick={AjouterVisites}
                         sx={{backgroundColor: "#05888A", 
                         fontFamily: "Arial", fontSize: "20px", 
                         marginTop: "10px",

@@ -14,10 +14,8 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import {ListAllVisite} from "../visites/VisiteService";
 import {Addstructure, ListAllStructure} from "./StructureService";
 import {Typography} from "@material-ui/core";
-import Checkbox from "@mui/material/Checkbox";
 
 
 
@@ -93,7 +91,7 @@ export const Structure = () => {
                     return alert(JSON.stringify(thisRow, null, 4));
                 };
 
-                return <Button variant="contained" style={{backgroundColor: 'red'}} onClick={AddStructure}>Bloquer</Button>;
+                return <Button variant="contained" style={{backgroundColor: '#FA8072'}} onClick={AddStructure}>Bloquer</Button>;
             }
         },
 
