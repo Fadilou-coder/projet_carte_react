@@ -91,7 +91,7 @@ export const Structure = () => {
                     return alert(JSON.stringify(thisRow, null, 4));
                 };
 
-                return <Button variant="contained" style={{backgroundColor: '#FA8072'}} onClick={AddStructure}>Bloquer</Button>;
+                return <Button variant="contained" style={{backgroundColor: '#E9967A'}} onClick={AddStructure}>Bloquer</Button>;
             }
         },
 
