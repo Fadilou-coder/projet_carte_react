@@ -201,6 +201,8 @@ export const Visites = () => {
     const componentRef = useRef();
 
 
+
+
     const datenow = new Date();
 
 
@@ -233,14 +235,18 @@ export const Visites = () => {
         } else if (value === "visiteur") {
             ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
                 setVisites(res.data)
-              })
-          }
-      };
+            })
+        }
+    };
 
 
-      const AjouterVisites = () => {
-        exportComponentAsPNG(componentRef)
-          handleClose()
+    // fONCTION POURGENERE PDF
+
+
+    const AjouterVisites = () => {
+
+        // exportComponentAsPNG(componentRef)
+        //   handleClose()
         // SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
         //     handleClose()
         //     if (visiteur === "") {
@@ -261,12 +267,26 @@ export const Visites = () => {
         //         prenom: '',
         //         nom: '',
         //         numTelephone: '',
-        
+
         //     })
         // })
-      }
-    
-    
+    }
+
+
+    const downloadQRCode = () => {
+        // Generate download with use canvas and stream
+        const canvas = document.getElementById("qr-gen");
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = "qrcode.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    };
+
 
 
 
@@ -428,10 +448,20 @@ export const Visites = () => {
 
                 </Box>
             </Box>
-            <div ref={componentRef} style={{maxWidth: '400px', maxheight: '400px', zIndex: "-1"}}>
-                <QRCode
-                    value={'{cni:' +  values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
-                    size={400}
+
+
+            <QRCode
+                hidden
+                id="qr-gen"
+                value={'{cni:' + values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
+                size={290}
+                level={"H"}
+                includeMargin={true}
+            />
+            {/* <QRCode
+                    hidden
+                    value={'{cni:' + values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
+                    size={300}
                     bgColor={"#ffffff"}
                     fgColor={"#138A8A"}
                     level={"H"}
@@ -445,60 +475,40 @@ export const Visites = () => {
                         width: 30,
                         excavate: false,
                     }}
-                        />
-            </div>
+                /> */}
+
 
             <div>
                 <Dialog open={open} onClose={handleClose}>
-                    <div ref={componentRef} style={{maxWidth: '400px', maxheight: '400px'}} hidden={open}>
-                
-                        <QRCode
-                            id="qrCode" style={{visibility: "visible" }}
-                            value={'{cni:' +  values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
-                            size={400}
-                            bgColor={"#ffffff"}
-                            fgColor={"#138A8A"}
-                            level={"H"}
-                            includeMargin={false}
-                            renderAs={"svg"}
-                            imageSettings={{
-                                            src: `${logosonatel}`,
-                                            x: null,
-                                            y: null,
-                                            height: 30,
-                                            width: 30,
-                                            excavate: false,
-                            }}
-                        />
-                    </div>
+
                     <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
                     <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
                     <DialogContent>
                         <Grid>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>CNI</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="cni"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:1 123 1234 12345" 
-                                    onChange={(event)=>{
-                                        setValues({...values,cni: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:1 123 1234 12345"
+                                    onChange={(event) => {
+                                        setValues({ ...values, cni: event.target.value })
                                     }}
                                     value={values.cni}
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid  mt={2}>
+                        <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Prenom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="prenom"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:Omar" 
-                                    onChange={(event)=>{
-                                        setValues({...values,prenom: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:Omar"
+                                    onChange={(event) => {
+                                        setValues({ ...values, prenom: event.target.value })
                                     }}
                                     value={values.prenom}
                                 />
@@ -507,13 +517,13 @@ export const Visites = () => {
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Nom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="nom"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:DIOP" 
-                                    onChange={(event)=>{
-                                        setValues({...values,nom: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:DIOP"
+                                    onChange={(event) => {
+                                        setValues({ ...values, nom: event.target.value })
                                     }}
                                     value={values.nom}
                                 />
@@ -522,13 +532,13 @@ export const Visites = () => {
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Telephone</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="telephone"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:777777777" 
-                                    onChange={(event)=>{
-                                        setValues({...values,numTelephone: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:777777777"
+                                    onChange={(event) => {
+                                        setValues({ ...values, numTelephone: event.target.value })
                                     }}
                                     value={values.numTelephone}
                                 />
@@ -536,28 +546,31 @@ export const Visites = () => {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={handleClose}
-                        sx={{backgroundColor: "#BE0101", 
-                        fontFamily: "Arial", fontSize: "20px", 
-                        marginTop: "10px",
-                        color: "#FFFFFF",
-                        '&:hover':{
-                            backgroundColor:"#F32018", 
-                            pointer:"cursor"
-                        }
-                    }}
-                    >ANNULER</Button>
-                    <Button onClick={AjouterVisites}
-                        sx={{backgroundColor: "#05888A", 
-                        fontFamily: "Arial", fontSize: "20px", 
-                        marginTop: "10px",
-                        color: "#FFFFFF",
-                        '&:hover':{
-                            backgroundColor:"#F48322", 
-                            pointer:"cursor"
-                        }
-                    }}
-                    >AJOUTER</Button>
+                        <Button onClick={handleClose}
+                            sx={{
+                                backgroundColor: "#BE0101",
+                                fontFamily: "Arial", fontSize: "20px",
+                                marginTop: "10px",
+                                color: "#FFFFFF",
+                                '&:hover': {
+                                    backgroundColor: "#F32018",
+                                    pointer: "cursor"
+                                }
+                            }}
+                        >ANNULER</Button>
+                        <Button onClick={downloadQRCode}
+                            sx={{
+                                backgroundColor: "#05888A",
+                                fontFamily: "Arial", fontSize: "20px",
+                                marginTop: "10px",
+                                color: "#FFFFFF",
+                                '&:hover': {
+                                    backgroundColor: "#F48322",
+                                    pointer: "cursor"
+                                }
+                            }}
+                        >AJOUTER
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>
