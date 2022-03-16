@@ -19,7 +19,7 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
-import { ListAllApprenant } from './ApprenantService';
+import { ListAllApprenant, putApprenant } from './ApprenantService';
 
 var QRCode = require('qrcode.react');
 
@@ -32,13 +32,25 @@ export const ListApprenant = () => {
 
     // Initialisation des données des apprenants
     const [apprenants, setApprenants] = React.useState([]);
+    // Show detail Apprenant
+    const [apprenant, setApprenant] = React.useState({
+        id: 0,
+        nom: '',
+        prenom: '',
+        code: '',
+        referentiel: '',
+        date_naiss: '00/00/0000',
+        adresse: '',
+        telephone: '77 777 77 77'
+
+    });
 
 
 
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
-            console.log(res.data)
+            setApprenant(res.data[0]);
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -69,24 +81,16 @@ export const ListApprenant = () => {
             />
         );
     }
-    // Tableau Row and Column qu'on a defini ici
-
-    const data = [
-        {
-            id: 1,
-            nom: 'Fadilou',
-            prenom: 'SY',
-            code: '20200354',
-            referentiel: 'Developpeur Web',
-            date_naiss: '02/02/2000',
-            adresse: 'Pikine',
-            telephone: '77 777 77 77'
-
-        }
-
-    ];
 
     const columns = [
+
+        {
+            field: 'code',
+            headerClassName: 'super-app-theme--header',
+            headerName: 'Numero Etudiant',
+            editable: true,
+            flex: 1
+        },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
@@ -101,21 +105,29 @@ export const ListApprenant = () => {
             editable: true,
             flex: 1
         },
-        {
-            field: 'code',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Numero Etudiant',
-            editable: true,
-            flex: 1
-        }
-
-
     ]
 
-    // Show detail Apprenant
-    let [apprenant, setApprenant] = React.useState(
-        data[0]
-    );
+    function update() {
+        let newApp = new FormData();
+        newApp.append('prenom', apprenant.prenom);
+        newApp.append('nom', apprenant.nom);
+        newApp.append('email', apprenant.email);
+        newApp.append('phone', apprenant.phone);
+        newApp.append('adresse', apprenant.adresse);
+        newApp.append('cni', apprenant.cni);
+        newApp.append('referentiel', apprenant.referentiel);
+        newApp.append('dateNaissance', apprenant.dateNaissance);
+        newApp.append('lieuNaissance', apprenant.lieuNaissance);
+        newApp.append('numTuteur', apprenant.numTuteur);
+        newApp.append('avatar', apprenant.avatar);
+
+        putApprenant(newApp, apprenant.id).then(res => {
+            setApprenant(res.data);
+        })
+        
+
+    }
+
 
     // Pour cocher les cases dont  la valeur blocked est egale à true
     //     const [selectionModel, setSelectionModel] = React.useState(() =>

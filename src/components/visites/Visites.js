@@ -1,19 +1,22 @@
-import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material';
-import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import React from 'react';
-import Layout from "../layout/Layout";
-import VisiteStyle from "./VisiteStyle";
-import { AddCircleOutlined } from '@mui/icons-material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { FormControl, Typography } from "@material-ui/core";
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService';
+import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material'
+import TextField from '@mui/material/TextField'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DatePicker from '@mui/lab/DatePicker'
+import React from 'react'
+import Layout from "../layout/Layout"
+import VisiteStyle from "./VisiteStyle"
+import { AddCircleOutlined } from '@mui/icons-material'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import { FormControl, Typography } from "@material-ui/core"
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService'
+import logosonatel from "../../assets/images/logoSA.png"
+import { exportComponentAsPNG } from "react-component-export-image";
+import { useRef } from "react";
 
 import {
     DataGrid,
@@ -21,11 +24,13 @@ import {
     gridPageSelector,
     useGridApiContext,
     useGridSelector,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid'
 // import { useDemoData } from "@mui/x-data-grid-generator";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
-import Skeleton from '@mui/material/Skeleton';
+import jsPDF from "jspdf"
+import "jspdf-autotable"
+import Skeleton from '@mui/material/Skeleton'
+
+var QRCode = require('qrcode.react')
 
 
 
@@ -34,13 +39,13 @@ import Skeleton from '@mui/material/Skeleton';
 export const Visites = () => {
 
     // Definition boolean pour le chargement des données
-    const [isLoaded, setIsloaded] = React.useState(false);
+    const [isLoaded, setIsloaded] = React.useState(false)
 
     //=======================================================
     // ========== Trier par Apprenant ou Visiteur  ==========
     // ======================================================
-    const [visiteur, setVisiteur] = React.useState("");
-    const [visites, setVisites] = React.useState([]);
+    const [visiteur, setVisiteur] = React.useState("")
+    const [visites, setVisites] = React.useState([])
 
     const [values, setValues] = React.useState({
         Cni: '',
@@ -48,30 +53,29 @@ export const Visites = () => {
         nom: '',
         numTelephone: '',
 
-    });
+    })
 
 
     //=======================================================
     // ===== Pour savoir sur quelle date on verifie =========
     // ===== Les presences des admins et visiteurs ==========
     // ======================================================
-    const [date, setDate] = React.useState(new Date());
+    const [date, setDate] = React.useState(new Date())
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data.reverse());
-            setIsloaded(true);
+            setVisites(res.data.reverse())
 
-        });
+        })
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [])
 
     // Custom Pagination
     function CustomPagination() {
-        const apiRef = useGridApiContext();
-        const page = useGridSelector(apiRef, gridPageSelector);
-        const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+        const apiRef = useGridApiContext()
+        const page = useGridSelector(apiRef, gridPageSelector)
+        const pageCount = useGridSelector(apiRef, gridPageCountSelector)
 
         return (
             <Pagination
@@ -84,7 +88,7 @@ export const Visites = () => {
                 renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
-        );
+        )
     }
 
 
@@ -97,12 +101,12 @@ export const Visites = () => {
             valueGetter: (params) => {
 
                 if (params.row.visiteur) {
-                    return params.row.visiteur.prenom;
+                    return params.row.visiteur.prenom
                 } else if (params.row.apprenant) {
-                    return params.row.apprenant.prenom;
+                    return params.row.apprenant.prenom
                 }
 
-                setIsloaded(true);
+                setIsloaded(true)
             }
         },
         {
@@ -112,9 +116,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                    return params.row.visiteur.nom;
+                    return params.row.visiteur.nom
                 } else if (params.row.apprenant) {
-                    return params.row.apprenant.nom;
+                    return params.row.apprenant.nom
                 }
             }
         },
@@ -125,9 +129,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                    return params.row.visiteur.cni;
+                    return params.row.visiteur.cni
                 } else if (params.row.apprenant) {
-                    return params.row.apprenant.cni;
+                    return params.row.apprenant.cni
                 }
             }
         },
@@ -138,7 +142,7 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
-                    return params.row.dateEntree.substr(11, 5);
+                    return params.row.dateEntree.substr(11, 5)
                 }
             }
         },
@@ -149,12 +153,12 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
-                    return params.row.dateSortie.substr(11, 5);
+                    return params.row.dateSortie.substr(11, 5)
                 }
             }
         },
 
-    ];
+    ]
 
 
     // =====================================================
@@ -162,17 +166,17 @@ export const Visites = () => {
     // =====================================================
     const exportPDF = () => {
 
-        const unit = "pt";
-        const size = "A4"; // Use A1, A2, A3 or A4
-        const orientation = "landscape"; // portrait or landscape
+        const unit = "pt"
+        const size = "A4" // Use A1, A2, A3 or A4
+        const orientation = "landscape" // portrait or landscape
 
-        const marginLeft = 40;
-        const doc = new jsPDF(orientation, unit, size);
+        const marginLeft = 40
+        const doc = new jsPDF(orientation, unit, size)
 
-        doc.setFontSize(15);
+        doc.setFontSize(15)
 
-        const title = "Liste du " + date.toDateString();
-        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
+        const title = "Liste du " + date.toDateString()
+        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]]
 
         const dat = visites.map(elt => [
             elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
@@ -181,41 +185,45 @@ export const Visites = () => {
             elt.dateEntree ? elt.dateEntree.substr(11, 5) : null,
             elt.dateSortie ? elt.dateSortie.substr(11, 5) : null,
         ]
-        );
+        )
 
         let content = {
             startY: 50,
             head: headers,
             body: dat
-        };
+        }
 
-        doc.text(title, marginLeft, 40);
-        doc.autoTable(content);
-        doc.save("report.pdf");
-    };
+        doc.text(title, marginLeft, 40)
+        doc.autoTable(content)
+        doc.save("report.pdf")
+    }
+
+    const componentRef = useRef();
+
+    const datenow = new Date();
 
 
-    const classes = VisiteStyle();
+    const classes = VisiteStyle()
 
 
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(false)
 
     const handleClickOpen = () => {
-        setOpen(true);
-    };
+        setOpen(true)
+    }
 
     const handleClose = () => {
-        setOpen(false);
-    };
+        setOpen(false)
+    }
 
 
     function chargerVisites(ndate, value) {
-        setVisiteur(value);
-        setDate(ndate);
+        setVisiteur(value)
+        setDate(ndate)
         if (value === "") {
             ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data);
+                setVisites(res.data)
             })
         } else if (value === "apprenant") {
             ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
@@ -230,29 +238,31 @@ export const Visites = () => {
 
 
       const AjouterVisites = () => {
-        SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
-            handleClose();
-            if (visiteur === "") {
-                ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                })
-            }else if (visiteur === "apprenant") {
-                ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
-                })
-            }else if (visiteur === "visiteur") {
-                ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
-                })
-            }
-            setValues({
-                Cni: '',
-                prenom: '',
-                nom: '',
-                numTelephone: '',
+        exportComponentAsPNG(componentRef)
+          handleClose()
+        // SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
+        //     handleClose()
+        //     if (visiteur === "") {
+        //         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+        //           setVisites(res.data)
+        //         })
+        //     }else if (visiteur === "apprenant") {
+        //         ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
+        //           setVisites(res.data)
+        //         })
+        //     }else if (visiteur === "visiteur") {
+        //         ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
+        //           setVisites(res.data)
+        //         })
+        //     }
+        //     setValues({
+        //         Cni: '',
+        //         prenom: '',
+        //         nom: '',
+        //         numTelephone: '',
         
-            })
-        });
+        //     })
+        // })
       }
     
     
@@ -299,7 +309,7 @@ export const Visites = () => {
                                         className={classes.visiteur}
                                         value={date}
                                         onChange={(newValue) => {
-                                            console.log(newValue);
+                                            console.log(newValue)
                                             chargerVisites(newValue, visiteur)
                                         }}
                                         renderInput={(params) => {
@@ -315,7 +325,7 @@ export const Visites = () => {
                                                         borderRadius: "15px"
                                                     }}
                                                 />
-                                            );
+                                            )
                                         }}
                                     // renderInput={(params) => <TextField {...params} />}
                                     />
@@ -364,7 +374,7 @@ export const Visites = () => {
                                 variant="contained"
                                 endIcon={<DocumentScannerOutlined />}
                                 onClick={(params, event) => {
-                                    exportPDF();
+                                    exportPDF()
                                 }}
                                 sx={{
                                     backgroundColor: "#138A8A",
@@ -409,7 +419,6 @@ export const Visites = () => {
                                 }}
                                 rows={visites}
                                 columns={columns}
-                                loading={isLoaded}
                                 disableVirtualization
                             />
                         </div>
@@ -418,9 +427,49 @@ export const Visites = () => {
 
                 </Box>
             </Box>
+            <div ref={componentRef} style={{maxWidth: '400px', maxheight: '400px', zIndex: "-1"}}>
+                <QRCode
+                    value={'{cni:' +  values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
+                    size={400}
+                    bgColor={"#ffffff"}
+                    fgColor={"#138A8A"}
+                    level={"H"}
+                    includeMargin={false}
+                    renderAs={"svg"}
+                    imageSettings={{
+                        src: `${logosonatel}`,
+                        x: null,
+                        y: null,
+                        height: 30,
+                        width: 30,
+                        excavate: false,
+                    }}
+                        />
+            </div>
 
             <div>
                 <Dialog open={open} onClose={handleClose}>
+                    <div ref={componentRef} style={{maxWidth: '400px', maxheight: '400px'}} hidden={open}>
+                
+                        <QRCode
+                            id="qrCode" style={{visibility: "visible" }}
+                            value={'{cni:' +  values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
+                            size={400}
+                            bgColor={"#ffffff"}
+                            fgColor={"#138A8A"}
+                            level={"H"}
+                            includeMargin={false}
+                            renderAs={"svg"}
+                            imageSettings={{
+                                            src: `${logosonatel}`,
+                                            x: null,
+                                            y: null,
+                                            height: 30,
+                                            width: 30,
+                                            excavate: false,
+                            }}
+                        />
+                    </div>
                     <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
                     <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
                     <DialogContent>
@@ -513,7 +562,7 @@ export const Visites = () => {
             </div>
 
         </Layout>
-    );
-};
+    )
+}
 
 export default Visites;
