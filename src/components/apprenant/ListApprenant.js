@@ -236,8 +236,8 @@ export const ListApprenant = () => {
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
                                             //   alert(event.target.value.id)
-                                            console.log(event)
-                                            setApprenant(params.row);
+                                            console.log(params.row)
+                                         //   setApprenant(params.row);
 
                                         }
                                     }}

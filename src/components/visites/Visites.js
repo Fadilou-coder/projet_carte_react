@@ -13,7 +13,14 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { FormControl, Typography } from "@material-ui/core";
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService';
+import {
+    ListAllVisite,
+    ListVisitesApp,
+    ListVisitesVisteur,
+    SaveVisitesVisieur,
+    SortieApp,
+    SortieVisiteur
+} from './VisiteService';
 
 import {
     DataGrid,
@@ -25,7 +32,7 @@ import {
 // import { useDemoData } from "@mui/x-data-grid-generator";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-import Skeleton from '@mui/material/Skeleton';
+import Skeletons from "../skeleton/Skeleton";
 
 
 
@@ -34,7 +41,7 @@ import Skeleton from '@mui/material/Skeleton';
 export const Visites = () => {
 
     // Definition boolean pour le chargement des données
-    const [isLoaded, setIsloaded] = React.useState(false);
+    const [isLoaded, setIsloaded] = useState(false);
 
     //=======================================================
     // ========== Trier par Apprenant ou Visiteur  ==========
@@ -57,9 +64,8 @@ export const Visites = () => {
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+            setIsloaded(true)
             setVisites(res.data.reverse());
-            setIsloaded(true);
-
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -82,6 +88,18 @@ export const Visites = () => {
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
         );
+    }
+
+    function buttonSortir(donnees){
+        if (donnees.apprenant != null){
+            SortieApp(donnees).then(() => {
+                chargerVisites(date, visiteur)
+            })
+        }else {
+            SortieVisiteur(donnees).then(() => {
+                chargerVisites(date, visiteur)
+            })
+        }
     }
 
 
@@ -144,13 +162,23 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
+            renderCell: (cellvalue) =>{
+                if (cellvalue.row.dateSortie==null){
+                    return <Button
+                        sx ={{backgroundColor:"green", color:"white" }}
+                        onClick= {() => buttonSortir(cellvalue.row)}
+                    >
+
+                        Sortir
+                    </Button>
+                }
+            },
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
                     return params.row.dateSortie.substr(11, 5);
                 }
             }
-        },
-
+        }
     ];
 
 
@@ -182,7 +210,10 @@ export const Visites = () => {
         let content = {
             startY: 50,
             head: headers,
-            body: dat
+            body:
+                !isLoaded?(
+                        <Skeletons nbItem={10} list={classes.listIsload}/>
+                    ) : (dat)
         };
 
         doc.text(title, marginLeft, 40);
@@ -209,15 +240,15 @@ export const Visites = () => {
         setDate(ndate);
         if (value === "") {
             ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data);
+                setVisites(res.data.reverse());
             })
         } else if (value === "apprenant") {
             ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
+                setVisites(res.data.reverse())
             })
         } else if (value === "visiteur") {
             ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
+                setVisites(res.data.reverse())
               })
           }
       };
@@ -400,7 +431,6 @@ export const Visites = () => {
                                 }}
                                 rows={visites}
                                 columns={columns}
-                                loading={isLoaded}
                                 disableVirtualization
                             />
                         </div>
