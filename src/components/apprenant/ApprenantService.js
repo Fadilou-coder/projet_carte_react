@@ -9,3 +9,18 @@ export const ListAllApprenant = () => {
 export const putApprenant = (data, id) => {
     return axios.put(API_URL + "apprenants/" + id, data,  {headers: authHeader()});
 }
+export const saveApprenant = (data) => {
+    return axios.post(
+        API_URL + "apprenants/create", data,
+        { headers: authHeader(),
+            "axios.defaults.headers.common['Content-Type'] ": 'multipart/form-data; boundary=someArbitraryUniqueString',
+        });
+}
+
+export const listAllReferentiels= () => {
+    return axios.get(
+        API_URL + "referentiels", { headers: authHeader()
+        });
+}
+
+

@@ -3,8 +3,8 @@ import themeGeneral from '../theme'
 
 const ApprenantStyle =makeStyles((theme) => ({
 
-   
-   
+
+
     subContainer:{
         padding:themeGeneral.spacing(1),
         border: "2px solid #E5E5E5",
@@ -24,6 +24,18 @@ const ApprenantStyle =makeStyles((theme) => ({
     //         paddingLeft:"0px",
     //     }
     // },
+    inputDate:{
+        background:themeGeneral.palette.primary.white,
+        border:`1px solid #DBE2EA`,
+        borderRadius:"5px",
+        width:"80%",
+        "& .css-i4bv87-MuiSvgIcon-root ":{
+            marginRight: "10px",
+        }, [theme.breakpoints.down("sm")]: {
+            width:"35vw",
+            margin:theme.spacing(1)
+        },
+    },
     labelText:{
         fontWeight:"normal",
         fontFamily: "Arial",

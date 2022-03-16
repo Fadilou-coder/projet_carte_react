@@ -38,7 +38,7 @@ export const ListApprenant = () => {
         nom: '',
         prenom: '',
         code: '',
-        referentiel: '',
+        referentiel: {id: 0, libelle: '',},
         date_naiss: '00/00/0000',
         adresse: '',
         telephone: '77 777 77 77'
@@ -247,8 +247,6 @@ export const ListApprenant = () => {
 
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
-                                            //   alert(event.target.value.id)
-                                            console.log(event)
                                             setApprenant(params.row);
 
                                         }
@@ -338,7 +336,7 @@ export const ListApprenant = () => {
                                                         { label: 'Reference Digital', value: 'trois' }
 
                                                     ]}
-                                                    value={apprenant.referentiel}
+                                                    value={apprenant.referentiel.libelle}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -488,5 +486,4 @@ export const ListApprenant = () => {
         </Layout >
     )
 }
-
 export default ListApprenant;

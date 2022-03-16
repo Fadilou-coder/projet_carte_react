@@ -28,7 +28,6 @@ import {
 // import { useDemoData } from "@mui/x-data-grid-generator";
 import jsPDF from "jspdf"
 import "jspdf-autotable"
-import Skeleton from '@mui/material/Skeleton'
 
 var QRCode = require('qrcode.react')
 
