@@ -296,7 +296,10 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type={Types.TEXT}
                                                     value={apprenant.nom}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.nom = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
@@ -304,7 +307,10 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type={Types.TEXT}
                                                     value={apprenant.prenom}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.prenom = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
@@ -318,7 +324,10 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type={Types.TEXT}
                                                     value={apprenant.code}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.code = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
@@ -337,7 +346,10 @@ export const ListApprenant = () => {
 
                                                     ]}
                                                     value={apprenant.referentiel.libelle}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.referentiel.libelle = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
@@ -353,21 +365,27 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type="date"
                                                     value={apprenant.dateNaissance}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.dateNaissance = val;
+                                                        console.log(val)
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
                                                 <EasyEdit
                                                     type={Types.TEXT}
                                                     value={apprenant.lieuNaissance}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.lieuNaissance = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
                                             </Stack>
                                         </Typography>
                                         <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            {/* Adresse: xxxxxxxxxxxxxx */}
                                             <Stack spacing={1} direction="row">
                                                 <div>
                                                     Adresse:
@@ -375,7 +393,10 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type={Types.TEXT}
                                                     value={apprenant.addresse}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.adresse = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
@@ -390,7 +411,10 @@ export const ListApprenant = () => {
                                                 <EasyEdit
                                                     type={Types.TEXT}
                                                     value={apprenant.phone}
-                                                    onSave={(val) => console.log(val)}
+                                                    onSave={(val) => {
+                                                        apprenant.phone = val;
+                                                        setApprenant(apprenant);
+                                                    }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
                                                 />
@@ -410,7 +434,6 @@ export const ListApprenant = () => {
 
                                         }}
                                     >
-                                        {/* <img src={pp} alt=""style={{ width: "95%", height:"100%", backgroundColor:"red" }} />                                     */}
                                     </div>
                                 </div>
                                 <div style={{
@@ -427,7 +450,21 @@ export const ListApprenant = () => {
                                             fontStyle: "italic",
                                             paddingTop: "6vh"
                                         }}>
-                                            Numero de contact d'urgence : xxxxxxxxxx
+                                            <Stack spacing={1} direction="row">
+                                                <div>
+                                                    Numero de contact d'urgence:
+                                                </div>
+                                                <EasyEdit
+                                                    type={Types.TEXT}
+                                                    value={apprenant.numTuteur}
+                                                    onSave={(val) => {
+                                                        apprenant.numTuteur = val;
+                                                        setApprenant(apprenant);
+                                                    }}
+                                                    saveButtonLabel={<Check></Check>}
+                                                    cancelButtonLabel={<Close />}
+                                                />
+                                            </Stack>
                                         </Typography>
                                     </div>
                                     <div
@@ -461,15 +498,31 @@ export const ListApprenant = () => {
 
                                 </div>
                             </Box>
-                            <Box textAlign="right" marginTop="20px">
+                            <Box flex marginTop="20px">
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        backgroundColor: "#138A8A",
+                                        marginLeft: "4vw",
+                                        backgroundColor: "#F48322",
                                         padding: "2vh 2vw",
                                         fontWeight: "bolder",
                                         '&:hover': {
                                             backgroundColor: '#F48322',
+                                        }
+                                    }}
+                                    onClick={update}
+                                >
+                                    Enregistrer Modification
+                                </Button>
+                                <Button
+                                    variant="contained"
+                                    sx={{
+                                        marginLeft: "4vw",
+                                        backgroundColor: "#138A8A",
+                                        padding: "2vh 2vw",
+                                        fontWeight: "bolder",
+                                        '&:hover': {
+                                            backgroundColor: '#138A8A',
                                         }
                                     }}
                                     endIcon={<DocumentScannerOutlined />}
