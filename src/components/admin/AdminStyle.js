@@ -14,7 +14,7 @@ const AdminStyle =makeStyles((theme) => ({
         boxShadow: "5px 5px 5px grey"
     },
     textTypo:{
-        fontFamily: "Arial",
+        fontFamily: "Open sans",
         color: themeGeneral.palette.primary.black,
     },
     // gridStyle:{
@@ -25,10 +25,15 @@ const AdminStyle =makeStyles((theme) => ({
     // },
     labelText:{
         fontWeight:"normal",
-        fontFamily: "Arial",
+        fontFamily: "Open sans",
         color: themeGeneral.palette.primary.black,
         fontSize: "20px",
         marginBottom: "2px"
+    },
+    errorMsg:{
+        marginTop: "5px",
+        color: "red",
+        fontFamily: "Open sans",
     },
     textContainer:{
         zIndex:3,
@@ -67,7 +72,17 @@ const AdminStyle =makeStyles((theme) => ({
         // marginLeft: theme.spacing(4)
     },
     input: {
-        marginBottom: theme.spacing(5)
+        border: "1px solid #BDBCBC",
+        padding: 20,
+        borderRadius: "5px",
+        '&:hover':
+        {
+            border: "2px solid #05888A",
+        },
+        '&:focus':
+        {
+            outline: "#05888A",
+        }
     },
     item: {
         marginBottom: theme.spacing(3),

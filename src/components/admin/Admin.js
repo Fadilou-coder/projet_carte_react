@@ -1,10 +1,9 @@
 import {Box, Button, Stack} from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
-import { FilterAltOutlined, Notes } from '@mui/icons-material';
+import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
 import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
 import VisiteStyle from "../visites/VisiteStyle";
-import { AddCircleOutlined } from '@mui/icons-material';
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 import {
@@ -16,6 +15,7 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
+import { ListAllAdmin } from './AdminService';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -23,6 +23,18 @@ export const Admin = () => {
 
 
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
+
+    const [admins, setAdmin] = React.useState([]);
+
+
+      React.useEffect(()=>{
+            ListAllAdmin().then(res => {
+                setAdmin(res.data);
+                
+                console.log(res);
+       })
+    
+    }, []);
 
     let history = useHistory();
 
@@ -52,75 +64,6 @@ export const Admin = () => {
         );
     }
 
-
-    // Tableau Row and Column qu'on a defini ici
-
-    const data = [
-        {
-            id: 1,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-        {
-            id: 2,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-        {
-            id: 3,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-        {
-            id: 4,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-        {
-            id: 5,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-        {
-            id: 6,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-        {
-            id: 7,
-            prenom: "Fadilou",
-            nom: "Sy",
-            email: "fadilousy@gmail.com",
-            telephone: "77 777 77 77",
-            cni: "13456789012",
-            blocked: true
-        },
-
-    ];
 
     const columns = [
         {
@@ -282,7 +225,7 @@ export const Admin = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-                                rows={data}
+                                rows={admins}
                                 columns={columns}
                                 // checkboxSelection
                                 // selectionModel={selectionModel}
