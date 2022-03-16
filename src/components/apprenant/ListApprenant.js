@@ -33,7 +33,17 @@ export const ListApprenant = () => {
     // Initialisation des données des apprenants
     const [apprenants, setApprenants] = React.useState([]);
     // Show detail Apprenant
-    const [apprenant, setApprenant] = React.useState({});
+    const [apprenant, setApprenant] = React.useState({
+        id: 0,
+        nom: '',
+        prenom: '',
+        code: '',
+        referentiel: {id: 0, libelle: '',},
+        date_naiss: '00/00/0000',
+        adresse: '',
+        telephone: '77 777 77 77'
+
+    });
 
 
 
@@ -326,7 +336,7 @@ export const ListApprenant = () => {
                                                         { label: 'Reference Digital', value: 'trois' }
 
                                                     ]}
-                                                    value={apprenant.referentiel?.libelle}
+                                                    value={apprenant.referentiel.libelle}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
