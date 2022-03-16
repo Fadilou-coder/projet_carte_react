@@ -10,7 +10,7 @@ import {makeStyles} from "@material-ui/core";
 import Layout from "../layout/Layout";
 import {Formik, Form, ErrorMessage, Field } from 'formik';
 import * as Yup from 'yup';
-import { ListStructure } from "../structure/StructureService";
+import { ListAllStructure } from "../structure/StructureService";
 
 
 function AddAdmin() {
@@ -86,7 +86,7 @@ function AddAdmin() {
     const styles = useStyles();
 
     React.useEffect(()=>{
-        ListStructure().then(val => {
+        ListAllStructure().then(val => {
             setStructure(val.data)
    });
 }, []
