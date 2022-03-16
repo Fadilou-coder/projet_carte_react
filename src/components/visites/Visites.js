@@ -239,31 +239,30 @@ export const Visites = () => {
 
 
       const AjouterVisites = () => {
-        exportComponentAsPNG(componentRef)
-          handleClose()
-        // SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
-        //     handleClose()
-        //     if (visiteur === "") {
-        //         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-        //           setVisites(res.data)
-        //         })
-        //     }else if (visiteur === "apprenant") {
-        //         ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-        //           setVisites(res.data)
-        //         })
-        //     }else if (visiteur === "visiteur") {
-        //         ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-        //           setVisites(res.data)
-        //         })
-        //     }
-        //     setValues({
-        //         Cni: '',
-        //         prenom: '',
-        //         nom: '',
-        //         numTelephone: '',
+        SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
+            handleClose()
+            exportComponentAsPNG(componentRef)
+            if (visiteur === "") {
+                ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }else if (visiteur === "apprenant") {
+                ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }else if (visiteur === "visiteur") {
+                ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }
+            setValues({
+                Cni: '',
+                prenom: '',
+                nom: '',
+                numTelephone: '',
         
-        //     })
-        // })
+            })
+        })
       }
     
     
