@@ -456,6 +456,17 @@ export const Visites = () => {
                 size={290}
                 level={"H"}
                 includeMargin={true}
+                bgColor={"#ffffff"}
+                fgColor={"#138A8A"}
+                renderAs={"svg"}
+                imageSettings={{
+                    src: `${logosonatel}`,
+                    x: null,
+                    y: null,
+                    height: 30,
+                    width: 30,
+                    excavate: false,
+                }}
             />
             {/* <QRCode
                     hidden
