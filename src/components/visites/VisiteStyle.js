@@ -24,8 +24,12 @@ const VisiteStyle = makeStyles(({
         fontSize: "20px",
         marginBottom: "2px"
     },
-
-    
+    listIsload:{
+        width: "20vw",
+        height:"40vh",
+        display:"block",
+        margin:"0% auto"
+    }
 
 }));
 

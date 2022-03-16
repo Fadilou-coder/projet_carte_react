@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef} from "react";
 import { Grid } from "@material-ui/core";
 import Box from '@mui/material/Box';
 import { FormControl, Typography } from "@material-ui/core";
@@ -16,21 +16,22 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Avatar from '@mui/material/Avatar';
 import imgAvatar from '../../assets/images/avatar.jpg';
 import Layout from "../layout/Layout";
-
-
+import {listAllReferentiels, saveApprenant} from "./ApprenantService";
+import Swal from "sweetalert2";
+import {DesktopDatePicker} from "@mui/lab";
 
 function AddApprenant() {
-    
-    const [referentiel, setStructure] = React.useState('');
-    
-      const handleChange = (event) => {
+
+    const [referentiel, setReferentiel] = React.useState([]);
+
+      /*const handleChange = (event) => {
     setStructure(event.target.value);
-    };
+    };*/
 
     const classes = ApprenantStyle();
     const useStyles = makeStyles((theme) => ({
     gridStyle:{
-        
+
         marginLeft: "50px",
         [theme.breakpoints.down("sm")]: {
             marginLeft: "0px",
@@ -40,9 +41,43 @@ function AddApprenant() {
     }));
     const styles = useStyles();
 
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = React.useState({
+        prenom: '',
+        nom: '',
+        email: '',
+        phone: '',
+        adresse: '',
+        cni: '',
+        referentiel: '',
+        dateNaissance: '',
+        lieuNaissance: '',
+        numTuteur:'',
+        avatar : ''
+
+    });
+
+    React.useState(() => {
+        listAllReferentiels().then((res)=>{
+            setReferentiel(res.data)
+        })
+    })
+
+    function formatDate(date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 
     const [image, setImage] = React.useState("");
+    const wrapperRef = useRef(null);
 
     const validateImage = e =>
     e.target.files[0].type ==="image/png" ||
@@ -63,6 +98,30 @@ function AddApprenant() {
         }
     };
 
+    const PostApprenant = () => {
+        let formData = new FormData();
+        const data = ["prenom", "nom", "email", "phone", "adresse", "cni","referentiel", "lieuNaissance", "numTuteur", "avatar" ];
+        console.log(value);
+        data.forEach((app) => {
+            if(value[app] !== '') {
+                formData.append(app, value[app]);
+            }
+            })
+            formData.append("dateNaissance",formatDate(value.dateNaissance));
+            saveApprenant(formData).then((res) => {
+                if(res.status === 200) {
+                    Swal.fire(
+                        'Succes!',
+                        'Enregistrer avec succes.',
+                        'success'
+                    )
+                }
+            }).catch(
+                (error) => {
+                    console.log(error);
+                }
+            )
+    }
 
     return(
         <React.Fragment>
@@ -71,7 +130,7 @@ function AddApprenant() {
                 <Grid container spacing={2} >
                     <Grid item xs={12} sm={12} md={12}>
                         <Typography  variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
-                                        AJOUTER UN APPRENANT              
+                                        AJOUTER UN APPRENANT
                         </Typography>
                         <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
@@ -80,22 +139,32 @@ function AddApprenant() {
                                     <Grid xs={12} sm={12} md={4}  className={styles.marginAlll} spacing={5} item>
                                         <FormControl fullWidth>
                                         <label className={classes.labelText}>Prenom</label>
-                                            <OutlinedInput 
+                                            <OutlinedInput
                                             id="prenom"
                                             type="text"
-                                            variant="outlined" 
-                                            placeholder="Ex:Omar" 
+                                            variant="outlined"
+                                            placeholder="Ex:Omar"
+                                            onChange={(event)=>{
+                                                setValue({...value,prenom: event.target.value})
+                                            }}
+                                            name="prenom"
+                                            value={value.prenom}
                                             />
                                         </FormControl>
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                         <FormControl fullWidth>
                                             <label className={classes.labelText}>Nom</label>
-                                            <OutlinedInput 
+                                            <OutlinedInput
                                             id="nom"
                                             type="text"
-                                            variant="outlined" 
-                                            placeholder="Ex: Ndiaye" 
+                                            variant="outlined"
+                                            placeholder="Ex: Ndiaye"
+                                            onChange={(event)=>{
+                                                setValue({...value,nom: event.target.value})
+                                            }}
+                                            name="nom"
+                                            value={value.nom}
                                             />
                                         </FormControl>
                                         </Grid>
@@ -106,18 +175,34 @@ function AddApprenant() {
                                     <Grid xs={12} sm={12} md={4}  item>
                                         <FormControl fullWidth>
                                             <label className={classes.labelText}>Date de naissance</label>
-                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                           {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <Stack>
                                                     <DatePicker
                                                         disableFuture
                                                         openTo="year"
                                                         views={['day', 'month', 'year']}
-                                                        value={value}
-                                                        onChange={(newValue) => {
-                                                            setValue(newValue);
+                                                        value={value.dateNaissance}
+                                                        onChange={(event)=>{
+                                                            setValue({...value,dateNaissance: event})
                                                         }}
-                                                        renderInput={(params) => <TextField {...params} />}
+                                                        defaultValue={null}
+                                                        renderInput={(params) => <TextField className={classes.inputDate} value={value.dateNaissance} {...params}/>}
                                                         />
+                                                </Stack>
+                                            </LocalizationProvider>*/}
+                                            <LocalizationProvider dateAdapter={AdapterDateFns}>
+                                                <Stack>
+                                                    <DatePicker
+                                                        inputFormat="MM/dd/yyyy"
+                                                        name="dateNaissance"
+                                                        id="dateNaissance"
+                                                        value={value.dateNaissance}
+                                                        onChange={(event)=>{
+                                                            setValue({...value,dateNaissance: event})
+                                                        }}
+                                                        defaultValue={null}
+                                                        renderInput={(params) => <TextField {...params} />}
+                                                    />
                                                 </Stack>
                                             </LocalizationProvider>
                                         </FormControl>
@@ -125,11 +210,16 @@ function AddApprenant() {
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
                                                 <label className={classes.labelText}>Lieu de naissance</label>
-                                                <OutlinedInput 
+                                                <OutlinedInput
                                                 id="lieunaiss"
                                                 type="text"
-                                                variant="outlined" 
-                                                placeholder="Ex: Parcelles assainies u3" 
+                                                variant="outlined"
+                                                placeholder="Ex: Parcelles assainies u3"
+                                                onChange={(event)=>{
+                                                    setValue({...value,lieuNaissance: event.target.value})
+                                                }}
+                                                name="lieuNaissance"
+                                                value={value.lieuNaissance}
                                                 />
                                             </FormControl>
                                         </Grid>
@@ -139,22 +229,32 @@ function AddApprenant() {
                                         <Grid xs={12} sm={12} md={4}  item>
                                             <FormControl fullWidth>
                                             <label className={classes.labelText}>Adresse</label>
-                                                <OutlinedInput 
+                                                <OutlinedInput
                                                 id="adresse"
                                                 type="text"
-                                                variant="outlined" 
-                                                placeholder="Ex: Pikine rue 10" 
+                                                variant="outlined"
+                                                placeholder="Ex: Pikine rue 10"
+                                                onChange={(event)=>{
+                                                    setValue({...value,adresse: event.target.value})
+                                                }}
+                                                name="adresse"
+                                                value={value.adresse}
                                                 />
                                             </FormControl>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>N° CNI</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="cni"
                                                     type="text"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: 2020202120221" 
+                                                    variant="outlined"
+                                                    placeholder="Ex: 2020202120221"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,cni: event.target.value})
+                                                    }}
+                                                    name="cni"
+                                                    value={value.cni}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -165,53 +265,74 @@ function AddApprenant() {
                                             <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>Referentiel</label>
-                                                    <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        value={referentiel}
-                                                        label="Referentiel"
-                                                        onChange={handleChange}
-                                                    >
-                                                        <MenuItem value="DEV WEB">Développeur Web </MenuItem>
-                                                        <MenuItem value="DATA">Data Artisan</MenuItem>
-                                                        <MenuItem value="REF DIG">Referent Digital</MenuItem>
-                                                    </Select>
+                                                            <Select
+                                                                labelId="demo-simple-select-label"
+                                                                id="demo-simple-select"
+                                                                label="Referentiel"
+                                                                onChange={(event)=>{
+                                                                    setValue({...value, referentiel: event.target.value})
+                                                                }}
+                                                                name="referentiel"
+                                                            >
+                                                                {
+                                                                    referentiel.map((row) =>
+                                                                <MenuItem  key={row.id}
+                                                                           value={row.libelle}
+                                                                >{row.libelle}</MenuItem>
+                                                                    )
+                                                                }
+                                                            </Select>
                                                 </FormControl>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>Email</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="email"
                                                     type="email"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: exemple@gmail.com" 
+                                                    variant="outlined"
+                                                    placeholder="Ex: exemple@gmail.com"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,email: event.target.value})
+                                                    }}
+                                                    name="email"
+                                                    value={value.email}
                                                     />
                                                 </FormControl>
                                                 </Grid>
                                         </Grid>
 
-                                       
+
                                         <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                             <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>Telephone</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="telephone"
                                                     type="text"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: 77 777 77 77" 
+                                                    variant="outlined"
+                                                    placeholder="Ex: 77 777 77 77"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,phone: event.target.value})
+                                                    }}
+                                                    name="phone"
+                                                    value={value.phone}
                                                     />
                                                 </FormControl>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                 <label className={classes.labelText}>Telephone tuteur</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="teltuteur"
                                                     type="text"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: 78 787 78 78" 
+                                                    variant="outlined"
+                                                    placeholder="Ex: 78 787 78 78"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,numTuteur: event.target.value})
+                                                    }}
+                                                    name="numTuteur"
+                                                    value={value.numTuteur}
                                                     />
                                                 </FormControl>
                                             </Grid>
@@ -230,7 +351,7 @@ function AddApprenant() {
                                                             id="file"
                                                             type="file"
                                                             onChange={e => {
-                                                                setImage({...image,avatar: e.target.files[0]})
+                                                                setValue({...value,avatar: e.target.files[0]})
                                                                 let files = e.target.files;
                                                                 if(files.length ===1 && validateImage(e)){
                                                                     upload(e);
@@ -239,33 +360,34 @@ function AddApprenant() {
                                                                     alert("please add image only");
                                                                 }
                                                             }}
-                                                            // ref={wrapperRef}
+                                                            ref={wrapperRef}
                                                             accept="image/gif, image/jpeg, image/png, image/jpg"
                                                             hidden
                                                         />
                                                             <CameraAltIcon/>
-                                                    </Button>                                              
+                                                    </Button>
                                                 </Grid>
                                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display:"flex", justifyContent:"center",  marginTop: "15px"}}>
                                                     <Avatar
                                                         alt=""
                                                         src={image || imgAvatar}
                                                         sx={{ width: 100, height: 100 }}
-                                                        />                                
+                                                        />
                                                 </Grid>
                                             </Grid>
 
-                                    <Button variant="contained" sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                    marginTop: "10px", 
+                                    <Button variant="contained" sx={{backgroundColor: "#05888A",
+                                                    fontFamily: "Arial", fontSize: "20px",
+                                                    marginTop: "10px",
                                                         '&:hover':{
-                                                            backgroundColor:"#F48322", 
+                                                            backgroundColor:"#F48322",
                                                             pointer:"cursor"
                                                         }
                                                     }}
+                                            onClick={ ()=> PostApprenant()}
                                             >Enregistrer et Imprimer carte</Button>
                                 </Grid>
-                            </Grid>                            
+                            </Grid>
                 </Grid>
             </Box>
             </Layout>

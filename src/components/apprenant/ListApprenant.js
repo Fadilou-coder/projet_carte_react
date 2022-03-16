@@ -486,5 +486,4 @@ export const ListApprenant = () => {
         </Layout >
     )
 }
-
 export default ListApprenant;
