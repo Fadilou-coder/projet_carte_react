@@ -3,10 +3,10 @@ import axios from "axios"
 const API_URL =  'https://projet-carte.herokuapp.com/api/';
 
 class AuthService {
-    login(username, password) {
+    login(email, password) {
         return  axios
             .post(API_URL + 'login',{
-                username,
+                email,
                 password
             })
             .then (response => {

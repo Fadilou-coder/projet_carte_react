@@ -1,4 +1,4 @@
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import { Grid } from "@material-ui/core";
 import Box from '@mui/material/Box';
 import { FormControl, Typography } from "@material-ui/core";
@@ -18,15 +18,11 @@ import imgAvatar from '../../assets/images/avatar.jpg';
 import Layout from "../layout/Layout";
 import {listAllReferentiels, saveApprenant} from "./ApprenantService";
 import Swal from "sweetalert2";
-import {DesktopDatePicker} from "@mui/lab";
 
 function AddApprenant() {
 
     const [referentiel, setReferentiel] = React.useState([]);
 
-      /*const handleChange = (event) => {
-    setStructure(event.target.value);
-    };*/
 
     const classes = ApprenantStyle();
     const useStyles = makeStyles((theme) => ({
@@ -99,6 +95,8 @@ function AddApprenant() {
     };
 
     const PostApprenant = () => {
+        setFormErrors(validateApprenant(formValues));
+        setIsSubmit(true);
         let formData = new FormData();
         const data = ["prenom", "nom", "email", "phone", "adresse", "cni","referentiel", "lieuNaissance", "numTuteur", "avatar" ];
         console.log(value);
@@ -114,14 +112,95 @@ function AddApprenant() {
                         'Succes!',
                         'Enregistrer avec succes.',
                         'success'
-                    )
+                    ).then((res) => {
+                        setValue({
+                            prenom: '',
+                            nom: '',
+                            email: '',
+                            phone: '',
+                            adresse: '',
+                            cni: '',
+                            referentiel: '',
+                            dateNaissance: '',
+                            lieuNaissance: '',
+                            numTuteur:'',
+                            avatar : ''
+                        })
+                    })
                 }
             }).catch(
                 (error) => {
+                    setErrorPage(true);
                     console.log(error);
                 }
             )
     }
+
+    const initialValues = {prenom: "", nom: "", email: "", phone: "", adresse: "", cni: "", lieuNaissance: "", numTuteur: "" };
+    const [formValues, setFormValues] = useState(initialValues);
+    const [formErrors, setFormErrors] = useState( {});
+    const [errorPage, setErrorPage] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
+
+    const validateApprenant = (val) => {
+        const errors = {};
+        if(!val.prenom){
+            errors.prenom = "prenom est requis"
+        } else if(val.prenom.length < 3){
+            errors.prenom = "le prenom doit comporter plus de 3 caractères";
+        }
+        else if(val.nom.length > 20){
+            errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
+        }
+        if(!val.nom){
+            errors.nom = "nom est requis"
+        } else if(val.nom.length < 2){
+            errors.nom = "le nom doit comporter plus de 2 caractères";
+        }
+        else if(val.nom.length > 10){
+            errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
+        }
+        let regexMail = /^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$/i;
+        let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
+        let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
+        if(!val.email){
+            errors.email = "le est requis"
+        } else if(!regexMail.test(val.email)){
+            errors.email = "le format Email n'est pas valide";
+        }
+        if(!val.phone){
+            errors.phone = "le numéro de télephone est requis"
+        } else if(!regexPhone.test(val.phone)){
+            errors.phone = "le format numéro télephone n'est pas valide";
+        }
+        if(!val.adresse){
+            errors.adresse = "l'adresse est requis"
+        } else if(val.adresse.length < 3){
+            errors.adresse = "l'adresse doit comporter plus de 3 caractères";
+        } else if(val.adresse.length > 15){
+            errors.adresse = "l'adresse ne peut pas dépassé plus de 15 caractères";
+        }
+
+        if(!val.cni){
+            errors.cni = "le numéro de carte d'identité est requis"
+        } else if(!regexCni.test(val.cni)){
+            errors.phone = "le format numéro de carte d'identité n'est pas valide";
+        }
+
+        if(!val.lieuNaissance){
+            errors.lieuNaissance = "lieu de naissance est requis"
+        } else if(val.lieuNaissance.length < 3){
+            errors.lieuNaissance = "lieu de naissance doit comporter plus de 3 caractères";
+        } else if(val.lieuNaissance.length > 15){
+            errors.lieuNaissance = "lieu de naissance ne peut pas dépassé plus de 15 caractères";
+        }
+        if(!val.numTuteur){
+            errors.numTuteur = "le numéro de Tuteur est requis"
+        } else if(!regexPhone.test(val.numTuteur)){
+            errors.numTuteur = "le format numéro de Tuteur n'est pas valide";
+        }
+        return errors;
+    };
 
     return(
         <React.Fragment>
@@ -134,23 +213,30 @@ function AddApprenant() {
                         </Typography>
                         <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
+                    {errorPage === true && isSubmit ? (
+                        <div className={classes.formError} >Les informations entrées sont incorrects!!!</div>
+                    ) : null}
                             <Grid  container className={classes.subContainer}>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
                                     <Grid xs={12} sm={12} md={4}  className={styles.marginAlll} spacing={5} item>
                                         <FormControl fullWidth>
                                         <label className={classes.labelText}>Prenom</label>
                                             <OutlinedInput
-                                            id="prenom"
+                                            id="nom"
                                             type="text"
                                             variant="outlined"
-                                            placeholder="Ex:Omar"
+                                            placeholder="prenom"
                                             onChange={(event)=>{
                                                 setValue({...value,prenom: event.target.value})
+                                                //validation
+                                                const {name, values} = event.target;
+                                                setFormValues({...formValues, [name]: values});
                                             }}
                                             name="prenom"
                                             value={value.prenom}
                                             />
                                         </FormControl>
+                                        <p className={classes.formError}>{formErrors.prenom}</p>
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                         <FormControl fullWidth>
@@ -159,14 +245,17 @@ function AddApprenant() {
                                             id="nom"
                                             type="text"
                                             variant="outlined"
-                                            placeholder="Ex: Ndiaye"
+                                            placeholder="nom"
                                             onChange={(event)=>{
                                                 setValue({...value,nom: event.target.value})
+                                                const {name, values} = event.target;
+                                                setFormValues({...formValues, [name]: values});
                                             }}
                                             name="nom"
                                             value={value.nom}
                                             />
                                         </FormControl>
+                                        <p className={classes.formError}>{formErrors.nom}</p>
                                         </Grid>
                                 </Grid>
 
@@ -175,21 +264,6 @@ function AddApprenant() {
                                     <Grid xs={12} sm={12} md={4}  item>
                                         <FormControl fullWidth>
                                             <label className={classes.labelText}>Date de naissance</label>
-                                           {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                                <Stack>
-                                                    <DatePicker
-                                                        disableFuture
-                                                        openTo="year"
-                                                        views={['day', 'month', 'year']}
-                                                        value={value.dateNaissance}
-                                                        onChange={(event)=>{
-                                                            setValue({...value,dateNaissance: event})
-                                                        }}
-                                                        defaultValue={null}
-                                                        renderInput={(params) => <TextField className={classes.inputDate} value={value.dateNaissance} {...params}/>}
-                                                        />
-                                                </Stack>
-                                            </LocalizationProvider>*/}
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <Stack>
                                                     <DatePicker
@@ -214,14 +288,17 @@ function AddApprenant() {
                                                 id="lieunaiss"
                                                 type="text"
                                                 variant="outlined"
-                                                placeholder="Ex: Parcelles assainies u3"
+                                                placeholder="lieu de Naissance"
                                                 onChange={(event)=>{
                                                     setValue({...value,lieuNaissance: event.target.value})
+                                                    const {name, values} = event.target;
+                                                    setFormValues({...formValues, [name]: values});
                                                 }}
                                                 name="lieuNaissance"
                                                 value={value.lieuNaissance}
                                                 />
                                             </FormControl>
+                                            <p className={classes.formError}>{formErrors.lieuNaissance}</p>
                                         </Grid>
 
 
@@ -233,14 +310,17 @@ function AddApprenant() {
                                                 id="adresse"
                                                 type="text"
                                                 variant="outlined"
-                                                placeholder="Ex: Pikine rue 10"
+                                                placeholder="adresse"
                                                 onChange={(event)=>{
                                                     setValue({...value,adresse: event.target.value})
+                                                    const {name, values} = event.target;
+                                                    setFormValues({...formValues, [name]: values});
                                                 }}
                                                 name="adresse"
                                                 value={value.adresse}
                                                 />
                                             </FormControl>
+                                            <p className={classes.formError}>{formErrors.adresse}</p>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                                 <FormControl fullWidth>
@@ -249,14 +329,17 @@ function AddApprenant() {
                                                     id="cni"
                                                     type="text"
                                                     variant="outlined"
-                                                    placeholder="Ex: 2020202120221"
+                                                    placeholder="cni"
                                                     onChange={(event)=>{
                                                         setValue({...value,cni: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="cni"
                                                     value={value.cni}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.cni}</p>
                                             </Grid>
                                         </Grid>
 
@@ -268,7 +351,7 @@ function AddApprenant() {
                                                             <Select
                                                                 labelId="demo-simple-select-label"
                                                                 id="demo-simple-select"
-                                                                label="Referentiel"
+                                                                placeholder="referentiel"
                                                                 onChange={(event)=>{
                                                                     setValue({...value, referentiel: event.target.value})
                                                                 }}
@@ -291,14 +374,17 @@ function AddApprenant() {
                                                     id="email"
                                                     type="email"
                                                     variant="outlined"
-                                                    placeholder="Ex: exemple@gmail.com"
+                                                    placeholder="email"
                                                     onChange={(event)=>{
                                                         setValue({...value,email: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="email"
                                                     value={value.email}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.email}</p>
                                                 </Grid>
                                         </Grid>
 
@@ -311,14 +397,17 @@ function AddApprenant() {
                                                     id="telephone"
                                                     type="text"
                                                     variant="outlined"
-                                                    placeholder="Ex: 77 777 77 77"
+                                                    placeholder="numéro télephone"
                                                     onChange={(event)=>{
                                                         setValue({...value,phone: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="phone"
                                                     value={value.phone}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.phone}</p>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
@@ -327,14 +416,17 @@ function AddApprenant() {
                                                     id="teltuteur"
                                                     type="text"
                                                     variant="outlined"
-                                                    placeholder="Ex: 78 787 78 78"
+                                                    placeholder="numéro de tuteur"
                                                     onChange={(event)=>{
                                                         setValue({...value,numTuteur: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="numTuteur"
                                                     value={value.numTuteur}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.numTuteur}</p>
                                             </Grid>
                                         </Grid>
 
