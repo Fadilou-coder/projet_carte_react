@@ -6,6 +6,9 @@ export const ListAllApprenant = () => {
     return axios.get(API_URL + "apprenants/",  {headers: authHeader()});
 }
 
+export const putApprenant = (data, id) => {
+    return axios.put(API_URL + "apprenants/" + id, data,  {headers: authHeader()});
+}
 export const saveApprenant = (data) => {
     return axios.post(
         API_URL + "apprenants/create", data,

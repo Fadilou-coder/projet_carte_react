@@ -1,22 +1,80 @@
 import {makeStyles} from "@material-ui/core";
-// import themeGeneral from "../theme";
+import themeGeneral from '../theme'
+
+const ApprenantStyle =makeStyles((theme) => ({
 
 
-const ListApprenantStyle = makeStyles(theme => ({
 
-    avatarApprenant : {
-        backgroundColor:"white",
-        display:"flex",
-        justifyContent:"space-between",
-        alignItems:"center"
+    subContainer:{
+        padding:themeGeneral.spacing(1),
+        border: "2px solid #E5E5E5",
+        backgroundColor: themeGeneral.palette.primary.white,
+        borderRadius: "20px",
+        width:"100%",
+        boxShadow: "5px 5px 5px grey"
     },
-
-    infoUser: {
+    textTypo:{
+        fontFamily: "Arial",
+        color: themeGeneral.palette.primary.black,
+        fontSize: "40px"
+    },
+    // gridStyle:{
+    //     paddingLeft:"50px",
+    //     [theme.breakpoints.down("sm")]: {
+    //         paddingLeft:"0px",
+    //     }
+    // },
+    labelText:{
+        fontWeight:"normal",
+        fontFamily: "Arial",
+        color: themeGeneral.palette.primary.black,
+        fontSize: "20px",
+        marginBottom: "2px"
+    },
+    textContainer:{
+        zIndex:3,
+        background:themeGeneral.palette.primary.white,
+        marginRight:themeGeneral.spacing(10),
+        height:"20vh"
+    },
+    formContainer:{
+        zIndex:2,
+        filter:` drop-shadow(0px 4px 4px ${'#05888A'})`,
+        background:themeGeneral.palette.primary.white,
+        borderRadius:"20px",
+        //  height: "500px",
+    },
+    connexion:{
+        textAlign:"center"
+    },
+    btnAdd:{
+        width:"200px",
+        backgroundColor: themeGeneral.palette.primary.main,
+        fontWeight:"normal",
+        fontFamily: "Arial",
+        fontSize: "50px",
+    },
+    logoAndText:{
+        display:"flex",
+        alignItems:"center",
+        color: themeGeneral.palette.primary.main,
+        fontWeight:"bold",
+    },
+    text:{
+        background:themeGeneral.palette.primary.main,
+        color:themeGeneral.palette.primary.white,
+        textAlign: "center",
+        fontWeight:"bold",
+        // marginLeft: theme.spacing(4)
+    },
+    input: {
+        marginBottom: theme.spacing(5)
+    },
+    item: {
+        marginBottom: theme.spacing(3),
         display: "flex",
         justifyContent:"space-between",
-        
+
     }
 }))
-
-
-export default ListApprenantStyle;
+export default ApprenantStyle;

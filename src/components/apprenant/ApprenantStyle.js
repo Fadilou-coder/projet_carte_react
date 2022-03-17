@@ -76,6 +76,9 @@ const ApprenantStyle =makeStyles((theme) => ({
         fontWeight:"bold",
         // marginLeft: theme.spacing(4)
     },
+    infoUser : {
+        display:"flex",
+    },
     input: {
         marginBottom: theme.spacing(5)
     },
