@@ -38,7 +38,6 @@ export const ListApprenant = () => {
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
-            console.log(res.data)
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,9 +234,7 @@ export const ListApprenant = () => {
 
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
-                                            //   alert(event.target.value.id)
-                                            console.log(params.row)
-                                         //   setApprenant(params.row);
+                                         setApprenant(params.row);
 
                                         }
                                     }}
@@ -326,7 +323,7 @@ export const ListApprenant = () => {
                                                         { label: 'Reference Digital', value: 'trois' }
 
                                                     ]}
-                                                    value={apprenant.referentiel}
+                                                    value={apprenant.referentiel.libelle}
                                                     onSave={(val) => console.log(val)}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}

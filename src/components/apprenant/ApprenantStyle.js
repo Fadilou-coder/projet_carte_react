@@ -18,12 +18,9 @@ const ApprenantStyle =makeStyles((theme) => ({
         color: themeGeneral.palette.primary.black,
         fontSize: "40px"
     },
-    // gridStyle:{
-    //     paddingLeft:"50px",
-    //     [theme.breakpoints.down("sm")]: {
-    //         paddingLeft:"0px",
-    //     }
-    // },
+    formError: {
+        color: 'red'
+    },
     inputDate:{
         background:themeGeneral.palette.primary.white,
         border:`1px solid #DBE2EA`,
