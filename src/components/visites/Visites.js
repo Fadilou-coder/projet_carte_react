@@ -13,7 +13,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService'
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
 
 import {
@@ -88,6 +88,18 @@ export const Visites = () => {
         )
     }
 
+    function buttonSortir(donnees){
+        if (donnees.apprenant != null){
+            SortieApp(donnees).then(() => {
+                chargerVisites(date, visiteur)
+            })
+        }else {
+            SortieVisiteur(donnees).then(() => {
+                chargerVisites(date, visiteur)
+            })
+        }
+    }
+
 
     const columns = [
         {
@@ -148,9 +160,20 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
+            renderCell: (cellvalue) =>{
+                if (cellvalue.row.dateSortie==null){
+                    return <Button
+                        sx ={{backgroundColor:"green", color:"white" }}
+                        onClick= {() => buttonSortir(cellvalue.row)}
+                    >
+
+                        Sortir
+                    </Button>
+                }
+            },
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
-                    return params.row.dateSortie.substr(11, 5)
+                    return params.row.dateSortie.substr(11, 5);
                 }
             }
         },
