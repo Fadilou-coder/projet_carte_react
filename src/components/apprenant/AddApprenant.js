@@ -95,8 +95,8 @@ function AddApprenant() {
     };
 
     const PostApprenant = () => {
-        setFormErrors(validateApprenant(formValues));
-        setIsSubmit(true);
+        setFormErrors(validateApprenant(value));
+        //setIsSubmit(true);
         let formData = new FormData();
         const data = ["prenom", "nom", "email", "phone", "adresse", "cni","referentiel", "lieuNaissance", "numTuteur", "avatar" ];
         console.log(value);
@@ -136,15 +136,15 @@ function AddApprenant() {
             )
     }
 
-    const initialValues = {prenom: "", nom: "", email: "", phone: "", adresse: "", cni: "", lieuNaissance: "", numTuteur: "" };
-    const [formValues, setFormValues] = useState(initialValues);
     const [formErrors, setFormErrors] = useState( {});
     const [errorPage, setErrorPage] = useState(false);
-    const [isSubmit, setIsSubmit] = useState(false);
 
     const validateApprenant = (val) => {
+        let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
+        let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
+        let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
         const errors = {};
-        if(!val.prenom){
+        if(val.prenom === ''){
             errors.prenom = "prenom est requis"
         } else if(val.prenom.length < 3){
             errors.prenom = "le prenom doit comporter plus de 3 caractères";
@@ -152,7 +152,7 @@ function AddApprenant() {
         else if(val.nom.length > 20){
             errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
         }
-        if(!val.nom){
+        if(val.nom === ''){
             errors.nom = "nom est requis"
         } else if(val.nom.length < 2){
             errors.nom = "le nom doit comporter plus de 2 caractères";
@@ -160,41 +160,36 @@ function AddApprenant() {
         else if(val.nom.length > 10){
             errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
         }
-        let regexMail = /^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$/i;
-        let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
-        let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
-        if(!val.email){
+        if(val.email === ''){
             errors.email = "le est requis"
         } else if(!regexMail.test(val.email)){
             errors.email = "le format Email n'est pas valide";
         }
-        if(!val.phone){
+        if(val.phone === ''){
             errors.phone = "le numéro de télephone est requis"
         } else if(!regexPhone.test(val.phone)){
             errors.phone = "le format numéro télephone n'est pas valide";
         }
-        if(!val.adresse){
+        if(val.adresse === ''){
             errors.adresse = "l'adresse est requis"
         } else if(val.adresse.length < 3){
             errors.adresse = "l'adresse doit comporter plus de 3 caractères";
         } else if(val.adresse.length > 15){
             errors.adresse = "l'adresse ne peut pas dépassé plus de 15 caractères";
         }
-
-        if(!val.cni){
+        if(val.cni === ''){
             errors.cni = "le numéro de carte d'identité est requis"
         } else if(!regexCni.test(val.cni)){
-            errors.phone = "le format numéro de carte d'identité n'est pas valide";
+            errors.cni = "le format numéro de carte d'identité n'est pas valide";
         }
-
-        if(!val.lieuNaissance){
+        if(val.lieuNaissance === ''){
             errors.lieuNaissance = "lieu de naissance est requis"
         } else if(val.lieuNaissance.length < 3){
             errors.lieuNaissance = "lieu de naissance doit comporter plus de 3 caractères";
         } else if(val.lieuNaissance.length > 15){
             errors.lieuNaissance = "lieu de naissance ne peut pas dépassé plus de 15 caractères";
         }
-        if(!val.numTuteur){
+        if(val.numTuteur === ''){
             errors.numTuteur = "le numéro de Tuteur est requis"
         } else if(!regexPhone.test(val.numTuteur)){
             errors.numTuteur = "le format numéro de Tuteur n'est pas valide";
@@ -213,9 +208,9 @@ function AddApprenant() {
                         </Typography>
                         <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
-                    {errorPage === true && isSubmit ? (
+                    {/*{errorPage === true && isSubmit ? (
                         <div className={classes.formError} >Les informations entrées sont incorrects!!!</div>
-                    ) : null}
+                    ) : null}*/}
                             <Grid  container className={classes.subContainer}>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
                                     <Grid xs={12} sm={12} md={4}  className={styles.marginAlll} spacing={5} item>
@@ -230,7 +225,6 @@ function AddApprenant() {
                                                 setValue({...value,prenom: event.target.value})
                                                 //validation
                                                 const {name, values} = event.target;
-                                                setFormValues({...formValues, [name]: values});
                                             }}
                                             name="prenom"
                                             value={value.prenom}
@@ -248,8 +242,6 @@ function AddApprenant() {
                                             placeholder="nom"
                                             onChange={(event)=>{
                                                 setValue({...value,nom: event.target.value})
-                                                const {name, values} = event.target;
-                                                setFormValues({...formValues, [name]: values});
                                             }}
                                             name="nom"
                                             value={value.nom}
@@ -291,8 +283,6 @@ function AddApprenant() {
                                                 placeholder="lieu de Naissance"
                                                 onChange={(event)=>{
                                                     setValue({...value,lieuNaissance: event.target.value})
-                                                    const {name, values} = event.target;
-                                                    setFormValues({...formValues, [name]: values});
                                                 }}
                                                 name="lieuNaissance"
                                                 value={value.lieuNaissance}
@@ -313,8 +303,6 @@ function AddApprenant() {
                                                 placeholder="adresse"
                                                 onChange={(event)=>{
                                                     setValue({...value,adresse: event.target.value})
-                                                    const {name, values} = event.target;
-                                                    setFormValues({...formValues, [name]: values});
                                                 }}
                                                 name="adresse"
                                                 value={value.adresse}
@@ -332,8 +320,6 @@ function AddApprenant() {
                                                     placeholder="cni"
                                                     onChange={(event)=>{
                                                         setValue({...value,cni: event.target.value})
-                                                        const {name, values} = event.target;
-                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="cni"
                                                     value={value.cni}
@@ -377,8 +363,6 @@ function AddApprenant() {
                                                     placeholder="email"
                                                     onChange={(event)=>{
                                                         setValue({...value,email: event.target.value})
-                                                        const {name, values} = event.target;
-                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="email"
                                                     value={value.email}
@@ -400,8 +384,6 @@ function AddApprenant() {
                                                     placeholder="numéro télephone"
                                                     onChange={(event)=>{
                                                         setValue({...value,phone: event.target.value})
-                                                        const {name, values} = event.target;
-                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="phone"
                                                     value={value.phone}
@@ -419,8 +401,6 @@ function AddApprenant() {
                                                     placeholder="numéro de tuteur"
                                                     onChange={(event)=>{
                                                         setValue({...value,numTuteur: event.target.value})
-                                                        const {name, values} = event.target;
-                                                        setFormValues({...formValues, [name]: values});
                                                     }}
                                                     name="numTuteur"
                                                     value={value.numTuteur}
