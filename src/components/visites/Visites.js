@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from "../layout/Layout";
 import VisiteStyle from "./VisiteStyle";
 import { AddCircleOutlined } from '@mui/icons-material';
@@ -49,8 +49,6 @@ export const Visites = () => {
         numTelephone: '',
 
     });
-
-
     //=======================================================
     // ===== Pour savoir sur quelle date on verifie =========
     // ===== Les presences des admins et visiteurs ==========
@@ -62,7 +60,6 @@ export const Visites = () => {
             setVisites(res.data.reverse());
 
         });
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -172,7 +169,6 @@ export const Visites = () => {
 
         const title = "Liste du " + date.toDateString();
         const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
-
         const dat = visites.map(elt => [
             elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
             elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom,
@@ -187,16 +183,13 @@ export const Visites = () => {
             head: headers,
             body: dat
         };
-
-        doc.ext(title, marginLeft, 40);
-        doc.autoTable(content);
+        doc.text(title, marginLeft, 40);
+        doc.autoTable(content)
         doc.save("report.pdf");
     };
 
 
     const classes = VisiteStyle();
-
-
 
     const [open, setOpen] = React.useState(false);
 
@@ -227,7 +220,6 @@ export const Visites = () => {
           }
       };
 
-
       const AjouterVisites = () => {
         SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
             handleClose();
@@ -249,12 +241,10 @@ export const Visites = () => {
                 prenom: '',
                 nom: '',
                 numTelephone: '',
-        
+
             })
         });
       }
-    
-    
 
 
 
@@ -267,7 +257,7 @@ export const Visites = () => {
 
                 <Box style={{ width: "100%" }}>
 
-                    {/* 
+                    {/*
                         Dans cettte partie, on a la partie du triage et de l'impressiono
                     */}
                     <Box sx={{
@@ -297,10 +287,10 @@ export const Visites = () => {
                                         inputFormat="dd/MM/yyy"
                                         className={classes.visiteur}
                                         value={date}
-                                        onChange={(newValue) => {
-                                            console.log(newValue);
-                                            chargerVisites(newValue, visiteur)
-                                        }}
+                                            onChange={(newValue) => {
+                                                console.log(newValue);
+                                                chargerVisites(newValue, visiteur)
+                                            }}
                                         renderInput={(params) => {
                                             return (
                                                 <TextField
@@ -383,7 +373,7 @@ export const Visites = () => {
 
 
                     {/*
-                        Nous avons ici le tableau des visite effectuées durant une journée 
+                        Nous avons ici le tableau des visite effectuées durant une journée
                      */}
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
@@ -426,11 +416,11 @@ export const Visites = () => {
                         <Grid>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>CNI</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="cni"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:1 123 1234 12345" 
+                                    variant="outlined"
+                                    placeholder="Ex:1 123 1234 12345"
                                     onChange={(event)=>{
                                         setValues({...values,cni: event.target.value})
                                     }}
@@ -441,11 +431,11 @@ export const Visites = () => {
                         <Grid  mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Prenom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="prenom"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:Omar" 
+                                    variant="outlined"
+                                    placeholder="Ex:Omar"
                                     onChange={(event)=>{
                                         setValues({...values,prenom: event.target.value})
                                     }}
@@ -456,11 +446,11 @@ export const Visites = () => {
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Nom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="nom"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:DIOP" 
+                                    variant="outlined"
+                                    placeholder="Ex:DIOP"
                                     onChange={(event)=>{
                                         setValues({...values,nom: event.target.value})
                                     }}
@@ -471,11 +461,11 @@ export const Visites = () => {
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Telephone</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="telephone"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:777777777" 
+                                    variant="outlined"
+                                    placeholder="Ex:777777777"
                                     onChange={(event)=>{
                                         setValues({...values,numTelephone: event.target.value})
                                     }}
@@ -486,23 +476,23 @@ export const Visites = () => {
                     </DialogContent>
                     <DialogActions>
                     <Button onClick={handleClose}
-                        sx={{backgroundColor: "#BE0101", 
-                        fontFamily: "Arial", fontSize: "20px", 
+                        sx={{backgroundColor: "#BE0101",
+                        fontFamily: "Arial", fontSize: "20px",
                         marginTop: "10px",
                         color: "#FFFFFF",
                         '&:hover':{
-                            backgroundColor:"#F32018", 
+                            backgroundColor:"#F32018",
                             pointer:"cursor"
                         }
                     }}
                     >ANNULER</Button>
                     <Button onClick={AjouterVisites}
-                        sx={{backgroundColor: "#05888A", 
-                        fontFamily: "Arial", fontSize: "20px", 
+                        sx={{backgroundColor: "#05888A",
+                        fontFamily: "Arial", fontSize: "20px",
                         marginTop: "10px",
                         color: "#FFFFFF",
                         '&:hover':{
-                            backgroundColor:"#F48322", 
+                            backgroundColor:"#F48322",
                             pointer:"cursor"
                         }
                     }}

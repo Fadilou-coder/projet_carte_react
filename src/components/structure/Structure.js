@@ -34,8 +34,9 @@ export const Structure = () => {
         });
     }
 
-    function BloquerSstructure() {
 
+    function BloquerSstructure(id) {
+        alert(id)
     }
 
 
@@ -75,23 +76,7 @@ export const Structure = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-                const onClick = (e) => {
-                    e.stopPropagation(); // don't select this row after clicking
-
-                    const api: GridApi = params.api;
-                    const thisRow: Record<string, GridCellValue> = {};
-
-                    api
-                        .getAllColumns()
-                        .filter((c) => c.field !== "__check__" && !!c)
-                        .forEach(
-                            (c) => (thisRow[c.field] = params.getValue(params.id, c.field))
-                        );
-
-                    return alert(JSON.stringify(thisRow, null, 4));
-                };
-
-                return <Button variant="contained" style={{backgroundColor: '#E9967A'}} onClick={AddStructure}>Bloquer</Button>;
+                return <Button variant="contained" style={{backgroundColor: '#E9967A'}} onClick={() => BloquerSstructure(params.id)}>Bloquer</Button>;
             }
         },
 
@@ -133,7 +118,7 @@ export const Structure = () => {
 
                         <div style={{ width:"50%" }}>
                             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                                LISTE DES VISITEURS
+                                LISTE DES STRUCTURES
                             </Typography>
 
 
@@ -155,7 +140,7 @@ export const Structure = () => {
                         <div style={{marginLeft:"100px",width:"40%",}}><div>
 
                             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                                LISTE DES VISITEURS
+                                AJOUTER DES STRUCTURES
                             </Typography>
 
                         </div>
