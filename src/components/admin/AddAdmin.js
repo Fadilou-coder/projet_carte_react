@@ -8,23 +8,33 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import {makeStyles} from "@material-ui/core";
 import Layout from "../layout/Layout";
-import {Formik, Form, ErrorMessage, Field } from 'formik';
+import {Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { ListStructure } from "../structure/StructureService";
+import { SaveAdmin } from "./AdminService";
 
 
 function AddAdmin() {
     
     const [structure, setStructure] = React.useState([]);
+    const [struct, setStruct] = React.useState([]);
+    
+    const text = "ABCDEFGHIJKLM0123456789";
+    var myPassword = "";
+    for(var i=0;i<8;i++){
+        var word = Math.round(Math.random()*text.length);
+        myPassword +=text.substring(word,word+1);
+    }
 
     const [admin, setAdmin] = React.useState({
         prenom: '',
         nom: '',
-        telephone: '',
+        phone: '',
         email: '',
-        adresse: '',
+        addresse: '',
+        password: myPassword,
         cni: '',
-        structure: '',
+        structure: {id: 0},
     });
 
 
@@ -39,15 +49,17 @@ function AddAdmin() {
             .min(2, "trop petit")
             .max(50, "trop long!")
             .required("Ce champ est obligatoire"),
-        telephone: Yup.string()
-            .matches(regexNum, "Le numéro telephone est incorrect")
+        phone: Yup.string()
+            .matches(regexNum, "Le numéro phone est incorrect")
             .min(9, "trop petit!")
             .max(9, "trop long!")
+            .required("Ce champ est obligatoire"),
+        password: Yup.string()
             .required("Ce champ est obligatoire"),
         email: Yup.string()
             .email("email invalide")
             .required("Ce champ est obligatoire"),
-       adresse: Yup.string()
+       addresse: Yup.string()
             .required("Ce champ est obligatoire"),
         cni: Yup.string()
             .matches(regexNum, "Le numéro cni est incorrect")
@@ -58,19 +70,16 @@ function AddAdmin() {
             .required("Ce champ est obligatoire"),
     });
 
-    const initialValues = {
-        prenom: '',
-        nom: '',
-        telephone: '',
-        email: '',
-        adresse: '',
-        cni: '',
-        structure: '',
-    };
 
-      const handleChange = (event) => {
-    setStructure(event.target.value);
-    };
+
+    function chargerStructure (value){
+        setStruct(value);
+        if (value === "") {
+            ListStructure().then(res => {
+                setStruct(res.data);
+            })
+        }
+    }
 
     const classes = AdminStyle();
     const useStyles = makeStyles((theme) => ({
@@ -92,10 +101,26 @@ function AddAdmin() {
 }, []
 );
 
+    
+    const handleSubmit = (event) => {
+         console.table(admin);
+        event.preventDefault();
 
-    const handleSubmit = (values) => {
-        
-        console.log(values)
+        SaveAdmin({ 'admin' : admin}).then(res => {
+            console.log(res);
+            console.log(res.data);
+        })
+                
+            setAdmin({
+                prenom: ' ',
+                nom: '',
+                phone: '',
+                email: '',
+                addresse: '',
+                password: myPassword,
+                cni: '',
+                structure: {id: 0},
+            })
     };
 
     
@@ -113,10 +138,10 @@ function AddAdmin() {
                         
                         </Grid>
                         <Formik
-                                initialValues={initialValues}
-                                validationSchema={validationSchema}
-                                onSubmit={(values) => handleSubmit(values)}
-                                >
+                            initialValues={admin}
+                            validationSchema={validationSchema}
+                            // onSubmit={(event) =>handleSubmit(event)}
+                        >
                             
     {({ resetForm }) => (
                         <Form>
@@ -127,35 +152,39 @@ function AddAdmin() {
                                         <FormControl fullWidth>
                                         <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
                                             <Field className={classes.input} 
-                                            id="prenom"
+                                            id="ok"
                                             name="prenom"
                                             type="text"
                                             variant="outlined" 
                                             placeholder="Ex:Omar" 
+                                            onChange={(event)=>{
+                                                setAdmin({...admin,prenom: event.target.value})
+                                            }}
+                                            value={admin.prenom}
                                             />
                                         </FormControl>
-                                        <ErrorMessage 
-                                        name="prenom"
-                                        component="small"
-                                        style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                        />
+                                            <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                Ce champ est obligatoire
+                                            </p>
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                         <FormControl fullWidth>
                                             <label className={classes.labelText}>Nom <span style={{ color: 'red' }}>*</span> </label>
                                             <Field className={classes.input}
-                                            id="nom"
+                                            id="input"
                                             name="nom"
                                             type="text"
                                             variant="outlined" 
                                             placeholder="Ex: Ndiaye" 
+                                            onChange={(event)=>{
+                                                setAdmin({...admin,nom: event.target.value})
+                                            }}
+                                            value={admin.nom}
                                             />
                                         </FormControl>
-                                        <ErrorMessage 
-                                        name="nom"
-                                        component="small"
-                                        style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                        />
+                                        <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                Ce champ est obligatoire
+                                        </p>
                                         </Grid>
                                     </Grid>
 
@@ -163,74 +192,87 @@ function AddAdmin() {
                                 <Grid xs={12} sm={12} md={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                     <Grid xs={12} sm={12} md={4}  item>
                                         <FormControl fullWidth>
-                                        <label className={classes.labelText}>Telephone <span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>phone <span style={{ color: 'red' }}>*</span> </label>
                                             <Field className={classes.input} 
-                                            id="telephone"
-                                            name="telephone"
+                                            id="input"
+                                            name="phone"
                                             type="text"
                                             variant="outlined" 
                                             placeholder="Ex: 77 777 77 77" 
+                                            onChange={(event)=>{
+                                                setAdmin({...admin,phone: event.target.value})
+                                            }}
+                                            value={admin.phone}
                                             />
                                         </FormControl>
-                                        <ErrorMessage 
-                                            name="telephone"
-                                            component="small"
-                                            style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                        />
+                                        <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                Ce champ est obligatoire
+                                            </p>
                                         </Grid>
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
                                                 <label className={classes.labelText}>Email <span style={{ color: 'red' }}>*</span> </label>
                                                 <Field className={classes.input} 
-                                                id="email"
+                                                id="input"
                                                 name="email"
                                                 type="email"
                                                 variant="outlined" 
                                                 placeholder="Ex: exemple@gmail.com" 
+                                                onChange={(event)=>{
+                                                    setAdmin({...admin,email: event.target.value})
+                                                }}
+                                                value={admin.email}
                                                 />
                                             </FormControl>
-                                            <ErrorMessage 
-                                            name="email"
-                                            component="small"
-                                            style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                            />
+                                            <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                Ce champ est obligatoire
+                                            </p>
                                         </Grid>
 
 
                                     <Grid xs={12} sm={12} md={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                         <Grid xs={12} sm={12} md={4}  item>
                                             <FormControl fullWidth>
-                                            <label className={classes.labelText}>Adresse <span style={{ color: 'red' }}>*</span> </label>
+                                            <label className={classes.labelText}>addresse <span style={{ color: 'red' }}>*</span> </label>
                                                 <Field className={classes.input} 
-                                                id="adresse"
-                                                name="adresse"
+                                                id="input"
+                                                name="addresse"
                                                 type="text"
                                                 variant="outlined" 
                                                 placeholder="Ex: Pikine rue 10" 
+                                                onChange={(event)=>{
+                                                    setAdmin({...admin,addresse: event.target.value})
+                                                }}
+                                                value={admin.addresse}
                                                 />
                                             </FormControl>
-                                            <ErrorMessage 
-                                                name="adresse"
-                                                component="small"
-                                                style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                                />
+                                            <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                Ce champ est obligatoire
+                                            </p>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>N° CNI <span style={{ color: 'red' }}>*</span> </label>
                                                     <Field className={classes.input} 
-                                                    id="cni"
+                                                    id="input"
                                                     name="cni"
                                                     type="text"
                                                     variant="outlined" 
                                                     placeholder="Ex: 2020202120221" 
+                                                    onChange={(event)=>{
+                                                        setAdmin({...admin,cni: event.target.value})
+                                                    }}
+                                                    value={admin.cni}
                                                     />
                                                 </FormControl>
-                                                <ErrorMessage 
+                                                {/* <ErrorMessage 
                                                 name="cni"
                                                 component="small"
                                                 style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                                />
+                                                /> */}
+                                                 <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                    Ce champ est obligatoire
+                                                 </p>
                                             </Grid>
                                         </Grid>
 
@@ -243,11 +285,11 @@ function AddAdmin() {
 
                                             <Select 
                                                 labelId="demo-simple-select-label"
-                                                id="demo-simple-select"
+                                                id="input"
                                                 name="structure"
-                                                value={structure}
                                                 label="Structure"
-                                                onChange={handleChange}
+                                                value={struct}
+                                                onChange={(event) => chargerStructure(event.target.value)}
                                                 sx= {{
                                                     borderRadius: "5px",
                                                     '&:hover':
@@ -259,7 +301,12 @@ function AddAdmin() {
                                                         outline: "#05888A",
                                                     }
                                                 }}
+                                                onChange={(event)=>{
+                                                    setAdmin({...admin,structure : {id: event.target.value}})
+                                                }}
+                                                value={admin.structure}
                                             >
+                                                <MenuItem selected>Select</MenuItem>    
                                                 {structure.map(item => (  
                                                     <MenuItem value={item.id}>{item.nomStructure}</MenuItem>    
                                                 ))}  
@@ -267,16 +314,15 @@ function AddAdmin() {
 
                                             </Select>
                                         </FormControl>
-                                        <ErrorMessage 
-                                        name="structure"
-                                        component="small"
-                                        style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}
-                                        />
+                                        <p component="small" style={{marginTop: "5px", color: "red", fontFamily: "Open sans", fontSize:"20px"}}>
+                                                Ce champ est obligatoire
+                                        </p>
                                         </Grid>
                                         <Grid xs={12} sm={12} md={4}  item className={styles.gridStyle}>
                                         </Grid>
                                     </Grid>
                                     <Button type="submit" variant="contained" 
+                                        id="button"
                                             sx={{
                                                 backgroundColor: "#05888A", 
                                                 fontFamily: "Arial", fontSize: "20px", 
@@ -286,6 +332,7 @@ function AddAdmin() {
                                                         pointer:"cursor"
                                                     }
                                                 }}
+                                                onClick={handleSubmit}
                                             >AJOUTER</Button>
                                 </Grid>
                             </Grid> 

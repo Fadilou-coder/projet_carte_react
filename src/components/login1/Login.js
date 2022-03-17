@@ -46,7 +46,7 @@ const Login = (props) => {
     }
     ).catch((e)=>{
       setOpen(true);
-      console.log("Login ou Mot de Passe Incorrecte!!!")
+      console.log("Login ou Mot de Passe Incorrect!!!")
     });
 }
 
