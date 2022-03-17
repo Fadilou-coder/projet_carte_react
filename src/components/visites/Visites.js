@@ -15,8 +15,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
-import { exportComponentAsPNG } from "react-component-export-image";
-import { useRef } from "react";
 
 import {
     DataGrid,
@@ -197,8 +195,6 @@ export const Visites = () => {
         doc.save("report.pdf")
     }
 
-    const componentRef = useRef();
-
 
 
 
@@ -243,38 +239,37 @@ export const Visites = () => {
 
 
     const AjouterVisites = () => {
+        SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
+            handleClose()
+            downloadQRCode();
+            if (visiteur === "") {
+                ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }else if (visiteur === "apprenant") {
+                ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }else if (visiteur === "visiteur") {
+                ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
+                  setVisites(res.data)
+                })
+            }
+            setValues({
+                Cni: '',
+                prenom: '',
+                nom: '',
+                numTelephone: '',
 
-        // exportComponentAsPNG(componentRef)
-        //   handleClose()
-        // SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
-        //     handleClose()
-        //     if (visiteur === "") {
-        //         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-        //           setVisites(res.data)
-        //         })
-        //     }else if (visiteur === "apprenant") {
-        //         ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-        //           setVisites(res.data)
-        //         })
-        //     }else if (visiteur === "visiteur") {
-        //         ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-        //           setVisites(res.data)
-        //         })
-        //     }
-        //     setValues({
-        //         Cni: '',
-        //         prenom: '',
-        //         nom: '',
-        //         numTelephone: '',
-
-        //     })
-        // })
+            })
+        })
     }
 
 
     const downloadQRCode = () => {
         // Generate download with use canvas and stream
         const canvas = document.getElementById("qr-gen");
+        console.log(values.Cni)
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -453,12 +448,11 @@ export const Visites = () => {
                 hidden
                 id="qr-gen"
                 value={'{cni:' + values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
-                size={290}
+                size={400}
                 level={"H"}
                 includeMargin={true}
                 bgColor={"#ffffff"}
                 fgColor={"#138A8A"}
-                renderAs={"svg"}
                 imageSettings={{
                     src: `${logosonatel}`,
                     x: null,
@@ -468,24 +462,6 @@ export const Visites = () => {
                     excavate: false,
                 }}
             />
-            {/* <QRCode
-                    hidden
-                    value={'{cni:' + values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
-                    size={300}
-                    bgColor={"#ffffff"}
-                    fgColor={"#138A8A"}
-                    level={"H"}
-                    includeMargin={false}
-                    renderAs={"svg"}
-                    imageSettings={{
-                        src: `${logosonatel}`,
-                        x: null,
-                        y: null,
-                        height: 30,
-                        width: 30,
-                        excavate: false,
-                    }}
-                /> */}
 
 
             <div>
@@ -503,7 +479,7 @@ export const Visites = () => {
                                     variant="outlined"
                                     placeholder="Ex:1 123 1234 12345"
                                     onChange={(event) => {
-                                        setValues({ ...values, cni: event.target.value })
+                                        setValues({ ...values, Cni: event.target.value })
                                     }}
                                     value={values.cni}
                                 />
@@ -568,7 +544,7 @@ export const Visites = () => {
                                 }
                             }}
                         >ANNULER</Button>
-                        <Button onClick={downloadQRCode}
+                        <Button onClick={AjouterVisites}
                             sx={{
                                 backgroundColor: "#05888A",
                                 fontFamily: "Arial", fontSize: "20px",

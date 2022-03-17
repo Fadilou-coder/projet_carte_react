@@ -120,10 +120,12 @@ export const ListApprenant = () => {
         newApp.append('lieuNaissance', apprenant.lieuNaissance);
         newApp.append('numTuteur', apprenant.numTuteur);
         newApp.append('avatar', apprenant.avatar);
+        console.log(newApp.values());
 
-        putApprenant(newApp, apprenant.id).then(res => {
-            setApprenant(res.data);
-        })
+
+        // putApprenant(newApp, apprenant.id).then(res => {
+        //     setApprenant(res.data);
+        // })
         
 
     }
