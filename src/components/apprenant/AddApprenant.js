@@ -223,8 +223,7 @@ function AddApprenant() {
                                             placeholder="prenom"
                                             onChange={(event)=>{
                                                 setValue({...value,prenom: event.target.value})
-                                                //validation
-                                                const {name, values} = event.target;
+                                                setFormErrors(validateApprenant(value));
                                             }}
                                             name="prenom"
                                             value={value.prenom}

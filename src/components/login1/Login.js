@@ -87,7 +87,7 @@ const Login = (props) => {
 
   const classes = LoginStyle();
 
-  const btn = username === '' || password == '' ? <Button disabled style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
+  const btn = username === '' || password === '' ? <Button disabled style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
   >Se connecter</Button> : <Button style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
   >Se connecter</Button>
 
