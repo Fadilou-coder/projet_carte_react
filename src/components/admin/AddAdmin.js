@@ -10,7 +10,7 @@ import {makeStyles} from "@material-ui/core";
 import Layout from "../layout/Layout";
 import {Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
-import { ListStructure } from "../structure/StructureService";
+import { ListAllStructure } from "../structure/StructureService";
 import { SaveAdmin } from "./AdminService";
 
 
@@ -75,7 +75,7 @@ function AddAdmin() {
     function chargerStructure (value){
         setStruct(value);
         if (value === "") {
-            ListStructure().then(res => {
+            ListAllStructure().then(res => {
                 setStruct(res.data);
             })
         }
@@ -95,7 +95,7 @@ function AddAdmin() {
     const styles = useStyles();
 
     React.useEffect(()=>{
-        ListStructure().then(val => {
+        ListAllStructure().then(val => {
             setStructure(val.data)
    });
 }, []
@@ -106,7 +106,7 @@ function AddAdmin() {
          console.table(admin);
         event.preventDefault();
 
-        SaveAdmin({ 'admin' : admin}).then(res => {
+        SaveAdmin(admin).then(res => {
             console.log(res);
             console.log(res.data);
         })
@@ -302,13 +302,13 @@ function AddAdmin() {
                                                     }
                                                 }}
                                                 onChange={(event)=>{
-                                                    setAdmin({...admin,structure : {id: event.target.value}})
+                                                    setAdmin({...admin,structure :  event.target.value})
                                                 }}
                                                 value={admin.structure}
-                                            >
+                                                >
                                                 <MenuItem selected>Select</MenuItem>    
                                                 {structure.map(item => (  
-                                                    <MenuItem value={item.id}>{item.nomStructure}</MenuItem>    
+                                                    <MenuItem value={item}>{item.nomStructure}</MenuItem>    
                                                 ))}  
                                                
 

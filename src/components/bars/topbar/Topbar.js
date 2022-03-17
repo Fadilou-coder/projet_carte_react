@@ -8,10 +8,7 @@ import { SearchOutlined } from '@mui/icons-material';
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-// import PersonIcon from '@mui/icons-material/Person';
-
-
-
+import {useHistory} from "react-router-dom";
 
 const Topbar = ({ funcSetIsMobile }) => {
     const classes = TopbarStyle();
@@ -39,6 +36,13 @@ const Topbar = ({ funcSetIsMobile }) => {
 
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
+
+    let history = useHistory();
+
+    const logout = () => {
+       localStorage.removeItem('token');
+       history.push('/')
+    }
 
 
     return (
@@ -85,25 +89,27 @@ const Topbar = ({ funcSetIsMobile }) => {
                                     <Typography variant="body2" style={{ color: "white" }} >Baye Niass</Typography>
                                 </AvatarLabel>
                             </AvatarContainer>
-                            </Button>
-                                <Popover
-                                    id={id}
-                                    open={open}
-                                    anchorEl={anchorEl}
-                                    onClose={handleClose}
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right',
-                                      }}
-                                      transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                      }}
-                                    >
-                                        {/* <Button variant="text" sx={{ color: "#000000"}}><PersonIcon marginLeft='5px'/>Profil</Button> */}
-                                        <Button variant="text" sx={{ color: "#000000"}}><ExitToAppRoundedIcon marginLeft='5px'/>Déconnexion</Button>
- 
-                                </Popover>
+                        </Button>
+                        <Popover
+                            id={id}
+                            open={open}
+                            anchorEl={anchorEl}
+                            onClose={handleClose}
+                            anchorOrigin={{
+                                vertical: 'bottom',
+                                horizontal: 'right',
+                            }}
+                            transformOrigin={{
+                                vertical: 'top',
+                                horizontal: 'right',
+                            }}
+                        >
+                            {/* <Button variant="text" sx={{ color: "#000000"}}><PersonIcon marginLeft='5px'/>Profil</Button> */}
+                            <Button variant="text" sx={{ color: "#000000"}}
+                                    onClick={logout}
+                            ><ExitToAppRoundedIcon marginLeft='5px'/>Déconnexion</Button>
+
+                        </Popover>
                     </div>
                 </Toolbar>
             </AppBar>

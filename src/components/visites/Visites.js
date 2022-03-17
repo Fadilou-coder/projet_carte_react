@@ -1,19 +1,20 @@
-import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material';
-import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material';
-import TextField from '@mui/material/TextField';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import DatePicker from '@mui/lab/DatePicker';
-import React from 'react';
-import Layout from "../layout/Layout";
-import VisiteStyle from "./VisiteStyle";
-import { AddCircleOutlined } from '@mui/icons-material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import { FormControl, Typography } from "@material-ui/core";
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService';
+import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material'
+import TextField from '@mui/material/TextField'
+import AdapterDateFns from '@mui/lab/AdapterDateFns'
+import LocalizationProvider from '@mui/lab/LocalizationProvider'
+import DatePicker from '@mui/lab/DatePicker'
+import React from 'react'
+import Layout from "../layout/Layout"
+import VisiteStyle from "./VisiteStyle"
+import { AddCircleOutlined } from '@mui/icons-material'
+import Dialog from '@mui/material/Dialog'
+import DialogActions from '@mui/material/DialogActions'
+import DialogContent from '@mui/material/DialogContent'
+import DialogTitle from '@mui/material/DialogTitle'
+import { FormControl, Typography } from "@material-ui/core"
+import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur } from './VisiteService'
+import logosonatel from "../../assets/images/logoSA.png"
 
 import {
     DataGrid,
@@ -21,21 +22,27 @@ import {
     gridPageSelector,
     useGridApiContext,
     useGridSelector,
-} from '@mui/x-data-grid';
+} from '@mui/x-data-grid'
 // import { useDemoData } from "@mui/x-data-grid-generator";
-import jsPDF from "jspdf";
-import "jspdf-autotable";
+import jsPDF from "jspdf"
+import "jspdf-autotable"
+
+var QRCode = require('qrcode.react')
+
 
 
 
 
 export const Visites = () => {
 
+    // Definition boolean pour le chargement des données
+    const [isLoaded, setIsloaded] = React.useState(false)
+
     //=======================================================
     // ========== Trier par Apprenant ou Visiteur  ==========
     // ======================================================
-    const [visiteur, setVisiteur] = React.useState("");
-    const [visites, setVisites] = React.useState([]);
+    const [visiteur, setVisiteur] = React.useState("")
+    const [visites, setVisites] = React.useState([])
 
     const [values, setValues] = React.useState({
         Cni: '',
@@ -43,28 +50,29 @@ export const Visites = () => {
         nom: '',
         numTelephone: '',
 
-    });
+    })
 
 
     //=======================================================
     // ===== Pour savoir sur quelle date on verifie =========
     // ===== Les presences des admins et visiteurs ==========
     // ======================================================
-    const [date, setDate] = React.useState(new Date());
+    const [date, setDate] = React.useState(new Date())
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data.reverse());
-        });
-    
-   // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []);
+            setVisites(res.data.reverse())
+
+        })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     // Custom Pagination
     function CustomPagination() {
-        const apiRef = useGridApiContext();
-        const page = useGridSelector(apiRef, gridPageSelector);
-        const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+        const apiRef = useGridApiContext()
+        const page = useGridSelector(apiRef, gridPageSelector)
+        const pageCount = useGridSelector(apiRef, gridPageCountSelector)
 
         return (
             <Pagination
@@ -77,7 +85,7 @@ export const Visites = () => {
                 renderItem={(props2) => <PaginationItem {...props2} disableRipple />}
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
-        );
+        )
     }
 
 
@@ -88,11 +96,14 @@ export const Visites = () => {
             headerName: 'Prenom',
             flex: 1,
             valueGetter: (params) => {
+
                 if (params.row.visiteur) {
-                  return params.row.visiteur.prenom;
-                } else if(params.row.apprenant) {
-                    return params.row.apprenant.prenom;
+                    return params.row.visiteur.prenom
+                } else if (params.row.apprenant) {
+                    return params.row.apprenant.prenom
                 }
+
+                setIsloaded(true)
             }
         },
         {
@@ -102,9 +113,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.nom;
-                } else if(params.row.apprenant) {
-                    return params.row.apprenant.nom;
+                    return params.row.visiteur.nom
+                } else if (params.row.apprenant) {
+                    return params.row.apprenant.nom
                 }
             }
         },
@@ -115,9 +126,9 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                  return params.row.visiteur.cni;
-                } else if(params.row.apprenant) {
-                    return params.row.apprenant.cni;
+                    return params.row.visiteur.cni
+                } else if (params.row.apprenant) {
+                    return params.row.apprenant.cni
                 }
             }
         },
@@ -128,8 +139,8 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
-                  return params.row.dateEntree.substr(11, 5);
-                } 
+                    return params.row.dateEntree.substr(11, 5)
+                }
             }
         },
         {
@@ -139,12 +150,12 @@ export const Visites = () => {
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.dateSortie) {
-                  return params.row.dateSortie.substr(11, 5);
-                } 
+                    return params.row.dateSortie.substr(11, 5)
+                }
             }
         },
 
-    ];
+    ]
 
 
     // =====================================================
@@ -152,78 +163,88 @@ export const Visites = () => {
     // =====================================================
     const exportPDF = () => {
 
-        const unit = "pt";
-        const size = "A4"; // Use A1, A2, A3 or A4
-        const orientation = "landscape"; // portrait or landscape
+        const unit = "pt"
+        const size = "A4" // Use A1, A2, A3 or A4
+        const orientation = "landscape" // portrait or landscape
 
-        const marginLeft = 40;
-        const doc = new jsPDF(orientation, unit, size);
+        const marginLeft = 40
+        const doc = new jsPDF(orientation, unit, size)
 
-        doc.setFontSize(15);
+        doc.setFontSize(15)
 
-        const title = "Liste du " + date.toDateString();
-        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]];
+        const title = "Liste du " + date.toDateString()
+        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]]
 
-        const dat = visites.map(elt => [elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom, 
-                                        elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom, 
-                                        elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni, 
-                                        elt.dateEntree ? elt.dateEntree.substr(11,5): null, 
-                                        elt.dateSortie ? elt.dateSortie.substr(11,5): null, ]
-                                );
+        const dat = visites.map(elt => [
+            elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
+            elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom,
+            elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni,
+            elt.dateEntree ? elt.dateEntree.substr(11, 5) : null,
+            elt.dateSortie ? elt.dateSortie.substr(11, 5) : null,
+        ]
+        )
 
         let content = {
             startY: 50,
             head: headers,
             body: dat
-        };
+        }
 
-        doc.text(title, marginLeft, 40);
-        doc.autoTable(content);
-        doc.save("report.pdf");
+        doc.text(title, marginLeft, 40)
+        doc.autoTable(content)
+        doc.save("report.pdf")
+    }
+
+
+
+
+    const datenow = new Date();
+
+
+    const classes = VisiteStyle()
+
+
+
+    const [open, setOpen] = React.useState(false)
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
+
+
+    function chargerVisites(ndate, value) {
+        setVisiteur(value)
+        setDate(ndate)
+        if (value === "") {
+            ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
+                setVisites(res.data)
+            })
+        } else if (value === "apprenant") {
+            ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
+                setVisites(res.data)
+            })
+        } else if (value === "visiteur") {
+            ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
+                setVisites(res.data)
+            })
+        }
     };
 
 
-    const classes = VisiteStyle();
-
-    
-
-      const [open, setOpen] = React.useState(false);
-
-      const handleClickOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-      };
+    // fONCTION POURGENERE PDF
 
 
-      function chargerVisites (ndate, value){
-          setVisiteur(value);
-          setDate(ndate);
-          if (value === "") {
-              ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data);
-              })
-          }else if (value === "apprenant") {
-              ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
-              })
-          }else if (value === "visiteur") {
-              ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
-              })
-          }
-      };
-
-
-      const AjouterVisites = () => {
-        
+    const AjouterVisites = () => {
         SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
-            handleClose();
+            handleClose()
+            downloadQRCode();
             if (visiteur === "") {
                 ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
+                  setVisites(res.data)
                 })
             }else if (visiteur === "apprenant") {
                 ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
@@ -239,12 +260,27 @@ export const Visites = () => {
                 prenom: '',
                 nom: '',
                 numTelephone: '',
-        
+
             })
-        });
-      }
-    
-    
+        })
+    }
+
+
+    const downloadQRCode = () => {
+        // Generate download with use canvas and stream
+        const canvas = document.getElementById("qr-gen");
+        console.log(values.Cni)
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = "qrcode.png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    };
+
 
 
 
@@ -288,7 +324,7 @@ export const Visites = () => {
                                         className={classes.visiteur}
                                         value={date}
                                         onChange={(newValue) => {
-                                            console.log(newValue);
+                                            console.log(newValue)
                                             chargerVisites(newValue, visiteur)
                                         }}
                                         renderInput={(params) => {
@@ -304,7 +340,7 @@ export const Visites = () => {
                                                         borderRadius: "15px"
                                                     }}
                                                 />
-                                            );
+                                            )
                                         }}
                                     // renderInput={(params) => <TextField {...params} />}
                                     />
@@ -336,15 +372,16 @@ export const Visites = () => {
                                 variant="contained"
                                 endIcon={<AddCircleOutlined />}
                                 onClick={handleClickOpen}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", 
-                                                    fontSize: "20px", 
-                                                    marginRight: "10px",
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
+                                sx={{
+                                    backgroundColor: "#05888A",
+                                    fontFamily: "Arial",
+                                    fontSize: "20px",
+                                    marginRight: "10px",
+                                    '&:hover': {
+                                        backgroundColor: "#F48322",
+                                        pointer: "cursor"
+                                    }
+                                }}
                             >
                                 AJOUTER
                             </Button>
@@ -352,16 +389,16 @@ export const Visites = () => {
                                 variant="contained"
                                 endIcon={<DocumentScannerOutlined />}
                                 onClick={(params, event) => {
-                                    exportPDF();
+                                    exportPDF()
                                 }}
                                 sx={{
-                                        backgroundColor: "#138A8A",
-                                        fontSize: "20px",
-                                        fontWeight: "bolder",
-                                        '&:hover': {
-                                            backgroundColor: '#F48322',
-                                        }
-                                    }}
+                                    backgroundColor: "#138A8A",
+                                    fontSize: "20px",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#F48322',
+                                    }
+                                }}
                             >
                                 Impression
                             </Button>
@@ -387,7 +424,7 @@ export const Visites = () => {
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
-
+                                onLoad
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
@@ -397,7 +434,6 @@ export const Visites = () => {
                                 }}
                                 rows={visites}
                                 columns={columns}
-
                                 disableVirtualization
                             />
                         </div>
@@ -407,36 +443,58 @@ export const Visites = () => {
                 </Box>
             </Box>
 
+
+            <QRCode
+                hidden
+                id="qr-gen"
+                value={'{cni:' + values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
+                size={400}
+                level={"H"}
+                includeMargin={true}
+                bgColor={"#ffffff"}
+                fgColor={"#138A8A"}
+                imageSettings={{
+                    src: `${logosonatel}`,
+                    x: null,
+                    y: null,
+                    height: 30,
+                    width: 30,
+                    excavate: false,
+                }}
+            />
+
+
             <div>
                 <Dialog open={open} onClose={handleClose}>
+
                     <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
-                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float:"left", marginLeft:"15px" }} />
+                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
                     <DialogContent>
                         <Grid>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>CNI</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="cni"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:1 123 1234 12345" 
-                                    onChange={(event)=>{
-                                        setValues({...values,cni: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:1 123 1234 12345"
+                                    onChange={(event) => {
+                                        setValues({ ...values, Cni: event.target.value })
                                     }}
                                     value={values.cni}
                                 />
                             </FormControl>
                         </Grid>
-                        <Grid  mt={2}>
+                        <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Prenom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="prenom"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:Omar" 
-                                    onChange={(event)=>{
-                                        setValues({...values,prenom: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:Omar"
+                                    onChange={(event) => {
+                                        setValues({ ...values, prenom: event.target.value })
                                     }}
                                     value={values.prenom}
                                 />
@@ -445,13 +503,13 @@ export const Visites = () => {
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Nom</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="nom"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:DIOP" 
-                                    onChange={(event)=>{
-                                        setValues({...values,nom: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:DIOP"
+                                    onChange={(event) => {
+                                        setValues({ ...values, nom: event.target.value })
                                     }}
                                     value={values.nom}
                                 />
@@ -460,13 +518,13 @@ export const Visites = () => {
                         <Grid mt={2}>
                             <FormControl fullWidth>
                                 <label className={classes.labelText}>Telephone</label>
-                                <OutlinedInput 
+                                <OutlinedInput
                                     id="telephone"
                                     type="text"
-                                    variant="outlined" 
-                                    placeholder="Ex:777777777" 
-                                    onChange={(event)=>{
-                                        setValues({...values,numTelephone: event.target.value})
+                                    variant="outlined"
+                                    placeholder="Ex:777777777"
+                                    onChange={(event) => {
+                                        setValues({ ...values, numTelephone: event.target.value })
                                     }}
                                     value={values.numTelephone}
                                 />
@@ -474,34 +532,37 @@ export const Visites = () => {
                         </Grid>
                     </DialogContent>
                     <DialogActions>
-                    <Button onClick={handleClose}
-                        sx={{backgroundColor: "#BE0101", 
-                        fontFamily: "Arial", fontSize: "20px", 
-                        marginTop: "10px",
-                        color: "#FFFFFF",
-                        '&:hover':{
-                            backgroundColor:"#F32018", 
-                            pointer:"cursor"
-                        }
-                    }}
-                    >ANNULER</Button>
-                    <Button onClick={AjouterVisites}
-                        sx={{backgroundColor: "#05888A", 
-                        fontFamily: "Arial", fontSize: "20px", 
-                        marginTop: "10px",
-                        color: "#FFFFFF",
-                        '&:hover':{
-                            backgroundColor:"#F48322", 
-                            pointer:"cursor"
-                        }
-                    }}
-                    >AJOUTER</Button>
+                        <Button onClick={handleClose}
+                            sx={{
+                                backgroundColor: "#BE0101",
+                                fontFamily: "Arial", fontSize: "20px",
+                                marginTop: "10px",
+                                color: "#FFFFFF",
+                                '&:hover': {
+                                    backgroundColor: "#F32018",
+                                    pointer: "cursor"
+                                }
+                            }}
+                        >ANNULER</Button>
+                        <Button onClick={AjouterVisites}
+                            sx={{
+                                backgroundColor: "#05888A",
+                                fontFamily: "Arial", fontSize: "20px",
+                                marginTop: "10px",
+                                color: "#FFFFFF",
+                                '&:hover': {
+                                    backgroundColor: "#F48322",
+                                    pointer: "cursor"
+                                }
+                            }}
+                        >AJOUTER
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </div>
 
         </Layout>
-    );
-};
+    )
+}
 
 export default Visites;
