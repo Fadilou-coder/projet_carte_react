@@ -124,11 +124,10 @@ export const ListApprenant = () => {
         }
         else
             newApp.append('avatar', new File([], ''));  
-        console.log(new File([], ''))
 
-        // putApprenant(newApp, apprenant.id).then(res => {
-        //     setApprenant(res.data);
-        // })
+        putApprenant(newApp, apprenant.id).then(res => {
+            setApprenant(res.data);
+        })
 
 
     }
