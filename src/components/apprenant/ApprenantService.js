@@ -7,7 +7,11 @@ export const ListAllApprenant = () => {
 }
 
 export const putApprenant = (data, id) => {
-    return axios.put(API_URL + "apprenants/" + id, data,  {headers: authHeader()});
+    return axios.put(API_URL + "apprenants/" + id, data,  
+    {
+        headers: authHeader(),
+        "axios.defaults.headers.common['Content-Type'] ": 'multipart/form-data; boundary=someArbitraryUniqueString',
+    });
 }
 export const saveApprenant = (data) => {
     return axios.post(

@@ -11,7 +11,7 @@ import {
 import React from 'react'
 import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
-import ListApprenantStyle from "./ListApprenantStyle";
+import ListApprenantStyle from "./ApprenantStyle";
 import pp from "../../assets/images/ppuser.png";
 import odc from "../../assets/images/odc.jpeg";
 import logosonatel from "../../assets/images/logoSA.png";
@@ -20,6 +20,7 @@ import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant } from './ApprenantService';
+import Swal from "sweetalert2";
 
 var QRCode = require('qrcode.react');
 
@@ -38,9 +39,9 @@ export const ListApprenant = () => {
         nom: '',
         prenom: '',
         code: '',
-        referentiel: {id: 0, libelle: '',},
+        referentiel: { id: 0, libelle: '', },
         date_naiss: '00/00/0000',
-        adresse: '',
+        addresse: '',
         telephone: '77 777 77 77'
 
     });
@@ -82,27 +83,27 @@ export const ListApprenant = () => {
         );
     }
 
+    const [isSelection, setIsSelection] = React.useState(false);
+
+
     const columns = [
 
         {
             field: 'code',
             headerClassName: 'super-app-theme--header',
             headerName: 'Numero Etudiant',
-            editable: true,
-            flex: 1
+            flex: 1,
         },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
-            editable: true,
             flex: 1,
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
-            editable: true,
             flex: 1
         },
     ]
@@ -113,28 +114,34 @@ export const ListApprenant = () => {
         newApp.append('nom', apprenant.nom);
         newApp.append('email', apprenant.email);
         newApp.append('phone', apprenant.phone);
-        newApp.append('adresse', apprenant.adresse);
-        newApp.append('cni', apprenant.cni);
-        newApp.append('referentiel', apprenant.referentiel);
+        newApp.append('adresse', apprenant.addresse);
+        newApp.append('cni', '1234543212345');
         newApp.append('dateNaissance', apprenant.dateNaissance);
         newApp.append('lieuNaissance', apprenant.lieuNaissance);
         newApp.append('numTuteur', apprenant.numTuteur);
-        newApp.append('avatar', apprenant.avatar);
-        console.log(newApp.values());
+        if (apprenant.avatar !== null) {
+            newApp.append('avatar', apprenant.avatar);
+        }
+        else
+            newApp.append('avatar', new File([], ''));
 
+        putApprenant(newApp, apprenant.id).then(res => {
+            if (res.status === 200) {
+                setApprenant(res.data);
+                setIsSelection(false);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Enregistrer avec success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
+        })
 
-        // putApprenant(newApp, apprenant.id).then(res => {
-        //     setApprenant(res.data);
-        // })
-        
 
     }
 
-
-    // Pour cocher les cases dont  la valeur blocked est egale à true
-    //     const [selectionModel, setSelectionModel] = React.useState(() =>
-    //     data.filter((r) => r.blocked = true).map((r) => r.id),
-    //   );
     let history = useHistory();
 
     function RedirectAddApprenant() {
@@ -186,7 +193,12 @@ export const ListApprenant = () => {
                                 <Select
                                     size='small'
                                     value={structure}
-                                    style={{ width: "20vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
+                                    style={{
+                                        width: "20em",
+                                        fontWeight: "bolder",
+                                        color: "#787486",
+                                        borderRadius: "15px",
+                                    }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
 
@@ -196,7 +208,7 @@ export const ListApprenant = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value="">
+                                    <MenuItem value={"tous"} selected="true">
                                         <em>Tous</em>
                                     </MenuItem>
                                     <MenuItem value={"data"}> Data Scientist </MenuItem>
@@ -227,57 +239,93 @@ export const ListApprenant = () => {
 
                     </Box>
 
-                    <Stack direction="row" spacing={3} >
-                        <Box sx={{
-                            boxShadow: 1, borderRadius: "10px", width: "50%", paddingBottom: "20px",
-                            '& .super-app-theme--header': {
-                                backgroundColor: '#44C3CF'
-                            },
-                        }} className={classes.tableau}
+                    <Grid className={classes1.table} >
+
+                        <Grid
+                            sx={{
+                                boxShadow: 1,
+                                borderRadius: "10px",
+                                width: "60%",
+                                '& .super-app-theme--header': {
+                                    backgroundColor: '#44C3CF',
+
+
+                                },
+                            }} className={classes1.tableau}
                         >
 
                             <div style={{ width: "100%" }}>
-
-
                                 <DataGrid
-
-                                    sx={{ boxShadow: "30px", width: "100%" }}
-
+                                    sx={{
+                                        boxShadow: "30px",
+                                        width: "100%",
+                                        fontSize: "20px",
+                                    }}
+                                    style={{
+                                        ".MuiDataGrid-columnHeaderTitleContainer": {
+                                            background: '#010310',
+                                        }
+                                    }}
                                     autoHeight
                                     pageSize={10}
                                     rowsPerPageOptions={[5, 10, 20]}
 
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
-                                            setApprenant(params.row);
+                                            if (apprenant.id !== params.row.id) {
+                                                if (isSelection === false) {
+                                                    setApprenant(params.row);
+                                                } else {
+                                                    Swal.fire({
+                                                        title: 'Attention?',
+                                                        text: "Voulez vous enregistrer les derniers modifications",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#3085d6',
+                                                        cancelButtonColor: '#d33',
+                                                        confirmButtonText: 'Oui!',
+                                                        cancelButtonText: 'Non'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            update();
+                                                            setApprenant(params.row);
+                                                            setIsSelection(false)
+                                                        } else {
+                                                            ListAllApprenant().then(res => {
+                                                                setApprenants(res.data);
+                                                            });
+                                                            setIsSelection(false)
+                                                        }
+                                                    })
+                                                }
+                                            }
 
                                         }
                                     }}
-
                                     components={{
                                         Pagination: CustomPagination,
-                                        // Toolbar: CustomToolbar,
                                     }}
                                     rows={apprenants}
                                     columns={columns}
-                                    // checkboxSelection
-                                    // selectionModel={selectionModel}
-                                    // onSelectionModelChange={setSelectionModel}
+                                    getRowClassName={() => 'apprenant-table--row'}
+                                    getCellClassName={() => 'apprenant-table--cell'}
+
                                     disableVirtualization
                                 />
                             </div>
 
-                        </Box>
+                        </Grid>
 
                         <Grid
                             sx={{
-                                width: "45%",
-                                height: "100%"
+                                width: "34%",
+                                height: "100%",
                             }}
+                            className={classes1.detailUser}
                         >
                             <Box
                                 sx={{
-                                    width: "95%",
+                                    width: "100%",
                                     height: "100%",
                                     borderRadius: "10px",
                                     border: "1px solid #138A8A",
@@ -288,7 +336,8 @@ export const ListApprenant = () => {
                             >
                                 <div className={classes1.avatarApprenant} >
                                     <img src={odc} alt="" style={{ width: "20%" }} />
-                                    <img src={sacademy} alt="" style={{ width: "25%" }} />
+                                    <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
+                                    />
                                 </div>
                                 <div className={classes1.infoUser}>
                                     <div style={{ width: "70%" }}>
@@ -301,6 +350,7 @@ export const ListApprenant = () => {
                                                     onSave={(val) => {
                                                         apprenant.nom = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -312,6 +362,7 @@ export const ListApprenant = () => {
                                                     onSave={(val) => {
                                                         apprenant.prenom = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -329,6 +380,7 @@ export const ListApprenant = () => {
                                                     onSave={(val) => {
                                                         apprenant.code = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -351,6 +403,7 @@ export const ListApprenant = () => {
                                                     onSave={(val) => {
                                                         apprenant.referentiel.libelle = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -369,8 +422,8 @@ export const ListApprenant = () => {
                                                     value={apprenant.dateNaissance}
                                                     onSave={(val) => {
                                                         apprenant.dateNaissance = val;
-                                                        console.log(val)
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -381,6 +434,7 @@ export const ListApprenant = () => {
                                                     onSave={(val) => {
                                                         apprenant.lieuNaissance = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -396,8 +450,9 @@ export const ListApprenant = () => {
                                                     type={Types.TEXT}
                                                     value={apprenant.addresse}
                                                     onSave={(val) => {
-                                                        apprenant.adresse = val;
+                                                        apprenant.addresse = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -416,6 +471,7 @@ export const ListApprenant = () => {
                                                     onSave={(val) => {
                                                         apprenant.phone = val;
                                                         setApprenant(apprenant);
+                                                        setIsSelection(true);
                                                     }}
                                                     saveButtonLabel={<Check></Check>}
                                                     cancelButtonLabel={<Close />}
@@ -500,13 +556,11 @@ export const ListApprenant = () => {
 
                                 </div>
                             </Box>
-                            <Box flex marginTop="20px">
+                            <Grid sx={{ display: "flex", justifyContent: "space-evenly" }} marginTop="20px">
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        marginLeft: "4vw",
                                         backgroundColor: "#F48322",
-                                        padding: "2vh 2vw",
                                         fontWeight: "bolder",
                                         '&:hover': {
                                             backgroundColor: '#F48322',
@@ -519,9 +573,7 @@ export const ListApprenant = () => {
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        marginLeft: "4vw",
                                         backgroundColor: "#138A8A",
-                                        padding: "2vh 2vw",
                                         fontWeight: "bolder",
                                         '&:hover': {
                                             backgroundColor: '#138A8A',
@@ -531,9 +583,9 @@ export const ListApprenant = () => {
                                 >
                                     Impression
                                 </Button>
-                            </Box>
+                            </Grid>
                         </Grid>
-                    </Stack>
+                    </Grid>
 
                 </Box>
             </Box >
