@@ -180,7 +180,12 @@ export const ListApprenant = () => {
                                 <Select
                                     size='small'
                                     value={structure}
-                                    style={{ width: "20vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
+                                    style={{
+                                        width: "20em",
+                                        fontWeight: "bolder",
+                                        color: "#787486",
+                                        borderRadius: "15px",
+                                    }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
 
@@ -190,7 +195,7 @@ export const ListApprenant = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value="">
+                                    <MenuItem value="tous"  selected>
                                         <em>Tous</em>
                                     </MenuItem>
                                     <MenuItem value={"data"}> Data Scientist </MenuItem>
@@ -227,8 +232,7 @@ export const ListApprenant = () => {
                             sx={{
                                 boxShadow: 1,
                                 borderRadius: "10px",
-                                width: "55%",
-                                paddingBottom: "20px",
+                                width: "60%",
                                 '& .super-app-theme--header': {
                                     backgroundColor: '#44C3CF',
                                     fontWeight: "bold",
@@ -238,8 +242,6 @@ export const ListApprenant = () => {
                         >
 
                             <div style={{ width: "100%" }}>
-
-
                                 <DataGrid
 
                                     sx={{ boxShadow: "30px", width: "100%", fontSize: "20px" }}
@@ -293,7 +295,7 @@ export const ListApprenant = () => {
 
                         <Grid
                             sx={{
-                                width: "50%",
+                                width: "34%",
                                 height: "100%",
                             }}
                             className={classes1.detailUser}
@@ -532,13 +534,11 @@ export const ListApprenant = () => {
 
                                 </div>
                             </Box>
-                            <Box flex marginTop="20px">
+                            <Grid sx={{ display: "flex", justifyContent: "space-evenly" }} marginTop="20px">
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        marginLeft: "4vw",
                                         backgroundColor: "#F48322",
-                                        padding: "1vh 1.5vw",
                                         fontWeight: "bolder",
                                         '&:hover': {
                                             backgroundColor: '#F48322',
@@ -551,9 +551,7 @@ export const ListApprenant = () => {
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        marginLeft: "4vw",
                                         backgroundColor: "#138A8A",
-                                        padding: "1vh 1vw",
                                         fontWeight: "bolder",
                                         '&:hover': {
                                             backgroundColor: '#138A8A',
@@ -563,7 +561,7 @@ export const ListApprenant = () => {
                                 >
                                     Impression
                                 </Button>
-                            </Box>
+                            </Grid>
                         </Grid>
                     </Grid>
 

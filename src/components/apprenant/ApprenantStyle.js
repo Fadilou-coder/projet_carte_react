@@ -21,7 +21,8 @@ const ApprenantStyle = makeStyles((theme) => ({
     },
     table: {
         display: "flex",
-        justifyContent: "space-between",
+        // justifyContent: "space-evenly",
+        gap:"1.5vw",
         [theme.breakpoints.down('md')]: {
             display: "block",
 
