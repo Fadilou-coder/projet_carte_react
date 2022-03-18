@@ -3,12 +3,13 @@ import LoginStyle from './Login.style';
 import Grid from '@mui/material/Grid';
 import logo from "../../assets/images/logoODC.png";
 import { InputAdornment, OutlinedInput, Stack, IconButton, Button } from '@mui/material';
-import { PersonOutline, VisibilityOff } from '@material-ui/icons';
+import { VisibilityOff } from '@material-ui/icons';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import React, { useState } from 'react';
 import AuthService from '../../core/service/AuthService';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
+import { EmailOutlined } from '@mui/icons-material';
 
 
 const Login = (props) => {
@@ -130,7 +131,8 @@ const Login = (props) => {
                   value={values.username}
                   startAdornment={
                     <InputAdornment position="start">
-                      <PersonOutline></PersonOutline>
+                      {/* <PersonOutline></PersonOutline> */}
+                      <EmailOutlined></EmailOutlined>
                     </InputAdornment>}
 
                   onChange={handleUsernameChange}
