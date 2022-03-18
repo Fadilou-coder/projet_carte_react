@@ -116,15 +116,19 @@ export const ListApprenant = () => {
         newApp.append('phone', apprenant.phone);
         newApp.append('adresse', apprenant.adresse);
         newApp.append('cni', apprenant.cni);
-        newApp.append('referentiel', apprenant.referentiel);
         newApp.append('dateNaissance', apprenant.dateNaissance);
         newApp.append('lieuNaissance', apprenant.lieuNaissance);
         newApp.append('numTuteur', apprenant.numTuteur);
-        newApp.append('avatar', apprenant.avatar);
+        if(apprenant.avatar !== null){
+            newApp.append('avatar', apprenant.avatar);
+        }
+        else
+            newApp.append('avatar', new File([], ''));  
+        console.log(new File([], ''))
 
-        putApprenant(newApp, apprenant.id).then(res => {
-            setApprenant(res.data);
-        })
+        // putApprenant(newApp, apprenant.id).then(res => {
+        //     setApprenant(res.data);
+        // })
 
 
     }
