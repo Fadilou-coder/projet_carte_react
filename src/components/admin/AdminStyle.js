@@ -3,8 +3,8 @@ import themeGeneral from '../theme'
 
 const AdminStyle =makeStyles((theme) => ({
 
-   
-   
+
+
     subContainer:{
         padding:themeGeneral.spacing(1),
         border: "2px solid #E5E5E5",
@@ -17,12 +17,9 @@ const AdminStyle =makeStyles((theme) => ({
         fontFamily: "Open sans",
         color: themeGeneral.palette.primary.black,
     },
-    // gridStyle:{
-    //     paddingLeft:"50px",
-    //     [theme.breakpoints.down("sm")]: {
-    //         paddingLeft:"0px",
-    //     }
-    // },
+    formError: {
+        color: 'red'
+    },
     labelText:{
         fontWeight:"normal",
         fontFamily: "Open sans",
@@ -114,9 +111,9 @@ const AdminStyle =makeStyles((theme) => ({
     },
 
     btnPrimary:{
-        backgroundColor: "#05888A", 
-        fontFamily: "Arial", 
-        fontSize: "20px", 
+        backgroundColor: "#05888A",
+        fontFamily: "Arial",
+        fontSize: "20px",
         marginTop: "10px",
     }
 }));

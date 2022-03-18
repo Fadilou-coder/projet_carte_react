@@ -29,7 +29,10 @@ const VisiteStyle = makeStyles(({
         height:"40vh",
         display:"block",
         margin:"0% auto"
-    }
+    },
+    formError: {
+        color: 'red'
+    },
 
 }));
 

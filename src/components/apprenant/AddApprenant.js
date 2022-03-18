@@ -96,10 +96,8 @@ function AddApprenant() {
 
     const PostApprenant = () => {
         setFormErrors(validateApprenant(value));
-        //setIsSubmit(true);
         let formData = new FormData();
         const data = ["prenom", "nom", "email", "phone", "adresse", "cni","referentiel", "lieuNaissance", "numTuteur", "avatar" ];
-        console.log(value);
         data.forEach((app) => {
             if(value[app] !== '') {
                 formData.append(app, value[app]);
@@ -138,6 +136,8 @@ function AddApprenant() {
 
     const [formErrors, setFormErrors] = useState( {});
     const [errorPage, setErrorPage] = useState(false);
+    //const [dateError, setDateError] = useState(null);
+
 
     const validateApprenant = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
@@ -161,7 +161,7 @@ function AddApprenant() {
             errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
         }
         if(val.email === ''){
-            errors.email = "le est requis"
+            errors.email = "le mail est requis"
         } else if(!regexMail.test(val.email)){
             errors.email = "le format Email n'est pas valide";
         }
@@ -223,8 +223,6 @@ function AddApprenant() {
                                             placeholder="prenom"
                                             onChange={(event)=>{
                                                 setValue({...value,prenom: event.target.value})
-                                                //validation
-                                                const {name, values} = event.target;
                                             }}
                                             name="prenom"
                                             value={value.prenom}
@@ -265,13 +263,25 @@ function AddApprenant() {
                                                         value={value.dateNaissance}
                                                         onChange={(event)=>{
                                                             setValue({...value,dateNaissance: event})
+                                                          /*  const selected = new Date({...value,dateNaissance: event});
+                                                            const maxDate = new Date();
+                                                            maxDate.setHours(0, 0, 0, 0);
+                                                            maxDate.setDate(maxDate.getDate() + 1);
+                                                            console.log(maxDate);
+                                                            if (selected < maxDate) {
+                                                                setDateError(null);
+                                                            } else {
+                                                                setDateError({ helperText: "Invalid", error: true });
+                                                            }*/
                                                         }}
+                                                        //{...{ ...(setDateError ? setDateError : {}) }}
                                                         defaultValue={null}
                                                         renderInput={(params) => <TextField {...params} />}
                                                     />
                                                 </Stack>
                                             </LocalizationProvider>
                                         </FormControl>
+                                        <p className={classes.formError}>{formErrors.dateNaissance}</p>
                                         </Grid>
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
