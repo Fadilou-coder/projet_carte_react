@@ -6,8 +6,17 @@ export const TopbarStyle = makeStyles(theme => ({
         [theme.breakpoints.up('sm')] : {
             marginLeft: '200px',
         },
-       /* backgroundColor: themeGeneral.palette.primary.black,*/
-        // backgroundImage:`url(${vectorNavBar})`,
+        backgroundColor:themeGeneral.palette.primary.light,
+        boxShadow:"none !important",
+        color:'black',
+        backgroundRepeat: "no-repeat",
+        backgroundSize:"cover",
+        top: 0,
+        bottom: "auto",
+        height:"70px",
+        background:"none"
+    },
+    topbarAdmin: {
         backgroundColor:themeGeneral.palette.primary.light,
         boxShadow:"none !important",
         color:'black',

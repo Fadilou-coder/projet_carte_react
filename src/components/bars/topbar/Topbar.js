@@ -48,7 +48,7 @@ const Topbar = ({ funcSetIsMobile }) => {
     return (
         <div>
             <AppBar position="fixed" sx={{ with: "100%" }}   >
-                <Toolbar style={{ display: "flex", justifyContent: "space-between" }} className={classes.topbar}>
+                <Toolbar style={{ display: "flex", justifyContent: "space-between" }} className={ localStorage.getItem('user') === '["ADMIN"]'  ? classes.topbarAdmin: classes.topbar}>
                     <IconButton
                         onClick={funcSetIsMobile}
                         className={classes.topbarContent}
@@ -61,7 +61,7 @@ const Topbar = ({ funcSetIsMobile }) => {
                         <FormControl sx={{ m: 1 }}>
                             <OutlinedInput
                                 id="email"
-                                placeholder="username"
+                                placeholder="rechercher"
                                 width="small"
                                 size='small'
                                 style={{ backgroundColor: "white", borderRadius: "50px", marginLeft: "100px" }}
