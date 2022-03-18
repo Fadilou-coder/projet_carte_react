@@ -3,6 +3,8 @@ import themeGeneral from '../theme'
 
 const ApprenantStyle = makeStyles((theme) => ({
 
+
+
     avatarApprenant: {
         display: "flex",
         justifyContent: "space-between",
@@ -12,6 +14,27 @@ const ApprenantStyle = makeStyles((theme) => ({
 
     tableau: {
         boxShadow: "2000px",
+        '& .super-app-theme--header': {
+            '& .MuiDataGrid-columnHeaderTitleContainer': {
+                padding: 0,
+                justifyContent: "center !important"
+            },
+            // set header font styling
+            '& .MuiDataGrid-columnHeaderTitle': {
+                fontWeight: 600,
+                fontFamily: "Open Sans",
+                textTransform: 'uppercase',
+                fontSize: '16px',
+
+            },
+        },
+        '& .apprenant-table--row': {
+        },
+        '& .apprenant-table--cell': {
+            justifyContent: "center !important",
+            fontSize: '16px',           
+
+        },
         [theme.breakpoints.down('md')]: {
             width: "100% !important",
             marginBottom: "12px"
@@ -22,7 +45,7 @@ const ApprenantStyle = makeStyles((theme) => ({
     table: {
         display: "flex",
         // justifyContent: "space-evenly",
-        gap:"1.5vw",
+        gap: "1.5vw",
         [theme.breakpoints.down('md')]: {
             display: "block",
 

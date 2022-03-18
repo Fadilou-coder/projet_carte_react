@@ -92,7 +92,7 @@ export const ListApprenant = () => {
             field: 'code',
             headerClassName: 'super-app-theme--header',
             headerName: 'Numero Etudiant',
-            flex: 1
+            flex: 1,
         },
         {
             field: 'prenom',
@@ -195,7 +195,7 @@ export const ListApprenant = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value="tous"  selected>
+                                    <MenuItem value={"tous"} selected="true">
                                         <em>Tous</em>
                                     </MenuItem>
                                     <MenuItem value={"data"}> Data Scientist </MenuItem>
@@ -235,17 +235,24 @@ export const ListApprenant = () => {
                                 width: "60%",
                                 '& .super-app-theme--header': {
                                     backgroundColor: '#44C3CF',
-                                    fontWeight: "bold",
-                                    textAlign: "center"
+
+
                                 },
                             }} className={classes1.tableau}
                         >
 
                             <div style={{ width: "100%" }}>
                                 <DataGrid
-
-                                    sx={{ boxShadow: "30px", width: "100%", fontSize: "20px" }}
-
+                                    sx={{
+                                        boxShadow: "30px",
+                                        width: "100%",
+                                        fontSize: "20px",
+                                    }}
+                                    style={{
+                                        ".MuiDataGrid-columnHeaderTitleContainer": {
+                                            background: '#010310',
+                                        }
+                                    }}
                                     autoHeight
                                     pageSize={10}
                                     rowsPerPageOptions={[5, 10, 20]}
@@ -287,6 +294,9 @@ export const ListApprenant = () => {
                                     }}
                                     rows={apprenants}
                                     columns={columns}
+                                    getRowClassName={() => 'apprenant-table--row'}
+                                    getCellClassName={() => 'apprenant-table--cell'}
+                                    
                                     disableVirtualization
                                 />
                             </div>
