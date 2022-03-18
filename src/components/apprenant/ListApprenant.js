@@ -54,6 +54,7 @@ export const ListApprenant = () => {
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
+            console.log(res.data)
             setApprenant(res.data[0]);
         })
 
@@ -62,7 +63,7 @@ export const ListApprenant = () => {
     React.useEffect(() => {
 
         listAllReferentiels().then(res => {
-            console.log(res.data)
+            // console.log(res.data)
             setReferentiels(res.data);
         });
 
@@ -74,10 +75,13 @@ export const ListApprenant = () => {
 
         console.log(value)
         if (value === "") {
-            console.log("Tousss")
+            ListAllApprenant().then(res => {
+                setApprenants(res.data);
+                // setApprenant(res.data[0]);
+            })
         } else {
             ListApprenantsByReferentiel(value).then(res => {
-                console.log(res.data)
+                // console.log(res.data)
                 setApprenants(res.data)
             })
         }
@@ -224,7 +228,7 @@ export const ListApprenant = () => {
                                     <MenuItem value={""}> Tous </MenuItem>
                                     {
                                         referentiels.map((element, i) => {
-                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
+                                            return (<MenuItem value={""+element.id}> {element.libelle} </MenuItem>)
                                         })
                                     }
 

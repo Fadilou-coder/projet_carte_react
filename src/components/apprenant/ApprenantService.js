@@ -26,7 +26,7 @@ export const listAllReferentiels = () => {
 }
 
 export const ListApprenantsByReferentiel = (id) => {
-    return axios.get(API_URL + "referentiels/"+id+"/apprenants", { headers: authHeader() });
+    return axios.get(API_URL + "referentiel/"+id+"/apprenants", { headers: authHeader() });
 }
 
 
