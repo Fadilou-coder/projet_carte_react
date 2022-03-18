@@ -37,7 +37,7 @@ function AddAdmin() {
     });
 
     const [formErrors, setFormErrors] = useState( {});
-    const [errorPage, setErrorPage] = useState(false);
+    const [setErrorPage] = useState(false);
 
     function chargerStructure (value){
         setStruct(value);

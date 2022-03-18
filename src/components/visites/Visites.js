@@ -30,12 +30,12 @@ var QRCode = require('qrcode.react')
 
 export const Visites = () => {
 
-    const [isLoaded, setIsloaded] = React.useState(false)
+    const [setIsloaded] = React.useState(false)
 
     const [visiteur, setVisiteur] = React.useState("")
     const [visites, setVisites] = React.useState([])
     const [formErrors, setFormErrors] = useState( {});
-    const [errorPage, setErrorPage] = useState(false);
+    const [setErrorPage] = useState(false);
 
     const [values, setValues] = React.useState({
         cni: '',
