@@ -7,7 +7,6 @@ import ListApprenant from "./components/apprenant/ListApprenant";
 import Admin from "./components/admin/Admin";
 import Structure from "./components/structure/Structure";
 import Login from './components/login1/Login';
-import AddStructure from './components/structure/AddStructure';
 import AddAdmin from './components/admin/AddAdmin';
 import AddApprenant from './components/apprenant/AddApprenant';
 import Layout from "./components/layout/Layout";
@@ -28,7 +27,6 @@ function App() {
                   <PrivateRoute  path="/liste_apprenants" component={ListApprenant}/>
                   <PrivateRoute  path="/structures" component={Structure}/>
                   <PrivateRoute path="/add_admin" component={AddAdmin} />
-                  <PrivateRoute path="/addstructures" component={AddStructure} />
                   <PrivateRoute path="/add_apprenant" component={AddApprenant} />
                   <PrivateRoute path="*" component={ErreurPage} />
               </Switch>

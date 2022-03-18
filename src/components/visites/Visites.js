@@ -323,7 +323,9 @@ export const Visites = () => {
 
 
     return (
-        <Layout>
+        <Layout >
+            <Grid style={{widt:"100%", display: 'flex', justifyContent:"center", alignItems:"center"}}>
+            <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? {width: '80%'} : {width: '100%'}}>
             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
                 LISTE DES VISITEURS
             </Typography>
@@ -603,7 +605,8 @@ export const Visites = () => {
                     </DialogActions>
                 </Dialog>
             </div>
-
+            </Grid>
+            </Grid>
         </Layout>
     )
 }

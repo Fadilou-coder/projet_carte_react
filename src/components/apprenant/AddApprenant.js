@@ -128,14 +128,12 @@ function AddApprenant() {
                 }
             }).catch(
                 (error) => {
-                    setErrorPage(true);
                     console.log(error);
                 }
             )
     }
 
     const [formErrors, setFormErrors] = useState( {});
-    const [errorPage, setErrorPage] = useState(false);
     //const [dateError, setDateError] = useState(null);
 
 
