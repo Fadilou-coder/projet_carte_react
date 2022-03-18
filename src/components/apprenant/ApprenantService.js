@@ -3,24 +3,30 @@ import authHeader from "../../core/service/AuthHeader"
 
 const API_URL = 'https://projet-carte.herokuapp.com/api/';
 export const ListAllApprenant = () => {
-    return axios.get(API_URL + "apprenants/",  {headers: authHeader()});
+    return axios.get(API_URL + "apprenants/", { headers: authHeader() });
 }
 
 export const putApprenant = (data, id) => {
-    return axios.put(API_URL + "apprenants/" + id, data,  {headers: authHeader()});
+    return axios.put(API_URL + "apprenants/" + id, data, { headers: authHeader() });
 }
 export const saveApprenant = (data) => {
     return axios.post(
         API_URL + "apprenants/create", data,
-        { headers: authHeader(),
+        {
+            headers: authHeader(),
             "axios.defaults.headers.common['Content-Type'] ": 'multipart/form-data; boundary=someArbitraryUniqueString',
         });
 }
 
-export const listAllReferentiels= () => {
+export const listAllReferentiels = () => {
     return axios.get(
-        API_URL + "referentiels", { headers: authHeader()
-        });
+        API_URL + "referentiels", {
+        headers: authHeader()
+    });
+}
+
+export const ListApprenantsByReferentiel = (id) => {
+    return axios.get(API_URL + "referentiels/"+id+"/apprenants", { headers: authHeader() });
 }
 
 
