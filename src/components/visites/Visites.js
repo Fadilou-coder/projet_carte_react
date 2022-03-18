@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
-import React from 'react'
+import React, {useState} from 'react'
 import Layout from "../layout/Layout"
 import VisiteStyle from "./VisiteStyle"
 import { AddCircleOutlined } from '@mui/icons-material'
@@ -15,7 +15,6 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
-
 import {
     DataGrid,
     gridPageCountSelector,
@@ -23,40 +22,28 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid'
-// import { useDemoData } from "@mui/x-data-grid-generator";
 import jsPDF from "jspdf"
 import "jspdf-autotable"
+import Swal from "sweetalert2";
 
 var QRCode = require('qrcode.react')
 
-
-
-
-
 export const Visites = () => {
 
-    // Definition boolean pour le chargement des données
     const [isLoaded, setIsloaded] = React.useState(false)
 
-    //=======================================================
-    // ========== Trier par Apprenant ou Visiteur  ==========
-    // ======================================================
     const [visiteur, setVisiteur] = React.useState("")
     const [visites, setVisites] = React.useState([])
+    const [formErrors, setFormErrors] = useState( {});
+    const [errorPage, setErrorPage] = useState(false);
 
     const [values, setValues] = React.useState({
-        Cni: '',
+        cni: '',
         prenom: '',
         nom: '',
         numTelephone: '',
 
     })
-
-
-    //=======================================================
-    // ===== Pour savoir sur quelle date on verifie =========
-    // ===== Les presences des admins et visiteurs ==========
-    // ======================================================
     const [date, setDate] = React.useState(new Date())
 
     React.useEffect(() => {
@@ -64,8 +51,6 @@ export const Visites = () => {
             setVisites(res.data.reverse())
 
         })
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     // Custom Pagination
@@ -134,7 +119,7 @@ export const Visites = () => {
         {
             field: 'cni',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Cni',
+            headerName: 'cni',
             flex: 1,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
@@ -179,11 +164,6 @@ export const Visites = () => {
         },
 
     ]
-
-
-    // =====================================================
-    // ======= Fonction qui permet la generation du Pdf ====
-    // =====================================================
     const exportPDF = () => {
 
         const unit = "pt"
@@ -196,7 +176,7 @@ export const Visites = () => {
         doc.setFontSize(15)
 
         const title = "Liste du " + date.toDateString()
-        const headers = [["Prenom", "Nom", "Cni", "Entree", "Sortie"]]
+        const headers = [["Prenom", "Nom", "cni", "Entree", "Sortie"]]
 
         const dat = visites.map(elt => [
             elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
@@ -218,16 +198,8 @@ export const Visites = () => {
         doc.save("report.pdf")
     }
 
-
-
-
     const datenow = new Date();
-
-
     const classes = VisiteStyle()
-
-
-
     const [open, setOpen] = React.useState(false)
 
     const handleClickOpen = () => {
@@ -237,7 +209,6 @@ export const Visites = () => {
     const handleClose = () => {
         setOpen(false)
     }
-
 
     function chargerVisites(ndate, value) {
         setVisiteur(value)
@@ -259,9 +230,8 @@ export const Visites = () => {
 
 
     // fONCTION POURGENERE PDF
-
-
     const AjouterVisites = () => {
+        setFormErrors(validateVisite(values));
         SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
             handleClose()
             downloadQRCode();
@@ -278,21 +248,33 @@ export const Visites = () => {
                   setVisites(res.data)
                 })
             }
-            setValues({
-                Cni: '',
-                prenom: '',
-                nom: '',
-                numTelephone: '',
+            if(res.status===200) {
+                Swal.fire(
+                    'Succes!',
+                    'Enregistrer avec succes.',
+                    'success'
+                ).then((res) => {
+                    setValues({
+                        cni: '',
+                        prenom: '',
+                        nom: '',
+                        numTelephone: '',
 
-            })
-        })
+                    })
+                })
+            }
+        }).catch(
+            (error) => {
+                setErrorPage(true);
+                console.log(error);
+            }
+        )
     }
-
 
     const downloadQRCode = () => {
         // Generate download with use canvas and stream
         const canvas = document.getElementById("qr-gen");
-        console.log(values.Cni)
+        console.log(values.cni)
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -304,7 +286,40 @@ export const Visites = () => {
         document.body.removeChild(downloadLink);
     };
 
+    const validateVisite = (val) => {
+        let regexcni = new RegExp("(^[1-2])[0-9]{12}$");
+        let regexPhone = new RegExp("^(33|7[5-8])[0-9]{7}$");
+        const errors = {};
+        if(val.prenom === ''){
+            errors.prenom = "prenom est requis"
+        } else if(val.prenom.length < 3){
+            errors.prenom = "le prenom doit comporter plus de 3 caractères";
+        }
+        else if(val.nom.length > 20){
+            errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
+        }
+        if(val.nom === ''){
+            errors.nom = "nom est requis"
+        } else if(val.nom.length < 2){
+            errors.nom = "le nom doit comporter plus de 2 caractères";
+        }
+        else if(val.nom.length > 10){
+            errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
+        }
 
+        if(val.numTelephone === ''){
+            errors.numTelephone = "le numéro de télephone est requis"
+        } else if(!regexPhone.test(val.numTelephone)){
+            errors.numTelephone = "le format numéro télephone n'est pas valide";
+        }
+
+        if(val.cni === ''){
+            errors.cni = "le numéro de carte d'identité est requis"
+        } else if(!regexcni.test(val.cni)){
+            errors.cni = "le format numéro de carte d'identité n'est pas valide";
+        }
+        return errors;
+    };
 
 
     return (
@@ -316,7 +331,7 @@ export const Visites = () => {
 
                 <Box style={{ width: "100%" }}>
 
-                    {/* 
+                    {/*
                         Dans cettte partie, on a la partie du triage et de l'impressiono
                     */}
                     <Box sx={{
@@ -432,7 +447,7 @@ export const Visites = () => {
 
 
                     {/*
-                        Nous avons ici le tableau des visite effectuées durant une journée 
+                        Nous avons ici le tableau des visite effectuées durant une journée
                      */}
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
@@ -470,7 +485,7 @@ export const Visites = () => {
             <QRCode
                 hidden
                 id="qr-gen"
-                value={'{cni:' + values.Cni + ', temps: ' + datenow.toUTCString() + '}'}
+                value={'{cni:' + values.cni + ', temps: ' + datenow.toUTCString() + '}'}
                 size={400}
                 level={"H"}
                 includeMargin={true}
@@ -500,13 +515,14 @@ export const Visites = () => {
                                     id="cni"
                                     type="text"
                                     variant="outlined"
-                                    placeholder="Ex:1 123 1234 12345"
+                                    placeholder="Ex:cni"
                                     onChange={(event) => {
-                                        setValues({ ...values, Cni: event.target.value })
+                                        setValues({ ...values, cni: event.target.value })
                                     }}
                                     value={values.cni}
                                 />
                             </FormControl>
+                            <p className={classes.formError}>{formErrors.cni}</p>
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
@@ -515,13 +531,14 @@ export const Visites = () => {
                                     id="prenom"
                                     type="text"
                                     variant="outlined"
-                                    placeholder="Ex:Omar"
+                                    placeholder="Ex:prenom"
                                     onChange={(event) => {
                                         setValues({ ...values, prenom: event.target.value })
                                     }}
                                     value={values.prenom}
                                 />
                             </FormControl>
+                            <p className={classes.formError}>{formErrors.prenom}</p>
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
@@ -530,13 +547,14 @@ export const Visites = () => {
                                     id="nom"
                                     type="text"
                                     variant="outlined"
-                                    placeholder="Ex:DIOP"
+                                    placeholder="Ex:nom"
                                     onChange={(event) => {
                                         setValues({ ...values, nom: event.target.value })
                                     }}
                                     value={values.nom}
                                 />
                             </FormControl>
+                            <p className={classes.formError}>{formErrors.nom}</p>
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
@@ -545,13 +563,14 @@ export const Visites = () => {
                                     id="telephone"
                                     type="text"
                                     variant="outlined"
-                                    placeholder="Ex:777777777"
+                                    placeholder="Ex:telephone"
                                     onChange={(event) => {
                                         setValues({ ...values, numTelephone: event.target.value })
                                     }}
                                     value={values.numTelephone}
                                 />
                             </FormControl>
+                            <p className={classes.formError}>{formErrors.numTelephone}</p>
                         </Grid>
                     </DialogContent>
                     <DialogActions>

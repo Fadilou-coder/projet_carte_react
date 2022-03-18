@@ -41,7 +41,7 @@ export const ListApprenant = () => {
         code: '',
         referentiel: { id: 0, libelle: '', },
         date_naiss: '00/00/0000',
-        adresse: '',
+        addresse: '',
         telephone: '77 777 77 77'
 
     });
@@ -114,19 +114,29 @@ export const ListApprenant = () => {
         newApp.append('nom', apprenant.nom);
         newApp.append('email', apprenant.email);
         newApp.append('phone', apprenant.phone);
-        newApp.append('adresse', apprenant.adresse);
-        newApp.append('cni', apprenant.cni);
+        newApp.append('adresse', apprenant.addresse);
+        newApp.append('cni', '1234543212345');
         newApp.append('dateNaissance', apprenant.dateNaissance);
         newApp.append('lieuNaissance', apprenant.lieuNaissance);
         newApp.append('numTuteur', apprenant.numTuteur);
-        if(apprenant.avatar !== null){
+        if (apprenant.avatar !== null) {
             newApp.append('avatar', apprenant.avatar);
         }
         else
-            newApp.append('avatar', new File([], ''));  
+            newApp.append('avatar', new File([], ''));
 
         putApprenant(newApp, apprenant.id).then(res => {
-            setApprenant(res.data);
+            if (res.status === 200) {
+                setApprenant(res.data);
+                setIsSelection(false);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Enregistrer avec success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            }
         })
 
 
@@ -262,7 +272,6 @@ export const ListApprenant = () => {
 
                                     onRowClick={(params, event) => {
                                         if (!event.ctrlKey) {
-                                            console.log(apprenant.id + " ", params.row.id)
                                             if (apprenant.id !== params.row.id) {
                                                 if (isSelection === false) {
                                                     setApprenant(params.row);
@@ -280,6 +289,7 @@ export const ListApprenant = () => {
                                                         if (result.isConfirmed) {
                                                             update();
                                                             setApprenant(params.row);
+                                                            setIsSelection(false)
                                                         } else {
                                                             ListAllApprenant().then(res => {
                                                                 setApprenants(res.data);
@@ -299,7 +309,7 @@ export const ListApprenant = () => {
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}
                                     getCellClassName={() => 'apprenant-table--cell'}
-                                    
+
                                     disableVirtualization
                                 />
                             </div>
@@ -412,7 +422,6 @@ export const ListApprenant = () => {
                                                     value={apprenant.dateNaissance}
                                                     onSave={(val) => {
                                                         apprenant.dateNaissance = val;
-                                                        console.log(val)
                                                         setApprenant(apprenant);
                                                         setIsSelection(true);
                                                     }}
@@ -441,7 +450,7 @@ export const ListApprenant = () => {
                                                     type={Types.TEXT}
                                                     value={apprenant.addresse}
                                                     onSave={(val) => {
-                                                        apprenant.adresse = val;
+                                                        apprenant.addresse = val;
                                                         setApprenant(apprenant);
                                                         setIsSelection(true);
                                                     }}

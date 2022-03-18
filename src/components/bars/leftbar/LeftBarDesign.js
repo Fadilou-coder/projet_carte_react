@@ -10,6 +10,48 @@ const LeftBarDesign = () => {
     const history = useHistory();
     const location = useLocation();
 
+    const user = localStorage.getItem('user');
+
+    const myTab = LeftBarData.map((item, key) =>
+      (item.showBySuperAdmin===true && user.includes("SUPER_ADMIN")) ? (
+          item.after? (
+              <ListItem
+                  key={key}
+                  button
+                  //key={item.id}
+                  onClick={() => history.push(item.path)}
+                  className={location.pathname === item.path ? classes.active : classes.notActive}
+              >
+                  <ListItemIcon className={classes.linkIcon}>{item.icon}</ListItemIcon>
+                  <ListItemText>
+                      <Typography style={{ color :"#138A8A", fontFamily:"Open Sans, Arial"}} >
+                          {item.title}
+                      </Typography>
+                  </ListItemText>
+              </ListItem>
+          ): null
+          ) :  (item.showByAdmin===false && user.includes("ADMIN")) ? (
+              item.after ?(
+                  <ListItem
+                      key={key}
+                      button
+                      //key={item.id}
+                      onClick={() => history.push(item.path)}
+                      className={location.pathname === item.path ? classes.active : classes.notActive}
+                  >
+                      <ListItemIcon className={classes.linkIcon}>{item.icon}</ListItemIcon>
+                      <ListItemText>
+                          <Typography style={{ color :"#138A8A", fontFamily:"Open Sans, Arial"}} >
+                              {item.title}
+                          </Typography>
+                      </ListItemText>
+                  </ListItem>
+              ) : null
+          ): "nono"
+        )
+
+
+
     return (
         <div>
             <div className={classes.logoDiv}>
@@ -17,7 +59,8 @@ const LeftBarDesign = () => {
                     className={classes.logoStyle}
                 />
             </div>
-            {
+            {myTab}
+            {/*{
                 LeftBarData.map(item => (
                     <ListItem
                         button
@@ -33,7 +76,7 @@ const LeftBarDesign = () => {
                         </ListItemText>
                     </ListItem>
                 ))
-            }
+            }*/}
         </div>
     )
 }
