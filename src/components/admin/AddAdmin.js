@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Grid } from "@material-ui/core";
 import Box from '@mui/material/Box';
 import AdminStyle from "./AdminStyle";
@@ -12,6 +12,8 @@ import {Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { ListAllStructure } from "../structure/StructureService";
 import { SaveAdmin } from "./AdminService";
+import Swal from 'sweetalert2'
+import emailjs from '@emailjs/browser';
 
 
 function AddAdmin() {
@@ -109,6 +111,16 @@ function AddAdmin() {
         SaveAdmin(admin).then(res => {
             console.log(res);
             console.log(res.data);
+
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Admin enrégistré avec succes',
+                showConfirmButton: true,
+                timer: 1500
+              })
+            sendEmail(event);
+
         })
                 
             setAdmin({
@@ -121,9 +133,20 @@ function AddAdmin() {
                 cni: '',
                 structure: {id: 0},
             })
+
     };
 
-    
+    const form = useRef();
+
+    const sendEmail = (e) => {
+  
+      emailjs.sendForm('service_tuwme63', 'email_dv26pv8', form.current, 'aF00JTLiRllzze4TO')
+        .then((result) => {
+            console.log(result.text);
+        }, (error) => {
+            console.log(error.text);
+        });
+    };
 
     return(
         <React.Fragment>
@@ -144,7 +167,7 @@ function AddAdmin() {
                         >
                             
     {({ resetForm }) => (
-                        <Form>
+                        <Form ref={form}>
                             <Grid  container className={classes.subContainer}>
                                 <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
