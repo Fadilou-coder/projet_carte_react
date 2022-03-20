@@ -21,6 +21,8 @@ import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant } from './ApprenantService';
 import Swal from "sweetalert2";
+import { exportComponentAsJPEG } from 'react-component-export-image';
+
 
 var QRCode = require('qrcode.react');
 
@@ -29,6 +31,10 @@ export const ListApprenant = () => {
 
 
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
+
+    const classes = VisiteStyle();
+
+    var componentRef = React.createRef();
 
 
     // Initialisation des données des apprenants
@@ -148,7 +154,23 @@ export const ListApprenant = () => {
         history.push("/add_apprenant");
     }
 
-    const classes = VisiteStyle();
+    const downloadQRCode = () => {
+        // Generate download with use canvas and stream
+        // const canvas = document.getElementById("qr-gen");
+        // const pngUrl = canvas
+        //     .toDataURL("image/png")
+        //     .replace("image/png", "image/octet-stream");
+        // let downloadLink = document.createElement("a");
+        // downloadLink.href = pngUrl;
+        // downloadLink.download = "qrcode.png";
+        // document.body.appendChild(downloadLink);
+        // downloadLink.click();
+        // document.body.removeChild(downloadLink);
+
+        exportComponentAsJPEG(componentRef)
+    };
+
+
     return (
         <Layout>
             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
@@ -333,228 +355,235 @@ export const ListApprenant = () => {
                                     padding: "2px 10px 10px 20px",
 
                                 }}
+                                style={{ backgroundColor: "white" }}
+                                
                             >
-                                <div className={classes1.avatarApprenant} >
-                                    <img src={odc} alt="" style={{ width: "20%" }} />
-                                    <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
-                                    />
-                                </div>
-                                <div className={classes1.infoUser}>
-                                    <div style={{ width: "70%" }}>
-                                        <Typography variant="h4" style={{ fontWeight: "bold" }}>
-                                            {/* Ahmed BA */}
-                                            <Stack spacing={2} direction="row">
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.nom}
-                                                    onSave={(val) => {
-                                                        apprenant.nom = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.prenom}
-                                                    onSave={(val) => {
-                                                        apprenant.prenom = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-                                        </Typography>
-                                        <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            <Stack direction="row" spacing={1} >
-                                                <div>
-                                                    Numero d'etudiant:
-                                                </div>
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.code}
-                                                    onSave={(val) => {
-                                                        apprenant.code = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-                                        </Typography>
-
-                                        <Typography style={{ fontWeight: "normal" }}>
-                                            <Stack spacing={1} direction="row">
-                                                <div>Réferentiel:</div>
-                                                <EasyEdit
-                                                    type="select"
-                                                    options={[
-                                                        { label: 'Developpeur Web et Mobile', value: 'one' },
-                                                        { label: 'Data Scientist', value: 'two' },
-                                                        { label: 'Reference Digital', value: 'trois' }
-
-                                                    ]}
-                                                    value={apprenant.referentiel.libelle}
-                                                    onSave={(val) => {
-                                                        apprenant.referentiel.libelle = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-                                        </Typography>
-                                        <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-
-                                            <Stack spacing={1} direction="row">
-                                                <div>
-                                                    Date de naissance:
-
-                                                </div>
-                                                <EasyEdit
-                                                    type="date"
-                                                    value={apprenant.dateNaissance}
-                                                    onSave={(val) => {
-                                                        apprenant.dateNaissance = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.lieuNaissance}
-                                                    onSave={(val) => {
-                                                        apprenant.lieuNaissance = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-                                        </Typography>
-                                        <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            <Stack spacing={1} direction="row">
-                                                <div>
-                                                    Adresse:
-                                                </div>
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.addresse}
-                                                    onSave={(val) => {
-                                                        apprenant.addresse = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-
-                                        </Typography>
-                                        <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                                            <Stack spacing={1} direction="row">
-                                                <div>
-                                                    Telephone:
-                                                </div>
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.phone}
-                                                    onSave={(val) => {
-                                                        apprenant.phone = val;
-                                                        setApprenant(apprenant);
-                                                        setIsSelection(true);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-
-                                        </Typography>
-
-
-                                    </div>
-                                    <div
-                                        style={{
-                                            width: "29%",
-                                            height: "20vh",
-                                            background: `url(${pp})`,
-                                            backgroundRepeat: "no-repeat",
-                                            backgroundSize: "cover",
-
-                                        }}
-                                    >
-                                    </div>
-                                </div>
-                                <div style={{
-                                    display: "flex",
-                                    justifyContent: "space-between",
-                                }}>
-                                    <div
-                                        style={{
-                                            width: "70%",
-
-                                        }} >
-                                        <Typography style={{
-                                            fontWeight: "bold",
-                                            fontStyle: "italic",
-                                            paddingTop: "6vh"
-                                        }}>
-                                            <Stack spacing={1} direction="row">
-                                                <div>
-                                                    Numero de contact d'urgence:
-                                                </div>
-                                                <EasyEdit
-                                                    type={Types.TEXT}
-                                                    value={apprenant.numTuteur}
-                                                    onSave={(val) => {
-                                                        apprenant.numTuteur = val;
-                                                        setApprenant(apprenant);
-                                                    }}
-                                                    saveButtonLabel={<Check></Check>}
-                                                    cancelButtonLabel={<Close />}
-                                                />
-                                            </Stack>
-                                        </Typography>
-                                    </div>
-                                    <div
-                                        style={{
-                                            width: "30%",
-                                            // height:"10vh",
-                                            textAlign: "center"
-
-                                        }}
-                                    >
-                                        {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
-                                        <QRCode
-                                            value={apprenant.code}
-                                            size={90}
-                                            bgColor={"#ffffff"}
-                                            fgColor={"#138A8A"}
-                                            level={"H"}
-                                            includeMargin={false}
-                                            renderAs={"svg"}
-                                            imageSettings={{
-                                                src: `${logosonatel}`,
-                                                x: null,
-                                                y: null,
-                                                height: 30,
-                                                width: 30,
-                                                excavate: false,
-                                            }}
+                                <Grid ref={componentRef}>
+                                    <div className={classes1.avatarApprenant} >
+                                        <img src={odc} alt="" style={{ width: "20%" }} />
+                                        <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
                                         />
                                     </div>
+                                    <div className={classes1.infoUser}>
+                                        <div style={{ width: "70%", backgroundColor: "white" }}>
+                                            <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
+                                                {/* Ahmed BA */}
+                                                <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.nom}
+                                                        onSave={(val) => {
+                                                            apprenant.nom = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.prenom}
+                                                        onSave={(val) => {
+                                                            apprenant.prenom = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+                                            </Typography>
+                                            <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
+                                                <Stack direction="row" spacing={1} >
+                                                    <div>
+                                                        Numero d'etudiant:
+                                                    </div>
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.code}
+                                                        onSave={(val) => {
+                                                            apprenant.code = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+                                            </Typography>
+
+                                            <Typography style={{ fontWeight: "normal" }}>
+                                                <Stack spacing={1} direction="row">
+                                                    <div>Réferentiel:</div>
+                                                    <EasyEdit
+                                                        type="select"
+                                                        options={[
+                                                            { label: 'Developpeur Web et Mobile', value: 'one' },
+                                                            { label: 'Data Scientist', value: 'two' },
+                                                            { label: 'Reference Digital', value: 'trois' }
+
+                                                        ]}
+                                                        value={apprenant.referentiel.libelle}
+                                                        onSave={(val) => {
+                                                            apprenant.referentiel.libelle = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+                                            </Typography>
+                                            <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
+
+                                                <Stack spacing={1} direction="row">
+                                                    <div>
+                                                        Date de naissance:
+
+                                                    </div>
+                                                    <EasyEdit
+                                                        type="date"
+                                                        value={apprenant.dateNaissance}
+                                                        onSave={(val) => {
+                                                            apprenant.dateNaissance = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.lieuNaissance}
+                                                        onSave={(val) => {
+                                                            apprenant.lieuNaissance = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+                                            </Typography>
+                                            <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
+                                                <Stack spacing={1} direction="row">
+                                                    <div>
+                                                        Adresse:
+                                                    </div>
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.addresse}
+                                                        onSave={(val) => {
+                                                            apprenant.addresse = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+
+                                            </Typography>
+                                            <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
+                                                <Stack spacing={1} direction="row">
+                                                    <div>
+                                                        Telephone:
+                                                    </div>
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.phone}
+                                                        onSave={(val) => {
+                                                            apprenant.phone = val;
+                                                            setApprenant(apprenant);
+                                                            setIsSelection(true);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+
+                                            </Typography>
 
 
-                                </div>
+                                        </div>
+                                        <div
+                                            style={{
+                                                width: "29%",
+                                                height: "20vh",
+                                                background: `url(${pp})`,
+                                                backgroundRepeat: "no-repeat",
+                                                backgroundSize: "cover",
+
+                                            }}
+                                        >
+                                        </div>
+                                    </div>
+                                    <div style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                        backgroundColor: "white"
+                                    }}>
+                                        <div
+                                            style={{
+                                                width: "70%",
+                                                backgroundColor: "white"
+
+                                            }} >
+                                            <Typography style={{
+                                                fontWeight: "bold",
+                                                fontStyle: "italic",
+                                                paddingTop: "6vh",
+                                                backgroundColor: "white"
+                                            }}>
+                                                <Stack spacing={1} direction="row">
+                                                    <div>
+                                                        Numero de contact d'urgence:
+                                                    </div>
+                                                    <EasyEdit
+                                                        type={Types.TEXT}
+                                                        value={apprenant.numTuteur}
+                                                        onSave={(val) => {
+                                                            apprenant.numTuteur = val;
+                                                            setApprenant(apprenant);
+                                                        }}
+                                                        saveButtonLabel={<Check></Check>}
+                                                        cancelButtonLabel={<Close />}
+                                                    />
+                                                </Stack>
+                                            </Typography>
+                                        </div>
+                                        <div
+                                            style={{
+                                                width: "30%",
+                                                textAlign: "center",
+                                                backgroundColor: "white"
+
+                                            }}
+                                        >
+                                            {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
+                                            <QRCode
+                                                value={apprenant.code}
+                                                size={90}
+                                                bgColor={"#ffffff"}
+                                                fgColor={"#138A8A"}
+                                                level={"H"}
+                                                includeMargin={false}
+                                                renderAs={"svg"}
+                                                imageSettings={{
+                                                    src: `${logosonatel}`,
+                                                    x: null,
+                                                    y: null,
+                                                    height: 30,
+                                                    width: 30,
+                                                    excavate: false,
+                                                }}
+                                            />
+                                        </div>
+
+
+                                    </div>
+                                </Grid>
                             </Box>
                             <Grid sx={{ display: "flex", justifyContent: "space-evenly" }} marginTop="20px">
                                 <Button
@@ -580,6 +609,7 @@ export const ListApprenant = () => {
                                         }
                                     }}
                                     endIcon={<DocumentScannerOutlined />}
+                                    onClick={downloadQRCode}
                                 >
                                     Impression
                                 </Button>

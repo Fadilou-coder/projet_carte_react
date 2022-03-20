@@ -34,6 +34,8 @@ export const Visites = () => {
     const [visites, setVisites] = React.useState([])
     const [formErrors, setFormErrors] = useState( {});
 
+    
+
     const [values, setValues] = React.useState({
         cni: '',
         prenom: '',
@@ -266,7 +268,6 @@ export const Visites = () => {
     const downloadQRCode = () => {
         // Generate download with use canvas and stream
         const canvas = document.getElementById("qr-gen");
-        console.log(values.cni)
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -356,7 +357,6 @@ export const Visites = () => {
                                         className={classes.visiteur}
                                         value={date}
                                         onChange={(newValue) => {
-                                            console.log(newValue)
                                             chargerVisites(newValue, visiteur)
                                         }}
                                         renderInput={(params) => {

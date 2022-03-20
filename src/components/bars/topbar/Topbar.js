@@ -117,10 +117,9 @@ const Topbar = ({ funcSetIsMobile }) => {
                                 horizontal: 'right',
                             }}
                         >
-                            {/* <Button variant="text" sx={{ color: "#000000"}}><PersonIcon marginLeft='5px'/>Profil</Button> */}
                             <Button variant="text" sx={{ color: "#000000" }}
                                 onClick={logout}
-                            ><ExitToAppRoundedIcon marginLeft='5px' />Déconnexion</Button>
+                            ><ExitToAppRoundedIcon />Déconnexion</Button>
 
                         </Popover>
                     </div>
