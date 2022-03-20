@@ -68,7 +68,6 @@ const Topbar = ({ funcSetIsMobile }) => {
                         onClick={funcSetIsMobile}
                         className={classes.topbarContent}
                     >
-
                         <MenuIcon />
                     </IconButton>
 

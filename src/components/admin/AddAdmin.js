@@ -16,7 +16,6 @@ import Swal from "sweetalert2";
 function AddAdmin() {
 
     const [structure, setStructure] = React.useState([]);
-    const [struct, setStruct] = React.useState([]);
 
     const text = "ABCDEFGHIJKLM0123456789";
     var myPassword = "";
@@ -36,17 +35,8 @@ function AddAdmin() {
         structure: { id: 0 },
     });
 
-    const [formErrors, setFormErrors] = useState({});
-    const [errorPage, setErrorPage] = useState(false);
-
-    function chargerStructure(value) {
-        setStruct(value);
-        if (value === "") {
-            ListAllStructure().then(res => {
-                setStruct(res.data);
-            })
-        }
-    }
+    const [formErrors, setFormErrors] = useState( {});
+    const [setErrorPage] = useState(false);
 
     const classes = AdminStyle();
     const useStyles = makeStyles((theme) => ({

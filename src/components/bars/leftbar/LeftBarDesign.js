@@ -50,8 +50,6 @@ const LeftBarDesign = () => {
           ): "nono"
         )
 
-
-
     return (
         <div>
             <div className={classes.logoDiv}>
@@ -60,23 +58,6 @@ const LeftBarDesign = () => {
                 />
             </div>
             {myTab}
-            {/*{
-                LeftBarData.map(item => (
-                    <ListItem
-                        button
-                        key={item.id}
-                        onClick={() => history.push(item.path)}
-                        className={location.pathname === item.path ? classes.active : classes.notActive}
-                    >
-                        <ListItemIcon className={classes.linkIcon}>{item.icon}</ListItemIcon>
-                        <ListItemText>
-                            <Typography style={{ color :"#138A8A", fontFamily:"Open Sans, Arial"}} >
-                                {item.title}
-                            </Typography>
-                        </ListItemText>
-                    </ListItem>
-                ))
-            }*/}
         </div>
     )
 }

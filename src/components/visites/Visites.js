@@ -30,7 +30,6 @@ import Swal from "sweetalert2";
 var QRCode = require('qrcode.react')
 
 export const Visites = () => {
-
     const [visiteur, setVisiteur] = React.useState("")
     const [visites, setVisites] = React.useState([])
     const [formErrors, setFormErrors] = useState( {});
@@ -503,9 +502,10 @@ export const Visites = () => {
                     <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
                     <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
                     <DialogContent>
+                        <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
                         <Grid>
                             <FormControl fullWidth>
-                                <label className={classes.labelText}>CNI</label>
+                                <label className={classes.labelText}>CNI<span style={{ color: 'red' }}>*</span> </label>
                                 <OutlinedInput
                                     id="cni"
                                     type="text"
@@ -521,7 +521,7 @@ export const Visites = () => {
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
-                                <label className={classes.labelText}>Prenom</label>
+                                <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
                                 <OutlinedInput
                                     id="prenom"
                                     type="text"
@@ -537,7 +537,7 @@ export const Visites = () => {
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
-                                <label className={classes.labelText}>Nom</label>
+                                <label className={classes.labelText}>Nom<span style={{ color: 'red' }}>*</span> </label>
                                 <OutlinedInput
                                     id="nom"
                                     type="text"
@@ -553,7 +553,7 @@ export const Visites = () => {
                         </Grid>
                         <Grid mt={2}>
                             <FormControl fullWidth>
-                                <label className={classes.labelText}>Telephone</label>
+                                <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}>*</span> </label>
                                 <OutlinedInput
                                     id="telephone"
                                     type="text"

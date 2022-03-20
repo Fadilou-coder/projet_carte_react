@@ -206,14 +206,11 @@ function AddApprenant() {
                         </Typography>
                         <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
-                    {/*{errorPage === true && isSubmit ? (
-                        <div className={classes.formError} >Les informations entrées sont incorrects!!!</div>
-                    ) : null}*/}
                             <Grid  container className={classes.subContainer}>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
                                     <Grid xs={12} sm={12} md={4}  className={styles.marginAlll} spacing={5} item>
                                         <FormControl fullWidth>
-                                        <label className={classes.labelText}>Prenom</label>
+                                        <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
                                             id="nom"
                                             type="text"
@@ -230,7 +227,7 @@ function AddApprenant() {
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                         <FormControl fullWidth>
-                                            <label className={classes.labelText}>Nom</label>
+                                            <label className={classes.labelText}>Nom<span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
                                             id="nom"
                                             type="text"
@@ -251,7 +248,7 @@ function AddApprenant() {
                                 <Grid xs={12} sm={12} md={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                     <Grid xs={12} sm={12} md={4}  item>
                                         <FormControl fullWidth>
-                                            <label className={classes.labelText}>Date de naissance</label>
+                                            <label className={classes.labelText}>Date de naissance<span style={{ color: 'red' }}>*</span> </label>
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <Stack>
                                                     <DatePicker
@@ -283,7 +280,7 @@ function AddApprenant() {
                                         </Grid>
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>Lieu de naissance</label>
+                                                <label className={classes.labelText}>Lieu de naissance<span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                 id="lieunaiss"
                                                 type="text"
@@ -303,7 +300,7 @@ function AddApprenant() {
                                     <Grid xs={12} sm={12} md={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                         <Grid xs={12} sm={12} md={4}  item>
                                             <FormControl fullWidth>
-                                            <label className={classes.labelText}>Adresse</label>
+                                            <label className={classes.labelText}>Adresse<span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                 id="adresse"
                                                 type="text"
@@ -320,7 +317,7 @@ function AddApprenant() {
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                                 <FormControl fullWidth>
-                                                    <label className={classes.labelText}>N° CNI</label>
+                                                    <label className={classes.labelText}>N° CNI<span style={{ color: 'red' }}>*</span> </label>
                                                     <OutlinedInput
                                                     id="cni"
                                                     type="text"
@@ -341,7 +338,7 @@ function AddApprenant() {
                                         <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                             <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                                 <FormControl fullWidth>
-                                                    <label className={classes.labelText}>Referentiel</label>
+                                                    <label className={classes.labelText}>Referentiel<span style={{ color: 'red' }}>*</span> </label>
                                                             <Select
                                                                 labelId="demo-simple-select-label"
                                                                 id="demo-simple-select"
@@ -363,7 +360,7 @@ function AddApprenant() {
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
-                                                    <label className={classes.labelText}>Email</label>
+                                                    <label className={classes.labelText}>Email<span style={{ color: 'red' }}>*</span> </label>
                                                     <OutlinedInput
                                                     id="email"
                                                     type="email"
@@ -384,7 +381,7 @@ function AddApprenant() {
                                         <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                             <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                                 <FormControl fullWidth>
-                                                    <label className={classes.labelText}>Telephone</label>
+                                                    <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}>*</span> </label>
                                                     <OutlinedInput
                                                     id="telephone"
                                                     type="text"
@@ -401,7 +398,7 @@ function AddApprenant() {
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
-                                                <label className={classes.labelText}>Telephone tuteur</label>
+                                                <label className={classes.labelText}>Telephone tuteur<span style={{ color: 'red' }}>*</span> </label>
                                                     <OutlinedInput
                                                     id="teltuteur"
                                                     type="text"
