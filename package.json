@@ -21,6 +21,7 @@
     "axios": "^0.22.0",
     "caniuse-lite": "^1.0.30001278",
     "date-fns": "2.23.0",
+    "date-time": "^4.0.0",
     "file-saver": "^2.0.5",
     "formik": "^2.2.9",
     "jspdf": "^2.5.1",

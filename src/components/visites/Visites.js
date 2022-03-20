@@ -15,6 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
+import dateTime from 'date-time';
 import {
     DataGrid,
     gridPageCountSelector,
@@ -30,12 +31,9 @@ var QRCode = require('qrcode.react')
 
 export const Visites = () => {
 
-    const [isLoaded, setIsloaded] = React.useState(false)
-
     const [visiteur, setVisiteur] = React.useState("")
     const [visites, setVisites] = React.useState([])
     const [formErrors, setFormErrors] = useState( {});
-    const [errorPage, setErrorPage] = useState(false);
 
     const [values, setValues] = React.useState({
         cni: '',
@@ -51,7 +49,7 @@ export const Visites = () => {
             setVisites(res.data.reverse())
 
         })
-    }, [])
+    }, [date])
 
     // Custom Pagination
     function CustomPagination() {
@@ -99,8 +97,6 @@ export const Visites = () => {
                 } else if (params.row.apprenant) {
                     return params.row.apprenant.prenom
                 }
-
-                setIsloaded(true)
             }
         },
         {
@@ -197,8 +193,6 @@ export const Visites = () => {
         doc.autoTable(content)
         doc.save("report.pdf")
     }
-
-    const datenow = new Date();
     const classes = VisiteStyle()
     const [open, setOpen] = React.useState(false)
 
@@ -265,7 +259,6 @@ export const Visites = () => {
             }
         }).catch(
             (error) => {
-                setErrorPage(true);
                 console.log(error);
             }
         )
@@ -487,7 +480,7 @@ export const Visites = () => {
             <QRCode
                 hidden
                 id="qr-gen"
-                value={'{cni:' + values.cni + ', temps: ' + datenow.toUTCString() + '}'}
+                value={'{cni:' + values.cni + ', temps: ' + dateTime({date: new Date()}) + '}'}
                 size={400}
                 level={"H"}
                 includeMargin={true}
