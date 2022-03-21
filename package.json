@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@date-io/date-fns": "^2.13.1",
+    "@emailjs/browser": "^3.4.0",
     "@emotion/react": "^11.8.1",
     "@emotion/styled": "^11.8.1",
     "@material-ui/icons": "^4.11.2",
@@ -50,7 +51,7 @@
     "react-tap-event-plugin": "^3.0.3",
     "rxjs": "^7.4.0",
     "styled-components": "^5.3.3",
-    "sweetalert2": "^11.1.9",
+    "sweetalert2": "^11.4.5",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.11"
   },

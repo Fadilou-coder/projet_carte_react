@@ -180,6 +180,17 @@ function AddApprenant() {
         } else if(!regexCni.test(val.cni)){
             errors.cni = "le format numéro de carte d'identité n'est pas valide";
         }
+        if(!val.dateNaissance){
+            errors.dateNaissance = "date de naissance est requis"
+        }
+        else{
+            const dateAtNow = new Date();
+            if(dateAtNow.getFullYear() - val.dateNaissance.getFullYear() <= 18){
+                errors.dateNaissance = "l'apprenant doit avoir au moins 18 ans";
+            }
+            // alert(dateAtNow.getFullYear());
+            // alert(val.dateNaissance.getFullYear());
+        }
         if(val.lieuNaissance === ''){
             errors.lieuNaissance = "lieu de naissance est requis"
         } else if(val.lieuNaissance.length < 3){
@@ -252,24 +263,13 @@ function AddApprenant() {
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <Stack>
                                                     <DatePicker
-                                                        inputFormat="MM/dd/yyyy"
+                                                        inputFormat="dd/MM/yyyy"
                                                         name="dateNaissance"
                                                         id="dateNaissance"
                                                         value={value.dateNaissance}
                                                         onChange={(event)=>{
                                                             setValue({...value,dateNaissance: event})
-                                                          /*  const selected = new Date({...value,dateNaissance: event});
-                                                            const maxDate = new Date();
-                                                            maxDate.setHours(0, 0, 0, 0);
-                                                            maxDate.setDate(maxDate.getDate() + 1);
-                                                            console.log(maxDate);
-                                                            if (selected < maxDate) {
-                                                                setDateError(null);
-                                                            } else {
-                                                                setDateError({ helperText: "Invalid", error: true });
-                                                            }*/
                                                         }}
-                                                        //{...{ ...(setDateError ? setDateError : {}) }}
                                                         defaultValue={null}
                                                         renderInput={(params) => <TextField {...params} />}
                                                     />
