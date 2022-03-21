@@ -16,8 +16,7 @@ import {
 
 import Checkbox from '@mui/material/Checkbox';
 import { ListAllAdmin, BloquerAdmin } from './AdminService';
-
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+import Swal from "sweetalert2";
 
 export const Admin = () => {
 
@@ -62,12 +61,34 @@ export const Admin = () => {
         );
     }
 
-    const bloquerAdmin = (id) => {
-        BloquerAdmin(id).then(() => {
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
+    const bloquerAdmin = (id, bloqued) => {
+        if (bloqued === false) {
+            Swal.fire({
+                title: 'Attention?',
+                text: "Voulez vraiment bloquer cet admin",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui!',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    BloquerAdmin(id).then(() => {
+                        Swal.fire(
+                            'Succes!',
+                            'Bloquer avec succes.',
+                            'success'
+                        ).then((res) => {
+                            ListAllAdmin().then(res => {
+                                setAdmin(res.data);
+                            })
+                        })
+                    })
+                }
             })
-        })
+        }
+
     }
 
 
@@ -115,8 +136,7 @@ export const Admin = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-                console.log.apply(params)
-                return <Checkbox {...label} onClick={() => bloquerAdmin(params.id)} checked={params.archive}/>;
+                return <Checkbox onClick={() => bloquerAdmin(params.id)} checked={params.row.isbloqued} />;
             }
         },
 

@@ -24,4 +24,4 @@ const API_URL =  'https://projet-carte.herokuapp.com/api/';
 
     export const SortieVisiteur = (data) => { return axios.post(API_URL + "visites/sortieVisiteur", data, {headers: authHeader()}); }
 
-    export const BloquerAdmin = (id) => { return axios.get(API_URL + "admin/" + id, {headers: authHeader()}); }
+    export const BloquerAdmin = (id) => { return axios.delete(API_URL + "admin/" + id, {headers: authHeader()}); }
