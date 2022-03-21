@@ -72,24 +72,6 @@ const Topbar = ({ funcSetIsMobile }) => {
                     </IconButton>
 
                     <div className={classes.mysearch}>
-                        <FormControl sx={{ m: 1 }}>
-                            <OutlinedInput
-                                id="email"
-                                placeholder="rechercher"
-                                width="small"
-                                size='small'
-                                style={{ backgroundColor: "white", borderRadius: "50px", marginLeft: "100px" }}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <SearchOutlined></SearchOutlined>
-                                    </InputAdornment>
-
-                                }
-
-                            // onChange={handleUsernameChange}
-
-                            />
-                        </FormControl>
                     </div>
                     <div className={classes.avatar}>
                         <Button aria-describedby={id} onClick={handleClick}>

@@ -330,6 +330,7 @@ function AddAdmin() {
                                     onClick={handleSubmit}
                                 >AJOUTER</Button>
                             </Grid>
+                            </Grid>
                         </form>
                 </Grid>
             </Box>

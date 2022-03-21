@@ -26,6 +26,8 @@ import {
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
+import { SearchOutlined } from '@mui/icons-material';
+
 
 var QRCode = require('qrcode.react')
 
@@ -368,8 +370,8 @@ export const Visites = () => {
                                                         input: { color: "#787486", fontWeight: "bold" },
                                                         label: { color: "#44C3CF" },
                                                         border: "2px solid #44C3CF",
-                                                        width: "15vw",
-                                                        borderRadius: "15px"
+                                                        width: "12vw",
+                                                        borderRadius: "10px"
                                                     }}
                                                 />
                                             )
@@ -381,7 +383,7 @@ export const Visites = () => {
                             <div>
                                 <Select
                                     value={visiteur}
-                                    style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
+                                    style={{ fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => chargerVisites(date, event.target.value)}
                                     className={classes.visiteur}
 
@@ -397,6 +399,24 @@ export const Visites = () => {
                                     <MenuItem value={"apprenant"}>Apprenant</MenuItem>
                                     <MenuItem value={"visiteur"}>Visiteur</MenuItem>
                                 </Select>
+                            </div>
+                            <div>
+                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                    <OutlinedInput
+                                        id="email"
+                                        placeholder="rechercher"
+                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchOutlined></SearchOutlined>
+                                            </InputAdornment>
+
+                                        }
+
+                                    // onChange={handleUsernameChange}
+
+                                    />
+                                </FormControl>
                             </div>
                         </Stack>
                         <div>
