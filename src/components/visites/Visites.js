@@ -28,7 +28,7 @@ import Swal from "sweetalert2";
 
 var QRCode = require('qrcode.react')
 
-export const Visites = () => {
+export const Visites = (props) => {
 
     const [setIsloaded] = React.useState(false)
 
@@ -45,6 +45,8 @@ export const Visites = () => {
 
     })
     const [date, setDate] = React.useState(new Date())
+
+    const [search, setSearch] = React.useState('');
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
@@ -190,7 +192,8 @@ export const Visites = () => {
         let content = {
             startY: 50,
             head: headers,
-            body: dat
+            body:dat
+
         }
 
         doc.text(title, marginLeft, 40)
@@ -322,8 +325,9 @@ export const Visites = () => {
     };
 
 
+
     return (
-        <Layout >
+        <Layout>
             <Grid style={{widt:"100%", display: 'flex', justifyContent:"center", alignItems:"center"}}>
             <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? {width: '80%'} : {width: '100%'}}>
             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
@@ -472,7 +476,7 @@ export const Visites = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-                                rows={visites}
+                                 rows={visites}
                                 columns={columns}
                                 disableVirtualization
                             />
