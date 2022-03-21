@@ -19,7 +19,7 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
-import { ListAllApprenant, putApprenant } from './ApprenantService';
+import { ListAllApprenant, putApprenant, listAllReferentiels, ListApprenantsByReferentiel } from './ApprenantService';
 import Swal from "sweetalert2";
 // import { exportComponentAsJPEG } from 'react-component-export-image';
 
@@ -39,6 +39,9 @@ export const ListApprenant = () => {
 
     // Initialisation des données des apprenants
     const [apprenants, setApprenants] = React.useState([]);
+
+    // Initialiser Liste Reeferentiel 
+    const [referentiels, setReferentiels] = React.useState([]);
     // Show detail Apprenant
     const [apprenant, setApprenant] = React.useState({
         id: 0,
@@ -57,12 +60,38 @@ export const ListApprenant = () => {
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
+            console.log(res.data)
             setApprenant(res.data[0]);
+        })
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+    React.useEffect(() => {
+
+        listAllReferentiels().then(res => {
+            // console.log(res.data)
+            setReferentiels(res.data);
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
+    function chargerReferentiel(value) {
+
+        console.log(value)
+        if (value === "") {
+            ListAllApprenant().then(res => {
+                setApprenants(res.data);
+                // setApprenant(res.data[0]);
+            })
+        } else {
+            ListApprenantsByReferentiel(value).then(res => {
+                // console.log(res.data)
+                setApprenants(res.data)
+            })
+        }
+    };
 
 
 
@@ -223,14 +252,15 @@ export const ListApprenant = () => {
                             <div>
                                 <Select
                                     size='small'
-                                    value={structure}
+                                    // value={referentiels[0].libelle}
+                                    onChange={(event) => chargerReferentiel(event.target.value)}
                                     style={{
                                         width: "20em",
                                         fontWeight: "bolder",
                                         color: "#787486",
                                         borderRadius: "15px",
                                     }}
-                                    onChange={(event) => setStructure(event.target.value)}
+                                    // onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
 
                                     startAdornment={
@@ -239,11 +269,13 @@ export const ListApprenant = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value={"tous"} selected="true">
-                                        <em>Tous</em>
-                                    </MenuItem>
-                                    <MenuItem value={"data"}> Data Scientist </MenuItem>
-                                    <MenuItem value={"dev"}> Developpeur Web et Mobile </MenuItem>
+                                    <MenuItem value={""}> Tous </MenuItem>
+                                    {
+                                        referentiels.map((element, i) => {
+                                            return (<MenuItem value={""+element.id}> {element.libelle} </MenuItem>)
+                                        })
+                                    }
+
                                 </Select>
                             </div>
                         </Stack>
