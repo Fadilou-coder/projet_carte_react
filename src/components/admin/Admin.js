@@ -1,4 +1,4 @@
-import {Box, Button, Stack} from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
@@ -15,7 +15,7 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin } from './AdminService';
+import { ListAllAdmin, BloquerAdmin } from './AdminService';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -27,20 +27,18 @@ export const Admin = () => {
     const [admins, setAdmin] = React.useState([]);
 
 
-      React.useEffect(()=>{
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
-                
-                console.log(res);
-       })
-    
+    React.useEffect(() => {
+        ListAllAdmin().then(res => {
+            setAdmin(res.data);
+        })
+
     }, []);
 
     let history = useHistory();
 
     function RedirectAddAdmin() {
         history.push("/add_admin");
-      }
+    }
 
 
 
@@ -62,6 +60,14 @@ export const Admin = () => {
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
         );
+    }
+
+    const bloquerAdmin = (id) => {
+        BloquerAdmin(id).then(() => {
+            ListAllAdmin().then(res => {
+                setAdmin(res.data);
+            })
+        })
     }
 
 
@@ -109,8 +115,8 @@ export const Admin = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-
-                return <Checkbox {...label} />;
+                console.log.apply(params)
+                return <Checkbox {...label} onClick={() => bloquerAdmin(params.id)} checked={params.archive}/>;
             }
         },
 
@@ -191,13 +197,14 @@ export const Admin = () => {
                                 variant="contained"
                                 endIcon={<AddCircleOutlined />}
                                 onClick={RedirectAddAdmin}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
+                                sx={{
+                                    backgroundColor: "#05888A",
+                                    fontFamily: "Arial", fontSize: "20px",
+                                    '&:hover': {
+                                        backgroundColor: "#F48322",
+                                        pointer: "cursor"
+                                    }
+                                }}
                             >
                                 Ajouter
                             </Button>
@@ -231,9 +238,9 @@ export const Admin = () => {
                                 // selectionModel={selectionModel}
                                 // onSelectionModelChange={setSelectionModel}
                                 disableVirtualization
-/*
-                                checkboxSelection
-*/
+                            /*
+                                                            checkboxSelection
+                            */
                             />
                         </div>
 
