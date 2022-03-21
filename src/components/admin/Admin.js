@@ -15,7 +15,7 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin, BloquerAdmin } from './AdminService';
+import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
 import Swal from "sweetalert2";
 
 export const Admin = () => {
@@ -78,6 +78,31 @@ export const Admin = () => {
                         Swal.fire(
                             'Succes!',
                             'Bloquer avec succes.',
+                            'success'
+                        ).then((res) => {
+                            ListAllAdmin().then(res => {
+                                setAdmin(res.data);
+                            })
+                        })
+                    })
+                }
+            })
+        }else{
+            Swal.fire({
+                title: 'Attention?',
+                text: "Voulez vraiment débloquer cet admin",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui!',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    DebloquerAdmin(id).then(() => {
+                        Swal.fire(
+                            'Succes!',
+                            'Admin débloquer avec succes.',
                             'success'
                         ).then((res) => {
                             ListAllAdmin().then(res => {
