@@ -5,7 +5,8 @@ import {makeStyles} from "@material-ui/core";
 const VisiteStyle = makeStyles(({
 
     visiteur: {
-        border: "2px solid #44C3CF"
+        border: "2px solid #44C3CF",
+        borderColor: "none"
     },
     visitePage: {
         width: "100%"

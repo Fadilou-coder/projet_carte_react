@@ -1,4 +1,4 @@
-import {Box, Button, Stack} from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
@@ -15,9 +15,8 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin } from './AdminService';
-
-const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
+import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
+import Swal from "sweetalert2";
 
 export const Admin = () => {
 
@@ -27,20 +26,18 @@ export const Admin = () => {
     const [admins, setAdmin] = React.useState([]);
 
 
-      React.useEffect(()=>{
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
-                
-                console.log(res);
-       })
-    
+    React.useEffect(() => {
+        ListAllAdmin().then(res => {
+            setAdmin(res.data);
+        })
+
     }, []);
 
     let history = useHistory();
 
     function RedirectAddAdmin() {
         history.push("/add_admin");
-      }
+    }
 
 
 
@@ -62,6 +59,61 @@ export const Admin = () => {
                 onChange={(event, value) => apiRef.current.setPage(value - 1)}
             />
         );
+    }
+
+    const bloquerAdmin = (id, bloqued) => {
+        if (!bloqued) {
+            Swal.fire({
+                title: 'Attention?',
+                text: "Voulez vraiment bloquer cet admin",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui!',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    BloquerAdmin(id).then(() => {
+                        Swal.fire(
+                            'Succes!',
+                            'Bloquer avec succes.',
+                            'success'
+                        ).then((res) => {
+                            ListAllAdmin().then(res => {
+                                setAdmin(res.data);
+                            })
+                        })
+                    })
+                }
+            })
+        }else{
+            Swal.fire({
+                title: 'Attention?',
+                text: "Voulez vraiment débloquer cet admin",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Oui!',
+                cancelButtonText: 'Non'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    DebloquerAdmin(id).then(() => {
+                        Swal.fire(
+                            'Succes!',
+                            'Admin débloquer avec succes.',
+                            'success'
+                        ).then((res) => {
+                            ListAllAdmin().then(res => {
+                                setAdmin(res.data);
+                            })
+                        })
+                    })
+                }
+            })
+        }
+
     }
 
 
@@ -109,8 +161,7 @@ export const Admin = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-
-                return <Checkbox {...label} />;
+                return <Checkbox onClick={() => bloquerAdmin(params.id)} checked={params.row.isbloqued} />;
             }
         },
 
@@ -191,13 +242,14 @@ export const Admin = () => {
                                 variant="contained"
                                 endIcon={<AddCircleOutlined />}
                                 onClick={RedirectAddAdmin}
-                                sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                        '&:hover':{
-                                                            backgroundColor:"#F48322", 
-                                                            pointer:"cursor"
-                                                        }
-                                                    }}
+                                sx={{
+                                    backgroundColor: "#05888A",
+                                    fontFamily: "Arial", fontSize: "20px",
+                                    '&:hover': {
+                                        backgroundColor: "#F48322",
+                                        pointer: "cursor"
+                                    }
+                                }}
                             >
                                 Ajouter
                             </Button>
@@ -231,9 +283,9 @@ export const Admin = () => {
                                 // selectionModel={selectionModel}
                                 // onSelectionModelChange={setSelectionModel}
                                 disableVirtualization
-/*
-                                checkboxSelection
-*/
+                            /*
+                                                            checkboxSelection
+                            */
                             />
                         </div>
 

@@ -86,9 +86,6 @@ const Topbar = ({ funcSetIsMobile }) => {
                                     </InputAdornment>
 
                                 }
-
-                            // onChange={handleUsernameChange}
-
                             />
                         </FormControl>
                     </div>
@@ -120,7 +117,7 @@ const Topbar = ({ funcSetIsMobile }) => {
                         >
                             <Button variant="text" sx={{ color: "#000000" }}
                                 onClick={logout}
-                            ><ExitToAppRoundedIcon marginLeft='5px' />Déconnexion</Button>
+                            ><ExitToAppRoundedIcon />Déconnexion</Button>
 
                         </Popover>
                     </div>

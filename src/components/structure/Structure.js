@@ -1,4 +1,3 @@
-
 import { Box, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React from 'react'
@@ -6,6 +5,8 @@ import Layout from "../layout/Layout";
 import StructureStyle from "./StructureStyle";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Swal from "sweetalert2";
+
 
 import {
     DataGrid,
@@ -14,29 +15,64 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import {Addstructure, ListAllStructure} from "./StructureService";
-import {Typography} from "@material-ui/core";
+import { Addstructure, Bloquerstructure, ListAllStructure, DebloquerStructure } from "./StructureService";
+import { Typography } from "@material-ui/core";
 
 
 
 export const Structure = () => {
 
     const [structure, setStructure] = React.useState([]);
-    const [nomStructure, setNomStructure] = React.useState({ nomStructure: ''});
-    React.useEffect(()=> {
-            ListAllStructure().then(response => {setStructure(response.data)})
-        }, []
-        );
-    function AddStructure (){
+    const [nomStructure, setNomStructure] = React.useState({ nomStructure: '' });
+    React.useEffect(() => {
+        ListAllStructure().then(response => { setStructure(response.data) })
+    }, []
+    );
+    function AddStructure() {
         Addstructure(nomStructure).then(response => {
-            ListAllStructure().then(response => {setStructure(response.data)})
-            setNomStructure({ nomStructure: ''});
+            ListAllStructure().then(response => { setStructure(response.data) })
+            setNomStructure({ nomStructure: '' });
         });
     }
 
 
-    function BloquerSstructure(id) {
-        alert(id)
+    function BloquerSstructure(id, blocked) {
+        if (!blocked) {
+            Swal.fire({
+                title: 'Attention!!!',
+                text: "voulez vous vraiment bloquer cette structure!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'green',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'oui!',
+                cancelButtonText: 'Non!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Bloquerstructure(id).then(() => {
+                        ListAllStructure().then(response => { setStructure(response.data) })
+                    })
+                }
+            })
+        }else{
+            Swal.fire({
+                title: 'Attention!!!',
+                text: "voulez vous vraiment débloquer cette structure!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: 'green',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'oui!',
+                cancelButtonText: 'Non!',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    DebloquerStructure(id).then(() => {
+                        ListAllStructure().then(response => { setStructure(response.data) })
+                    })
+                }
+            })
+        }
+
     }
 
 
@@ -76,7 +112,10 @@ export const Structure = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-                return <Button variant="contained" style={{backgroundColor: '#E9967A'}} onClick={() => BloquerSstructure(params.id)}>Bloquer</Button>;
+                if (!params.row.isBlocked)
+                    return <Button variant="contained" style={{ backgroundColor: '#E9967A' }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Bloquer</Button>;
+                else
+                    return <Button variant="contained" style={{ backgroundColor: 'green' }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Debloquer</Button>;
             }
         },
 
@@ -110,13 +149,13 @@ export const Structure = () => {
 
                         },
                     }}
-                         style={{
-                             display:"flex",
+                        style={{
+                            display: "flex",
 
-                         }}
-                         className={classes.tableau}>
+                        }}
+                        className={classes.tableau}>
 
-                        <div style={{ width:"50%" }}>
+                        <div style={{ width: "50%" }}>
                             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
                                 LISTE DES STRUCTURES
                             </Typography>
@@ -124,7 +163,7 @@ export const Structure = () => {
 
                             <DataGrid
 
-                                sx={{ boxShadow: "30px", width: "100%" ,}}
+                                sx={{ boxShadow: "30px", width: "100%", }}
 
                                 autoHeight
                                 pageSize={6}
@@ -137,7 +176,7 @@ export const Structure = () => {
                             />
                         </div>
 
-                        <div style={{marginLeft:"100px",width:"40%",}}><div>
+                        <div style={{ marginLeft: "100px", width: "40%", }}><div>
 
                             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
                                 AJOUTER DES STRUCTURES
@@ -154,7 +193,7 @@ export const Structure = () => {
                                     id="outlined-basic"
                                     label="Nom structure"
                                     variant="outlined"
-                                    style={{width:"100%",height:"100%",}}
+                                    style={{ width: "100%", height: "100%", }}
                                     value={nomStructure.nomStructure}
                                     onChange={(event) => setNomStructure({
                                         ...nomStructure,
@@ -162,8 +201,8 @@ export const Structure = () => {
                                     })}
                                 />
                             </Paper>
-                            <div style={{marginTop: "20px"}}>
-                                <Button disabled={nomStructure.nomStructure === ''} variant="contained" style={{marginTop: "50px",margin: 'auto', display: "flex", backgroundColor: '#44C3CF'}} onClick={AddStructure}>AJOUTER</Button>
+                            <div style={{ marginTop: "20px" }}>
+                                <Button disabled={nomStructure.nomStructure === ''} variant="contained" style={{ marginTop: "50px", margin: 'auto', display: "flex", backgroundColor: '#44C3CF' }} onClick={AddStructure}>AJOUTER</Button>
 
                             </div>
                         </div>

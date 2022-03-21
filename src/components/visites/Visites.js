@@ -15,6 +15,7 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
+import dateTime from 'date-time';
 import {
     DataGrid,
     gridPageCountSelector,
@@ -28,14 +29,13 @@ import Swal from "sweetalert2";
 
 var QRCode = require('qrcode.react')
 
-export const Visites = (props) => {
-
-    const [setIsloaded] = React.useState(false)
+export const Visites = () => {
 
     const [visiteur, setVisiteur] = React.useState("")
     const [visites, setVisites] = React.useState([])
     const [formErrors, setFormErrors] = useState( {});
-    const [setErrorPage] = useState(false);
+
+
 
     const [values, setValues] = React.useState({
         cni: '',
@@ -50,10 +50,9 @@ export const Visites = (props) => {
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data.reverse())
-
+            console.log(res.data.reverse());
         })
-    }, [])
+    }, [date])
 
     // Custom Pagination
     function CustomPagination() {
@@ -101,8 +100,6 @@ export const Visites = (props) => {
                 } else if (params.row.apprenant) {
                     return params.row.apprenant.prenom
                 }
-
-                setIsloaded(true)
             }
         },
         {
@@ -200,8 +197,6 @@ export const Visites = (props) => {
         doc.autoTable(content)
         doc.save("report.pdf")
     }
-
-    const datenow = new Date();
     const classes = VisiteStyle()
     const [open, setOpen] = React.useState(false)
 
@@ -268,7 +263,6 @@ export const Visites = (props) => {
             }
         }).catch(
             (error) => {
-                setErrorPage(true);
                 console.log(error);
             }
         )
@@ -277,13 +271,12 @@ export const Visites = (props) => {
     const downloadQRCode = () => {
         // Generate download with use canvas and stream
         const canvas = document.getElementById("qr-gen");
-        console.log(values.cni)
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
-        downloadLink.download = "qrcode.png";
+        downloadLink.download = "qrcode_"+ values.prenom + "_" + values.nom + ".png";
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
@@ -368,7 +361,6 @@ export const Visites = (props) => {
                                         className={classes.visiteur}
                                         value={date}
                                         onChange={(newValue) => {
-                                            console.log(newValue)
                                             chargerVisites(newValue, visiteur)
                                         }}
                                         renderInput={(params) => {
@@ -491,7 +483,7 @@ export const Visites = (props) => {
             <QRCode
                 hidden
                 id="qr-gen"
-                value={'{cni:' + values.cni + ', temps: ' + datenow.toUTCString() + '}'}
+                value={'{cni:' + values.cni + ', temps: ' + dateTime({date: new Date()}) + '}'}
                 size={400}
                 level={"H"}
                 includeMargin={true}

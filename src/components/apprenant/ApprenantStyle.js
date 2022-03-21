@@ -9,6 +9,7 @@ const ApprenantStyle = makeStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
+        backgroundColor: "white"
     },
 
 
@@ -56,7 +57,8 @@ const ApprenantStyle = makeStyles((theme) => ({
             width: "80% !important",
             margin: "0 auto !important",
 
-        }
+        },
+        backgroundColor: "white"
     }
     ,
 
@@ -133,7 +135,8 @@ const ApprenantStyle = makeStyles((theme) => ({
     },
     infoUser: {
         display: "flex",
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        backgroundColor: "white"
 
     },
     input: {

@@ -12,14 +12,6 @@ const API_URL =  'https://projet-carte.herokuapp.com/api/';
 
     export const SaveAdmin = (data) => { return axios.post(API_URL + "admin/create/", data, {headers: authHeader()}); }
 
-    export const ListVisitesApp = (date) => { return axios.get(API_URL + "visites/" + date + "/apprenant"); }
+    export const BloquerAdmin = (id) => { return axios.delete(API_URL + "admin/" + id, {headers: authHeader()}); }
 
-    export const ListVisitesVisteur = (date) => { return axios.get(API_URL + "visites/" + date + "/visiteur"); }
-
-    export const SaveVisitesApp = (data) => { return axios.post(API_URL + "visites/create/apprenant", data, {headers: authHeader()}); }
-
-    export const SaveVisitesVisieur = (data) => { return axios.post(API_URL + "visites/create/visiteur", data, {headers: authHeader()}); }
-
-    export const SortieApp = (data) => { return axios.post(API_URL + "visites/sortieApprenant", data, {headers: authHeader()}); }
-
-    export const SortieVisiteur = (data) => { return axios.post(API_URL + "visites/sortieVisiteur", data, {headers: authHeader()}); }
+    export const DebloquerAdmin = (id) => { return axios.put(API_URL + "admin/debloquer/" + id, {}, {headers: authHeader()}); }
