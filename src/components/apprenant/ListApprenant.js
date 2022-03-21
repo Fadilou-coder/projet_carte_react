@@ -21,7 +21,7 @@ import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant } from './ApprenantService';
 import Swal from "sweetalert2";
-import { exportComponentAsJPEG } from 'react-component-export-image';
+// import { exportComponentAsJPEG } from 'react-component-export-image';
 
 
 var QRCode = require('qrcode.react');
@@ -157,9 +157,20 @@ export const ListApprenant = () => {
     const downloadQRCode = () => {
         // exportComponentAsJPEG(componentRef)
         const canvas = document.getElementById("qr-gen");
+        
+        // canvas.toBlob(function(blob) {
+        //     const formData = new FormData();
+        //     formData.append('file', blob, 'qrcode.png');
+        //     formData.append('prenom', apprenant.prenom);
+        //     formData.append('nom', apprenant.nom);
+        //     formData.append('email', 'fadilousy@outlook.com');
+
+        //     sendCarte(formData);
+        //   });
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
+        
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
         downloadLink.download = "qrcode_" + apprenant.prenom + "_" + apprenant.nom + ".png";

@@ -21,6 +21,14 @@ export const saveApprenant = (data) => {
         });
 }
 
+export const sendCarte = (data) => {
+    return axios.post(
+        API_URL + "apprenants/sendMail", data,
+        { headers: authHeader(),
+            "axios.defaults.headers.common['Content-Type'] ": 'multipart/form-data; boundary=someArbitraryUniqueString',
+        });
+}
+
 export const listAllReferentiels= () => {
     return axios.get(
         API_URL + "referentiels", { headers: authHeader()
