@@ -1,5 +1,5 @@
 import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
-import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
+import { Box, OutlinedInput, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
 import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
@@ -18,10 +18,11 @@ import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
-import { Typography } from '@material-ui/core';
+import { Typography, FormControl } from '@material-ui/core';
 import { ListAllApprenant, putApprenant } from './ApprenantService';
 import Swal from "sweetalert2";
 import { exportComponentAsJPEG } from 'react-component-export-image';
+import { SearchOutlined } from '@mui/icons-material';
 
 
 var QRCode = require('qrcode.react');
@@ -213,22 +214,14 @@ export const ListApprenant = () => {
 
                             <div>
                                 <Select
-                                    size='small'
                                     value={structure}
-                                    style={{
-                                        width: "20em",
-                                        fontWeight: "bolder",
-                                        color: "#787486",
-                                        borderRadius: "15px",
-                                    }}
+                                    style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
-
                                     startAdornment={
                                         <InputAdornment position="start">
                                             <Notes sx={{ color: "#44C3CF" }} ></Notes>
                                         </InputAdornment>}
-
                                 >
                                     <MenuItem value={"tous"} selected="true">
                                         <em>Tous</em>
@@ -237,17 +230,31 @@ export const ListApprenant = () => {
                                     <MenuItem value={"dev"}> Developpeur Web et Mobile </MenuItem>
                                 </Select>
                             </div>
+                            <div>
+                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                    <OutlinedInput
+                                        id="email"
+                                        placeholder="rechercher"
+                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchOutlined></SearchOutlined>
+                                            </InputAdornment>
+
+                                        }
+                                    />
+                                </FormControl>
+                            </div>
                         </Stack>
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
-                                style={{
-
-                                }}
                                 sx={{
                                     backgroundColor: "#138A8A",
+                                    fontFamily: "Arial", fontSize: "20px",
                                     marginRight: "35px",
-                                    fontWeight: "bolder",
+                                    marginTop: "20px",
+                                    pointer: "cursor",
                                     '&:hover': {
                                         backgroundColor: '#F48322',
                                     }

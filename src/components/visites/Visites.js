@@ -410,11 +410,7 @@ export const Visites = () => {
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
                                             </InputAdornment>
-
                                         }
-
-                                    // onChange={handleUsernameChange}
-
                                     />
                                 </FormControl>
                             </div>

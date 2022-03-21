@@ -45,10 +45,9 @@ const VisiteStyle = makeStyles(theme => ({
         },
         border: "2px solid #44C3CF",
         color: "#787486",
-        width: "15vw",
+        width: "12vw",
         borderRadius: "10px",
         borderColor: "#44C3CF",
-        color: "#787486",
         '&:focus':{
             borderColor: "#44C3CF",
         }

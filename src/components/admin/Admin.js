@@ -142,7 +142,7 @@ export const Admin = () => {
             flex: 1
         },
         {
-            field: 'telephone',
+            field: 'phone',
             headerClassName: 'super-app-theme--header',
             headerName: 'Téléphone',
             editable: true,

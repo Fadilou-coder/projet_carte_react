@@ -3,8 +3,7 @@ import { AppBar, Toolbar, IconButton, Avatar } from "@material-ui/core";
 import { TopbarStyle } from "./TopbarStyle";
 import MenuIcon from '@material-ui/icons/Menu'
 import styled from "styled-components";
-import { Typography, FormControl, OutlinedInput, InputAdornment } from "@mui/material";
-import { SearchOutlined } from '@mui/icons-material';
+import { Typography } from "@mui/material";
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
