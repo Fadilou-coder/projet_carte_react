@@ -62,7 +62,7 @@ export const Admin = () => {
     }
 
     const bloquerAdmin = (id, bloqued) => {
-        if (bloqued) {
+        if (!bloqued) {
             Swal.fire({
                 title: 'Attention?',
                 text: "Voulez vraiment bloquer cet admin",
