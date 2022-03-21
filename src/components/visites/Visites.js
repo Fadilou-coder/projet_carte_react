@@ -273,7 +273,7 @@ export const Visites = () => {
             .replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
-        downloadLink.download = "qrcode.png";
+        downloadLink.download = "qrcode_"+ values.prenom + "_" + values.nom + ".png";
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);

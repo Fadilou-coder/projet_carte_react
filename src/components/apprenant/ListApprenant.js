@@ -155,19 +155,17 @@ export const ListApprenant = () => {
     }
 
     const downloadQRCode = () => {
-        // Generate download with use canvas and stream
-        // const canvas = document.getElementById("qr-gen");
-        // const pngUrl = canvas
-        //     .toDataURL("image/png")
-        //     .replace("image/png", "image/octet-stream");
-        // let downloadLink = document.createElement("a");
-        // downloadLink.href = pngUrl;
-        // downloadLink.download = "qrcode.png";
-        // document.body.appendChild(downloadLink);
-        // downloadLink.click();
-        // document.body.removeChild(downloadLink);
-
-        exportComponentAsJPEG(componentRef)
+        // exportComponentAsJPEG(componentRef)
+        const canvas = document.getElementById("qr-gen");
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = "qrcode_" + apprenant.prenom + "_" + apprenant.nom + ".png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     };
 
 
@@ -356,7 +354,7 @@ export const ListApprenant = () => {
 
                                 }}
                                 style={{ backgroundColor: "white" }}
-                                
+
                             >
                                 <Grid ref={componentRef}>
                                     <div className={classes1.avatarApprenant} >
@@ -561,7 +559,6 @@ export const ListApprenant = () => {
 
                                             }}
                                         >
-                                            {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
                                             <QRCode
                                                 value={apprenant.code}
                                                 size={90}
@@ -569,7 +566,25 @@ export const ListApprenant = () => {
                                                 fgColor={"#138A8A"}
                                                 level={"H"}
                                                 includeMargin={false}
-                                                renderAs={"svg"}
+                                                imageSettings={{
+                                                    src: `${logosonatel}`,
+                                                    x: null,
+                                                    y: null,
+                                                    height: 30,
+                                                    width: 30,
+                                                    excavate: false,
+                                                }}
+                                            />
+
+                                            <QRCode
+                                                hidden
+                                                id="qr-gen"
+                                                value={apprenant.code}
+                                                size={400}
+                                                level={"H"}
+                                                includeMargin={true}
+                                                bgColor={"#ffffff"}
+                                                fgColor={"#138A8A"}
                                                 imageSettings={{
                                                     src: `${logosonatel}`,
                                                     x: null,

@@ -37,7 +37,7 @@ export const Structure = () => {
 
 
     function BloquerSstructure(id, blocked) {
-        if (!blocked) {
+        if (blocked) {
             Swal.fire({
                 title: 'Attention!!!',
                 text: "voulez vous vraiment bloquer cette structure!",
