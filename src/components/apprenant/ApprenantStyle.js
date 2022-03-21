@@ -3,8 +3,8 @@ import themeGeneral from '../theme'
 
 const ApprenantStyle =makeStyles((theme) => ({
 
-   
-   
+
+
     subContainer:{
         padding:themeGeneral.spacing(1),
         border: "2px solid #E5E5E5",
@@ -18,12 +18,21 @@ const ApprenantStyle =makeStyles((theme) => ({
         color: themeGeneral.palette.primary.black,
         fontSize: "40px"
     },
-    // gridStyle:{
-    //     paddingLeft:"50px",
-    //     [theme.breakpoints.down("sm")]: {
-    //         paddingLeft:"0px",
-    //     }
-    // },
+    formError: {
+        color: 'red'
+    },
+    inputDate:{
+        background:themeGeneral.palette.primary.white,
+        border:`1px solid #DBE2EA`,
+        borderRadius:"5px",
+        width:"80%",
+        "& .css-i4bv87-MuiSvgIcon-root ":{
+            marginRight: "10px",
+        }, [theme.breakpoints.down("sm")]: {
+            width:"35vw",
+            margin:theme.spacing(1)
+        },
+    },
     labelText:{
         fontWeight:"normal",
         fontFamily: "Arial",
@@ -66,6 +75,9 @@ const ApprenantStyle =makeStyles((theme) => ({
         textAlign: "center",
         fontWeight:"bold",
         // marginLeft: theme.spacing(4)
+    },
+    infoUser : {
+        display:"flex",
     },
     input: {
         marginBottom: theme.spacing(5)

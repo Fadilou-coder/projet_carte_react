@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useRef, useState} from "react";
 import { Grid } from "@material-ui/core";
 import Box from '@mui/material/Box';
 import { FormControl, Typography } from "@material-ui/core";
@@ -16,21 +16,18 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Avatar from '@mui/material/Avatar';
 import imgAvatar from '../../assets/images/avatar.jpg';
 import Layout from "../layout/Layout";
-
-
+import {listAllReferentiels, saveApprenant} from "./ApprenantService";
+import Swal from "sweetalert2";
 
 function AddApprenant() {
-    
-    const [referentiel, setStructure] = React.useState('');
-    
-      const handleChange = (event) => {
-    setStructure(event.target.value);
-    };
+
+    const [referentiel, setReferentiel] = React.useState([]);
+
 
     const classes = ApprenantStyle();
     const useStyles = makeStyles((theme) => ({
     gridStyle:{
-        
+
         marginLeft: "50px",
         [theme.breakpoints.down("sm")]: {
             marginLeft: "0px",
@@ -40,9 +37,43 @@ function AddApprenant() {
     }));
     const styles = useStyles();
 
-    const [value, setValue] = React.useState(null);
+    const [value, setValue] = React.useState({
+        prenom: '',
+        nom: '',
+        email: '',
+        phone: '',
+        adresse: '',
+        cni: '',
+        referentiel: '',
+        dateNaissance: '',
+        lieuNaissance: '',
+        numTuteur:'',
+        avatar : ''
+
+    });
+
+    React.useState(() => {
+        listAllReferentiels().then((res)=>{
+            setReferentiel(res.data)
+        })
+    })
+
+    function formatDate(date) {
+        let d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
 
     const [image, setImage] = React.useState("");
+    const wrapperRef = useRef(null);
 
     const validateImage = e =>
     e.target.files[0].type ==="image/png" ||
@@ -63,6 +94,113 @@ function AddApprenant() {
         }
     };
 
+    const PostApprenant = () => {
+        setFormErrors(validateApprenant(formValues));
+        setIsSubmit(true);
+        let formData = new FormData();
+        const data = ["prenom", "nom", "email", "phone", "adresse", "cni","referentiel", "lieuNaissance", "numTuteur", "avatar" ];
+        console.log(value);
+        data.forEach((app) => {
+            if(value[app] !== '') {
+                formData.append(app, value[app]);
+            }
+            })
+            formData.append("dateNaissance",formatDate(value.dateNaissance));
+            saveApprenant(formData).then((res) => {
+                if(res.status === 200) {
+                    Swal.fire(
+                        'Succes!',
+                        'Enregistrer avec succes.',
+                        'success'
+                    ).then((res) => {
+                        setValue({
+                            prenom: '',
+                            nom: '',
+                            email: '',
+                            phone: '',
+                            adresse: '',
+                            cni: '',
+                            referentiel: '',
+                            dateNaissance: '',
+                            lieuNaissance: '',
+                            numTuteur:'',
+                            avatar : ''
+                        })
+                    })
+                }
+            }).catch(
+                (error) => {
+                    setErrorPage(true);
+                    console.log(error);
+                }
+            )
+    }
+
+    const initialValues = {prenom: "", nom: "", email: "", phone: "", adresse: "", cni: "", lieuNaissance: "", numTuteur: "" };
+    const [formValues, setFormValues] = useState(initialValues);
+    const [formErrors, setFormErrors] = useState( {});
+    const [errorPage, setErrorPage] = useState(false);
+    const [isSubmit, setIsSubmit] = useState(false);
+
+    const validateApprenant = (val) => {
+        const errors = {};
+        if(!val.prenom){
+            errors.prenom = "prenom est requis"
+        } else if(val.prenom.length < 3){
+            errors.prenom = "le prenom doit comporter plus de 3 caractères";
+        }
+        else if(val.nom.length > 20){
+            errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
+        }
+        if(!val.nom){
+            errors.nom = "nom est requis"
+        } else if(val.nom.length < 2){
+            errors.nom = "le nom doit comporter plus de 2 caractères";
+        }
+        else if(val.nom.length > 10){
+            errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
+        }
+        let regexMail = /^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$/i;
+        let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
+        let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
+        if(!val.email){
+            errors.email = "le est requis"
+        } else if(!regexMail.test(val.email)){
+            errors.email = "le format Email n'est pas valide";
+        }
+        if(!val.phone){
+            errors.phone = "le numéro de télephone est requis"
+        } else if(!regexPhone.test(val.phone)){
+            errors.phone = "le format numéro télephone n'est pas valide";
+        }
+        if(!val.adresse){
+            errors.adresse = "l'adresse est requis"
+        } else if(val.adresse.length < 3){
+            errors.adresse = "l'adresse doit comporter plus de 3 caractères";
+        } else if(val.adresse.length > 15){
+            errors.adresse = "l'adresse ne peut pas dépassé plus de 15 caractères";
+        }
+
+        if(!val.cni){
+            errors.cni = "le numéro de carte d'identité est requis"
+        } else if(!regexCni.test(val.cni)){
+            errors.phone = "le format numéro de carte d'identité n'est pas valide";
+        }
+
+        if(!val.lieuNaissance){
+            errors.lieuNaissance = "lieu de naissance est requis"
+        } else if(val.lieuNaissance.length < 3){
+            errors.lieuNaissance = "lieu de naissance doit comporter plus de 3 caractères";
+        } else if(val.lieuNaissance.length > 15){
+            errors.lieuNaissance = "lieu de naissance ne peut pas dépassé plus de 15 caractères";
+        }
+        if(!val.numTuteur){
+            errors.numTuteur = "le numéro de Tuteur est requis"
+        } else if(!regexPhone.test(val.numTuteur)){
+            errors.numTuteur = "le format numéro de Tuteur n'est pas valide";
+        }
+        return errors;
+    };
 
     return(
         <React.Fragment>
@@ -71,33 +209,53 @@ function AddApprenant() {
                 <Grid container spacing={2} >
                     <Grid item xs={12} sm={12} md={12}>
                         <Typography  variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
-                                        AJOUTER UN APPRENANT              
+                                        AJOUTER UN APPRENANT
                         </Typography>
                         <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float:"left", marginLeft:"15px" }} />
                         </Grid>
+                    {errorPage === true && isSubmit ? (
+                        <div className={classes.formError} >Les informations entrées sont incorrects!!!</div>
+                    ) : null}
                             <Grid  container className={classes.subContainer}>
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
                                     <Grid xs={12} sm={12} md={4}  className={styles.marginAlll} spacing={5} item>
                                         <FormControl fullWidth>
                                         <label className={classes.labelText}>Prenom</label>
-                                            <OutlinedInput 
-                                            id="prenom"
+                                            <OutlinedInput
+                                            id="nom"
                                             type="text"
-                                            variant="outlined" 
-                                            placeholder="Ex:Omar" 
+                                            variant="outlined"
+                                            placeholder="prenom"
+                                            onChange={(event)=>{
+                                                setValue({...value,prenom: event.target.value})
+                                                //validation
+                                                const {name, values} = event.target;
+                                                setFormValues({...formValues, [name]: values});
+                                            }}
+                                            name="prenom"
+                                            value={value.prenom}
                                             />
                                         </FormControl>
+                                        <p className={classes.formError}>{formErrors.prenom}</p>
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                         <FormControl fullWidth>
                                             <label className={classes.labelText}>Nom</label>
-                                            <OutlinedInput 
+                                            <OutlinedInput
                                             id="nom"
                                             type="text"
-                                            variant="outlined" 
-                                            placeholder="Ex: Ndiaye" 
+                                            variant="outlined"
+                                            placeholder="nom"
+                                            onChange={(event)=>{
+                                                setValue({...value,nom: event.target.value})
+                                                const {name, values} = event.target;
+                                                setFormValues({...formValues, [name]: values});
+                                            }}
+                                            name="nom"
+                                            value={value.nom}
                                             />
                                         </FormControl>
+                                        <p className={classes.formError}>{formErrors.nom}</p>
                                         </Grid>
                                 </Grid>
 
@@ -109,15 +267,16 @@ function AddApprenant() {
                                             <LocalizationProvider dateAdapter={AdapterDateFns}>
                                                 <Stack>
                                                     <DatePicker
-                                                        disableFuture
-                                                        openTo="year"
-                                                        views={['day', 'month', 'year']}
-                                                        value={value}
-                                                        onChange={(newValue) => {
-                                                            setValue(newValue);
+                                                        inputFormat="MM/dd/yyyy"
+                                                        name="dateNaissance"
+                                                        id="dateNaissance"
+                                                        value={value.dateNaissance}
+                                                        onChange={(event)=>{
+                                                            setValue({...value,dateNaissance: event})
                                                         }}
+                                                        defaultValue={null}
                                                         renderInput={(params) => <TextField {...params} />}
-                                                        />
+                                                    />
                                                 </Stack>
                                             </LocalizationProvider>
                                         </FormControl>
@@ -125,13 +284,21 @@ function AddApprenant() {
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
                                                 <label className={classes.labelText}>Lieu de naissance</label>
-                                                <OutlinedInput 
+                                                <OutlinedInput
                                                 id="lieunaiss"
                                                 type="text"
-                                                variant="outlined" 
-                                                placeholder="Ex: Parcelles assainies u3" 
+                                                variant="outlined"
+                                                placeholder="lieu de Naissance"
+                                                onChange={(event)=>{
+                                                    setValue({...value,lieuNaissance: event.target.value})
+                                                    const {name, values} = event.target;
+                                                    setFormValues({...formValues, [name]: values});
+                                                }}
+                                                name="lieuNaissance"
+                                                value={value.lieuNaissance}
                                                 />
                                             </FormControl>
+                                            <p className={classes.formError}>{formErrors.lieuNaissance}</p>
                                         </Grid>
 
 
@@ -139,24 +306,40 @@ function AddApprenant() {
                                         <Grid xs={12} sm={12} md={4}  item>
                                             <FormControl fullWidth>
                                             <label className={classes.labelText}>Adresse</label>
-                                                <OutlinedInput 
+                                                <OutlinedInput
                                                 id="adresse"
                                                 type="text"
-                                                variant="outlined" 
-                                                placeholder="Ex: Pikine rue 10" 
+                                                variant="outlined"
+                                                placeholder="adresse"
+                                                onChange={(event)=>{
+                                                    setValue({...value,adresse: event.target.value})
+                                                    const {name, values} = event.target;
+                                                    setFormValues({...formValues, [name]: values});
+                                                }}
+                                                name="adresse"
+                                                value={value.adresse}
                                                 />
                                             </FormControl>
+                                            <p className={classes.formError}>{formErrors.adresse}</p>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>N° CNI</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="cni"
                                                     type="text"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: 2020202120221" 
+                                                    variant="outlined"
+                                                    placeholder="cni"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,cni: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
+                                                    }}
+                                                    name="cni"
+                                                    value={value.cni}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.cni}</p>
                                             </Grid>
                                         </Grid>
 
@@ -165,55 +348,85 @@ function AddApprenant() {
                                             <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>Referentiel</label>
-                                                    <Select
-                                                        labelId="demo-simple-select-label"
-                                                        id="demo-simple-select"
-                                                        value={referentiel}
-                                                        label="Referentiel"
-                                                        onChange={handleChange}
-                                                    >
-                                                        <MenuItem value="DEV WEB">Développeur Web </MenuItem>
-                                                        <MenuItem value="DATA">Data Artisan</MenuItem>
-                                                        <MenuItem value="REF DIG">Referent Digital</MenuItem>
-                                                    </Select>
+                                                            <Select
+                                                                labelId="demo-simple-select-label"
+                                                                id="demo-simple-select"
+                                                                placeholder="referentiel"
+                                                                onChange={(event)=>{
+                                                                    setValue({...value, referentiel: event.target.value})
+                                                                }}
+                                                                name="referentiel"
+                                                            >
+                                                                {
+                                                                    referentiel.map((row) =>
+                                                                <MenuItem  key={row.id}
+                                                                           value={row.libelle}
+                                                                >{row.libelle}</MenuItem>
+                                                                    )
+                                                                }
+                                                            </Select>
                                                 </FormControl>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>Email</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="email"
                                                     type="email"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: exemple@gmail.com" 
+                                                    variant="outlined"
+                                                    placeholder="email"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,email: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
+                                                    }}
+                                                    name="email"
+                                                    value={value.email}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.email}</p>
                                                 </Grid>
                                         </Grid>
 
-                                       
+
                                         <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center", marginTop: "20px"}}>
                                             <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                                 <FormControl fullWidth>
                                                     <label className={classes.labelText}>Telephone</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="telephone"
                                                     type="text"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: 77 777 77 77" 
+                                                    variant="outlined"
+                                                    placeholder="numéro télephone"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,phone: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
+                                                    }}
+                                                    name="phone"
+                                                    value={value.phone}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.phone}</p>
                                             </Grid>
                                             <Grid xs={12} sm={12} md={4} item  className={styles.gridStyle}>
                                                 <FormControl fullWidth>
                                                 <label className={classes.labelText}>Telephone tuteur</label>
-                                                    <OutlinedInput 
+                                                    <OutlinedInput
                                                     id="teltuteur"
                                                     type="text"
-                                                    variant="outlined" 
-                                                    placeholder="Ex: 78 787 78 78" 
+                                                    variant="outlined"
+                                                    placeholder="numéro de tuteur"
+                                                    onChange={(event)=>{
+                                                        setValue({...value,numTuteur: event.target.value})
+                                                        const {name, values} = event.target;
+                                                        setFormValues({...formValues, [name]: values});
+                                                    }}
+                                                    name="numTuteur"
+                                                    value={value.numTuteur}
                                                     />
                                                 </FormControl>
+                                                <p className={classes.formError}>{formErrors.numTuteur}</p>
                                             </Grid>
                                         </Grid>
 
@@ -230,7 +443,7 @@ function AddApprenant() {
                                                             id="file"
                                                             type="file"
                                                             onChange={e => {
-                                                                setImage({...image,avatar: e.target.files[0]})
+                                                                setValue({...value,avatar: e.target.files[0]})
                                                                 let files = e.target.files;
                                                                 if(files.length ===1 && validateImage(e)){
                                                                     upload(e);
@@ -239,33 +452,34 @@ function AddApprenant() {
                                                                     alert("please add image only");
                                                                 }
                                                             }}
-                                                            // ref={wrapperRef}
+                                                            ref={wrapperRef}
                                                             accept="image/gif, image/jpeg, image/png, image/jpg"
                                                             hidden
                                                         />
                                                             <CameraAltIcon/>
-                                                    </Button>                                              
+                                                    </Button>
                                                 </Grid>
                                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display:"flex", justifyContent:"center",  marginTop: "15px"}}>
                                                     <Avatar
                                                         alt=""
                                                         src={image || imgAvatar}
                                                         sx={{ width: 100, height: 100 }}
-                                                        />                                
+                                                        />
                                                 </Grid>
                                             </Grid>
 
-                                    <Button variant="contained" sx={{backgroundColor: "#05888A", 
-                                                    fontFamily: "Arial", fontSize: "20px", 
-                                                    marginTop: "10px", 
+                                    <Button variant="contained" sx={{backgroundColor: "#05888A",
+                                                    fontFamily: "Arial", fontSize: "20px",
+                                                    marginTop: "10px",
                                                         '&:hover':{
-                                                            backgroundColor:"#F48322", 
+                                                            backgroundColor:"#F48322",
                                                             pointer:"cursor"
                                                         }
                                                     }}
+                                            onClick={ ()=> PostApprenant()}
                                             >Enregistrer et Imprimer carte</Button>
                                 </Grid>
-                            </Grid>                            
+                            </Grid>
                 </Grid>
             </Box>
             </Layout>

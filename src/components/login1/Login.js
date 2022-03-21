@@ -15,10 +15,16 @@ const Login = (props) => {
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [errorPage, setErrorPage] = useState(false);
 
   const [values, setValues] = React.useState({
     showPassword: false,
   });
+
+  const initialValues = {username: "", password: ""};
+  const [formValues, setFormValues] = useState(initialValues);
+  const [formErrors, setFormErrors] = useState( {});
+  const [isSubmit, setIsSubmit] = useState(false);
 
   const [ open, setOpen] = React.useState(false);
 
@@ -30,27 +36,60 @@ const Login = (props) => {
   };
 
   const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
+     setUsername(event.target.value);
+    const {name, value} = event.target;
+    setFormValues({...formValues, [name]: value});
   }
+
   const handlePasswordChange = (event) => {
-      setPassword(event.target.value);
+    setPassword(event.target.value);
+    const {name, value} = event.target;
+    setFormValues({...formValues, [name]: value});
   }
+ /* const handleChange = (e) => {
+      const {name, value} = e.target;
+      setFormValues({...formValues, [name]: value});
+      console.log(formValues);
+  }*/
 
 
   const handleLogin = (event) => {
     event.preventDefault();
-    setOpen(true);
+    setFormErrors(validate(formValues));
+    setIsSubmit(true);
+     setOpen(true);
     AuthService.login(username, password).then(
     (res) => {
       props.history.push("/visites");
     }
     ).catch((e)=>{
-      setOpen(true);
-      console.log("Login ou Mot de Passe Incorrecte!!!")
+     setOpen(false);
+      setErrorPage(true);
+      console.log("Login ou Mot de Passe Incorrect!!!")
     });
 }
 
+  const validate = (val) => {
+    const errors = {};
+    if(!val.username){
+      errors.username = "email est requis"
+    }
+    if(!val.password){
+      errors.password = "password est requis"
+    } else if(val.password.length < 3){
+      errors.password = "le mot de passe doit comporter plus de 3 caractères";
+    }
+    else if(val.password.length > 10){
+      errors.password = "le mot de passe ne peut pas dépassé plus de 10 caractères";
+    }
+    return errors;
+  };
+
   const classes = LoginStyle();
+
+  const btn = username === '' || password == '' ? <Button disabled style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
+  >Se connecter</Button> : <Button style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
+  >Se connecter</Button>
 
   return (
     <>
@@ -78,28 +117,33 @@ const Login = (props) => {
               >
                 Entrer vos informations de connexion
               </Typography>
+              {errorPage === true && isSubmit ? (
+                  <div className={classes.formError} >Login ou mot de passe incorrect!!!</div>
+              ) : null}
 
               {/* Input Email */}
               <FormControl fullWidth sx={{ m: 1 }}>
                 <OutlinedInput
-                  id="email"
-                  placeholder="username"
+                  id="username"
+                  placeholder="email"
+                  name="username"
+                  value={values.username}
                   startAdornment={
                     <InputAdornment position="start">
                       <PersonOutline></PersonOutline>
                     </InputAdornment>}
 
                   onChange={handleUsernameChange}
-
                 />
               </FormControl>
-
+              <p className={classes.formError}>{formErrors.username}</p>
 
               {/* Input Password */}
               <FormControl fullWidth>
                 <OutlinedInput
                   id='password'
-                  placeholder='Password'
+                  placeholder='password'
+                  name="password"
                   type={values.showPassword ? 'text' : 'password'}
                   value={values.password}
                   startAdornment={
@@ -116,10 +160,9 @@ const Login = (props) => {
                   }
                   onChange={handlePasswordChange}
                 >
-
                 </OutlinedInput>
               </FormControl>
-
+              <p className={classes.formError}>{formErrors.password}</p>
               {/* Forgot Mdp */}
               <div
                 style={{ display: "flex", justifyContent: "flex-end", width: "100%", marginTop: "20px" }}
@@ -133,7 +176,7 @@ const Login = (props) => {
               </div>
 
               {/* Se connecter */}
-              <Button style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}>Se connecter</Button>
+              {btn}
             </Stack>
 
           </Box>

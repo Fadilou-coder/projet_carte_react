@@ -24,14 +24,14 @@ const Topbar = ({ funcSetIsMobile }) => {
   align-items: center;
 `;
 
-    const [anchorEl, setAnchorEl] = React.useState(null);
+    const [anchorEl, setAnchorEl] = React.useState(false);
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
 
     const handleClose = () => {
-        setAnchorEl(null);
+        setAnchorEl(false);
     };
 
     const open = Boolean(anchorEl);

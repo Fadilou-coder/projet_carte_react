@@ -8,6 +8,9 @@ const LoginStyle = makeStyles(({
         padding: 0,
         margin: 0
     },
+    formError: {
+        color: 'red'
+    },
     loginpage: {
         padding: 0,
         margin: 0,

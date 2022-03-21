@@ -6,6 +6,8 @@ import Layout from "../layout/Layout";
 import StructureStyle from "./StructureStyle";
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import Swal from "sweetalert2";
+
 
 import {
     DataGrid, GridApi, GridCellValue,
@@ -14,7 +16,7 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import {Addstructure, ListAllStructure} from "./StructureService";
+import {Addstructure, Bloquerstructure, ListAllStructure} from "./StructureService";
 import {Typography} from "@material-ui/core";
 
 
@@ -36,7 +38,23 @@ export const Structure = () => {
 
 
     function BloquerSstructure(id) {
-        alert(id)
+        Swal.fire({
+            title: 'Attention!!!',
+            text: "vous les vous vraiment bloquer!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#05888A',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'oui!',
+            cancelButtonText: 'Non!',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Bloquerstructure(id).then(() =>{
+                    ListAllStructure().then(response => {setStructure(response.data)})
+                })
+            }
+        })
+
     }
 
 
