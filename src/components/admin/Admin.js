@@ -1,11 +1,11 @@
-import { Box, Button, Stack } from '@mui/material';
+import { Box, Button, Stack, OutlinedInput } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
 import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
 import VisiteStyle from "../visites/VisiteStyle";
 import { useHistory } from "react-router-dom";
-import { Typography } from '@material-ui/core';
+import { FormControl, Typography } from '@material-ui/core';
 import {
     DataGrid,
     gridPageCountSelector,
@@ -17,6 +17,8 @@ import {
 import Checkbox from '@mui/material/Checkbox';
 import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
 import Swal from "sweetalert2";
+import { SearchOutlined } from '@mui/icons-material';
+
 
 export const Admin = () => {
 
@@ -140,7 +142,7 @@ export const Admin = () => {
             flex: 1
         },
         {
-            field: 'telephone',
+            field: 'phone',
             headerClassName: 'super-app-theme--header',
             headerName: 'Téléphone',
             editable: true,
@@ -218,7 +220,7 @@ export const Admin = () => {
                             <div>
                                 <Select
                                     value={structure}
-                                    style={{ width: "20vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
+                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
 
@@ -235,6 +237,25 @@ export const Admin = () => {
                                     <MenuItem value={"cbag"}> Cbag Securité </MenuItem>
                                 </Select>
                             </div>
+                            <div>
+                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                    <OutlinedInput
+                                        id="email"
+                                        placeholder="rechercher"
+                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchOutlined></SearchOutlined>
+                                            </InputAdornment>
+
+                                        }
+
+                                    // onChange={handleUsernameChange}
+
+                                    />
+                                </FormControl>
+                            </div>
+
                         </Stack>
 
                         <Box textAlign="right">
@@ -249,7 +270,7 @@ export const Admin = () => {
                                         backgroundColor: "#F48322",
                                         pointer: "cursor"
                                     }
-                                }}
+                                }} 
                             >
                                 Ajouter
                             </Button>

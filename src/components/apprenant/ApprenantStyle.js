@@ -47,6 +47,7 @@ const ApprenantStyle = makeStyles((theme) => ({
         display: "flex",
         // justifyContent: "space-evenly",
         gap: "1.5vw",
+        marginTop: "20px",
         [theme.breakpoints.down('md')]: {
             display: "block",
 
@@ -169,6 +170,15 @@ const ApprenantStyle = makeStyles((theme) => ({
         /* width: "99.6%",*/
         top: "58.5%",
         bottom: "56%"
+    },
+    filterInput: {
+        border: "2px solid #44C3CF",
+        borderRadius: "10px",
+        width: "12vw",
+        borderColor: "#44C3CF",
+        '&:focus':{
+            borderColor: "#44C3CF",
+        }
     }
 }));
 

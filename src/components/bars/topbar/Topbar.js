@@ -3,8 +3,7 @@ import { AppBar, Toolbar, IconButton, Avatar } from "@material-ui/core";
 import { TopbarStyle } from "./TopbarStyle";
 import MenuIcon from '@material-ui/icons/Menu'
 import styled from "styled-components";
-import { Typography, FormControl, OutlinedInput, InputAdornment } from "@mui/material";
-import { SearchOutlined } from '@mui/icons-material';
+import { Typography } from "@mui/material";
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
@@ -72,24 +71,6 @@ const Topbar = ({ funcSetIsMobile }) => {
                     </IconButton>
 
                     <div className={classes.mysearch}>
-                        <FormControl sx={{ m: 1 }}>
-                            <OutlinedInput
-                                id="email"
-                                placeholder="rechercher"
-                                width="small"
-                                size='small'
-                                style={{ backgroundColor: "white", borderRadius: "50px", marginLeft: "100px" }}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <SearchOutlined></SearchOutlined>
-                                    </InputAdornment>
-
-                                }
-
-                            // onChange={handleUsernameChange}
-
-                            />
-                        </FormControl>
                     </div>
                     <div className={classes.avatar}>
                         <Button aria-describedby={id} onClick={handleClick}>
