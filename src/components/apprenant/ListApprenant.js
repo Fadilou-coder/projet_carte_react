@@ -1,5 +1,16 @@
 import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
-import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
+import {
+    Box,
+    Grid,
+    InputAdornment,
+    MenuItem,
+    Pagination,
+    PaginationItem,
+    Select,
+    Stack,
+    Button,
+    FormControl, OutlinedInput
+} from '@mui/material';
 import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
@@ -19,12 +30,10 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
-import { ListAllApprenant, putApprenant, listAllReferentiels, ListApprenantsByReferentiel } from './ApprenantService';
+import { ListAllApprenant, putApprenant, ListApprenantsByReferentiel } from './ApprenantService';
 import Swal from "sweetalert2";
-import { exportComponentAsJPEG } from 'react-component-export-image';
 import { SearchOutlined } from '@mui/icons-material';
-import Skeletons from "../skeleton/Skeleton";
-import Skeleton from '@mui/material/Skeleton';
+
 
 var QRCode = require('qrcode.react');
 
@@ -33,7 +42,6 @@ export const ListApprenant = () => {
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
-    const [isLoaded,setIsLoaded] = React.useState(false);
 
     var componentRef = React.createRef();
 
@@ -61,9 +69,7 @@ export const ListApprenant = () => {
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
-            console.log(res.data)
             setApprenant(res.data[0]);
-            setIsLoaded(true)
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -377,7 +383,6 @@ export const ListApprenant = () => {
                                         Pagination: CustomPagination,
                                     }}
                                     rows={
-                                        !isLoaded?( <Skeletons nbItem={10} list={classes.listIsload}/>):(
                                         apprenants.filter((val) => {
                                             if(search === ""){
                                                 return val;
@@ -387,7 +392,7 @@ export const ListApprenant = () => {
                                             }
                                         }).map((row) => {
                                             return row;
-                                        }))
+                                        })
                                     }
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}

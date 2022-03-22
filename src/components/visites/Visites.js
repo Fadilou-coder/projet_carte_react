@@ -489,8 +489,8 @@ export const Visites = () => {
                                     visites.filter((val) => {
                                         if(search === ""){
                                             return val;
-                                        } else if (val.visiteur.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.visiteur.cni.toLowerCase().includes(search.toLowerCase())){
+                                        } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.visiteur?.cni.toLowerCase().includes(search.toLowerCase())){
                                             return val;
                                         }
                                     }).map((row) => {
