@@ -26,6 +26,7 @@ import {
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
+import {encode as base64_encode} from 'base-64';
 
 var QRCode = require('qrcode.react')
 
@@ -479,7 +480,7 @@ export const Visites = () => {
             <QRCode
                 hidden
                 id="qr-gen"
-                value={'{cni:' + values.cni + ', temps: ' + dateTime({date: new Date()}) + '}'}
+                value={base64_encode('{"cni":"' + values.cni + '", "date": "' + dateTime({date: new Date()}) + '"}')}
                 size={400}
                 level={"H"}
                 includeMargin={true}

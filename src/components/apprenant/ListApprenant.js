@@ -29,9 +29,6 @@ var QRCode = require('qrcode.react');
 
 export const ListApprenant = () => {
 
-
-    const [structure, setStructure] = React.useState("FadiloU Agency Security");
-
     const classes = VisiteStyle();
 
     var componentRef = React.createRef();

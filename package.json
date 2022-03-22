@@ -20,6 +20,7 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "axios": "^0.22.0",
+    "base-64": "^1.0.0",
     "caniuse-lite": "^1.0.30001278",
     "date-fns": "2.23.0",
     "date-time": "^4.0.0",
