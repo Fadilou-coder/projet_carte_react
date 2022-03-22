@@ -215,7 +215,7 @@ export const ListApprenant = () => {
                             <div>
                                 <Select
                                     value={structure}
-                                    style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
+                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
                                     startAdornment={
@@ -373,7 +373,7 @@ export const ListApprenant = () => {
                                     </div>
                                     <div className={classes1.infoUser}>
                                         <div style={{ width: "70%", backgroundColor: "white" }}>
-                                            <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
+                                            <Typography variant="h4" style={{ backgroundColor: "white", fontFamily: "arial" }}>
                                                 {/* Ahmed BA */}
                                                 <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
                                                     <EasyEdit

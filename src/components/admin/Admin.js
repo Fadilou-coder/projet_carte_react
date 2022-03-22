@@ -220,7 +220,7 @@ export const Admin = () => {
                             <div>
                                 <Select
                                     value={structure}
-                                    style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
+                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
 
