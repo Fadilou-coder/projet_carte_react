@@ -36,7 +36,7 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState( {});
-    const [visit, setVisit] = React.useState([]);
+    //const [visit, setVisit] = React.useState([]);
 
 
 
@@ -52,7 +52,7 @@ export const Visites = () => {
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisit(res.data.reverse());
+            setVisites(res.data.reverse());
         })
     }, [date])
 
@@ -414,7 +414,6 @@ export const Visites = () => {
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
                                             </InputAdornment>
-
                                         }
                                         onChange={(event) => {
                                             setSearch(event.target.value);
@@ -488,11 +487,11 @@ export const Visites = () => {
                                 }}
 
                                 rows={
-                                    visit.filter((val) => {
+                                    visites.filter((val) => {
                                         if(search === ""){
                                             return val;
-                                        } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.cni.toLowerCase().includes(search.toLowerCase())){
+                                        } else if (val.visiteur.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.visiteur.cni.toLowerCase().includes(search.toLowerCase())){
                                             return val;
                                         }
                                     }).map((row) => {

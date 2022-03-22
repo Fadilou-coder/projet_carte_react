@@ -309,7 +309,6 @@ export const Admin = () => {
                                         return val;
                                     }
                                 }).map((row) => {
-                                    console.log(row)
                                      return row;
                                 })
                             }

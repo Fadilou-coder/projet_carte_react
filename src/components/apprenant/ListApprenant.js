@@ -1,16 +1,5 @@
 import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
-import {
-    Box,
-    Grid,
-    InputAdornment,
-    MenuItem,
-    Pagination,
-    PaginationItem,
-    Select,
-    Stack,
-    Button,
-    FormControl, OutlinedInput
-} from '@mui/material';
+import { Box, OutlinedInput, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
 import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
@@ -29,11 +18,11 @@ import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
-import { Typography } from '@material-ui/core';
+import { Typography, FormControl } from '@material-ui/core';
 import { ListAllApprenant, putApprenant } from './ApprenantService';
 import Swal from "sweetalert2";
 import { exportComponentAsJPEG } from 'react-component-export-image';
-import {SearchOutlined} from "@material-ui/icons";
+import { SearchOutlined } from '@mui/icons-material';
 
 
 var QRCode = require('qrcode.react');
@@ -42,10 +31,13 @@ var QRCode = require('qrcode.react');
 export const ListApprenant = () => {
 
 
-    const [structure, setStructure] = React.useState("Fadilou Agency Security");
+    const [structure, setStructure] = React.useState("FadiloU Agency Security");
+
     const classes = VisiteStyle();
-    var componentRef = React.createRef();
     const [search, setSearch] = React.useState('');
+
+    var componentRef = React.createRef();
+
 
     // Initialisation des données des apprenants
     const [apprenants, setApprenants] = React.useState([]);
@@ -62,6 +54,8 @@ export const ListApprenant = () => {
 
     });
 
+
+
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
@@ -70,6 +64,10 @@ export const ListApprenant = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+
+
+
 
     const classes1 = ListApprenantStyle();
 
@@ -159,17 +157,19 @@ export const ListApprenant = () => {
     }
 
     const downloadQRCode = () => {
-        // exportComponentAsJPEG(componentRef)
-        const canvas = document.getElementById("qr-gen");
-        const pngUrl = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
-        let downloadLink = document.createElement("a");
-        downloadLink.href = pngUrl;
-        downloadLink.download = "qrcode_" + apprenant.prenom + "_" + apprenant.nom + ".png";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
+        // Generate download with use canvas and stream
+        // const canvas = document.getElementById("qr-gen");
+        // const pngUrl = canvas
+        //     .toDataURL("image/png")
+        //     .replace("image/png", "image/octet-stream");
+        // let downloadLink = document.createElement("a");
+        // downloadLink.href = pngUrl;
+        // downloadLink.download = "qrcode.png";
+        // document.body.appendChild(downloadLink);
+        // downloadLink.click();
+        // document.body.removeChild(downloadLink);
+
+        exportComponentAsJPEG(componentRef)
     };
 
 
@@ -215,22 +215,14 @@ export const ListApprenant = () => {
 
                             <div>
                                 <Select
-                                    size='small'
                                     value={structure}
-                                    style={{
-                                        width: "15em",
-                                        fontWeight: "bolder",
-                                        color: "#787486",
-                                        borderRadius: "15px",
-                                    }}
+                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
-
                                     startAdornment={
                                         <InputAdornment position="start">
                                             <Notes sx={{ color: "#44C3CF" }} ></Notes>
                                         </InputAdornment>}
-
                                 >
                                     <MenuItem value={"tous"} selected="true">
                                         <em>Tous</em>
@@ -242,14 +234,13 @@ export const ListApprenant = () => {
                             <div>
                                 <FormControl sx={{ m: 1 }} className={classes.mysearch}>
                                     <OutlinedInput
-                                        id="search"
+                                        id="email"
                                         placeholder="rechercher"
                                         style={{ fontWeight: "bolder", color: "#787486"}}
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
                                             </InputAdornment>
-
                                         }
                                         onChange={(event) => {
                                             setSearch(event.target.value);
@@ -261,13 +252,12 @@ export const ListApprenant = () => {
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
-                                style={{
-
-                                }}
                                 sx={{
                                     backgroundColor: "#138A8A",
+                                    fontFamily: "Arial", fontSize: "20px",
                                     marginRight: "35px",
-                                    fontWeight: "bolder",
+                                    marginTop: "20px",
+                                    pointer: "cursor",
                                     '&:hover': {
                                         backgroundColor: '#F48322',
                                     }
@@ -356,7 +346,6 @@ export const ListApprenant = () => {
                                                 return val;
                                             }
                                         }).map((row) => {
-                                            console.log(row)
                                             return row;
                                         })
                                     }
@@ -399,6 +388,7 @@ export const ListApprenant = () => {
                                     <div className={classes1.infoUser}>
                                         <div style={{ width: "70%", backgroundColor: "white" }}>
                                             <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
+                                                {/* Ahmed BA */}
                                                 <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
                                                     <EasyEdit
                                                         type={Types.TEXT}
@@ -592,6 +582,7 @@ export const ListApprenant = () => {
 
                                             }}
                                         >
+                                            {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
                                             <QRCode
                                                 value={apprenant.code}
                                                 size={90}
@@ -599,25 +590,7 @@ export const ListApprenant = () => {
                                                 fgColor={"#138A8A"}
                                                 level={"H"}
                                                 includeMargin={false}
-                                                imageSettings={{
-                                                    src: `${logosonatel}`,
-                                                    x: null,
-                                                    y: null,
-                                                    height: 30,
-                                                    width: 30,
-                                                    excavate: false,
-                                                }}
-                                            />
-
-                                            <QRCode
-                                                hidden
-                                                id="qr-gen"
-                                                value={apprenant.code}
-                                                size={400}
-                                                level={"H"}
-                                                includeMargin={true}
-                                                bgColor={"#ffffff"}
-                                                fgColor={"#138A8A"}
+                                                renderAs={"svg"}
                                                 imageSettings={{
                                                     src: `${logosonatel}`,
                                                     x: null,
