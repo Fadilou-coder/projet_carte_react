@@ -1,5 +1,5 @@
 import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
-import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
 import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
@@ -18,9 +18,10 @@ import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
-import { Typography } from '@material-ui/core';
+import { Typography, FormControl } from '@material-ui/core';
 import { ListAllApprenant, putApprenant, listAllReferentiels, ListApprenantsByReferentiel } from './ApprenantService';
 import Swal from "sweetalert2";
+import { SearchOutlined } from '@mui/icons-material';
 // import { exportComponentAsJPEG } from 'react-component-export-image';
 
 
@@ -30,6 +31,7 @@ var QRCode = require('qrcode.react');
 export const ListApprenant = () => {
 
     const classes = VisiteStyle();
+    const [search, setSearch] = React.useState('');
 
     var componentRef = React.createRef();
 
@@ -183,16 +185,6 @@ export const ListApprenant = () => {
     const downloadQRCode = () => {
         // exportComponentAsJPEG(componentRef)
         const canvas = document.getElementById("qr-gen");
-        
-        // canvas.toBlob(function(blob) {
-        //     const formData = new FormData();
-        //     formData.append('file', blob, 'qrcode.png');
-        //     formData.append('prenom', apprenant.prenom);
-        //     formData.append('nom', apprenant.nom);
-        //     formData.append('email', 'fadilousy@outlook.com');
-
-        //     sendCarte(formData);
-        //   });
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -251,12 +243,7 @@ export const ListApprenant = () => {
                                     size='small'
                                     // value={referentiels[0].libelle}
                                     onChange={(event) => chargerReferentiel(event.target.value)}
-                                    style={{
-                                        width: "20em",
-                                        fontWeight: "bolder",
-                                        color: "#787486",
-                                        borderRadius: "15px",
-                                    }}
+                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     // onChange={(event) => setStructure(event.target.value)}
                                     className={classes.visiteur}
 
@@ -274,6 +261,23 @@ export const ListApprenant = () => {
                                     }
 
                                 </Select>
+                            </div>
+                            <div>
+                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                    <OutlinedInput
+                                        id="email"
+                                        placeholder="rechercher"
+                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchOutlined></SearchOutlined>
+                                            </InputAdornment>
+                                        }
+                                        onChange={(event) => {
+                                            setSearch(event.target.value);
+                                        }}
+                                    />
+                                </FormControl>
                             </div>
                         </Stack>
                         <Box textAlign="right">
@@ -365,7 +369,19 @@ export const ListApprenant = () => {
                                     components={{
                                         Pagination: CustomPagination,
                                     }}
-                                    rows={apprenants}
+                                    rows={
+                                        apprenants.filter((val) => {
+                                            if(search === ""){
+                                                return val;
+                                            } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                                || val.code.toLowerCase().includes(search.toLowerCase())){
+                                                return val;
+                                            }
+                                            return apprenants;
+                                        }).map((row) => {
+                                            return row;
+                                        })
+                                    }
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}
                                     getCellClassName={() => 'apprenant-table--cell'}
@@ -599,6 +615,7 @@ export const ListApprenant = () => {
 
                                             }}
                                         >
+                                            {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
                                             <QRCode
                                                 value={apprenant.code}
                                                 size={90}
@@ -606,25 +623,7 @@ export const ListApprenant = () => {
                                                 fgColor={"#138A8A"}
                                                 level={"H"}
                                                 includeMargin={false}
-                                                imageSettings={{
-                                                    src: `${logosonatel}`,
-                                                    x: null,
-                                                    y: null,
-                                                    height: 30,
-                                                    width: 30,
-                                                    excavate: false,
-                                                }}
-                                            />
-
-                                            <QRCode
-                                                hidden
-                                                id="qr-gen"
-                                                value={apprenant.code}
-                                                size={400}
-                                                level={"H"}
-                                                includeMargin={true}
-                                                bgColor={"#ffffff"}
-                                                fgColor={"#138A8A"}
+                                                renderAs={"svg"}
                                                 imageSettings={{
                                                     src: `${logosonatel}`,
                                                     x: null,

@@ -9,6 +9,7 @@ import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { useHistory } from "react-router-dom";
 import { FindById, FindBySuperAdminId } from '../../admin/AdminService'
+import logoutImg from "../../../assets/images/logout.jpeg"
 
 const Topbar = ({ funcSetIsMobile }) => {
     const classes = TopbarStyle();
@@ -46,16 +47,16 @@ const Topbar = ({ funcSetIsMobile }) => {
     }
 
     React.useEffect(() => {
-        if (localStorage.getItem('user') === '["ADMIN"]') {
-            FindById(localStorage.getItem('id')).then(res => {
-                setAdmin(res.data);
-            })
-        }else{
-            FindBySuperAdminId(localStorage.getItem('id')).then(res => {
-                setAdmin(res.data);
-            })
-        }
-    }, []
+            if (localStorage.getItem('user') === '["ADMIN"]') {
+                FindById(localStorage.getItem('id')).then(res => {
+                    setAdmin(res.data);
+                })
+            }else{
+                FindBySuperAdminId(localStorage.getItem('id')).then(res => {
+                    setAdmin(res.data);
+                })
+            }
+        }, []
     );
 
 
@@ -78,7 +79,7 @@ const Topbar = ({ funcSetIsMobile }) => {
                                 <AvatarLabel>
                                     <Avatar
                                         style={{ marginRight: "14px" }}
-                                        src=""
+                                        src={logoutImg}
                                     />
                                     <Typography variant="body2" style={{ color: "white" }} >{admin.prenom} {admin.nom}</Typography>
                                 </AvatarLabel>
@@ -99,7 +100,7 @@ const Topbar = ({ funcSetIsMobile }) => {
                             }}
                         >
                             <Button variant="text" sx={{ color: "#000000" }}
-                                onClick={logout}
+                                    onClick={logout}
                             ><ExitToAppRoundedIcon />Déconnexion</Button>
 
                         </Popover>

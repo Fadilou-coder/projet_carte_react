@@ -51,7 +51,28 @@ const VisiteStyle = makeStyles(theme => ({
         '&:focus':{
             borderColor: "#44C3CF",
         }
-    }
+    },
+    table: {
+        width: "80%",
+        justifyContent: "center",
+    },
+    tabRow: {
+        "& .MuiTableCell-alignRight": {
+            width: "5%",
+            fontSize: "20px",
+            textAlign: "inherit"
+        },
+        "& .MuiTableCell-alignCenter":{
+            textAlign: "center",
+            width: "55%",
+            fontSize: "20px"
+        },
+        "& .MuiTableCell-alignLeft": {
+            textAlign: "left",
+            width: "10%",
+            fontSize: "20px"
+        }
+    },
 
 }));
 

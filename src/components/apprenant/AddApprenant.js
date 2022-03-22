@@ -60,9 +60,8 @@ export const AddApprenant = () => {
     })
 
     React.useEffect(() => {
-        listAllReferentiels().then((res) => {
-            setReferentiel(res.data);
-
+        listAllReferentiels().then((res)=>{
+            setReferentiel(res.data)
         })
     }, []);
 

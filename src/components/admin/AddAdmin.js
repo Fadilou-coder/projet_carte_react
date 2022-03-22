@@ -36,7 +36,7 @@ function AddAdmin() {
         structure: { id: 0 },
     });
 
-    const [formErrors, setFormErrors] = useState({});
+    const [formErrors, setFormErrors] = useState( {});
     const [setErrorPage] = useState(false);
 
     const classes = AdminStyle();
@@ -53,10 +53,10 @@ function AddAdmin() {
     const styles = useStyles();
 
     React.useEffect(() => {
-        ListAllStructure().then(val => {
-            setStructure(val.data)
-        });
-    }, []
+            ListAllStructure().then(val => {
+                setStructure(val.data)
+            });
+        }, []
     );
 
     const handleSubmit = (event) => {
@@ -87,7 +87,7 @@ function AddAdmin() {
             addresse: '',
             password: myPassword,
             cni: '',
-            structure: { id: 0 },
+            structure: {id: 0},
         })
 
     };
@@ -164,10 +164,10 @@ function AddAdmin() {
 
                         </Grid>
                         <form ref={form}>
-                            <Grid container className={classes.subContainer}>
+                            <Grid  container className={classes.subContainer}>
                                 <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
-                                <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
-                                    <Grid xs={12} sm={12} md={4} spacing={5} item>
+                                <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
+                                    <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                         <FormControl fullWidth>
                                             <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
@@ -291,13 +291,13 @@ function AddAdmin() {
                                                     sx={{
                                                         borderRadius: "5px",
                                                         '&:hover':
-                                                        {
-                                                            border: "2px solid #05888A",
-                                                        },
+                                                            {
+                                                                border: "2px solid #05888A",
+                                                            },
                                                         '&:focus':
-                                                        {
-                                                            outline: "#05888A",
-                                                        }
+                                                            {
+                                                                outline: "#05888A",
+                                                            }
                                                     }}
                                                     onChange={(event) => {
                                                         setAdmin({ ...admin, structure: event.target.value })
@@ -317,17 +317,17 @@ function AddAdmin() {
                                         </Grid>
                                     </Grid>
                                     <Button type="submit" variant="contained"
-                                        id="button"
-                                        sx={{
-                                            backgroundColor: "#05888A",
-                                            fontFamily: "Arial", fontSize: "20px",
-                                            marginTop: "10px",
-                                            '&:hover': {
-                                                backgroundColor: "#F48322",
-                                                pointer: "cursor"
-                                            }
-                                        }}
-                                        onClick={handleSubmit}
+                                            id="button"
+                                            sx={{
+                                                backgroundColor: "#05888A",
+                                                fontFamily: "Arial", fontSize: "20px",
+                                                marginTop: "10px",
+                                                '&:hover': {
+                                                    backgroundColor: "#F48322",
+                                                    pointer: "cursor"
+                                                }
+                                            }}
+                                            onClick={handleSubmit}
                                     >AJOUTER</Button>
                                 </Grid>
                             </Grid>
