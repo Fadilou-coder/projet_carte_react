@@ -270,7 +270,7 @@ export const Admin = () => {
                                         backgroundColor: "#F48322",
                                         pointer: "cursor"
                                     }
-                                }}
+                                }} 
                             >
                                 Ajouter
                             </Button>
