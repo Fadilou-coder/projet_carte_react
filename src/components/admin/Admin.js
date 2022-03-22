@@ -1,4 +1,4 @@
-import { Box, Button, Stack, OutlinedInput } from '@mui/material';
+import {Box, Button, Stack, OutlinedInput, TableCell} from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
@@ -22,10 +22,10 @@ import { SearchOutlined } from '@mui/icons-material';
 
 export const Admin = () => {
 
-
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
 
     const [admins, setAdmin] = React.useState([]);
+    const [search, setSearch] = React.useState('');
 
 
     React.useEffect(() => {
@@ -64,7 +64,7 @@ export const Admin = () => {
     }
 
     const bloquerAdmin = (id, bloqued) => {
-        if (bloqued === false) {
+        if (!bloqued) {
             Swal.fire({
                 title: 'Attention?',
                 text: "Voulez vraiment bloquer cet admin",
@@ -247,10 +247,10 @@ export const Admin = () => {
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
                                             </InputAdornment>
-
                                         }
-
-                                    // onChange={handleUsernameChange}
+                                        onChange={(event) => {
+                                            setSearch(event.target.value);
+                                        }}
 
                                     />
                                 </FormControl>
@@ -298,16 +298,24 @@ export const Admin = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-                                rows={admins}
+
+                                 rows={
+                                admins.filter((val) => {
+                                    if(search === ""){
+                                        return val;
+                                    } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                        || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
+                                        || val.cni.toLowerCase().includes(search.toLowerCase())){
+                                        return val;
+                                    }
+                                }).map((row) => {
+                                     return row;
+                                })
+                            }
                                 columns={columns}
-                                // checkboxSelection
-                                // selectionModel={selectionModel}
-                                // onSelectionModelChange={setSelectionModel}
                                 disableVirtualization
-                            /*
-                                                            checkboxSelection
-                            */
-                            />
+                            >
+                            </DataGrid>
                         </div>
 
                     </Box>

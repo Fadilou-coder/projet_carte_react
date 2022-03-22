@@ -52,7 +52,7 @@ function AddApprenant() {
 
     });
 
-    React.useState(() => {
+    React.useEffect(() => {
         listAllReferentiels().then((res)=>{
             setReferentiel(res.data)
         })

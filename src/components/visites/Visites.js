@@ -32,11 +32,13 @@ import { SearchOutlined } from '@mui/icons-material';
 var QRCode = require('qrcode.react')
 
 export const Visites = () => {
-    const [visiteur, setVisiteur] = React.useState("")
-    const [visites, setVisites] = React.useState([])
-    const [formErrors, setFormErrors] = useState( {});
 
-    
+    const [visiteur, setVisiteur] = React.useState("");
+    const [visites, setVisites] = React.useState([]);
+    const [formErrors, setFormErrors] = useState( {});
+    //const [visit, setVisit] = React.useState([]);
+
+
 
     const [values, setValues] = React.useState({
         cni: '',
@@ -46,11 +48,11 @@ export const Visites = () => {
 
     })
     const [date, setDate] = React.useState(new Date())
+    const [search, setSearch] = React.useState('');
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data.reverse())
-
+            setVisites(res.data.reverse());
         })
     }, [date])
 
@@ -189,7 +191,8 @@ export const Visites = () => {
         let content = {
             startY: 50,
             head: headers,
-            body: dat
+            body:dat
+
         }
 
         doc.text(title, marginLeft, 40)
@@ -275,7 +278,7 @@ export const Visites = () => {
             .replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
-        downloadLink.download = "qrcode.png";
+        downloadLink.download = "qrcode_"+ values.prenom + "_" + values.nom + ".png";
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
@@ -317,8 +320,9 @@ export const Visites = () => {
     };
 
 
+
     return (
-        <Layout >
+        <Layout>
             <Grid style={{widt:"100%", display: 'flex', justifyContent:"center", alignItems:"center"}}>
             <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? {width: '80%'} : {width: '100%'}}>
             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
@@ -403,7 +407,7 @@ export const Visites = () => {
                             <div>
                                 <FormControl sx={{ m: 1 }} className={classes.mysearch}>
                                     <OutlinedInput
-                                        id="email"
+                                        id="search"
                                         placeholder="rechercher"
                                         style={{ fontWeight: "bolder", color: "#787486"}}
                                         startAdornment={
@@ -411,6 +415,9 @@ export const Visites = () => {
                                                 <SearchOutlined></SearchOutlined>
                                             </InputAdornment>
                                         }
+                                        onChange={(event) => {
+                                            setSearch(event.target.value);
+                                        }}
                                     />
                                 </FormControl>
                             </div>
@@ -468,11 +475,9 @@ export const Visites = () => {
 
                         <div style={{ width: "100%" }}>
                             <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
-
                             <DataGrid
-
                                 sx={{ boxShadow: "30px", width: "100%" }}
-                                onLoad
+
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
@@ -480,10 +485,23 @@ export const Visites = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-                                rows={visites}
+
+                                rows={
+                                    visites.filter((val) => {
+                                        if(search === ""){
+                                            return val;
+                                        } else if (val.visiteur.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.visiteur.cni.toLowerCase().includes(search.toLowerCase())){
+                                            return val;
+                                        }
+                                    }).map((row) => {
+                                          return row;
+                                    })
+                                }
                                 columns={columns}
                                 disableVirtualization
-                            />
+                            >
+                            </DataGrid>
                         </div>
 
                     </Box>

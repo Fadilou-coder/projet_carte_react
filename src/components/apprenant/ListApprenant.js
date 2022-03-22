@@ -34,6 +34,7 @@ export const ListApprenant = () => {
     const [structure, setStructure] = React.useState("FadiloU Agency Security");
 
     const classes = VisiteStyle();
+    const [search, setSearch] = React.useState('');
 
     var componentRef = React.createRef();
 
@@ -240,8 +241,10 @@ export const ListApprenant = () => {
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
                                             </InputAdornment>
-
                                         }
+                                        onChange={(event) => {
+                                            setSearch(event.target.value);
+                                        }}
                                     />
                                 </FormControl>
                             </div>
@@ -334,7 +337,18 @@ export const ListApprenant = () => {
                                     components={{
                                         Pagination: CustomPagination,
                                     }}
-                                    rows={apprenants}
+                                    rows={
+                                        apprenants.filter((val) => {
+                                            if(search === ""){
+                                                return val;
+                                            } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                                || val.code.toLowerCase().includes(search.toLowerCase())){
+                                                return val;
+                                            }
+                                        }).map((row) => {
+                                            return row;
+                                        })
+                                    }
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}
                                     getCellClassName={() => 'apprenant-table--cell'}
@@ -363,7 +377,7 @@ export const ListApprenant = () => {
 
                                 }}
                                 style={{ backgroundColor: "white" }}
-                                
+
                             >
                                 <Grid ref={componentRef}>
                                     <div className={classes1.avatarApprenant} >

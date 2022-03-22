@@ -53,10 +53,10 @@ function AddAdmin() {
     const styles = useStyles();
 
     React.useEffect(() => {
-        ListAllStructure().then(val => {
-            setStructure(val.data)
-        });
-    }, []
+            ListAllStructure().then(val => {
+                setStructure(val.data)
+            });
+        }, []
     );
 
     const handleSubmit = (event) => {
@@ -70,7 +70,7 @@ function AddAdmin() {
                 title: 'Admin enrégistré avec succes',
                 showConfirmButton: true,
                 timer: 1500
-              }).catch(
+            }).catch(
                 (error) => {
                     setErrorPage(true);
                     console.log(error);
@@ -78,31 +78,31 @@ function AddAdmin() {
             )
             sendEmail(event);
         })
-                
-            setAdmin({
-                prenom: ' ',
-                nom: '',
-                phone: '',
-                email: '',
-                addresse: '',
-                password: myPassword,
-                cni: '',
-                structure: {id: 0},
-            })
+
+        setAdmin({
+            prenom: ' ',
+            nom: '',
+            phone: '',
+            email: '',
+            addresse: '',
+            password: myPassword,
+            cni: '',
+            structure: {id: 0},
+        })
 
     };
 
     const form = useRef();
 
     const sendEmail = (e) => {
-  
-      emailjs.sendForm('service_tuwme63', 'email_dv26pv8', form.current, 'aF00JTLiRllzze4TO')
-        .then((result) => {
-            console.log(result.text);
-        }, (error) => {
-            console.log(error.text);
-        });
-            
+
+        emailjs.sendForm('service_tuwme63', 'email_dv26pv8', form.current, 'aF00JTLiRllzze4TO')
+            .then((result) => {
+                console.log(result.text);
+            }, (error) => {
+                console.log(error.text);
+            });
+
     };
 
     const validateAdmin = (val) => {
@@ -169,171 +169,171 @@ function AddAdmin() {
                                 <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
                                     <Grid xs={12} sm={12} md={4}  spacing={5} item>
                                         <FormControl fullWidth>
-                                        <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="ok"
-                                            name="prenom"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="Ex: prenom"
-                                            onChange={(event) => {
-                                                setAdmin({ ...admin, prenom: event.target.value })
-                                            }}
-                                            value={admin.prenom}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.prenom}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Nom <span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="input"
-                                            name="nom"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="Ex: nom"
-                                            onChange={(event) => {
-                                                setAdmin({ ...admin, nom: event.target.value })
-                                            }}
-                                            value={admin.nom}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.nom}</p>
-                                </Grid>
-                            </Grid>
-
-
-                            <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Grid xs={12} sm={12} md={4} item>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>phone <span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="input"
-                                            name="phone"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="Ex: phone"
-                                            onChange={(event) => {
-                                                setAdmin({ ...admin, phone: event.target.value })
-                                            }}
-                                            value={admin.phone}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.phone}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Email <span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="input"
-                                            name="email"
-                                            type="email"
-                                            variant="outlined"
-                                            placeholder="Ex:email"
-                                            onChange={(event) => {
-                                                setAdmin({ ...admin, email: event.target.value })
-                                            }}
-                                            value={admin.email}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.email}</p>
+                                            <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
+                                            <OutlinedInput
+                                                id="ok"
+                                                name="prenom"
+                                                type="text"
+                                                variant="outlined"
+                                                placeholder="Ex: prenom"
+                                                onChange={(event) => {
+                                                    setAdmin({ ...admin, prenom: event.target.value })
+                                                }}
+                                                value={admin.prenom}
+                                            />
+                                        </FormControl>
+                                        <p className={classes.formError}>{formErrors.prenom}</p>
+                                    </Grid>
+                                    <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                                        <FormControl fullWidth>
+                                            <label className={classes.labelText}>Nom <span style={{ color: 'red' }}>*</span> </label>
+                                            <OutlinedInput
+                                                id="input"
+                                                name="nom"
+                                                type="text"
+                                                variant="outlined"
+                                                placeholder="Ex: nom"
+                                                onChange={(event) => {
+                                                    setAdmin({ ...admin, nom: event.target.value })
+                                                }}
+                                                value={admin.nom}
+                                            />
+                                        </FormControl>
+                                        <p className={classes.formError}>{formErrors.nom}</p>
+                                    </Grid>
                                 </Grid>
 
 
                                 <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                     <Grid xs={12} sm={12} md={4} item>
                                         <FormControl fullWidth>
-                                            <label className={classes.labelText}>addresse <span style={{ color: 'red' }}>*</span> </label>
+                                            <label className={classes.labelText}>phone <span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
                                                 id="input"
-                                                name="addresse"
+                                                name="phone"
                                                 type="text"
                                                 variant="outlined"
-                                                placeholder="Ex: addresse"
+                                                placeholder="Ex: phone"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, addresse: event.target.value })
+                                                    setAdmin({ ...admin, phone: event.target.value })
                                                 }}
-                                                value={admin.addresse}
+                                                value={admin.phone}
                                             />
                                         </FormControl>
-                                        <p className={classes.formError}>{formErrors.addresse}</p>
+                                        <p className={classes.formError}>{formErrors.phone}</p>
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                         <FormControl fullWidth>
-                                            <label className={classes.labelText}>N° CNI <span style={{ color: 'red' }}>*</span> </label>
+                                            <label className={classes.labelText}>Email <span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
                                                 id="input"
-                                                name="cni"
-                                                type="text"
+                                                name="email"
+                                                type="email"
                                                 variant="outlined"
-                                                placeholder="Ex: cni"
+                                                placeholder="Ex:email"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, cni: event.target.value })
+                                                    setAdmin({ ...admin, email: event.target.value })
                                                 }}
-                                                value={admin.cni}
+                                                value={admin.email}
                                             />
                                         </FormControl>
-                                        <p className={classes.formError}>{formErrors.cni}</p>
+                                        <p className={classes.formError}>{formErrors.email}</p>
                                     </Grid>
+
+
+                                    <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                                        <Grid xs={12} sm={12} md={4} item>
+                                            <FormControl fullWidth>
+                                                <label className={classes.labelText}>addresse <span style={{ color: 'red' }}>*</span> </label>
+                                                <OutlinedInput
+                                                    id="input"
+                                                    name="addresse"
+                                                    type="text"
+                                                    variant="outlined"
+                                                    placeholder="Ex: addresse"
+                                                    onChange={(event) => {
+                                                        setAdmin({ ...admin, addresse: event.target.value })
+                                                    }}
+                                                    value={admin.addresse}
+                                                />
+                                            </FormControl>
+                                            <p className={classes.formError}>{formErrors.addresse}</p>
+                                        </Grid>
+                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                                            <FormControl fullWidth>
+                                                <label className={classes.labelText}>N° CNI <span style={{ color: 'red' }}>*</span> </label>
+                                                <OutlinedInput
+                                                    id="input"
+                                                    name="cni"
+                                                    type="text"
+                                                    variant="outlined"
+                                                    placeholder="Ex: cni"
+                                                    onChange={(event) => {
+                                                        setAdmin({ ...admin, cni: event.target.value })
+                                                    }}
+                                                    value={admin.cni}
+                                                />
+                                            </FormControl>
+                                            <p className={classes.formError}>{formErrors.cni}</p>
+                                        </Grid>
+                                    </Grid>
+
+
+                                    <Grid xs={12} sm={12} md={12} style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                                        <Grid xs={12} sm={12} md={4} item>
+                                            <FormControl fullWidth>
+                                                <label className={classes.labelText}>Structure <span style={{ color: 'red' }}>*</span> </label>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="input"
+                                                    name="structure"
+                                                    label="Structure"
+                                                    sx={{
+                                                        borderRadius: "5px",
+                                                        '&:hover':
+                                                            {
+                                                                border: "2px solid #05888A",
+                                                            },
+                                                        '&:focus':
+                                                            {
+                                                                outline: "#05888A",
+                                                            }
+                                                    }}
+                                                    onChange={(event) => {
+                                                        setAdmin({ ...admin, structure: event.target.value })
+                                                    }}
+                                                    value={admin.structure}
+                                                >
+                                                    <MenuItem selected>Select</MenuItem>
+                                                    {structure.map(item => (
+                                                        <MenuItem value={item}>{item.nomStructure}</MenuItem>
+                                                    ))}
+
+
+                                                </Select>
+                                            </FormControl>
+                                        </Grid>
+                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                                        </Grid>
+                                    </Grid>
+                                    <Button type="submit" variant="contained"
+                                            id="button"
+                                            sx={{
+                                                backgroundColor: "#05888A",
+                                                fontFamily: "Arial", fontSize: "20px",
+                                                marginTop: "10px",
+                                                '&:hover': {
+                                                    backgroundColor: "#F48322",
+                                                    pointer: "cursor"
+                                                }
+                                            }}
+                                            onClick={handleSubmit}
+                                    >AJOUTER</Button>
                                 </Grid>
-
-
-                                <Grid xs={12} sm={12} md={12} style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                    <Grid xs={12} sm={12} md={4} item>
-                                        <FormControl fullWidth>
-                                            <label className={classes.labelText}>Structure <span style={{ color: 'red' }}>*</span> </label>
-                                            <Select
-                                                labelId="demo-simple-select-label"
-                                                id="input"
-                                                name="structure"
-                                                label="Structure"
-                                                sx={{
-                                                    borderRadius: "5px",
-                                                    '&:hover':
-                                                    {
-                                                        border: "2px solid #05888A",
-                                                    },
-                                                    '&:focus':
-                                                    {
-                                                        outline: "#05888A",
-                                                    }
-                                                }}
-                                                onChange={(event) => {
-                                                    setAdmin({ ...admin, structure: event.target.value })
-                                                }}
-                                                value={admin.structure}
-                                            >
-                                                <MenuItem selected>Select</MenuItem>
-                                                {structure.map(item => (
-                                                    <MenuItem value={item}>{item.nomStructure}</MenuItem>
-                                                ))}
-
-
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    </Grid>
-                                </Grid>
-                                <Button type="submit" variant="contained"
-                                    id="button"
-                                    sx={{
-                                        backgroundColor: "#05888A",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        '&:hover': {
-                                            backgroundColor: "#F48322",
-                                            pointer: "cursor"
-                                        }
-                                    }}
-                                    onClick={handleSubmit}
-                                >AJOUTER</Button>
-                            </Grid>
                             </Grid>
                         </form>
-                </Grid>
-            </Box>
+                    </Grid>
+                </Box>
             </Layout>
         </React.Fragment>
     )

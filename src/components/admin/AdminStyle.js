@@ -129,7 +129,7 @@ const AdminStyle =makeStyles((theme) => ({
             borderColor: "#44C3CF",
         }
     }
-    
+
 }));
 
 export default AdminStyle;
