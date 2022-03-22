@@ -3,8 +3,7 @@ import { AppBar, Toolbar, IconButton, Avatar } from "@material-ui/core";
 import { TopbarStyle } from "./TopbarStyle";
 import MenuIcon from '@material-ui/icons/Menu'
 import styled from "styled-components";
-import { Typography, FormControl, OutlinedInput, InputAdornment } from "@mui/material";
-import { SearchOutlined } from '@mui/icons-material';
+import { Typography } from "@mui/material";
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
@@ -48,16 +47,16 @@ const Topbar = ({ funcSetIsMobile }) => {
     }
 
     React.useEffect(() => {
-        if (localStorage.getItem('user') === '["ADMIN"]') {
-            FindById(localStorage.getItem('id')).then(res => {
-                setAdmin(res.data);
-            })
-        }else{
-            FindBySuperAdminId(localStorage.getItem('id')).then(res => {
-                setAdmin(res.data);
-            })
-        }
-    }, []
+            if (localStorage.getItem('user') === '["ADMIN"]') {
+                FindById(localStorage.getItem('id')).then(res => {
+                    setAdmin(res.data);
+                })
+            }else{
+                FindBySuperAdminId(localStorage.getItem('id')).then(res => {
+                    setAdmin(res.data);
+                })
+            }
+        }, []
     );
 
 
@@ -73,28 +72,13 @@ const Topbar = ({ funcSetIsMobile }) => {
                     </IconButton>
 
                     <div className={classes.mysearch}>
-                        <FormControl sx={{ m: 1 }}>
-                            <OutlinedInput
-                                id="email"
-                                placeholder="rechercher"
-                                width="small"
-                                size='small'
-                                style={{ backgroundColor: "white", borderRadius: "50px", marginLeft: "100px" }}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <SearchOutlined></SearchOutlined>
-                                    </InputAdornment>
-
-                                }
-                            />
-                        </FormControl>
                     </div>
                     <div className={classes.avatar}>
                         <Button aria-describedby={id} onClick={handleClick}>
                             <AvatarContainer>
                                 <AvatarLabel>
                                     <Avatar
-                                        style={{ marginRight: "14px", width: "50px", height: "50px", marginTop: "10px" }}
+                                        style={{ marginRight: "14px" }}
                                         src={logoutImg}
                                     />
                                     <Typography variant="body2" style={{ color: "white" }} >{admin.prenom} {admin.nom}</Typography>
@@ -116,7 +100,7 @@ const Topbar = ({ funcSetIsMobile }) => {
                             }}
                         >
                             <Button variant="text" sx={{ color: "#000000" }}
-                                onClick={logout}
+                                    onClick={logout}
                             ><ExitToAppRoundedIcon />Déconnexion</Button>
 
                         </Popover>

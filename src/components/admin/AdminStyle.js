@@ -115,7 +115,21 @@ const AdminStyle =makeStyles((theme) => ({
         fontFamily: "Arial",
         fontSize: "20px",
         marginTop: "10px",
+    },
+    mysearch: {
+        [theme.breakpoints.down('xs')] : {
+            display:"none",
+        },
+        border: "2px solid #44C3CF",
+        color: "#787486",
+        width: "12vw",
+        borderRadius: "15px",
+        borderColor: "#44C3CF",
+        '&:focus':{
+            borderColor: "#44C3CF",
+        }
     }
+
 }));
 
 export default AdminStyle;

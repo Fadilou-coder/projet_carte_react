@@ -1,5 +1,16 @@
 import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
-import { Box, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
+import {
+    Box,
+    Grid,
+    InputAdornment,
+    MenuItem,
+    Pagination,
+    PaginationItem,
+    Select,
+    Stack,
+    Button,
+    FormControl, OutlinedInput
+} from '@mui/material';
 import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
@@ -22,6 +33,7 @@ import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant } from './ApprenantService';
 import Swal from "sweetalert2";
 import { exportComponentAsJPEG } from 'react-component-export-image';
+import {SearchOutlined} from "@material-ui/icons";
 
 
 var QRCode = require('qrcode.react');
@@ -31,11 +43,9 @@ export const ListApprenant = () => {
 
 
     const [structure, setStructure] = React.useState("Fadilou Agency Security");
-
     const classes = VisiteStyle();
-
     var componentRef = React.createRef();
-
+    const [search, setSearch] = React.useState('');
 
     // Initialisation des données des apprenants
     const [apprenants, setApprenants] = React.useState([]);
@@ -52,8 +62,6 @@ export const ListApprenant = () => {
 
     });
 
-
-
     React.useEffect(() => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
@@ -62,10 +70,6 @@ export const ListApprenant = () => {
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
-
-
-
 
     const classes1 = ListApprenantStyle();
 
@@ -214,7 +218,7 @@ export const ListApprenant = () => {
                                     size='small'
                                     value={structure}
                                     style={{
-                                        width: "20em",
+                                        width: "15em",
                                         fontWeight: "bolder",
                                         color: "#787486",
                                         borderRadius: "15px",
@@ -234,6 +238,24 @@ export const ListApprenant = () => {
                                     <MenuItem value={"data"}> Data Scientist </MenuItem>
                                     <MenuItem value={"dev"}> Developpeur Web et Mobile </MenuItem>
                                 </Select>
+                            </div>
+                            <div>
+                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                    <OutlinedInput
+                                        id="search"
+                                        placeholder="rechercher"
+                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchOutlined></SearchOutlined>
+                                            </InputAdornment>
+
+                                        }
+                                        onChange={(event) => {
+                                            setSearch(event.target.value);
+                                        }}
+                                    />
+                                </FormControl>
                             </div>
                         </Stack>
                         <Box textAlign="right">
@@ -325,7 +347,19 @@ export const ListApprenant = () => {
                                     components={{
                                         Pagination: CustomPagination,
                                     }}
-                                    rows={apprenants}
+                                    rows={
+                                        apprenants.filter((val) => {
+                                            if(search === ""){
+                                                return val;
+                                            } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                                || val.code.toLowerCase().includes(search.toLowerCase())){
+                                                return val;
+                                            }
+                                        }).map((row) => {
+                                            console.log(row)
+                                            return row;
+                                        })
+                                    }
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}
                                     getCellClassName={() => 'apprenant-table--cell'}
@@ -365,7 +399,6 @@ export const ListApprenant = () => {
                                     <div className={classes1.infoUser}>
                                         <div style={{ width: "70%", backgroundColor: "white" }}>
                                             <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
-                                                {/* Ahmed BA */}
                                                 <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
                                                     <EasyEdit
                                                         type={Types.TEXT}

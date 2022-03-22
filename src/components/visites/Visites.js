@@ -26,14 +26,17 @@ import {
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
+import { SearchOutlined } from '@mui/icons-material';
+
 
 var QRCode = require('qrcode.react')
 
 export const Visites = () => {
 
-    const [visiteur, setVisiteur] = React.useState("")
-    const [visites, setVisites] = React.useState([])
+    const [visiteur, setVisiteur] = React.useState("");
+    const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState( {});
+    const [visit, setVisit] = React.useState([]);
 
 
 
@@ -45,12 +48,11 @@ export const Visites = () => {
 
     })
     const [date, setDate] = React.useState(new Date())
-
     const [search, setSearch] = React.useState('');
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            console.log(res.data.reverse());
+            setVisit(res.data.reverse());
         })
     }, [date])
 
@@ -372,8 +374,8 @@ export const Visites = () => {
                                                         input: { color: "#787486", fontWeight: "bold" },
                                                         label: { color: "#44C3CF" },
                                                         border: "2px solid #44C3CF",
-                                                        width: "15vw",
-                                                        borderRadius: "15px"
+                                                        width: "12vw",
+                                                        borderRadius: "10px"
                                                     }}
                                                 />
                                             )
@@ -385,7 +387,7 @@ export const Visites = () => {
                             <div>
                                 <Select
                                     value={visiteur}
-                                    style={{ width: "15vw", fontWeight: "bolder", color: "#787486", borderRadius: "15px" }}
+                                    style={{ fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => chargerVisites(date, event.target.value)}
                                     className={classes.visiteur}
 
@@ -401,6 +403,24 @@ export const Visites = () => {
                                     <MenuItem value={"apprenant"}>Apprenant</MenuItem>
                                     <MenuItem value={"visiteur"}>Visiteur</MenuItem>
                                 </Select>
+                            </div>
+                            <div>
+                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                    <OutlinedInput
+                                        id="search"
+                                        placeholder="rechercher"
+                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        startAdornment={
+                                            <InputAdornment position="start">
+                                                <SearchOutlined></SearchOutlined>
+                                            </InputAdornment>
+
+                                        }
+                                        onChange={(event) => {
+                                            setSearch(event.target.value);
+                                        }}
+                                    />
+                                </FormControl>
                             </div>
                         </Stack>
                         <div>
@@ -456,11 +476,9 @@ export const Visites = () => {
 
                         <div style={{ width: "100%" }}>
                             <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
-
                             <DataGrid
-
                                 sx={{ boxShadow: "30px", width: "100%" }}
-                                onLoad
+
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
@@ -468,10 +486,23 @@ export const Visites = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-                                 rows={visites}
+
+                                rows={
+                                    visit.filter((val) => {
+                                        if(search === ""){
+                                            return val;
+                                        } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.cni.toLowerCase().includes(search.toLowerCase())){
+                                            return val;
+                                        }
+                                    }).map((row) => {
+                                          return row;
+                                    })
+                                }
                                 columns={columns}
                                 disableVirtualization
-                            />
+                            >
+                            </DataGrid>
                         </div>
 
                     </Box>
