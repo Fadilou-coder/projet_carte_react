@@ -18,6 +18,7 @@ import Checkbox from '@mui/material/Checkbox';
 import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import Skeletons from "../skeleton/Skeleton";
 
 
 export const Admin = () => {
@@ -26,10 +27,11 @@ export const Admin = () => {
 
     const [admins, setAdmin] = React.useState([]);
     const [search, setSearch] = React.useState('');
-
+    const [isLoaded,setIsLoaded] = React.useState(false);
 
     React.useEffect(() => {
         ListAllAdmin().then(res => {
+            setIsLoaded(true);
             setAdmin(res.data);
         })
 
@@ -40,8 +42,6 @@ export const Admin = () => {
     function RedirectAddAdmin() {
         history.push("/add_admin");
     }
-
-
 
     // Custom Pagination
     function CustomPagination() {
@@ -286,7 +286,6 @@ export const Admin = () => {
 
                         <div style={{ width: "100%" }}>
 
-
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
@@ -300,6 +299,7 @@ export const Admin = () => {
                                 }}
 
                                  rows={
+                                     !isLoaded?( <Skeletons nbItem={10} list={classes.listIsload} sx={{ width: 300 }}/>):(
                                 admins.filter((val) => {
                                     if(search === ""){
                                         return val;
@@ -310,12 +310,11 @@ export const Admin = () => {
                                     }
                                 }).map((row) => {
                                      return row;
-                                })
+                                }))
                             }
                                 columns={columns}
                                 disableVirtualization
-                            >
-                            </DataGrid>
+                            />
                         </div>
 
                     </Box>

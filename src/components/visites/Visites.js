@@ -36,7 +36,6 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState( {});
-    //const [visit, setVisit] = React.useState([]);
 
 
 

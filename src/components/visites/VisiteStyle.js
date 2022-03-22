@@ -31,8 +31,8 @@ const VisiteStyle = makeStyles(theme => ({
         marginBottom: "2px"
     },
     listIsload:{
-        width: "20vw",
-        height:"40vh",
+        width: "40vw",
+        height:"50vh",
         display:"block",
         margin:"0% auto"
     },

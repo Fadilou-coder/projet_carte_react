@@ -23,7 +23,8 @@ import { ListAllApprenant, putApprenant } from './ApprenantService';
 import Swal from "sweetalert2";
 import { exportComponentAsJPEG } from 'react-component-export-image';
 import { SearchOutlined } from '@mui/icons-material';
-
+import Skeletons from "../skeleton/Skeleton";
+import Skeleton from '@mui/material/Skeleton';
 
 var QRCode = require('qrcode.react');
 
@@ -35,6 +36,7 @@ export const ListApprenant = () => {
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
+    const [isLoaded,setIsLoaded] = React.useState(false);
 
     var componentRef = React.createRef();
 
@@ -60,6 +62,7 @@ export const ListApprenant = () => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
             setApprenant(res.data[0]);
+            setIsLoaded(true)
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -338,6 +341,7 @@ export const ListApprenant = () => {
                                         Pagination: CustomPagination,
                                     }}
                                     rows={
+                                        !isLoaded?( <Skeletons nbItem={10} list={classes.listIsload}/>):(
                                         apprenants.filter((val) => {
                                             if(search === ""){
                                                 return val;
@@ -347,7 +351,7 @@ export const ListApprenant = () => {
                                             }
                                         }).map((row) => {
                                             return row;
-                                        })
+                                        }))
                                     }
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}
