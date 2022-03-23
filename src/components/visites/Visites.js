@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
 import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
@@ -36,7 +37,6 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState( {});
-    //const [visit, setVisit] = React.useState([]);
 
 
 
@@ -490,11 +490,12 @@ export const Visites = () => {
                                     visites.filter((val) => {
                                         if(search === ""){
                                             return val;
-                                        } else if (val.visiteur.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.visiteur.cni.toLowerCase().includes(search.toLowerCase())){
+                                        } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.visiteur?.cni.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.apprenant?.cni.toLowerCase().includes(search.toLowerCase())){
+
                                             return val;
                                         }
-                                        return visites;
                                     }).map((row) => {
                                           return row;
                                     })

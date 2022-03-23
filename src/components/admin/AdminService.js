@@ -8,6 +8,8 @@ const API_URL =  'https://projet-carte.herokuapp.com/api/';
 
     export const FindById = (id) => { return axios.get(API_URL + "admin/" + id, {headers: authHeader()}); }
 
+    export const FindByStructure = (id) => { return axios.get(API_URL + "structures/" + id + "/admin", {headers: authHeader()}); }
+
     export const FindBySuperAdminId = (id) => { return axios.get(API_URL + "superAdmin/" + id, {headers: authHeader()}); }
 
     export const SaveAdmin = (data) => { return axios.post(API_URL + "admin/create/", data, {headers: authHeader()}); }

@@ -9,7 +9,7 @@ import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { useHistory } from "react-router-dom";
 import { FindById, FindBySuperAdminId } from '../../admin/AdminService'
-import logoutImg from "../../../assets/images/logout.jpeg"
+import logoutImg from "../../../assets/images/logOut.jpeg"
 
 const Topbar = ({ funcSetIsMobile }) => {
     const classes = TopbarStyle();
@@ -78,7 +78,7 @@ const Topbar = ({ funcSetIsMobile }) => {
                             <AvatarContainer>
                                 <AvatarLabel>
                                     <Avatar
-                                        style={{ marginRight: "14px" }}
+                                        style={{ marginRight: "14px", width: "50px", height: "50px"}}
                                         src={logoutImg}
                                     />
                                     <Typography variant="body2" style={{ color: "white" }} >{admin.prenom} {admin.nom}</Typography>
