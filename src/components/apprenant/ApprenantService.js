@@ -50,7 +50,7 @@ export const ListPromos = () => {
 }
 
 export const ListApprenantsByReferentielByPromo = (idRef, idPr) => {
-    return axios.get(API_URL + "referentiel/"+idRef+"promo/"+idPr+"/apprenants", { headers: authHeader() });
+    return axios.get(API_URL + "referentiel/"+idRef+"/promo/"+idPr+"/apprenants", { headers: authHeader() });
 }
 
 

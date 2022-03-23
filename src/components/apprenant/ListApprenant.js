@@ -31,9 +31,10 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
-import { ListAllApprenant, putApprenant, ListApprenantsByReferentiel, listAllReferentiels } from './ApprenantService';
+import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo } from './ApprenantService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import { set } from 'lodash';
 
 
 var QRCode = require('qrcode.react');
@@ -52,6 +53,17 @@ export const ListApprenant = () => {
 
     // Initialiser Liste Reeferentiel
     const [referentiels, setReferentiels] = React.useState([]);
+
+    // Initialiser Liste Promos 
+    const [promos, setPromos] = React.useState([]);
+
+
+    const [referentiel, setReferentiel] = React.useState("");
+
+    // Initialiser Liste Promos 
+    const [promo, setPromo] = React.useState("");
+
+
     // Show detail Apprenant
     const [apprenant, setApprenant] = React.useState({
         id: 0,
@@ -75,27 +87,31 @@ export const ListApprenant = () => {
 
         listAllReferentiels().then(res => {
             setReferentiels(res.data);
-        })
+        });
+
+        ListPromos().then(res => {
+            setPromos(res.data);
+            setPromo(res.data[res.data.length - 1].id)
+        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
-    function chargerReferentiel(value) {
-        if (value === "") {
-            ListAllApprenant().then(res => {
-                setApprenants(res.data);
-                // setApprenant(res.data[0]);
-            })
-        } else {
-            ListApprenantsByReferentiel(value).then(res => {
+
+    function chargerApprenant() {
+        // console.log(promo)
+        if (referentiel === "") {
+            ListApprenantsByPromo(promo).then(res => {
                 // console.log(res.data)
                 setApprenants(res.data)
             })
+        } else {
+            ListApprenantsByReferentielByPromo(referentiel, promo).then(res => {
+                setApprenants(res.data)
+            })
         }
-    };
-
-
+    }
 
 
     const classes1 = ListApprenantStyle();
@@ -189,15 +205,7 @@ export const ListApprenant = () => {
         // exportComponentAsJPEG(componentRef)
         const canvas = document.getElementById("qr-gen");
 
-        // canvas.toBlob(function(blob) {
-        //     const formData = new FormData();
-        //     formData.append('file', blob, 'qrcode.png');
-        //     formData.append('prenom', apprenant.prenom);
-        //     formData.append('nom', apprenant.nom);
-        //     formData.append('email', 'fadilousy@outlook.com');
 
-        //     sendCarte(formData);
-        //   });
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -213,7 +221,13 @@ export const ListApprenant = () => {
 
     return (
         <Layout>
-            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+            <Typography variant='h5'
+             style={{
+                  marginBottom: "20px", 
+                  borderLeft: "6px solid gray",
+                   color: "gray", 
+                   paddingLeft: "20px",
+                   fontWeight:"bolder" }}>
                 LISTE DES APPRENANTS
             </Typography>
             <Box sx={{}} className={classes.visitePage} >
@@ -221,22 +235,18 @@ export const ListApprenant = () => {
                 <Box style={{ width: "100%" }}>
                     {/* Gestion de l'entete de la liste des Reservations */}
 
-                    <Box
-                        marginBottom={1}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between"
-                        }}
-                        spacing={2}
-                    >
+                    <div className={classes1.gridfiltre}>
 
-                        <Grid classname={classes1.filtre}>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
+                        <div className={classes1.filtre}>
+                            <div
+                                className={classes1.champtextfiltre}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                    color: "gray"
+                                }}
+
                             >
                                 <FilterAltOutlined></FilterAltOutlined>
                                 Filtre
@@ -245,15 +255,14 @@ export const ListApprenant = () => {
                             <div>
                                 <Select
                                     size='small'
-                                    // value={referentiels[0].libelle}
-                                    onChange={(event) => chargerReferentiel(event.target.value)}
-                                    style={{
-                                        width: "15vw",
-                                        fontWeight: "bolder",
-                                        color: "#787486",
-                                        borderRadius: "15px",
+                                    onChange={(event) => {
+                                        setPromo(event.target.value)
+                                        chargerApprenant()
                                     }}
-                                    className={classes.visiteur}
+                                    style={{
+                                        borderRadius: "30px",
+                                    }}
+                                    className={classes1.visiteur}
 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -261,10 +270,9 @@ export const ListApprenant = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value={""}> Tous </MenuItem>
                                     {
-                                        referentiels.map((element, i) => {
-                                            return (<MenuItem value={"" + element.id}> {element.libelle} </MenuItem>)
+                                        promos.map((element, i) => {
+                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
                                         })
                                     }
                                 </Select>
@@ -274,14 +282,14 @@ export const ListApprenant = () => {
                                 <Select
                                     size='small'
                                     // value={referentiels[0].libelle}
-                                    onChange={(event) => chargerReferentiel(event.target.value)}
-                                    style={{
-                                        width: "20em",
-                                        fontWeight: "bolder",
-                                        color: "#787486",
-                                        borderRadius: "15px",
+                                    onChange={(event) => {
+                                        setReferentiel(event.target.value)
+                                        chargerApprenant()
                                     }}
-                                    className={classes.visiteur}
+                                    style={{
+                                        borderRadius: "30px",
+                                    }}
+                                    className={classes1.visiteur}
 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -299,7 +307,7 @@ export const ListApprenant = () => {
                             </div>
 
                             <div>
-                                <FormControl sx={{ m: 1 }}>
+                                <FormControl style={{ width: "100%", marginBottom:"20px" }}>
                                     <OutlinedInput
 
                                         id="email"
@@ -309,7 +317,7 @@ export const ListApprenant = () => {
                                         className={classes1.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined  sx={{ color: "#44C3CF" }}></SearchOutlined>
+                                                <SearchOutlined sx={{ color: "#44C3CF" }}></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -318,7 +326,7 @@ export const ListApprenant = () => {
                                     />
                                 </FormControl>
                             </div>
-                        </Grid>
+                        </div>
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
@@ -340,7 +348,7 @@ export const ListApprenant = () => {
                             </Button>
                         </Box>
 
-                    </Box>
+                    </div>
 
                     <Grid className={classes1.table} >
 

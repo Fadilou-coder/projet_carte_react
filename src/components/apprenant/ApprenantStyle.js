@@ -3,10 +3,47 @@ import themeGeneral from '../theme'
 
 const ApprenantStyle = makeStyles((theme) => ({
 
+    visiteur: {
+        border: "2px solid #44C3CF",
+        width: "15vw",
+        fontWeight: "bolder",
+        color: "#787486",
+        borderColor: "#44C3CF",
+        '&:focus': {
+            borderColor: "#44C3CF",
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: "100%"
+
+        },
+    },
+
     filtre: {
         display: "flex",
-        backgroundColor:"red"
+        alignItems: "center",
+        flexWrap: "wrap",
+        gap: "10px",
+        width: "100%",
+        [theme.breakpoints.down('sm')]: {
+            display:"block",
+            '& div': {
+                margin:"3px 0 0 0"
+            },
+        },
 
+    },
+    champtextfiltre: {
+        [theme.breakpoints.down('sm')]: {
+            display: "none !important",
+        },
+    },
+    gridfiltre: {
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        [theme.breakpoints.down('md')]: {
+            display: "block"
+        },
     },
 
     avatarApprenant: {
@@ -47,9 +84,13 @@ const ApprenantStyle = makeStyles((theme) => ({
         }
 
     },
-    mysearch : {
-        borderRadius:"50px !important",
-        border:"2px solid #44C3CF"
+    mysearch: {
+        borderRadius: "50px !important",
+        border: "2px solid #44C3CF",
+        [theme.breakpoints.down('sm')]: {
+            width: "100% !important"
+        },
+        
     },
     table: {
         display: "flex",
