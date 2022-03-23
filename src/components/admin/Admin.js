@@ -51,12 +51,12 @@ export const Admin = () => {
 
     const chargerStructure = (value) => {
         if (value === "") {
-            ListAllStructure().then(res => {
-                setStructure(res.data);
+            ListAllAdmin().then(res => {
+                setAdmin(res.data);
             })
         } else {
             FindByStructure(value).then(res => {
-                setStructure(res.data)
+                setAdmin(res.data)
             })
         }
     }
