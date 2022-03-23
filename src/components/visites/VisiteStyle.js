@@ -14,7 +14,6 @@ const VisiteStyle = makeStyles(theme => ({
         },
         [theme.breakpoints.down('sm')]: {
             width: "48%"
-
         },
     },
     champfiltre: {

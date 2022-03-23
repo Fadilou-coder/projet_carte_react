@@ -4,7 +4,47 @@ import themeGeneral from '../theme'
 const AdminStyle = makeStyles((theme) => ({
 
 
+    visiteur: {
+        border: "2px solid #44C3CF",
+        borderRadius: "50px !important",
+        width: "15vw",
+        borderColor: "#44C3CF",
+        '&:focus': {
+            borderColor: "#44C3CF",
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: "100%",
+        },
+    },
+    filtre: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginBottom:"20px",
+        [theme.breakpoints.down('sm')]: {
+            // backgroundColor: 'green',
+            display: "block",
 
+        },
+    },
+    champtextfiltre: {
+        [theme.breakpoints.down('sm')]: {
+            display: "none !important",
+        },
+    },
+    champfiltre: {
+        display: "flex",
+        alignItems:"self-end",
+        // justifyContent: "space-around",
+        gap: "20px",
+        width: "60%",
+        [theme.breakpoints.down('sm')]: {
+            display: "block",
+            width: "100%",
+            marginBottom: "20px"
+        },
+
+    },
     subContainer: {
         padding: themeGeneral.spacing(1),
         border: "2px solid #E5E5E5",
@@ -16,10 +56,16 @@ const AdminStyle = makeStyles((theme) => ({
     mysearch: {
         borderRadius: "50px !important",
         border: "2px solid #44C3CF",
+        marginTop:"10px",
         [theme.breakpoints.down('sm')]: {
             width: "100% !important"
         },
 
+    },
+    mytextsearch: {
+        [theme.breakpoints.down('sm')]: {
+            width: "100%"
+        },
     },
     textTypo: {
         fontFamily: "Open sans",
@@ -124,19 +170,7 @@ const AdminStyle = makeStyles((theme) => ({
         fontSize: "20px",
         marginTop: "10px",
     },
-    mysearch: {
-        [theme.breakpoints.down('xs')]: {
-            display: "none",
-        },
-        border: "2px solid #44C3CF",
-        color: "#787486",
-        width: "12vw",
-        borderRadius: "15px",
-        borderColor: "#44C3CF",
-        '&:focus': {
-            borderColor: "#44C3CF",
-        }
-    }
+
 
 }));
 

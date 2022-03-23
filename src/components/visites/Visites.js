@@ -367,6 +367,7 @@ export const Visites = () => {
 
                                         <LocalizationProvider dateAdapter={AdapterDateFns} >
                                             <DatePicker
+
                                                 inputFormat="dd/MM/yyy"
                                                 value={date}
                                                 onChange={(newValue) => {
@@ -375,12 +376,13 @@ export const Visites = () => {
                                                 renderInput={(params) => {
                                                     return (
                                                         <TextField
+                                                            size="small"
                                                             {...params}
                                                             sx={{
                                                                 svg: { color: "#44C3CF" },
                                                                 input: { color: "#787486", fontWeight: "bold" },
                                                                 label: { color: "#44C3CF" },
-                                                                width: "100%"
+                                                                width: "100%",
                                                             }}
                                                         />
                                                     )
@@ -393,6 +395,7 @@ export const Visites = () => {
                                         className={classes.visiteur}
                                     >
                                         <Select
+                                            size='small'
                                             value={visiteur}
                                             style={{ fontWeight: "bolder", width: "100%", borderRadius: "10px" }}
                                             onChange={(event) => chargerVisites(date, event.target.value)}
@@ -414,6 +417,7 @@ export const Visites = () => {
                                     <div className={classes.mysearch}>
                                         <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
                                             <OutlinedInput
+                                                size='small'
                                                 id="search"
                                                 placeholder="rechercher"
                                                 style={{ fontWeight: "bolder", color: "#787486" }}
@@ -441,7 +445,7 @@ export const Visites = () => {
                                         sx={{
                                             backgroundColor: "#05888A",
                                             fontFamily: "Arial",
-                                            fontSize: "20px",
+                                            fontSize: "16px",
                                             marginRight: "10px",
                                             fontWeight: "bold",
                                             '&:hover': {
@@ -460,7 +464,7 @@ export const Visites = () => {
                                         }}
                                         sx={{
                                             backgroundColor: "#138A8A",
-                                            fontSize: "20px",
+                                            fontSize: "16px",
                                             fontWeight: "bold",
                                             '&:hover': {
                                                 backgroundColor: '#F48322',
