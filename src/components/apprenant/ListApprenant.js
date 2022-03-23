@@ -304,13 +304,9 @@ export const ListApprenant = () => {
 
                                         id="email"
                                         placeholder="rechercher"
-<<<<<<< HEAD
                                         style={{ fontWeight: "bolder", color: "#787486" }}
-=======
                                         size="small"
-                                        style={{ fontWeight: "bolder", color: "#787486"}}
                                         className={classes1.mysearch}
->>>>>>> b84a784c097039622b596cdbc5df73067cb61bd5
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <SearchOutlined  sx={{ color: "#44C3CF" }}></SearchOutlined>
