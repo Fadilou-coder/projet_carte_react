@@ -279,14 +279,17 @@ export const ListApprenant = () => {
                                 </Select>
                             </div>
                             <div>
-                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                <FormControl sx={{ m: 1 }}>
                                     <OutlinedInput
+
                                         id="email"
                                         placeholder="rechercher"
+                                        size="small"
                                         style={{ fontWeight: "bolder", color: "#787486"}}
+                                        className={classes1.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined></SearchOutlined>
+                                                <SearchOutlined  sx={{ color: "#44C3CF" }}></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
