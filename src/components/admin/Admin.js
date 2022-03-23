@@ -1,4 +1,5 @@
-import {Box, Button, Stack, OutlinedInput } from '@mui/material';
+/* eslint-disable array-callback-return */
+import {Box, Button, Stack, OutlinedInput} from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
@@ -15,22 +16,29 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
+import { ListAllAdmin, BloquerAdmin, DebloquerAdmin, FindByStructure } from './AdminService';
+import { ListAllStructure } from '../structure/StructureService'
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import Skeletons from "../skeleton/Skeleton";
 
 
 export const Admin = () => {
 
-    const [structure, setStructure] = React.useState("FadiloU Agency Security");
+    const [structure, setStructure] = React.useState([]);
 
     const [admins, setAdmin] = React.useState([]);
     const [search, setSearch] = React.useState('');
-
+    const [isLoaded,setIsLoaded] = React.useState(false);
 
     React.useEffect(() => {
         ListAllAdmin().then(res => {
+            setIsLoaded(true);
             setAdmin(res.data);
+        })
+
+        ListAllStructure().then(res => {
+            setStructure(res.data)
         })
 
     }, []);
@@ -41,7 +49,17 @@ export const Admin = () => {
         history.push("/add_admin");
     }
 
-
+    const chargerStructure = (value) => {
+        if (value === "") {
+            ListAllStructure().then(res => {
+                setStructure(res.data);
+            })
+        } else {
+            FindByStructure(value).then(res => {
+                setStructure(res.data)
+            })
+        }
+    }
 
     // Custom Pagination
     function CustomPagination() {
@@ -163,18 +181,12 @@ export const Admin = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-                return <Checkbox onClick={() => bloquerAdmin(params.id)} checked={params.row.isbloqued} />;
+                return <Checkbox onClick={() => bloquerAdmin(params.id, params.row.isbloqued)} checked={params.row.isbloqued} />;
             }
         },
 
 
     ]
-
-
-    // Pour cocher les cases dont  la valeur blocked est egale à true
-    //     const [selectionModel, setSelectionModel] = React.useState(() =>
-    //     data.filter((r) => r.blocked = true).map((r) => r.id),
-    //   );
 
 
     const classes = VisiteStyle();
@@ -221,7 +233,7 @@ export const Admin = () => {
                                 <Select
                                     value={structure}
                                     style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
-                                    onChange={(event) => setStructure(event.target.value)}
+                                    onChange={(event) => chargerStructure(event.target.value)}
                                     className={classes.visiteur}
 
                                     startAdornment={
@@ -230,11 +242,14 @@ export const Admin = () => {
                                         </InputAdornment>}
 
                                 >
-                                    <MenuItem value="">
-                                        <em>Tous</em>
-                                    </MenuItem>
-                                    <MenuItem value={"fadilou"}> Fadilou Agency Security </MenuItem>
-                                    <MenuItem value={"cbag"}> Cbag Securité </MenuItem>
+                                    <MenuItem value={""}> Tous </MenuItem>
+                                    {
+                                        structure.map((element, i) => {
+                                            if(!element.isBlocked){
+                                                return (<MenuItem value={""+element.id}> {element.nomStructure} </MenuItem>)
+                                            }
+                                        })
+                                    }
                                 </Select>
                             </div>
                             <div>
@@ -286,7 +301,6 @@ export const Admin = () => {
 
                         <div style={{ width: "100%" }}>
 
-
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
@@ -300,6 +314,7 @@ export const Admin = () => {
                                 }}
 
                                  rows={
+                                     !isLoaded?( <Skeletons nbItem={10} list={classes.listIsload} sx={{ width: 300 }}/>):(
                                 admins.filter((val) => {
                                     if(search === ""){
                                         return val;
@@ -310,12 +325,11 @@ export const Admin = () => {
                                     }
                                 }).map((row) => {
                                      return row;
-                                })
+                                }))
                             }
                                 columns={columns}
                                 disableVirtualization
-                            >
-                            </DataGrid>
+                            />
                         </div>
 
                     </Box>

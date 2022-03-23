@@ -1,5 +1,17 @@
+/* eslint-disable array-callback-return */
 import { AddCircleOutlined, Check, Close, DocumentScannerOutlined, FilterAltOutlined, Notes } from '@mui/icons-material';
-import { Box, OutlinedInput, Grid, InputAdornment, MenuItem, Pagination, PaginationItem, Select, Stack, Button } from '@mui/material';
+import {
+    Box,
+    Grid,
+    InputAdornment,
+    MenuItem,
+    Pagination,
+    PaginationItem,
+    Select,
+    Stack,
+    Button,
+    FormControl, OutlinedInput
+} from '@mui/material';
 import EasyEdit, { Types } from "react-easy-edit";
 import {
     DataGrid,
@@ -18,10 +30,9 @@ import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
-import { Typography, FormControl } from '@material-ui/core';
-import { ListAllApprenant, putApprenant } from './ApprenantService';
+import { Typography } from '@material-ui/core';
+import { ListAllApprenant, putApprenant, ListApprenantsByReferentiel, listAllReferentiels } from './ApprenantService';
 import Swal from "sweetalert2";
-import { exportComponentAsJPEG } from 'react-component-export-image';
 import { SearchOutlined } from '@mui/icons-material';
 
 
@@ -29,9 +40,6 @@ var QRCode = require('qrcode.react');
 
 
 export const ListApprenant = () => {
-
-
-    const [structure, setStructure] = React.useState("FadiloU Agency Security");
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
@@ -41,6 +49,9 @@ export const ListApprenant = () => {
 
     // Initialisation des données des apprenants
     const [apprenants, setApprenants] = React.useState([]);
+
+    // Initialiser Liste Reeferentiel
+    const [referentiels, setReferentiels] = React.useState([]);
     // Show detail Apprenant
     const [apprenant, setApprenant] = React.useState({
         id: 0,
@@ -62,9 +73,27 @@ export const ListApprenant = () => {
             setApprenant(res.data[0]);
         });
 
+        listAllReferentiels().then(res => {
+            setReferentiels(res.data);
+        })
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+
+    function chargerReferentiel(value) {
+        if (value === "") {
+            ListAllApprenant().then(res => {
+                setApprenants(res.data);
+                // setApprenant(res.data[0]);
+            })
+        } else {
+            ListApprenantsByReferentiel(value).then(res => {
+                // console.log(res.data)
+                setApprenants(res.data)
+            })
+        }
+    };
 
 
 
@@ -157,19 +186,28 @@ export const ListApprenant = () => {
     }
 
     const downloadQRCode = () => {
-        // Generate download with use canvas and stream
-        // const canvas = document.getElementById("qr-gen");
-        // const pngUrl = canvas
-        //     .toDataURL("image/png")
-        //     .replace("image/png", "image/octet-stream");
-        // let downloadLink = document.createElement("a");
-        // downloadLink.href = pngUrl;
-        // downloadLink.download = "qrcode.png";
-        // document.body.appendChild(downloadLink);
-        // downloadLink.click();
-        // document.body.removeChild(downloadLink);
+        // exportComponentAsJPEG(componentRef)
+        const canvas = document.getElementById("qr-gen");
 
-        exportComponentAsJPEG(componentRef)
+        // canvas.toBlob(function(blob) {
+        //     const formData = new FormData();
+        //     formData.append('file', blob, 'qrcode.png');
+        //     formData.append('prenom', apprenant.prenom);
+        //     formData.append('nom', apprenant.nom);
+        //     formData.append('email', 'fadilousy@outlook.com');
+
+        //     sendCarte(formData);
+        //   });
+        const pngUrl = canvas
+            .toDataURL("image/png")
+            .replace("image/png", "image/octet-stream");
+
+        let downloadLink = document.createElement("a");
+        downloadLink.href = pngUrl;
+        downloadLink.download = "qrcode_" + apprenant.prenom + "_" + apprenant.nom + ".png";
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
     };
 
 
@@ -215,20 +253,29 @@ export const ListApprenant = () => {
 
                             <div>
                                 <Select
-                                    value={structure}
-                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
-                                    onChange={(event) => setStructure(event.target.value)}
+                                    size='small'
+                                    // value={referentiels[0].libelle}
+                                    onChange={(event) => chargerReferentiel(event.target.value)}
+                                    style={{
+                                        width: "20em",
+                                        fontWeight: "bolder",
+                                        color: "#787486",
+                                        borderRadius: "15px",
+                                    }}
                                     className={classes.visiteur}
+
                                     startAdornment={
                                         <InputAdornment position="start">
                                             <Notes sx={{ color: "#44C3CF" }} ></Notes>
                                         </InputAdornment>}
+
                                 >
-                                    <MenuItem value={"tous"} selected="true">
-                                        <em>Tous</em>
-                                    </MenuItem>
-                                    <MenuItem value={"data"}> Data Scientist </MenuItem>
-                                    <MenuItem value={"dev"}> Developpeur Web et Mobile </MenuItem>
+                                    <MenuItem value={""}> Tous </MenuItem>
+                                    {
+                                        referentiels.map((element, i) => {
+                                            return (<MenuItem value={""+element.id}> {element.libelle} </MenuItem>)
+                                        })
+                                    }
                                 </Select>
                             </div>
                             <div>
@@ -252,12 +299,13 @@ export const ListApprenant = () => {
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
+                                style={{
+
+                                }}
                                 sx={{
                                     backgroundColor: "#138A8A",
-                                    fontFamily: "Arial", fontSize: "20px",
                                     marginRight: "35px",
-                                    marginTop: "20px",
-                                    pointer: "cursor",
+                                    fontWeight: "bolder",
                                     '&:hover': {
                                         backgroundColor: '#F48322',
                                     }
@@ -387,7 +435,7 @@ export const ListApprenant = () => {
                                     </div>
                                     <div className={classes1.infoUser}>
                                         <div style={{ width: "70%", backgroundColor: "white" }}>
-                                            <Typography variant="h4" style={{ backgroundColor: "white", fontFamily: "arial" }}>
+                                            <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
                                                 {/* Ahmed BA */}
                                                 <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
                                                     <EasyEdit
