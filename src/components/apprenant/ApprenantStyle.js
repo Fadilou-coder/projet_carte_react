@@ -3,7 +3,11 @@ import themeGeneral from '../theme'
 
 const ApprenantStyle = makeStyles((theme) => ({
 
+    filtre: {
+        display: "flex",
+        backgroundColor:"red"
 
+    },
 
     avatarApprenant: {
         display: "flex",
@@ -33,7 +37,7 @@ const ApprenantStyle = makeStyles((theme) => ({
         },
         '& .apprenant-table--cell': {
             justifyContent: "center !important",
-            fontSize: '16px',           
+            fontSize: '16px',
 
         },
         [theme.breakpoints.down('md')]: {
@@ -176,7 +180,7 @@ const ApprenantStyle = makeStyles((theme) => ({
         borderRadius: "10px",
         width: "12vw",
         borderColor: "#44C3CF",
-        '&:focus':{
+        '&:focus': {
             borderColor: "#44C3CF",
         }
     }

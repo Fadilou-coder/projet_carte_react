@@ -214,7 +214,7 @@ export const ListApprenant = () => {
     return (
         <Layout>
             <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                SONATEL ACADEMY : LISTE DES APPRENANTS
+                LISTE DES APPRENANTS
             </Typography>
             <Box sx={{}} className={classes.visitePage} >
 
@@ -226,19 +226,11 @@ export const ListApprenant = () => {
                         sx={{
                             display: "flex",
                             justifyContent: "space-between"
-
-
-                        }} spacing={2}
+                        }}
+                        spacing={2}
                     >
 
-                        <Stack
-                            direction="row"
-                            spacing={5}
-                            justifyContent="center"
-                            alignItems="center"
-
-
-                        >
+                        <Grid classname={classes1.filtre}>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -250,6 +242,33 @@ export const ListApprenant = () => {
                                 Filtre
                             </div>
 
+                            <div>
+                                <Select
+                                    size='small'
+                                    // value={referentiels[0].libelle}
+                                    onChange={(event) => chargerReferentiel(event.target.value)}
+                                    style={{
+                                        width: "15vw",
+                                        fontWeight: "bolder",
+                                        color: "#787486",
+                                        borderRadius: "15px",
+                                    }}
+                                    className={classes.visiteur}
+
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <Notes sx={{ color: "#44C3CF" }} ></Notes>
+                                        </InputAdornment>}
+
+                                >
+                                    <MenuItem value={""}> Tous </MenuItem>
+                                    {
+                                        referentiels.map((element, i) => {
+                                            return (<MenuItem value={"" + element.id}> {element.libelle} </MenuItem>)
+                                        })
+                                    }
+                                </Select>
+                            </div>
 
                             <div>
                                 <Select
@@ -273,17 +292,18 @@ export const ListApprenant = () => {
                                     <MenuItem value={""}> Tous </MenuItem>
                                     {
                                         referentiels.map((element, i) => {
-                                            return (<MenuItem value={""+element.id}> {element.libelle} </MenuItem>)
+                                            return (<MenuItem value={"" + element.id}> {element.libelle} </MenuItem>)
                                         })
                                     }
                                 </Select>
                             </div>
+
                             <div>
                                 <FormControl sx={{ m: 1 }} className={classes.mysearch}>
                                     <OutlinedInput
                                         id="email"
                                         placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        style={{ fontWeight: "bolder", color: "#787486" }}
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
@@ -295,7 +315,7 @@ export const ListApprenant = () => {
                                     />
                                 </FormControl>
                             </div>
-                        </Stack>
+                        </Grid>
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
@@ -387,10 +407,10 @@ export const ListApprenant = () => {
                                     }}
                                     rows={
                                         apprenants.filter((val) => {
-                                            if(search === ""){
+                                            if (search === "") {
                                                 return val;
                                             } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
-                                                || val.code.toLowerCase().includes(search.toLowerCase())){
+                                                || val.code.toLowerCase().includes(search.toLowerCase())) {
                                                 return val;
                                             }
                                         }).map((row) => {

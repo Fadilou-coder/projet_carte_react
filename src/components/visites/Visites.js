@@ -5,7 +5,7 @@ import TextField from '@mui/material/TextField'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
 import DatePicker from '@mui/lab/DatePicker'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Layout from "../layout/Layout"
 import VisiteStyle from "./VisiteStyle"
 import { AddCircleOutlined } from '@mui/icons-material'
@@ -27,7 +27,7 @@ import {
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
-import {encode as base64_encode} from 'base-64';
+import { encode as base64_encode } from 'base-64';
 import { SearchOutlined } from '@mui/icons-material';
 
 var QRCode = require('qrcode.react')
@@ -36,7 +36,7 @@ export const Visites = () => {
 
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
-    const [formErrors, setFormErrors] = useState( {});
+    const [formErrors, setFormErrors] = useState({});
 
 
 
@@ -76,12 +76,12 @@ export const Visites = () => {
         )
     }
 
-    function buttonSortir(donnees){
-        if (donnees.apprenant != null){
+    function buttonSortir(donnees) {
+        if (donnees.apprenant != null) {
             SortieApp(donnees).then(() => {
                 chargerVisites(date, visiteur)
             })
-        }else {
+        } else {
             SortieVisiteur(donnees).then(() => {
                 chargerVisites(date, visiteur)
             })
@@ -146,11 +146,11 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
-            renderCell: (cellvalue) =>{
-                if (cellvalue.row.dateSortie==null){
+            renderCell: (cellvalue) => {
+                if (cellvalue.row.dateSortie == null) {
                     return <Button
-                        sx ={{backgroundColor:"green", color:"white" }}
-                        onClick= {() => buttonSortir(cellvalue.row)}
+                        sx={{ backgroundColor: "green", color: "white" }}
+                        onClick={() => buttonSortir(cellvalue.row)}
                     >
 
                         Sortir
@@ -191,7 +191,7 @@ export const Visites = () => {
         let content = {
             startY: 50,
             head: headers,
-            body:dat
+            body: dat
 
         }
 
@@ -232,23 +232,23 @@ export const Visites = () => {
     // fONCTION POURGENERE PDF
     const AjouterVisites = () => {
         setFormErrors(validateVisite(values));
-        SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
+        SaveVisitesVisieur({ 'visiteur': values }).then(res => {
             handleClose()
             downloadQRCode();
             if (visiteur === "") {
                 ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
+                    setVisites(res.data)
                 })
-            }else if (visiteur === "apprenant") {
+            } else if (visiteur === "apprenant") {
                 ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
+                    setVisites(res.data)
                 })
-            }else if (visiteur === "visiteur") {
+            } else if (visiteur === "visiteur") {
                 ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
+                    setVisites(res.data)
                 })
             }
-            if(res.status===200) {
+            if (res.status === 200) {
                 Swal.fire(
                     'Succes!',
                     'Enregistrer avec succes.',
@@ -278,7 +278,7 @@ export const Visites = () => {
             .replace("image/png", "image/octet-stream");
         let downloadLink = document.createElement("a");
         downloadLink.href = pngUrl;
-        downloadLink.download = "qrcode_"+ values.prenom + "_" + values.nom + ".png";
+        downloadLink.download = "qrcode_" + values.prenom + "_" + values.nom + ".png";
         document.body.appendChild(downloadLink);
         downloadLink.click();
         document.body.removeChild(downloadLink);
@@ -288,32 +288,32 @@ export const Visites = () => {
         let regexcni = new RegExp("(^[1-2])[0-9]{12}$");
         let regexPhone = new RegExp("^(33|7[5-8])[0-9]{7}$");
         const errors = {};
-        if(val.prenom === ''){
+        if (val.prenom === '') {
             errors.prenom = "prenom est requis"
-        } else if(val.prenom.length < 3){
+        } else if (val.prenom.length < 3) {
             errors.prenom = "le prenom doit comporter plus de 3 caractères";
         }
-        else if(val.nom.length > 20){
+        else if (val.nom.length > 20) {
             errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
         }
-        if(val.nom === ''){
+        if (val.nom === '') {
             errors.nom = "nom est requis"
-        } else if(val.nom.length < 2){
+        } else if (val.nom.length < 2) {
             errors.nom = "le nom doit comporter plus de 2 caractères";
         }
-        else if(val.nom.length > 10){
+        else if (val.nom.length > 10) {
             errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
         }
 
-        if(val.numTelephone === ''){
+        if (val.numTelephone === '') {
             errors.numTelephone = "le numéro de télephone est requis"
-        } else if(!regexPhone.test(val.numTelephone)){
+        } else if (!regexPhone.test(val.numTelephone)) {
             errors.numTelephone = "le format numéro télephone n'est pas valide";
         }
 
-        if(val.cni === ''){
+        if (val.cni === '') {
             errors.cni = "le numéro de carte d'identité est requis"
-        } else if(!regexcni.test(val.cni)){
+        } else if (!regexcni.test(val.cni)) {
             errors.cni = "le format numéro de carte d'identité n'est pas valide";
         }
         return errors;
@@ -323,317 +323,322 @@ export const Visites = () => {
 
     return (
         <Layout>
-            <Grid style={{widt:"100%", display: 'flex', justifyContent:"center", alignItems:"center"}}>
-            <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? {width: '80%'} : {width: '100%'}}>
-            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                LISTE DES VISITEURS
-            </Typography>
-            <Box sx={{}} className={classes.visitePage} >
+            <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
+                <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
+                    <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                        LISTE DES VISITEURS
+                    </Typography>
+                    <Box sx={{}} className={classes.visitePage} >
 
-                <Box style={{ width: "100%" }}>
+                        <Box style={{ width: "100%" }}>
 
-                    {/*
-                        Dans cettte partie, on a la partie du triage et de l'impressiono
+                            {/*
+                        On a la partie du triage et de l'impression
                     */}
-                    <Box sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
+                            <Box
+                                className={classes.filtre}
 
-                    }} spacing={2}
-                    >
-
-                        <Stack direction="row" spacing={5} justifyContent="center" alignItems="center">
-                            <div
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    flexWrap: 'wrap',
-                                    color: "gray"
-                                }}
                             >
-                                <FilterAltOutlined></FilterAltOutlined>
-                                Filtre
-                            </div>
 
-                            <div>
-                                <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                    <DatePicker
-                                        inputFormat="dd/MM/yyy"
+                                <Grid direction="row" spacing={5} alignItems="center" className={classes.champfiltre}>
+                                    <div
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            flexWrap: 'wrap',
+                                            color: "gray"
+                                        }}
+                                        className={classes.champtextfiltre}
+                                    >
+                                        <FilterAltOutlined></FilterAltOutlined>
+                                        Filtre
+                                    </div>
+
+                                    <div
                                         className={classes.visiteur}
-                                        value={date}
-                                        onChange={(newValue) => {
-                                            chargerVisites(newValue, visiteur)
-                                        }}
-                                        renderInput={(params) => {
-                                            return (
-                                                <TextField
-                                                    {...params}
-                                                    sx={{
-                                                        svg: { color: "#44C3CF" },
-                                                        input: { color: "#787486", fontWeight: "bold" },
-                                                        label: { color: "#44C3CF" },
-                                                        border: "2px solid #44C3CF",
-                                                        width: "12vw",
-                                                        borderRadius: "10px"
-                                                    }}
-                                                />
-                                            )
-                                        }}
-                                    // renderInput={(params) => <TextField {...params} />}
-                                    />
-                                </LocalizationProvider>
-                            </div>
-                            <div>
-                                <Select
-                                    value={visiteur}
-                                    style={{ fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
-                                    onChange={(event) => chargerVisites(date, event.target.value)}
-                                    className={classes.visiteur}
+                                    >
 
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <PersonOutline sx={{ color: "#44C3CF" }} ></PersonOutline>
-                                        </InputAdornment>}
+                                        <LocalizationProvider dateAdapter={AdapterDateFns} >
+                                            <DatePicker
+                                                inputFormat="dd/MM/yyy"
+                                                value={date}
+                                                onChange={(newValue) => {
+                                                    chargerVisites(newValue, visiteur)
+                                                }}
+                                                renderInput={(params) => {
+                                                    return (
+                                                        <TextField
+                                                            {...params}
+                                                            sx={{
+                                                                svg: { color: "#44C3CF" },
+                                                                input: { color: "#787486", fontWeight: "bold" },
+                                                                label: { color: "#44C3CF" },
+                                                                width: "100%"
+                                                            }}
+                                                        />
+                                                    )
+                                                }}
+                                            // renderInput={(params) => <TextField {...params} />}
+                                            />
+                                        </LocalizationProvider>
+                                    </div>
+                                    <div
+                                        className={classes.visiteur}
+                                    >
+                                        <Select
+                                            value={visiteur}
+                                            style={{ fontWeight: "bolder", width: "100%", borderRadius: "10px" }}
+                                            onChange={(event) => chargerVisites(date, event.target.value)}
+
+
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                    <PersonOutline  ></PersonOutline>
+                                                </InputAdornment>}
+
+                                        >
+                                            <MenuItem value={""}>
+                                                <em>Tous</em>
+                                            </MenuItem>
+                                            <MenuItem value={"apprenant"}>Apprenant</MenuItem>
+                                            <MenuItem value={"visiteur"}>Visiteur</MenuItem>
+                                        </Select>
+                                    </div>
+                                    <div className={classes.mysearch}>
+                                        <FormControl sx={{ m: 1, width:"100%" }} className={classes.mytextsearch} >
+                                            <OutlinedInput
+                                                id="search"
+                                                placeholder="rechercher"
+                                                style={{ fontWeight: "bolder", color: "#787486"}}
+                                                
+                                                startAdornment={
+                                                    <InputAdornment position="start">
+                                                        <SearchOutlined></SearchOutlined>
+                                                    </InputAdornment>
+                                                }
+                                                onChange={(event) => {
+                                                    setSearch(event.target.value);
+                                                }}
+                                            />
+                                        </FormControl>
+                                    </div>
+                                </Grid>
+                                <div
+                                    className={classes.ajoutScan}
 
                                 >
-                                    <MenuItem value={""}>
-                                        <em>Tous</em>
-                                    </MenuItem>
-                                    <MenuItem value={"apprenant"}>Apprenant</MenuItem>
-                                    <MenuItem value={"visiteur"}>Visiteur</MenuItem>
-                                </Select>
-                            </div>
-                            <div>
-                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
-                                    <OutlinedInput
-                                        id="search"
-                                        placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486"}}
-                                        startAdornment={
-                                            <InputAdornment position="start">
-                                                <SearchOutlined></SearchOutlined>
-                                            </InputAdornment>
-                                        }
-                                        onChange={(event) => {
-                                            setSearch(event.target.value);
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<AddCircleOutlined />}
+                                        onClick={handleClickOpen}
+                                        sx={{
+                                            backgroundColor: "#05888A",
+                                            fontFamily: "Arial",
+                                            fontSize: "20px",
+                                            marginRight: "10px",
+                                            fontWeight: "bold",
+                                            '&:hover': {
+                                                backgroundColor: "#F48322",
+                                                pointer: "cursor"
+                                            }
                                         }}
-                                    />
-                                </FormControl>
-                            </div>
-                        </Stack>
-                        <div>
-                            <Button
-                                variant="contained"
-                                endIcon={<AddCircleOutlined />}
-                                onClick={handleClickOpen}
-                                sx={{
-                                    backgroundColor: "#05888A",
-                                    fontFamily: "Arial",
-                                    fontSize: "20px",
-                                    marginRight: "10px",
-                                    '&:hover': {
-                                        backgroundColor: "#F48322",
-                                        pointer: "cursor"
-                                    }
-                                }}
-                            >
-                                AJOUTER
-                            </Button>
-                            <Button
-                                variant="contained"
-                                endIcon={<DocumentScannerOutlined />}
-                                onClick={(params, event) => {
-                                    exportPDF()
-                                }}
-                                sx={{
-                                    backgroundColor: "#138A8A",
-                                    fontSize: "20px",
-                                    fontWeight: "bolder",
-                                    '&:hover': {
-                                        backgroundColor: '#F48322',
-                                    }
-                                }}
-                            >
-                                Impression
-                            </Button>
+                                    >
+                                        AJOUTER
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<DocumentScannerOutlined />}
+                                        onClick={(params, event) => {
+                                            exportPDF()
+                                        }}
+                                        sx={{
+                                            backgroundColor: "#138A8A",
+                                            fontSize: "20px",
+                                            fontWeight: "bold",
+                                            '&:hover': {
+                                                backgroundColor: '#F48322',
+                                            }
+                                        }}
+                                    >
+                                        Impression
+                                    </Button>
 
-                        </div>
+                                </div>
 
-                    </Box>
+                            </Box>
 
 
-                    {/*
+                            {/*
                         Nous avons ici le tableau des visite effectuées durant une journée
                      */}
-                    <Box sx={{
-                        boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
-                        '& .super-app-theme--header': {
-                            backgroundColor: '#44C3CF'
-                        },
-                    }} className={classes.tableau}>
+                            <Box sx={{
+                                boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
+                                '& .super-app-theme--header': {
+                                    backgroundColor: '#44C3CF'
+                                },
+                            }} className={classes.tableau}>
 
-                        <div style={{ width: "100%" }}>
-                            <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
-                            <DataGrid
-                                sx={{ boxShadow: "30px", width: "100%" }}
+                                <div style={{ width: "100%" }}>
+                                    <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
+                                    <DataGrid
+                                        sx={{ boxShadow: "30px", width: "100%" }}
 
-                                autoHeight
-                                pageSize={10}
-                                rowsPerPageOptions={[5, 10, 20]}
-                                components={{
-                                    Pagination: CustomPagination,
-                                    // Toolbar: CustomToolbar,
-                                }}
+                                        autoHeight
+                                        pageSize={10}
+                                        rowsPerPageOptions={[5, 10, 20]}
+                                        components={{
+                                            Pagination: CustomPagination,
+                                            // Toolbar: CustomToolbar,
+                                        }}
 
-                                rows={
-                                    visites.filter((val) => {
-                                        if(search === ""){
-                                            return val;
-                                        } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.visiteur?.cni.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.apprenant?.cni.toLowerCase().includes(search.toLowerCase())){
+                                        rows={
+                                            visites.filter((val) => {
+                                                if (search === "") {
+                                                    return val;
+                                                } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
+                                                    || val.visiteur?.cni.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
+                                                    || val.apprenant?.cni.toLowerCase().includes(search.toLowerCase())) {
 
-                                            return val;
+                                                    return val;
+                                                }
+                                            }).map((row) => {
+                                                return row;
+                                            })
                                         }
-                                    }).map((row) => {
-                                          return row;
-                                    })
-                                }
-                                columns={columns}
-                                disableVirtualization
-                            >
-                            </DataGrid>
-                        </div>
+                                        columns={columns}
+                                        disableVirtualization
+                                    >
+                                    </DataGrid>
+                                </div>
 
+                            </Box>
+
+                        </Box>
                     </Box>
 
-                </Box>
-            </Box>
+
+                    <QRCode
+                        hidden
+                        id="qr-gen"
+                        value={base64_encode('{"cni":"' + values.cni + '", "date": "' + dateTime({ date: new Date() }) + '"}')}
+                        size={400}
+                        level={"H"}
+                        includeMargin={true}
+                        bgColor={"#ffffff"}
+                        fgColor={"#138A8A"}
+                        imageSettings={{
+                            src: `${logosonatel}`,
+                            x: null,
+                            y: null,
+                            height: 30,
+                            width: 30,
+                            excavate: false,
+                        }}
+                    />
 
 
-            <QRCode
-                hidden
-                id="qr-gen"
-                value={base64_encode('{"cni":"' + values.cni + '", "date": "' + dateTime({date: new Date()}) + '"}')}
-                size={400}
-                level={"H"}
-                includeMargin={true}
-                bgColor={"#ffffff"}
-                fgColor={"#138A8A"}
-                imageSettings={{
-                    src: `${logosonatel}`,
-                    x: null,
-                    y: null,
-                    height: 30,
-                    width: 30,
-                    excavate: false,
-                }}
-            />
+                    <div>
+                        <Dialog open={open} onClose={handleClose}>
 
-
-            <div>
-                <Dialog open={open} onClose={handleClose}>
-
-                    <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
-                    <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
-                    <DialogContent>
-                        <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
-                        <Grid>
-                            <FormControl fullWidth>
-                                <label className={classes.labelText}>CNI<span style={{ color: 'red' }}>*</span> </label>
-                                <OutlinedInput
-                                    id="cni"
-                                    type="text"
-                                    variant="outlined"
-                                    placeholder="Ex:cni"
-                                    onChange={(event) => {
-                                        setValues({ ...values, cni: event.target.value })
+                            <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
+                            <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
+                            <DialogContent>
+                                <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
+                                <Grid>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>CNI<span style={{ color: 'red' }}>*</span> </label>
+                                        <OutlinedInput
+                                            id="cni"
+                                            type="text"
+                                            variant="outlined"
+                                            placeholder="Ex:cni"
+                                            onChange={(event) => {
+                                                setValues({ ...values, cni: event.target.value })
+                                            }}
+                                            value={values.cni}
+                                        />
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.cni}</p>
+                                </Grid>
+                                <Grid mt={2}>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
+                                        <OutlinedInput
+                                            id="prenom"
+                                            type="text"
+                                            variant="outlined"
+                                            placeholder="Ex:prenom"
+                                            onChange={(event) => {
+                                                setValues({ ...values, prenom: event.target.value })
+                                            }}
+                                            value={values.prenom}
+                                        />
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.prenom}</p>
+                                </Grid>
+                                <Grid mt={2}>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Nom<span style={{ color: 'red' }}>*</span> </label>
+                                        <OutlinedInput
+                                            id="nom"
+                                            type="text"
+                                            variant="outlined"
+                                            placeholder="Ex:nom"
+                                            onChange={(event) => {
+                                                setValues({ ...values, nom: event.target.value })
+                                            }}
+                                            value={values.nom}
+                                        />
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.nom}</p>
+                                </Grid>
+                                <Grid mt={2}>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}>*</span> </label>
+                                        <OutlinedInput
+                                            id="telephone"
+                                            type="text"
+                                            variant="outlined"
+                                            placeholder="Ex:telephone"
+                                            onChange={(event) => {
+                                                setValues({ ...values, numTelephone: event.target.value })
+                                            }}
+                                            value={values.numTelephone}
+                                        />
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.numTelephone}</p>
+                                </Grid>
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}
+                                    sx={{
+                                        backgroundColor: "#BE0101",
+                                        fontFamily: "Arial", fontSize: "20px",
+                                        marginTop: "10px",
+                                        color: "#FFFFFF",
+                                        '&:hover': {
+                                            backgroundColor: "#F32018",
+                                            pointer: "cursor"
+                                        }
                                     }}
-                                    value={values.cni}
-                                />
-                            </FormControl>
-                            <p className={classes.formError}>{formErrors.cni}</p>
-                        </Grid>
-                        <Grid mt={2}>
-                            <FormControl fullWidth>
-                                <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
-                                <OutlinedInput
-                                    id="prenom"
-                                    type="text"
-                                    variant="outlined"
-                                    placeholder="Ex:prenom"
-                                    onChange={(event) => {
-                                        setValues({ ...values, prenom: event.target.value })
+                                >ANNULER</Button>
+                                <Button onClick={AjouterVisites}
+                                    sx={{
+                                        backgroundColor: "#05888A",
+                                        fontFamily: "Arial", fontSize: "20px",
+                                        marginTop: "10px",
+                                        color: "#FFFFFF",
+                                        '&:hover': {
+                                            backgroundColor: "#F48322",
+                                            pointer: "cursor"
+                                        }
                                     }}
-                                    value={values.prenom}
-                                />
-                            </FormControl>
-                            <p className={classes.formError}>{formErrors.prenom}</p>
-                        </Grid>
-                        <Grid mt={2}>
-                            <FormControl fullWidth>
-                                <label className={classes.labelText}>Nom<span style={{ color: 'red' }}>*</span> </label>
-                                <OutlinedInput
-                                    id="nom"
-                                    type="text"
-                                    variant="outlined"
-                                    placeholder="Ex:nom"
-                                    onChange={(event) => {
-                                        setValues({ ...values, nom: event.target.value })
-                                    }}
-                                    value={values.nom}
-                                />
-                            </FormControl>
-                            <p className={classes.formError}>{formErrors.nom}</p>
-                        </Grid>
-                        <Grid mt={2}>
-                            <FormControl fullWidth>
-                                <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}>*</span> </label>
-                                <OutlinedInput
-                                    id="telephone"
-                                    type="text"
-                                    variant="outlined"
-                                    placeholder="Ex:telephone"
-                                    onChange={(event) => {
-                                        setValues({ ...values, numTelephone: event.target.value })
-                                    }}
-                                    value={values.numTelephone}
-                                />
-                            </FormControl>
-                            <p className={classes.formError}>{formErrors.numTelephone}</p>
-                        </Grid>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose}
-                            sx={{
-                                backgroundColor: "#BE0101",
-                                fontFamily: "Arial", fontSize: "20px",
-                                marginTop: "10px",
-                                color: "#FFFFFF",
-                                '&:hover': {
-                                    backgroundColor: "#F32018",
-                                    pointer: "cursor"
-                                }
-                            }}
-                        >ANNULER</Button>
-                        <Button onClick={AjouterVisites}
-                            sx={{
-                                backgroundColor: "#05888A",
-                                fontFamily: "Arial", fontSize: "20px",
-                                marginTop: "10px",
-                                color: "#FFFFFF",
-                                '&:hover': {
-                                    backgroundColor: "#F48322",
-                                    pointer: "cursor"
-                                }
-                            }}
-                        >AJOUTER
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </div>
-            </Grid>
+                                >AJOUTER
+                                </Button>
+                            </DialogActions>
+                        </Dialog>
+                    </div>
+                </Grid>
             </Grid>
         </Layout>
     )
