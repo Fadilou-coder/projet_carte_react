@@ -20,7 +20,7 @@ const ApprenantStyle = makeStyles((theme) => ({
 
     filtre: {
         display: "flex",
-        alignItems: "center",
+        alignContent: "center",
         flexWrap: "wrap",
         gap: "10px",
         width: "100%",
@@ -39,7 +39,7 @@ const ApprenantStyle = makeStyles((theme) => ({
     },
     gridfiltre: {
         display: "flex",
-        alignItems: "center",
+        alignContent: "center",
         justifyContent: "space-between",
         [theme.breakpoints.down('md')]: {
             display: "block"

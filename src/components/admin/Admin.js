@@ -253,7 +253,7 @@ export const Admin = () => {
                                 </Select>
                             </div>
                             <div>
-                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                <FormControl className={classes.mysearch}>
                                     <OutlinedInput
                                         id="email"
                                         placeholder="rechercher"

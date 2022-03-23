@@ -149,7 +149,7 @@ export const Visites = () => {
             renderCell: (cellvalue) => {
                 if (cellvalue.row.dateSortie == null) {
                     return <Button
-                        sx={{ backgroundColor: "green", color: "white" }}
+                        sx={{ backgroundColor: "#BC6602", color: "white" }}
                         onClick={() => buttonSortir(cellvalue.row)}
                     >
 
@@ -325,7 +325,14 @@ export const Visites = () => {
         <Layout>
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
-                    <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+                    <Typography variant='h5'
+                        style={{
+                            marginBottom: "20px",
+                            borderLeft: "6px solid gray",
+                            color: "gray",
+                            paddingLeft: "20px",
+                            fontWeight: "bolder"
+                        }}>
                         LISTE DES VISITEURS
                     </Typography>
                     <Box sx={{}} className={classes.visitePage} >
@@ -405,12 +412,12 @@ export const Visites = () => {
                                         </Select>
                                     </div>
                                     <div className={classes.mysearch}>
-                                        <FormControl sx={{ m: 1, width:"100%" }} className={classes.mytextsearch} >
+                                        <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
                                             <OutlinedInput
                                                 id="search"
                                                 placeholder="rechercher"
-                                                style={{ fontWeight: "bolder", color: "#787486"}}
-                                                
+                                                style={{ fontWeight: "bolder", color: "#787486" }}
+
                                                 startAdornment={
                                                     <InputAdornment position="start">
                                                         <SearchOutlined></SearchOutlined>
