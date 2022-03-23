@@ -24,13 +24,23 @@ export const Structure = () => {
 
     const [structure, setStructure] = React.useState([]);
     const [nomStructure, setNomStructure] = React.useState({ nomStructure: '' });
+    const [loading, setLoading] = React.useState(true);
+
+
     React.useEffect(() => {
-        ListAllStructure().then(response => { setStructure(response.data) })
+        ListAllStructure().then(response => { 
+            setStructure(response.data);
+            setLoading(false); 
+        });
     }, []
     );
     function AddStructure() {
         Addstructure(nomStructure).then(response => {
-            ListAllStructure().then(response => { setStructure(response.data) })
+            setLoading(true);
+            ListAllStructure().then(response => { 
+                setStructure(response.data);
+                setLoading(false);
+            })
             setNomStructure({ nomStructure: '' });
         });
     }
@@ -50,7 +60,11 @@ export const Structure = () => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     Bloquerstructure(id).then(() => {
-                        ListAllStructure().then(response => { setStructure(response.data) })
+                        setLoading(true);
+                        ListAllStructure().then(response => { 
+                            setStructure(response.data);
+                            setLoading(false); 
+                        })
                     })
                 }
             })
@@ -67,7 +81,11 @@ export const Structure = () => {
             }).then((result) => {
                 if (result.isConfirmed) {
                     DebloquerStructure(id).then(() => {
-                        ListAllStructure().then(response => { setStructure(response.data) })
+                        setLoading(true);
+                        ListAllStructure().then(response => { 
+                            setStructure(response.data);
+                            setLoading(false); 
+                        })
                     })
                 }
             })
@@ -171,6 +189,7 @@ export const Structure = () => {
                                 components={{
                                     Pagination: CustomPagination,
                                 }}
+                                loading={loading}
                                 rows={structure}
                                 columns={columns}
                             />

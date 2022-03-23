@@ -43,6 +43,7 @@ export const ListApprenant = () => {
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
+    const [loading, setLoading] = React.useState(true);
 
     var componentRef = React.createRef();
 
@@ -71,6 +72,7 @@ export const ListApprenant = () => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
             setApprenant(res.data[0]);
+            setLoading(false);
         });
 
         listAllReferentiels().then(res => {
@@ -386,8 +388,9 @@ export const ListApprenant = () => {
                                         }
                                     }}
                                     components={{
-                                        Pagination: CustomPagination,
+                                        Pagination: CustomPagination
                                     }}
+                                    loading={loading}
                                     rows={
                                         apprenants.filter((val) => {
                                             if(search === ""){
@@ -406,6 +409,7 @@ export const ListApprenant = () => {
 
                                     disableVirtualization
                                 />
+                                
                             </div>
 
                         </Grid>
