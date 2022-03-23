@@ -27,7 +27,6 @@ import ListApprenantStyle from "./ApprenantStyle";
 import pp from "../../assets/images/ppuser.png";
 import odc from "../../assets/images/odc.jpeg";
 import logosonatel from "../../assets/images/logoSA.png";
-
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
@@ -43,7 +42,6 @@ export const ListApprenant = () => {
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
-
     var componentRef = React.createRef();
 
 
@@ -89,7 +87,6 @@ export const ListApprenant = () => {
             })
         } else {
             ListApprenantsByReferentiel(value).then(res => {
-                // console.log(res.data)
                 setApprenants(res.data)
             })
         }
@@ -188,16 +185,6 @@ export const ListApprenant = () => {
     const downloadQRCode = () => {
         // exportComponentAsJPEG(componentRef)
         const canvas = document.getElementById("qr-gen");
-
-        // canvas.toBlob(function(blob) {
-        //     const formData = new FormData();
-        //     formData.append('file', blob, 'qrcode.png');
-        //     formData.append('prenom', apprenant.prenom);
-        //     formData.append('nom', apprenant.nom);
-        //     formData.append('email', 'fadilousy@outlook.com');
-
-        //     sendCarte(formData);
-        //   });
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");

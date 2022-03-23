@@ -11,7 +11,7 @@ const VisiteStyle = makeStyles(theme => ({
         borderColor: "#44C3CF",
         '&:focus':{
             borderColor: "#44C3CF",
-        }
+        },
     },
     visitePage: {
         width: "100%"
