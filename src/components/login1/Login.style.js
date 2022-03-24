@@ -16,16 +16,16 @@ const LoginStyle = makeStyles(({
         margin: 0,
         width: "100vw",
         height: "100vh",
-        backgroundColor: "#138A8A",
-        backgroundImage: `url(${bg})`,
+        backgroundColor: "#FF6600",
+        backgroundImage: `url("https://www.erenumerique.fr/wp-content/uploads/2018/07/fibre-orange.jpg")`,
         backgroundSize: 'cover',
         display: "block"
     },
     pageGreen: {
-        backgroundColor: "#138A8A",
+        backgroundColor: "#FF6600",
         width: "100%",
         height: "100%",
-        opacity: "81%",
+        opacity: "40%",
         position: " absolute",
         zIndex: "0 !important",
 
@@ -58,7 +58,7 @@ const LoginStyle = makeStyles(({
     subtit: {
         fontWeight: 500,
         fontSize: "large",
-        color: "#138A8A",
+        color: "#000000",
         textAlign: "center"
     },
     '@media only screen and (max-width: 700px)': {

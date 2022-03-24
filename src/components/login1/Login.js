@@ -88,8 +88,8 @@ const Login = (props) => {
 
   const classes = LoginStyle();
 
-  const btn = username === '' || password === '' ? <Button disabled style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
-  >Se connecter</Button> : <Button style={{ backgroundColor: "#138A8A", width: "100%", marginTop: "30px" }} variant="contained" onClick={handleLogin}
+  const btn = username === '' || password === '' ? <Button disabled sx={{ backgroundColor: "#FF6600", width: "100%", marginTop: "30px", '&:hover':{backgroundColor: "#000000"} }} variant="contained" onClick={handleLogin}
+  >Se connecter</Button> : <Button sx={{ backgroundColor: "#FF6600", width: "100%", marginTop: "30px", '&:hover':{backgroundColor: "#000000"} }} variant="contained" onClick={handleLogin}
   >Se connecter</Button>
 
   return (
@@ -110,8 +110,8 @@ const Login = (props) => {
             </Box>
 
             <Stack alignItems={"center"} spacing={2}>
-              <Typography variant='h4' style={{ fontWeight: 600, color: "#138A8A" }} > Bienvenue </Typography>
-              <hr style={{ borderTop: " 1px solid #138A8A", width: "30%" }} />
+              <Typography variant='h4' style={{ fontWeight: 600, color: "#000000" }} > Bienvenue </Typography>
+              <hr style={{ borderTop: " 1px solid #FF6600", width: "30%" }} />
               <Typography
                 variant='subtitle1'
                 className={classes.subtit}
