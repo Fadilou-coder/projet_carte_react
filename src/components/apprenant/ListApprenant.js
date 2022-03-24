@@ -34,7 +34,6 @@ import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo } from './ApprenantService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
-import { set } from 'lodash';
 
 
 var QRCode = require('qrcode.react');

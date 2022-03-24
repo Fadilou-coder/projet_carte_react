@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
-import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material'
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
