@@ -25,7 +25,7 @@ import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ApprenantStyle";
 import pp from "../../assets/images/ppuser.png";
-import odc from "../../assets/images/odc.jpeg";
+import odc from "../../assets/images/logo_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
@@ -389,6 +389,7 @@ export const ListApprenant = () => {
                                             if (apprenant.id !== params.row.id) {
                                                 if (isSelection === false) {
                                                     setApprenant(params.row);
+                                                    console.log(apprenant);
                                                 } else {
                                                     Swal.fire({
                                                         title: 'Attention?',
@@ -465,7 +466,7 @@ export const ListApprenant = () => {
                             >
                                 <Grid ref={componentRef}>
                                     <div className={classes1.avatarApprenant} >
-                                        <img src={odc} alt="" style={{ width: "20%" }} />
+                                        <img src={odc} alt="" style={{ width: "30%" }} />
                                         <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
                                         />
                                     </div>
@@ -613,15 +614,16 @@ export const ListApprenant = () => {
 
                                         </div>
                                         <div
-                                            style={{
-                                                width: "29%",
-                                                height: "20vh",
-                                                background: `url(${pp})`,
-                                                backgroundRepeat: "no-repeat",
-                                                backgroundSize: "cover",
+                                            // style={{
+                                            //     width: "29%",
+                                            //     height: "20vh",
+                                            //     background: `url("data:image/png;base64, "${apprenant.avatar})`,
+                                            //     backgroundRepeat: "no-repeat",
+                                            //     backgroundSize: "cover",
 
-                                            }}
+                                            // }}
                                         >
+                                            <img src={"data:image/png;base64,"+apprenant.avatar}  alt=""/>
                                         </div>
                                     </div>
                                     <div style={{
