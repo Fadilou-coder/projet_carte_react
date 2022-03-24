@@ -1,10 +1,10 @@
 /* eslint-disable array-callback-return */
-import { Box, Button, Stack, OutlinedInput } from '@mui/material';
+import { Box, Button, OutlinedInput } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
 import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
-import VisiteStyle from "../visites/VisiteStyle";
+import AdminStyle from "./AdminStyle";
 import { useHistory } from "react-router-dom";
 import { FormControl, Typography } from '@material-ui/core';
 import {
@@ -194,10 +194,17 @@ export const Admin = () => {
     ]
 
 
-    const classes = VisiteStyle();
+    const classes = AdminStyle();
     return (
         <Layout>
-            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
+            <Typography variant='h5'
+                style={{
+                    marginBottom: "20px",
+                    borderLeft: "6px solid gray",
+                    color: "gray",
+                    paddingLeft: "20px",
+                    fontWeight: "bolder"
+                }}>
                 LISTE DES ADMINISTRATEURS
             </Typography>
 
@@ -206,28 +213,18 @@ export const Admin = () => {
                 <Box style={{ width: "100%" }}>
                     {/* Gestion de l'entete de la liste des Reservations */}
 
-                    <Box sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-
-                    }} spacing={2}
+                    <Box
+                        className={classes.filtre}
                     >
 
-                        <Stack
-                            direction="row"
-                            spacing={5}
-                            justifyContent="center"
-                            alignItems="center"
-                            marginBottom={4}
-
-                        >
+                        <div className={classes.champfiltre}>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
                                 flexWrap: 'wrap',
                                 color: "gray"
                             }}
+                                className={classes.champtextfiltre}
                             >
                                 <FilterAltOutlined></FilterAltOutlined>
                                 Filtre
@@ -236,8 +233,8 @@ export const Admin = () => {
 
                             <div>
                                 <Select
+                                    size='small'
                                     value={structure}
-                                    style={{ width: "12vw", fontWeight: "bolder", color: "#787486", borderRadius: "10px" }}
                                     onChange={(event) => chargerStructure(event.target.value)}
                                     className={classes.visiteur}
 
@@ -245,7 +242,6 @@ export const Admin = () => {
                                         <InputAdornment position="start">
                                             <Notes sx={{ color: "#44C3CF" }} ></Notes>
                                         </InputAdornment>}
-
                                 >
                                     <MenuItem value={""}> Tous </MenuItem>
                                     {
@@ -257,12 +253,13 @@ export const Admin = () => {
                                     }
                                 </Select>
                             </div>
-                            <div>
-                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                            <div className={classes.mysearch}>
+                                <FormControl className={classes.mytextsearch}>
                                     <OutlinedInput
+                                        size='small'
                                         id="email"
                                         placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486" }}
+                                        style={{ fontWeight: "bolder", color: "#787486", border: "none" }}
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
@@ -276,7 +273,7 @@ export const Admin = () => {
                                 </FormControl>
                             </div>
 
-                        </Stack>
+                        </div>
 
                         <Box textAlign="right">
                             <Button
@@ -285,7 +282,10 @@ export const Admin = () => {
                                 onClick={RedirectAddAdmin}
                                 sx={{
                                     backgroundColor: "#05888A",
-                                    fontFamily: "Arial", fontSize: "20px",
+                                    fontFamily: "Arial",
+                                    fontSize: "16px",
+                                    fontWeight:"bolder",
+                                    marginBottom: "10px",
                                     '&:hover': {
                                         backgroundColor: "#F48322",
                                         pointer: "cursor"

@@ -3,7 +3,6 @@ import TextField from '@mui/material/TextField';
 import React from 'react'
 import Layout from "../layout/Layout";
 import StructureStyle from "./StructureStyle";
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Swal from "sweetalert2";
 
@@ -68,7 +67,7 @@ export const Structure = () => {
                     })
                 }
             })
-        }else{
+        } else {
             Swal.fire({
                 title: 'Attention!!!',
                 text: "voulez vous vraiment débloquer cette structure!",
@@ -142,94 +141,96 @@ export const Structure = () => {
     const classes = StructureStyle();
     return (
         <Layout>
+            <Grid className={classes.structurePage}>
 
-            <Box sx={{}} className={classes.structurePage} >
-
-                <Box style={{ width: "100%" }}>
-                    {/* Gestion de l'entete de la liste des Reservations */}
-
+                <Grid className={classes.structureDiv}>
                     <Box sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                        alignItems: "center"
-
-                    }} spacing={2}
+                        '& .super-app-theme--header': {
+                            backgroundColor: '#44C3CF',
+                        },
+                    }}
+                        className={classes.contentDiv}
                     >
 
 
+                        <Typography
+                            variant='h5'
+                            style={{
+                                marginBottom: "20px",
+                                borderLeft: "6px solid gray",
+                                color: "gray",
+                                paddingLeft: "20px",
+                                fontWeight: "bolder"
+                            }}>
+                            LISTE DES STRUCTURES
+                        </Typography>
+
+
+                        <DataGrid
+
+                            sx={{ boxShadow: "30px", width: "100%", }}
+
+                            autoHeight
+                            pageSize={6}
+                            rowsPerPageOptions={[5, 10, 20]}
+                            components={{
+                                Pagination: CustomPagination,
+                            }}
+                            loading={loading}
+                            rows={structure}
+                            columns={columns}
+                        />
 
                     </Box>
+                    <Box
+                        className={classes.contentDiv}
 
-                    <Box sx={{
-                        boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
-                        '& .super-app-theme--header': {
-                            backgroundColor: '#44C3CF',
-
-                        },
-                    }}
-                        style={{
-                            display: "flex",
-
-                        }}
-                        className={classes.tableau}>
-
-                        <div style={{ width: "50%" }}>
-                            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                                LISTE DES STRUCTURES
-                            </Typography>
+                    >
+                        <Typography
+                            variant='h5'
+                            style={{
+                                marginBottom: "20px",
+                                borderLeft: "6px solid gray",
+                                color: "gray",
+                                paddingLeft: "20px",
+                                fontWeight: "bolder"
+                            }}>
+                            AJOUTER DES STRUCTURES
+                        </Typography>
 
 
-                            <DataGrid
+                        <Grid container wrap="nowrap" spacing={2}>
 
-                                sx={{ boxShadow: "30px", width: "100%", }}
+                            <Grid item xs>
+                            </Grid>
+                        </Grid>
+                        <TextField
+                            id="outlined-basic"
+                            label="Nom structure"
+                            variant="outlined"
+                            style={{ width: "100%", marginBottom: "20px" }}
+                            value={nomStructure.nomStructure}
+                            onChange={(event) => setNomStructure({
+                                ...nomStructure,
+                                nomStructure: event.target.value
+                            })}
+                        />
 
-                                autoHeight
-                                pageSize={6}
-                                rowsPerPageOptions={[5, 10, 20]}
-                                components={{
-                                    Pagination: CustomPagination,
-                                }}
-                                loading={loading}
-                                rows={structure}
-                                columns={columns}
-                            />
-                        </div>
+                        <div style={{}}>
+                            <Button
+                                disabled={nomStructure.nomStructure === ''}
+                                variant="contained"
+                                style={{ margin: 'auto', display: "flex", backgroundColor: '#44C3CF' }}
+                                onClick={AddStructure}>
+                                AJOUTER
+                            </Button>
 
-                        <div style={{ marginLeft: "100px", width: "40%", }}><div>
-
-                            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                                AJOUTER DES STRUCTURES
-                            </Typography>
-
-                        </div>
-                            <Paper className={classes.paper}>
-                                <Grid container wrap="nowrap" spacing={2}>
-
-                                    <Grid item xs>
-                                    </Grid>
-                                </Grid>
-                                <TextField
-                                    id="outlined-basic"
-                                    label="Nom structure"
-                                    variant="outlined"
-                                    style={{ width: "100%", height: "100%", }}
-                                    value={nomStructure.nomStructure}
-                                    onChange={(event) => setNomStructure({
-                                        ...nomStructure,
-                                        nomStructure: event.target.value
-                                    })}
-                                />
-                            </Paper>
-                            <div style={{ marginTop: "20px" }}>
-                                <Button disabled={nomStructure.nomStructure === ''} variant="contained" style={{ marginTop: "50px", margin: 'auto', display: "flex", backgroundColor: '#44C3CF' }} onClick={AddStructure}>AJOUTER</Button>
-
-                            </div>
                         </div>
 
                     </Box>
+                </Grid>
 
-                </Box>
-            </Box>
+            </Grid>
 
         </Layout>
     )

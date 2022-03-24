@@ -1,18 +1,57 @@
 
 import {makeStyles} from "@material-ui/core";
- import themeGeneral from '../theme';
- import themeGenerale from '../theme';
+import themeGeneral from '../theme';
 
 const VisiteStyle = makeStyles(theme => ({
 
     visiteur: {
         border: "2px solid #44C3CF",
         borderRadius: "10px",
-        width: "12vw",
+        width: "15vw",
         borderColor: "#44C3CF",
-        '&:focus':{
+        '&:focus': {
             borderColor: "#44C3CF",
-        }
+        },
+        [theme.breakpoints.down('sm')]: {
+            width: "48%"
+        },
+    },
+    champfiltre: {
+        display: "flex",
+        justifyContent: "space-around",
+        width: "60%",
+        [theme.breakpoints.down('sm')]: {
+            width: "100%",
+            flexWrap: "wrap"
+        },
+
+    },
+    champtextfiltre: {
+        [theme.breakpoints.down('sm')]: {
+            display: "none !important",
+        },
+    },
+
+    ajoutScan: {
+        width: "35%",
+        display: "flex",
+        justifyContent: "end",
+        [theme.breakpoints.down('sm')]: {
+            width: "100%",
+            marginTop: "20px",
+            justifyContent: "space-between",
+
+        },
+    },
+    filtre: {
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        [theme.breakpoints.down('sm')]: {
+            // backgroundColor: 'green',
+            display: "block",
+
+        },
     },
     visitePage: {
         width: "100%"
@@ -20,38 +59,44 @@ const VisiteStyle = makeStyles(theme => ({
     tableau: {
         boxShadow: "2000px"
     },
-    textTypo:{
+    textTypo: {
         fontFamily: "Arial",
         color: themeGeneral.palette.primary.black,
     },
-    labelText:{
-        fontWeight:"normal",
+    labelText: {
+        fontWeight: "normal",
         fontFamily: "Arial",
         color: themeGeneral.palette.primary.black,
         fontSize: "20px",
         marginBottom: "2px"
     },
-    listIsload:{
+    listIsload: {
         width: "40vw",
-        height:"12vh",
-        display:"block",
-        margin:"0% auto"
+        height: "50vh",
+        display: "block",
+        margin: "0% auto"
     },
     formError: {
         color: 'red'
     },
     mysearch: {
-        [theme.breakpoints.down('xs')] : {
-            display:"none",
+        [theme.breakpoints.down('sm')]: {
+            width: "100%",
+            marginTop: "20px"
         },
         border: "2px solid #44C3CF",
         color: "#787486",
         width: "12vw",
         borderRadius: "10px",
         borderColor: "#44C3CF",
-        '&:focus':{
+        '&:focus': {
             borderColor: "#44C3CF",
         }
+    },
+    mytextsearch: {
+        [theme.breakpoints.down('sm')]: {
+            width: "100%"
+        },
     },
     table: {
         width: "80%",
@@ -63,7 +108,7 @@ const VisiteStyle = makeStyles(theme => ({
             fontSize: "20px",
             textAlign: "inherit"
         },
-        "& .MuiTableCell-alignCenter":{
+        "& .MuiTableCell-alignCenter": {
             textAlign: "center",
             width: "55%",
             fontSize: "20px"
@@ -73,14 +118,7 @@ const VisiteStyle = makeStyles(theme => ({
             width: "10%",
             fontSize: "20px"
         }
-    },
-
-    list:{
-        display:"block",
-    },
-    listCard:{
-        margin:themeGenerale.spacing(1)
-    },
+    }
 
 }));
 
