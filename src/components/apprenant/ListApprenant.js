@@ -257,6 +257,7 @@ export const ListApprenant = () => {
                             <div>
                                 <Select
                                     size='small'
+                                    value={promo}
                                     onChange={(event) => {
                                         setPromo(event.target.value)
                                         chargerApprenant(referentiel, event.target.value)
@@ -274,7 +275,7 @@ export const ListApprenant = () => {
                                     
                                     {
                                         promos.map((element, i) => {
-                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
+                                            return (<MenuItem value={element.id} > {element.libelle} </MenuItem>)
                                         })
                                     }
                                 </Select>
