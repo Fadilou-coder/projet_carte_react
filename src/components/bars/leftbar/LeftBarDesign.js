@@ -1,5 +1,5 @@
 import React from 'react'
-import sonatelLogo from "../../../assets/images/sonatelLogo.png"
+import sonatelLogo from "../../../assets/images/logo_ODC.png"
 import { Avatar, ListItem, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import { LeftBarStyle } from "./LeftBarStyle";
 import { LeftBarData } from './LeftBarData';

@@ -31,7 +31,8 @@ export const LeftBarStyle = makeStyles(theme => ({
     },
     logoStyle: {
         width: "100%",
-        height: theme.spacing(10)
+        height:"auto",
+        margin:"40px 0 5px 0"
     },
     active: {
         backgroundColor: "#D3FFFF",

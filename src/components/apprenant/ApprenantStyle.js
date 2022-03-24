@@ -50,7 +50,8 @@ const ApprenantStyle = makeStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: "white"
+        backgroundColor: "white",
+        marginTop: "20px"
     },
 
 
