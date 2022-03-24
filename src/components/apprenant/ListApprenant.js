@@ -25,7 +25,7 @@ import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ApprenantStyle";
 import pp from "../../assets/images/ppuser.png";
-import odc from "../../assets/images/LOGO_ODC.png";
+import odc from "../../assets/images/logo_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
@@ -466,7 +466,7 @@ export const ListApprenant = () => {
                             >
                                 <Grid ref={componentRef}>
                                     <div className={classes1.avatarApprenant} >
-                                        <img src={odc} alt="" style={{ width: "20%" }} />
+                                        <img src={odc} alt="" style={{ width: "30%" }} />
                                         <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
                                         />
                                     </div>
