@@ -41,4 +41,16 @@ export const ListApprenantsByReferentiel = (id) => {
     return axios.get(API_URL + "referentiel/"+id+"/apprenants", { headers: authHeader() });
 }
 
+export const ListApprenantsByPromo = (id) => {
+    return axios.get(API_URL + "promo/"+id+"/apprenants", { headers: authHeader() });
+}
+
+export const ListPromos = () => {
+    return axios.get(API_URL + "promos", { headers: authHeader() });
+}
+
+export const ListApprenantsByReferentielByPromo = (idRef, idPr) => {
+    return axios.get(API_URL + "referentiel/"+idRef+"/promo/"+idPr+"/apprenants", { headers: authHeader() });
+}
+
 

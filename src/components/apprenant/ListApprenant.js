@@ -31,10 +31,9 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
-import { ListAllApprenant, putApprenant, ListApprenantsByReferentiel, listAllReferentiels } from './ApprenantService';
+import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo } from './ApprenantService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
-
 
 var QRCode = require('qrcode.react');
 
@@ -43,6 +42,7 @@ export const ListApprenant = () => {
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
+    const [loading, setLoading] = React.useState(true);
 
     var componentRef = React.createRef();
 
@@ -52,6 +52,17 @@ export const ListApprenant = () => {
 
     // Initialiser Liste Reeferentiel
     const [referentiels, setReferentiels] = React.useState([]);
+
+    // Initialiser Liste Promos 
+    const [promos, setPromos] = React.useState([]);
+
+
+    const [referentiel, setReferentiel] = React.useState("");
+
+    // Initialiser Liste Promos 
+    const [promo, setPromo] = React.useState("");
+
+
     // Show detail Apprenant
     const [apprenant, setApprenant] = React.useState({
         id: 0,
@@ -68,34 +79,41 @@ export const ListApprenant = () => {
 
 
     React.useEffect(() => {
-        ListAllApprenant().then(res => {
-            setApprenants(res.data);
-            setApprenant(res.data[0]);
-        });
-
         listAllReferentiels().then(res => {
             setReferentiels(res.data);
-        })
+        });
+
+        ListPromos().then(res => {
+            setPromos(res.data);
+            setPromo(res.data[res.data.length - 1].id);
+            ListApprenantsByPromo(res.data[res.data.length - 1].id).then(res => {
+                setApprenants(res.data)
+                setApprenant(res.data[0]);
+                setLoading(false);
+            })
+        });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
 
-    function chargerReferentiel(value) {
-        if (value === "") {
-            ListAllApprenant().then(res => {
-                setApprenants(res.data);
-                // setApprenant(res.data[0]);
+
+    function chargerApprenant(idRef, idPr) {
+        setLoading(true);
+        if (idRef === "") {
+            ListApprenantsByPromo(idPr).then(res => {
+                setApprenants(res.data)
+                setApprenant(res.data[0]);
+                setLoading(false);
             })
         } else {
-            ListApprenantsByReferentiel(value).then(res => {
-                // console.log(res.data)
-                setApprenants(res.data)
+            ListApprenantsByReferentielByPromo(idRef, idPr).then(res => {
+                setApprenants(res.data);
+                setApprenant(res.data[0]);
+                setLoading(false);
             })
         }
-    };
-
-
+    }
 
 
     const classes1 = ListApprenantStyle();
@@ -189,15 +207,7 @@ export const ListApprenant = () => {
         // exportComponentAsJPEG(componentRef)
         const canvas = document.getElementById("qr-gen");
 
-        // canvas.toBlob(function(blob) {
-        //     const formData = new FormData();
-        //     formData.append('file', blob, 'qrcode.png');
-        //     formData.append('prenom', apprenant.prenom);
-        //     formData.append('nom', apprenant.nom);
-        //     formData.append('email', 'fadilousy@outlook.com');
 
-        //     sendCarte(formData);
-        //   });
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -213,56 +223,75 @@ export const ListApprenant = () => {
 
     return (
         <Layout>
-            <Typography variant='h4' style={{ marginBottom: "20px", borderLeft: "6px solid gray", color: "gray", paddingLeft: "20px" }}>
-                SONATEL ACADEMY : LISTE DES APPRENANTS
+            <Typography variant='h5'
+             style={{
+                  marginBottom: "20px", 
+                  borderLeft: "6px solid gray",
+                   color: "gray", 
+                   paddingLeft: "20px",
+                   fontWeight:"bolder" }}>
+                LISTE DES APPRENANTS
             </Typography>
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
                     {/* Gestion de l'entete de la liste des Reservations */}
 
-                    <Box
-                        marginBottom={1}
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between"
+                    <div className={classes1.gridfiltre}>
 
+                        <div className={classes1.filtre}>
+                            <div
+                                className={classes1.champtextfiltre}
+                                style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    flexWrap: 'wrap',
+                                    color: "gray"
+                                }}
 
-                        }} spacing={2}
-                    >
-
-                        <Stack
-                            direction="row"
-                            spacing={5}
-                            justifyContent="center"
-                            alignItems="center"
-
-
-                        >
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
                             >
                                 <FilterAltOutlined></FilterAltOutlined>
                                 Filtre
                             </div>
 
+                            <div>
+                                <Select
+                                    size='small'
+                                    onChange={(event) => {
+                                        setPromo(event.target.value)
+                                        chargerApprenant(referentiel, event.target.value)
+                                    }}
+                                    style={{
+                                        borderRadius: "30px",
+                                    }}
+                                    className={classes1.visiteur}
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <Notes sx={{ color: "#44C3CF" }} ></Notes>
+                                        </InputAdornment>}
+
+                                >
+                                    
+                                    {
+                                        promos.map((element, i) => {
+                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
+                                        })
+                                    }
+                                </Select>
+                            </div>
 
                             <div>
                                 <Select
                                     size='small'
                                     // value={referentiels[0].libelle}
-                                    onChange={(event) => chargerReferentiel(event.target.value)}
-                                    style={{
-                                        width: "20em",
-                                        fontWeight: "bolder",
-                                        color: "#787486",
-                                        borderRadius: "15px",
+                                    onChange={(event) => {
+                                        setReferentiel(event.target.value)
+                                        chargerApprenant(event.target.value, promo)
                                     }}
-                                    className={classes.visiteur}
+                                    style={{
+                                        borderRadius: "30px",
+                                    }}
+                                    className={classes1.visiteur}
 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -273,20 +302,24 @@ export const ListApprenant = () => {
                                     <MenuItem value={""}> Tous </MenuItem>
                                     {
                                         referentiels.map((element, i) => {
-                                            return (<MenuItem value={""+element.id}> {element.libelle} </MenuItem>)
+                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
                                         })
                                     }
                                 </Select>
                             </div>
+
                             <div>
-                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                <FormControl style={{ width: "100%", marginBottom:"20px" }}>
                                     <OutlinedInput
+
                                         id="email"
                                         placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        style={{ fontWeight: "bolder", color: "#787486" }}
+                                        size="small"
+                                        className={classes1.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined></SearchOutlined>
+                                                <SearchOutlined sx={{ color: "#44C3CF" }}></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -295,7 +328,7 @@ export const ListApprenant = () => {
                                     />
                                 </FormControl>
                             </div>
-                        </Stack>
+                        </div>
                         <Box textAlign="right">
                             <Button
                                 variant="contained"
@@ -317,7 +350,7 @@ export const ListApprenant = () => {
                             </Button>
                         </Box>
 
-                    </Box>
+                    </div>
 
                     <Grid className={classes1.table} >
 
@@ -383,14 +416,15 @@ export const ListApprenant = () => {
                                         }
                                     }}
                                     components={{
-                                        Pagination: CustomPagination,
+                                        Pagination: CustomPagination
                                     }}
+                                    loading={loading}
                                     rows={
                                         apprenants.filter((val) => {
-                                            if(search === ""){
+                                            if (search === "") {
                                                 return val;
                                             } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
-                                                || val.code.toLowerCase().includes(search.toLowerCase())){
+                                                || val.code.toLowerCase().includes(search.toLowerCase())) {
                                                 return val;
                                             }
                                         }).map((row) => {
@@ -403,6 +437,7 @@ export const ListApprenant = () => {
 
                                     disableVirtualization
                                 />
+                                
                             </div>
 
                         </Grid>

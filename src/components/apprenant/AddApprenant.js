@@ -15,7 +15,7 @@ import Stack from '@mui/material/Stack';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Avatar from '@mui/material/Avatar';
 import Layout from "../layout/Layout";
-import { listAllReferentiels, saveApprenant, sendCarte } from "./ApprenantService";
+import { listAllReferentiels, saveApprenant, sendCarte, ListPromos } from "./ApprenantService";
 import Swal from "sweetalert2";
 
 import logosonatel from "../../assets/images/logoSA.png";
@@ -25,6 +25,8 @@ export const AddApprenant = () => {
     var QRCode = require('qrcode.react');
 
     const [referentiel, setReferentiel] = React.useState([]);
+    const [promos, setPromos] = React.useState([]);
+
 
 
     const classes = ApprenantStyle();
@@ -62,7 +64,12 @@ export const AddApprenant = () => {
     React.useEffect(() => {
         listAllReferentiels().then((res)=>{
             setReferentiel(res.data)
-        })
+        });
+
+        ListPromos().then((res)=>{
+            setPromos(res.data);
+        });
+
     }, []);
 
     function formatDate(date) {
@@ -450,7 +457,7 @@ export const AddApprenant = () => {
                                             name="promo"
                                         >
                                             {
-                                                referentiel.map((row) =>
+                                                promos.map((row) =>
                                                     <MenuItem key={row.id}
                                                         value={row.libelle}
                                                     >{row.libelle}</MenuItem>
