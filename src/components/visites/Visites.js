@@ -80,10 +80,12 @@ export const Visites = () => {
 
     function buttonSortir(donnees){
         if (donnees.apprenant != null){
+            setLoading(true);
             SortieApp(donnees).then(() => {
                 chargerVisites(date, visiteur)
             })
         }else {
+            setLoading(true);
             SortieVisiteur(donnees).then(() => {
                 chargerVisites(date, visiteur)
             })

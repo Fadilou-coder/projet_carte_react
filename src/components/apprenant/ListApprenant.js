@@ -35,7 +35,6 @@ import { ListAllApprenant, putApprenant, ListApprenantsByReferentiel, listAllRef
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
 
-
 var QRCode = require('qrcode.react');
 
 
