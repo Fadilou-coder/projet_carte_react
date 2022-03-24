@@ -36,7 +36,7 @@ export const Visites = () => {
 
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
-    const [formErrors, setFormErrors] = useState( {});
+    const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = React.useState(true);
 
 
@@ -78,13 +78,13 @@ export const Visites = () => {
         )
     }
 
-    function buttonSortir(donnees){
-        if (donnees.apprenant != null){
+    function buttonSortir(donnees) {
+        if (donnees.apprenant != null) {
             setLoading(true);
             SortieApp(donnees).then(() => {
                 chargerVisites(date, visiteur)
             })
-        }else {
+        } else {
             setLoading(true);
             SortieVisiteur(donnees).then(() => {
                 chargerVisites(date, visiteur)
@@ -153,7 +153,15 @@ export const Visites = () => {
             renderCell: (cellvalue) => {
                 if (cellvalue.row.dateSortie == null) {
                     return <Button
-                        sx={{ backgroundColor: "#BC6602", color: "white" }}
+                        sx={{
+                            backgroundColor: '#FF6600',
+                            color: "#000000",
+                            fontWeight: "bolder",
+                            '&:hover': {
+                                backgroundColor: '#000000',
+                                color: "#FFFFFF"
+                            }
+                        }}
                         onClick={() => buttonSortir(cellvalue.row)}
                     >
 
@@ -246,18 +254,18 @@ export const Visites = () => {
             setLoading(true);
             if (visiteur === "") {
                 ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                  setLoading(false);
+                    setVisites(res.data);
+                    setLoading(false);
                 })
             } else if (visiteur === "apprenant") {
                 ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                  setLoading(false);
+                    setVisites(res.data);
+                    setLoading(false);
                 })
             } else if (visiteur === "visiteur") {
                 ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                  setLoading(false);
+                    setVisites(res.data);
+                    setLoading(false);
                 })
             }
             if (res.status === 200) {
@@ -340,8 +348,8 @@ export const Visites = () => {
                     <Typography variant='h5'
                         style={{
                             marginBottom: "20px",
-                            borderLeft: "6px solid gray",
-                            color: "gray",
+                            borderLeft: "6px solid #000000",
+                            color: "#000000",
                             paddingLeft: "20px",
                             fontWeight: "bolder"
                         }}>
@@ -391,8 +399,8 @@ export const Visites = () => {
                                                             size="small"
                                                             {...params}
                                                             sx={{
-                                                                svg: { color: "#44C3CF" },
-                                                                input: { color: "#787486", fontWeight: "bold" },
+                                                                svg: { color: "#000000" },
+                                                                input: { color: "#000000", fontWeight: "bold" },
                                                                 label: { color: "#44C3CF" },
                                                                 width: "100%",
                                                             }}
@@ -415,7 +423,7 @@ export const Visites = () => {
 
                                             startAdornment={
                                                 <InputAdornment position="start">
-                                                    <PersonOutline  ></PersonOutline>
+                                                    <PersonOutline sx={{ color: "#000000" }}  ></PersonOutline>
                                                 </InputAdornment>}
 
                                         >
@@ -432,11 +440,17 @@ export const Visites = () => {
                                                 size='small'
                                                 id="search"
                                                 placeholder="rechercher"
-                                                style={{ fontWeight: "bolder", color: "#787486" }}
+                                                style={{
+                                                    fontWeight: "bolder",
+                                                    color: "#000000",
+                                                    '&:focus': {
+                                                        borderColor: "#FF6600",
+                                                    },
+                                                }}
 
                                                 startAdornment={
                                                     <InputAdornment position="start">
-                                                        <SearchOutlined></SearchOutlined>
+                                                        <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
                                                     </InputAdornment>
                                                 }
                                                 onChange={(event) => {
@@ -455,14 +469,17 @@ export const Visites = () => {
                                         endIcon={<AddCircleOutlined />}
                                         onClick={handleClickOpen}
                                         sx={{
-                                            backgroundColor: "#05888A",
+                                            backgroundColor: "#FF6600",
                                             fontFamily: "Arial",
                                             fontSize: "16px",
+                                            color: "#000000",
                                             marginRight: "10px",
                                             fontWeight: "bold",
                                             '&:hover': {
-                                                backgroundColor: "#F48322",
-                                                pointer: "cursor"
+                                                backgroundColor: "#000000",
+                                                pointer: "cursor",
+                                                color: "white"
+
                                             }
                                         }}
                                     >
@@ -475,11 +492,13 @@ export const Visites = () => {
                                             exportPDF()
                                         }}
                                         sx={{
-                                            backgroundColor: "#138A8A",
+                                            backgroundColor: "#FF6600",
                                             fontSize: "16px",
+                                            color: "#000000",
                                             fontWeight: "bold",
                                             '&:hover': {
-                                                backgroundColor: '#F48322',
+                                                backgroundColor: '#000000',
+                                                color: "white"
                                             }
                                         }}
                                     >
@@ -497,12 +516,15 @@ export const Visites = () => {
                             <Box sx={{
                                 boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                                 '& .super-app-theme--header': {
-                                    backgroundColor: '#44C3CF'
+                                    backgroundColor: '#696969',
+                                    color: "#FFFFFF",
+                                    fontWeight: "bold",
+                                    textTransform: "uppercase"
                                 },
                             }} className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
-                                    <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
+                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toDateString()}</h2>
                                     <DataGrid
                                         sx={{ boxShadow: "30px", width: "100%" }}
 

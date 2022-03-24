@@ -16,13 +16,13 @@ const LoginStyle = makeStyles(({
         margin: 0,
         width: "100vw",
         height: "100vh",
-        backgroundColor: "#138A8A",
-        backgroundImage: `url(${bg})`,
+        backgroundColor: "#FF6600",
+        // backgroundImage: `url(${bg})`,
         backgroundSize: 'cover',
         display: "block"
     },
     pageGreen: {
-        backgroundColor: "#138A8A",
+        backgroundColor: "#FF6600",
         width: "100%",
         height: "100%",
         opacity: "81%",
