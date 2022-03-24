@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
 import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Stack, Button, Pagination, PaginationItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
@@ -27,8 +26,8 @@ import {
 import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
-import {encode as base64_encode} from 'base-64';
 import { SearchOutlined } from '@mui/icons-material';
+
 
 var QRCode = require('qrcode.react')
 
@@ -37,6 +36,7 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState( {});
+    //const [visit, setVisit] = React.useState([]);
 
 
 
@@ -490,10 +490,8 @@ export const Visites = () => {
                                     visites.filter((val) => {
                                         if(search === ""){
                                             return val;
-                                        } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.visiteur?.cni.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.apprenant?.cni.toLowerCase().includes(search.toLowerCase())){
-
+                                        } else if (val.visiteur.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.visiteur.cni.toLowerCase().includes(search.toLowerCase())){
                                             return val;
                                         }
                                     }).map((row) => {
@@ -515,7 +513,7 @@ export const Visites = () => {
             <QRCode
                 hidden
                 id="qr-gen"
-                value={base64_encode('{"cni":"' + values.cni + '", "date": "' + dateTime({date: new Date()}) + '"}')}
+                value={'{cni:' + values.cni + ', temps: ' + dateTime({date: new Date()}) + '}'}
                 size={400}
                 level={"H"}
                 includeMargin={true}
