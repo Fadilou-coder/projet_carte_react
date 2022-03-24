@@ -389,6 +389,7 @@ export const ListApprenant = () => {
                                             if (apprenant.id !== params.row.id) {
                                                 if (isSelection === false) {
                                                     setApprenant(params.row);
+                                                    console.log(apprenant);
                                                 } else {
                                                     Swal.fire({
                                                         title: 'Attention?',
@@ -613,15 +614,16 @@ export const ListApprenant = () => {
 
                                         </div>
                                         <div
-                                            style={{
-                                                width: "29%",
-                                                height: "20vh",
-                                                background: `url(${pp})`,
-                                                backgroundRepeat: "no-repeat",
-                                                backgroundSize: "cover",
+                                            // style={{
+                                            //     width: "29%",
+                                            //     height: "20vh",
+                                            //     background: `url("data:image/png;base64, "${apprenant.avatar})`,
+                                            //     backgroundRepeat: "no-repeat",
+                                            //     backgroundSize: "cover",
 
-                                            }}
+                                            // }}
                                         >
+                                            <img src={"data:image/png;base64,"+apprenant.avatar}  alt=""/>
                                         </div>
                                     </div>
                                     <div style={{
