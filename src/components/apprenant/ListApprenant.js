@@ -79,19 +79,18 @@ export const ListApprenant = () => {
 
 
     React.useEffect(() => {
-        ListAllApprenant().then(res => {
-            setApprenants(res.data);
-            setApprenant(res.data[0]);
-            setLoading(false);
-        });
-
         listAllReferentiels().then(res => {
             setReferentiels(res.data);
         });
 
         ListPromos().then(res => {
             setPromos(res.data);
-            setPromo(res.data[res.data.length - 1].id)
+            setPromo(res.data[res.data.length - 1].id);
+            ListApprenantsByPromo(res.data[res.data.length - 1].id).then(res => {
+                setApprenants(res.data)
+                setApprenant(res.data[0]);
+                setLoading(false);
+            })
         });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -99,16 +98,19 @@ export const ListApprenant = () => {
 
 
 
-    function chargerApprenant() {
-        // console.log(promo)
-        if (referentiel === "") {
-            ListApprenantsByPromo(promo).then(res => {
-                // console.log(res.data)
+    function chargerApprenant(idRef, idPr) {
+        setLoading(true);
+        if (idRef === "") {
+            ListApprenantsByPromo(idPr).then(res => {
                 setApprenants(res.data)
+                setApprenant(res.data[0]);
+                setLoading(false);
             })
         } else {
-            ListApprenantsByReferentielByPromo(referentiel, promo).then(res => {
-                setApprenants(res.data)
+            ListApprenantsByReferentielByPromo(idRef, idPr).then(res => {
+                setApprenants(res.data);
+                setApprenant(res.data[0]);
+                setLoading(false);
             })
         }
     }
@@ -257,19 +259,19 @@ export const ListApprenant = () => {
                                     size='small'
                                     onChange={(event) => {
                                         setPromo(event.target.value)
-                                        chargerApprenant()
+                                        chargerApprenant(referentiel, event.target.value)
                                     }}
                                     style={{
                                         borderRadius: "30px",
                                     }}
                                     className={classes1.visiteur}
-
                                     startAdornment={
                                         <InputAdornment position="start">
                                             <Notes sx={{ color: "#44C3CF" }} ></Notes>
                                         </InputAdornment>}
 
                                 >
+                                    
                                     {
                                         promos.map((element, i) => {
                                             return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
@@ -284,7 +286,7 @@ export const ListApprenant = () => {
                                     // value={referentiels[0].libelle}
                                     onChange={(event) => {
                                         setReferentiel(event.target.value)
-                                        chargerApprenant()
+                                        chargerApprenant(event.target.value, promo)
                                     }}
                                     style={{
                                         borderRadius: "30px",
@@ -300,7 +302,7 @@ export const ListApprenant = () => {
                                     <MenuItem value={""}> Tous </MenuItem>
                                     {
                                         referentiels.map((element, i) => {
-                                            return (<MenuItem value={"" + element.id}> {element.libelle} </MenuItem>)
+                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
                                         })
                                     }
                                 </Select>
