@@ -25,7 +25,7 @@ import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ApprenantStyle";
 import pp from "../../assets/images/ppuser.png";
-import odc from "../../assets/images/odc.jpeg";
+import odc from "../../assets/images/LOGO_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
