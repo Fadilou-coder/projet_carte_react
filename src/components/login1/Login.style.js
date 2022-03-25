@@ -1,5 +1,5 @@
 import {makeStyles} from "@material-ui/core";
-import bg from "../../assets/images/bg.jpeg";
+// import bg from "../../assets/images/bg.jpeg";
 // import themeGeneral from '../theme';
 
 const LoginStyle = makeStyles(({
@@ -17,15 +17,15 @@ const LoginStyle = makeStyles(({
         width: "100vw",
         height: "100vh",
         backgroundColor: "#FF6600",
-        backgroundImage: `url("https://www.erenumerique.fr/wp-content/uploads/2018/07/fibre-orange.jpg")`,
+        backgroundImage: `url("https://media-exp1.licdn.com/dms/image/C4E1BAQHnBNo5v2Lc0A/company-background_10000/0/1621248856863?e=2147483647&v=beta&t=2zn8JhBp2InFzZWzfEufY_4PkL8zCE2jaVnS3bJf5Qo")`,
         backgroundSize: 'cover',
         display: "block"
     },
     pageGreen: {
-        backgroundColor: "#FF6600",
+        backgroundColor: "#000000",
         width: "100%",
         height: "100%",
-        opacity: "40%",
+        opacity: "30%",
         position: " absolute",
         zIndex: "0 !important",
 

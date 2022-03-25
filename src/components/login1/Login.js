@@ -1,7 +1,7 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import LoginStyle from './Login.style';
 import Grid from '@mui/material/Grid';
-import logo from "../../assets/images/logoODC.png";
+import logo from "../../assets/images/login.jpeg";
 import { InputAdornment, OutlinedInput, Stack, IconButton, Button } from '@mui/material';
 import { VisibilityOff } from '@material-ui/icons';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -96,17 +96,18 @@ const Login = (props) => {
     <>
       <Grid container className={classes.loginpage}>
 
-        <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2 }} className={classes.loginContent}>
+        <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2, marginTop: "12em", opacity: "80%"}} className={classes.loginContent}>
 
-          <h1 className={classes.titre}>
+          {/* <h1 className={classes.titre}>
             PLATEFORME DE POINTAGE DES APPRENANTS
-          </h1>
+          </h1> */}
           <Box
             sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, 1fr)', }}
             className={classes.contenu} boxShadow = {3}
           >
             <Box className={classes.logo} >
-              <img style={{ width: "70%" }} src={logo} alt="" />
+             <img  style={{ width: "80%" }} src={logo} alt="" />
+              {/* <Box sx={12}><img style={{ width: "100%" }} src="https://www.orange.com/sites/orangecom/files/styles/crop_4_3_medium/public/2021-08/Orange%20jobs%20HP.png?h=541b8180&itok=t0pYzqqY" alt="" /></Box> */}
             </Box>
 
             <Stack alignItems={"center"} spacing={2}>
