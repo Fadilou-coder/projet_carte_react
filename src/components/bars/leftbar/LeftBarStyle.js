@@ -15,7 +15,7 @@ export const LeftBarStyle = makeStyles(theme => ({
         color: themeGeneral.palette.primary.white,
     },
     logoDiv: {
-        borderBottom: '1px solid #138A8A',
+        borderBottom: '1px solid ##000000',
         padding: "45px 5px 30px 5px",
         "& .MuiAvatar-img": {
             color: 'transparent',
@@ -32,19 +32,22 @@ export const LeftBarStyle = makeStyles(theme => ({
     logoStyle: {
         width: "100%",
         height:"auto",
-        margin:"40px 0 5px 0"
+        marginTop:"40px",
+        display:"flex",
+        justifyContent:"center",
+        alignItems:"center"
     },
     active: {
-        backgroundColor: "#D3FFFF",
-        borderBottom: '1px solid #138A8A',
-        borderRight: '1px solid #138A8A',
-        borderLeft: '1px solid #138A8A',
+        backgroundColor: "#FF6600",
+        borderBottom: '1px solid #000000',
+        borderRight: '1px solid #000000',
+        borderLeft: '1px solid #000000',
 
 
         "& .MuiTypography-displayBlock ": {
             display: 'block',
             fontSize: "20px",
-            color: "#138A8A"
+            color: "#000000"
         },    }
     ,
     notActive: {
@@ -52,11 +55,11 @@ export const LeftBarStyle = makeStyles(theme => ({
         "& .MuiTypography-displayBlock ": {
             display: 'block',
             fontSize: "20px",
-            color: "#696969"
+            color: "#000000"
         }
     },
     linkIcon: {
-        color: '#138A8A'
+        color: '#000000'
     }
 
 }))

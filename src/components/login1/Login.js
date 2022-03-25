@@ -1,7 +1,7 @@
 import { Box, FormControl, Typography } from '@material-ui/core';
 import LoginStyle from './Login.style';
 import Grid from '@mui/material/Grid';
-import logo from "../../assets/images/logoODC.png";
+import logo from "../../assets/images/logo_ODC.png";
 import { InputAdornment, OutlinedInput, Stack, IconButton, Button } from '@mui/material';
 import { VisibilityOff } from '@material-ui/icons';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
@@ -103,7 +103,7 @@ const Login = (props) => {
           </h1>
           <Box
             sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, 1fr)', }}
-            className={classes.contenu} boxShadow = {3}
+            className={classes.contenu} 
           >
             <Box className={classes.logo} >
               <img style={{ width: "70%" }} src={logo} alt="" />
