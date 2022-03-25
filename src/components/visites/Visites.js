@@ -203,7 +203,8 @@ export const Visites = () => {
         let content = {
             startY: 50,
             head: headers,
-            body: dat
+            body: dat,
+            headStyles: { fillColor: [0, 0, 0] },
 
         }
 
