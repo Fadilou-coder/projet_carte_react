@@ -16,6 +16,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
+import imgData from "../../assets/images/filigrane_logo.png"
+
 import dateTime from 'date-time';
 import {
     DataGrid,
@@ -66,8 +68,9 @@ export const Visites = () => {
 
         return (
             <Pagination
-                color="primary"
-                variant="outlined"
+                color="standard"
+
+                iant="outlined"
                 shape="rounded"
                 page={page + 1}
                 count={pageCount}
@@ -177,6 +180,21 @@ export const Visites = () => {
         },
 
     ]
+
+
+    function addWaterMark(doc) {
+        var totalPages = doc.internal.getNumberOfPages();
+
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            doc.saveGraphicsState();
+            doc.setGState(new doc.GState({opacity: 0.2}));
+            doc.addImage(imgData, 'PNG', 150, 100, 500, 400);
+            doc.restoreGraphicsState();
+        }
+
+        return doc;
+    }
     const exportPDF = () => {
 
         const unit = "pt"
@@ -184,7 +202,7 @@ export const Visites = () => {
         const orientation = "landscape" // portrait or landscape
 
         const marginLeft = 40
-        const doc = new jsPDF(orientation, unit, size)
+        var doc = new jsPDF(orientation, unit, size)
 
         doc.setFontSize(15)
 
@@ -210,6 +228,7 @@ export const Visites = () => {
 
         doc.text(title, marginLeft, 40)
         doc.autoTable(content)
+        doc = addWaterMark(doc);
         doc.save("report.pdf")
     }
     const classes = VisiteStyle()
