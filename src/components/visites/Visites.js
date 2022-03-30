@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
 import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
@@ -29,6 +28,7 @@ import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { encode as base64_encode } from 'base-64';
 import { SearchOutlined } from '@mui/icons-material';
+
 
 var QRCode = require('qrcode.react')
 
@@ -209,7 +209,7 @@ export const Visites = () => {
 
         doc.text(title, marginLeft, 40)
         doc.autoTable(content)
-        doc.save("report.pdf")
+        doc.save("Rapport du " + date.toDateString())
     }
     const classes = VisiteStyle()
     const [open, setOpen] = React.useState(false)
