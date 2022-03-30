@@ -17,9 +17,9 @@ export const TopbarStyle = makeStyles(theme => ({
         background:"none"
     },
     topbarAdmin: {
-        backgroundColor:themeGeneral.palette.primary.light,
         boxShadow:"none !important",
         color:'black',
+        backgroundColor:"#000000",
         backgroundRepeat: "no-repeat",
         backgroundSize:"cover",
         top: 0,
