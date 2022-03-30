@@ -1,6 +1,7 @@
 
 import {makeStyles} from "@material-ui/core";
  import themeGeneral from '../theme';
+ import themeGenerale from '../theme';
 
 const VisiteStyle = makeStyles(theme => ({
 
@@ -32,7 +33,7 @@ const VisiteStyle = makeStyles(theme => ({
     },
     listIsload:{
         width: "40vw",
-        height:"50vh",
+        height:"12vh",
         display:"block",
         margin:"0% auto"
     },
@@ -72,6 +73,13 @@ const VisiteStyle = makeStyles(theme => ({
             width: "10%",
             fontSize: "20px"
         }
+    },
+
+    list:{
+        display:"block",
+    },
+    listCard:{
+        margin:themeGenerale.spacing(1)
     },
 
 }));

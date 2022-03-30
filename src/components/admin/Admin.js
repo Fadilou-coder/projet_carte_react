@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import {Box, Button, Stack, OutlinedInput} from '@mui/material';
+import { Box, Button, Stack, OutlinedInput } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
@@ -28,16 +28,16 @@ export const Admin = () => {
 
     const [admins, setAdmin] = React.useState([]);
     const [search, setSearch] = React.useState('');
+    const [isLoaded, setIsLoaded] = React.useState(true);
 
     React.useEffect(() => {
-        ListAllAdmin().then(res => {
-            setAdmin(res.data);
-        })
-
         ListAllStructure().then(res => {
             setStructure(res.data)
+            ListAllAdmin().then(res => {
+                setAdmin(res.data);
+                setIsLoaded(false);
+            })
         })
-
     }, []);
 
     let history = useHistory();
@@ -47,13 +47,16 @@ export const Admin = () => {
     }
 
     const chargerStructure = (value) => {
+        setIsLoaded(true);
         if (value === "") {
-            ListAllStructure().then(res => {
-                setStructure(res.data);
+            ListAllAdmin().then(res => {
+                setAdmin(res.data);
+                setIsLoaded(false);
             })
         } else {
             FindByStructure(value).then(res => {
-                setStructure(res.data)
+                setAdmin(res.data)
+                setIsLoaded(false);
             })
         }
     }
@@ -97,14 +100,16 @@ export const Admin = () => {
                             'Bloquer avec succes.',
                             'success'
                         ).then((res) => {
+                            setIsLoaded(true);
                             ListAllAdmin().then(res => {
                                 setAdmin(res.data);
+                                setIsLoaded(false);
                             })
                         })
                     })
                 }
             })
-        }else{
+        } else {
             Swal.fire({
                 title: 'Attention?',
                 text: "Voulez vraiment débloquer cet admin",
@@ -122,8 +127,10 @@ export const Admin = () => {
                             'Admin débloquer avec succes.',
                             'success'
                         ).then((res) => {
+                            setIsLoaded(true);
                             ListAllAdmin().then(res => {
                                 setAdmin(res.data);
+                                setIsLoaded(false);
                             })
                         })
                     })
@@ -242,8 +249,8 @@ export const Admin = () => {
                                     <MenuItem value={""}> Tous </MenuItem>
                                     {
                                         structure.map((element, i) => {
-                                            if(!element.isBlocked){
-                                                return (<MenuItem value={""+element.id}> {element.nomStructure} </MenuItem>)
+                                            if (!element.isBlocked) {
+                                                return (<MenuItem value={"" + element.id}> {element.nomStructure} </MenuItem>)
                                             }
                                         })
                                     }
@@ -254,7 +261,7 @@ export const Admin = () => {
                                     <OutlinedInput
                                         id="email"
                                         placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486"}}
+                                        style={{ fontWeight: "bolder", color: "#787486" }}
                                         startAdornment={
                                             <InputAdornment position="start">
                                                 <SearchOutlined></SearchOutlined>
@@ -309,20 +316,20 @@ export const Admin = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-
-                                 rows={
-                                admins.filter((val) => {
-                                    if(search === ""){
-                                        return val;
-                                    } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
-                                        || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
-                                        || val.cni.toLowerCase().includes(search.toLowerCase())){
-                                        return val;
-                                    }
-                                }).map((row) => {
-                                     return row;
-                                })
-                            }
+                                loading={isLoaded}
+                                rows={
+                                    admins.filter((val) => {
+                                        if (search === "") {
+                                            return val;
+                                        } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                            || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
+                                            || val.cni.toLowerCase().includes(search.toLowerCase())) {
+                                            return val;
+                                        }
+                                    }).map((row) => {
+                                        return row;
+                                    })
+                                }
                                 columns={columns}
                                 disableVirtualization
                             />

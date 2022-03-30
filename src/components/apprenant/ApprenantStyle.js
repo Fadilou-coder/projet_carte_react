@@ -43,6 +43,10 @@ const ApprenantStyle = makeStyles((theme) => ({
         }
 
     },
+    mysearch : {
+        borderRadius:"50px !important",
+        border:"2px solid #44C3CF"
+    },
     table: {
         display: "flex",
         // justifyContent: "space-evenly",

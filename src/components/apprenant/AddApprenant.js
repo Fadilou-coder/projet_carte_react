@@ -15,7 +15,7 @@ import Stack from '@mui/material/Stack';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Avatar from '@mui/material/Avatar';
 import Layout from "../layout/Layout";
-import { listAllReferentiels, saveApprenant, sendCarte } from "./ApprenantService";
+import { listAllReferentiels, saveApprenant, sendCarte, ListPromos } from "./ApprenantService";
 import Swal from "sweetalert2";
 
 import logosonatel from "../../assets/images/logoSA.png";
@@ -25,6 +25,8 @@ export const AddApprenant = () => {
     var QRCode = require('qrcode.react');
 
     const [referentiel, setReferentiel] = React.useState([]);
+    const [promos, setPromos] = React.useState([]);
+
 
 
     const classes = ApprenantStyle();
@@ -62,7 +64,12 @@ export const AddApprenant = () => {
     React.useEffect(() => {
         listAllReferentiels().then((res)=>{
             setReferentiel(res.data)
-        })
+        });
+
+        ListPromos().then((res)=>{
+            setPromos(res.data);
+        });
+
     }, []);
 
     function formatDate(date) {
@@ -104,7 +111,7 @@ export const AddApprenant = () => {
     const PostApprenant = () => {
         setFormErrors(validateApprenant(value));
         let formData = new FormData();
-        const data = ["prenom", "nom", "email", "phone", "adresse", "cni", "referentiel", "lieuNaissance", "numTuteur", "avatar"];
+        const data = ["prenom", "nom", "email", "phone", "adresse", "cni", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
         data.forEach((app) => {
             if (value[app] !== '') {
                 formData.append(app, value[app]);
@@ -140,6 +147,7 @@ export const AddApprenant = () => {
                         referentiel: '',
                         dateNaissance: '',
                         lieuNaissance: '',
+                        promo: "",
                         numTuteur: '',
                         avatar: ''
                     })
@@ -431,6 +439,35 @@ export const AddApprenant = () => {
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.numTuteur}</p>
+                                </Grid>
+                            </Grid>
+
+
+                            <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                                <Grid xs={12} sm={12} md={4} spacing={5} item>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Promo<span style={{ color: 'red' }}>*</span> </label>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            placeholder="promo"
+                                            onChange={(event) => {
+                                                setValue({ ...value, promo: event.target.value })
+                                            }}
+                                            name="promo"
+                                        >
+                                            {
+                                                promos.map((row) =>
+                                                    <MenuItem key={row.id}
+                                                        value={row.libelle}
+                                                    >{row.libelle}</MenuItem>
+                                                )
+                                            }
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                                    
                                 </Grid>
                             </Grid>
 

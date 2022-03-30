@@ -42,6 +42,7 @@ export const ListApprenant = () => {
 
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
+    const [loading, setLoading] = React.useState(true);
     var componentRef = React.createRef();
 
 
@@ -69,6 +70,7 @@ export const ListApprenant = () => {
         ListAllApprenant().then(res => {
             setApprenants(res.data);
             setApprenant(res.data[0]);
+            setLoading(false);
         });
 
         listAllReferentiels().then(res => {
@@ -266,14 +268,17 @@ export const ListApprenant = () => {
                                 </Select>
                             </div>
                             <div>
-                                <FormControl sx={{ m: 1 }} className={classes.mysearch}>
+                                <FormControl sx={{ m: 1 }}>
                                     <OutlinedInput
+
                                         id="email"
                                         placeholder="rechercher"
+                                        size="small"
                                         style={{ fontWeight: "bolder", color: "#787486"}}
+                                        className={classes1.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined></SearchOutlined>
+                                                <SearchOutlined  sx={{ color: "#44C3CF" }}></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -370,8 +375,9 @@ export const ListApprenant = () => {
                                         }
                                     }}
                                     components={{
-                                        Pagination: CustomPagination,
+                                        Pagination: CustomPagination
                                     }}
+                                    loading={loading}
                                     rows={
                                         apprenants.filter((val) => {
                                             if(search === ""){
@@ -390,6 +396,7 @@ export const ListApprenant = () => {
 
                                     disableVirtualization
                                 />
+
                             </div>
 
                         </Grid>

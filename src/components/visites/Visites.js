@@ -37,6 +37,7 @@ export const Visites = () => {
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState( {});
+    const [loading, setLoading] = React.useState(true);
 
 
 
@@ -53,6 +54,7 @@ export const Visites = () => {
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
             setVisites(res.data.reverse());
+            setLoading(false);
         })
     }, [date])
 
@@ -213,17 +215,21 @@ export const Visites = () => {
     function chargerVisites(ndate, value) {
         setVisiteur(value)
         setDate(ndate)
+        setLoading(true);
         if (value === "") {
             ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
+                setVisites(res.data);
+                setLoading(false);
             })
         } else if (value === "apprenant") {
             ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
+                setVisites(res.data);
+                setLoading(false);
             })
         } else if (value === "visiteur") {
             ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data)
+                setVisites(res.data);
+                setLoading(false);
             })
         }
     };
@@ -235,17 +241,21 @@ export const Visites = () => {
         SaveVisitesVisieur({ 'visiteur' : values}).then(res => {
             handleClose()
             downloadQRCode();
+            setLoading(true);
             if (visiteur === "") {
                 ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
+                  setVisites(res.data);
+                  setLoading(false);
                 })
             }else if (visiteur === "apprenant") {
                 ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
+                  setVisites(res.data);
+                  setLoading(false);
                 })
             }else if (visiteur === "visiteur") {
                 ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data)
+                  setVisites(res.data);
+                  setLoading(false);
                 })
             }
             if(res.status===200) {
@@ -485,7 +495,7 @@ export const Visites = () => {
                                     Pagination: CustomPagination,
                                     // Toolbar: CustomToolbar,
                                 }}
-
+                                loading={loading}
                                 rows={
                                     visites.filter((val) => {
                                         if(search === ""){
