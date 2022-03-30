@@ -25,7 +25,6 @@ import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ApprenantStyle";
 import Avatar from '@mui/material/Avatar';
-import pp from "../../assets/images/ppuser.png";
 import odc from "../../assets/images/logo_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
 
