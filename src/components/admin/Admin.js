@@ -200,8 +200,8 @@ export const Admin = () => {
             <Typography variant='h5'
                 style={{
                     marginBottom: "20px",
-                    borderLeft: "6px solid gray",
-                    color: "gray",
+                    borderLeft: "6px solid #000000",
+                    color: "#000000",
                     paddingLeft: "20px",
                     fontWeight: "bolder"
                 }}>
@@ -240,7 +240,7 @@ export const Admin = () => {
 
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <Notes sx={{ color: "#44C3CF" }} ></Notes>
+                                            <Notes sx={{ color: "#000000" }} ></Notes>
                                         </InputAdornment>}
                                 >
                                     <MenuItem value={""}> Tous </MenuItem>
@@ -259,10 +259,10 @@ export const Admin = () => {
                                         size='small'
                                         id="email"
                                         placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486", border: "none" }}
+                                        style={{ fontWeight: "bolder", color: "#000000", border: "none" }}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined></SearchOutlined>
+                                                <SearchOutlined  sx={{ color: "#000000" }} ></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -281,13 +281,15 @@ export const Admin = () => {
                                 endIcon={<AddCircleOutlined />}
                                 onClick={RedirectAddAdmin}
                                 sx={{
-                                    backgroundColor: "#05888A",
+                                    backgroundColor: "#FF6600",
+                                    color:"#000000",
                                     fontFamily: "Arial",
                                     fontSize: "16px",
                                     fontWeight:"bolder",
                                     marginBottom: "10px",
                                     '&:hover': {
-                                        backgroundColor: "#F48322",
+                                        backgroundColor: "#000000",
+                                        color:"#FFFFFF",
                                         pointer: "cursor"
                                     }
                                 }}
@@ -300,7 +302,10 @@ export const Admin = () => {
                     <Box sx={{
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
-                            backgroundColor: '#44C3CF'
+                            backgroundColor: '#696969',
+                            color:"#FFFFFF",
+                            fontWeight:"bold",
+                            textTransform:"uppercase"
                         },
                     }} className={classes.tableau}>
 

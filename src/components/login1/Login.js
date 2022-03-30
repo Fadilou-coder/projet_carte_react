@@ -103,7 +103,7 @@ const Login = (props) => {
           </h1> */}
           <Box
             sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, 1fr)', }}
-            className={classes.contenu} boxShadow = {3}
+            className={classes.contenu} 
           >
             <Box className={classes.logo} >
              <img  style={{ width: "80%" }} src={logo} alt="" />

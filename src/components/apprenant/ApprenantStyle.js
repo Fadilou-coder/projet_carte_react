@@ -4,13 +4,12 @@ import themeGeneral from '../theme'
 const ApprenantStyle = makeStyles((theme) => ({
 
     visiteur: {
-        border: "2px solid #44C3CF",
+        border: "2px solid #000000",
         width: "15vw",
         fontWeight: "bolder",
         color: "#787486",
-        borderColor: "#44C3CF",
         '&:focus': {
-            borderColor: "#44C3CF",
+            borderColor: "#000000",
         },
         [theme.breakpoints.down('sm')]: {
             width: "100%"
@@ -50,7 +49,8 @@ const ApprenantStyle = makeStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        backgroundColor: "white"
+        backgroundColor: "white",
+        marginTop: "20px"
     },
 
 
@@ -86,7 +86,7 @@ const ApprenantStyle = makeStyles((theme) => ({
     },
     mysearch: {
         borderRadius: "50px !important",
-        border: "2px solid #44C3CF",
+        border: "2px solid #000000",
         [theme.breakpoints.down('sm')]: {
             width: "100% !important"
         },
