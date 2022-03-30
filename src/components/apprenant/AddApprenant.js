@@ -53,7 +53,9 @@ export const AddApprenant = () => {
         dateNaissance: '',
         lieuNaissance: '',
         numTuteur: '',
-        avatar: ''
+        avatar: new File([], ''),
+        promo: '',
+
 
     });
 
@@ -62,11 +64,11 @@ export const AddApprenant = () => {
     })
 
     React.useEffect(() => {
-        listAllReferentiels().then((res)=>{
+        listAllReferentiels().then((res) => {
             setReferentiel(res.data)
         });
 
-        ListPromos().then((res)=>{
+        ListPromos().then((res) => {
             setPromos(res.data);
         });
 
@@ -112,57 +114,65 @@ export const AddApprenant = () => {
         setFormErrors(validateApprenant(value));
         let formData = new FormData();
         const data = ["prenom", "nom", "email", "phone", "adresse", "cni", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
+        var valide = true;
         data.forEach((app) => {
             if (value[app] !== '') {
                 formData.append(app, value[app]);
             }
+            if (validateApprenant(value)[app]) {
+                valide = false;
+            }
         })
         formData.append("dateNaissance", formatDate(value.dateNaissance));
-        saveApprenant(formData).then((res) => {
-            if (res.status === 200) {
-                setnewApp(res.data);
-                const canvas = document.getElementById("qr-gen");
+        if (validateApprenant(value).dateNaissance) {
+            valide = false;
+        }
+        if (valide) {
+            saveApprenant(formData).then((res) => {
+                if (res.status === 200) {
+                    setnewApp(res.data);
+                    const canvas = document.getElementById("qr-gen");
 
-                canvas.toBlob(function (blob) {
-                    const formData = new FormData();
-                    formData.append('file', blob, 'qrcode.png');
-                    formData.append('prenom', value.prenom);
-                    formData.append('nom', value.nom);
-                    formData.append('email', value.email);
+                    canvas.toBlob(function (blob) {
+                        const formData = new FormData();
+                        formData.append('file', blob, 'qrcode.png');
+                        formData.append('prenom', value.prenom);
+                        formData.append('nom', value.nom);
+                        formData.append('email', value.email);
 
-                    sendCarte(formData);
-                });
-                Swal.fire(
-                    'Succes!',
-                    'Enregistrer avec succes.',
-                    'success'
-                ).then((res) => {
-                    setValue({
-                        prenom: '',
-                        nom: '',
-                        email: '',
-                        phone: '',
-                        adresse: '',
-                        cni: '',
-                        referentiel: '',
-                        dateNaissance: '',
-                        lieuNaissance: '',
-                        promo: "",
-                        numTuteur: '',
-                        avatar: ''
+                        sendCarte(formData);
+                    });
+                    Swal.fire(
+                        'Succes!',
+                        'Enregistrer avec succes.',
+                        'success'
+                    ).then((res) => {
+                        setValue({
+                            prenom: '',
+                            nom: '',
+                            email: '',
+                            phone: '',
+                            adresse: '',
+                            cni: '',
+                            referentiel: '',
+                            dateNaissance: '',
+                            lieuNaissance: '',
+                            promo: '',
+                            numTuteur: '',
+                            avatar: new File([], ''),
+                        })
+                        setImage("")
                     })
-                    setImage("")
-                })
-            }
-        }).catch(
-            (error) => {
-                console.log(error);
-            }
-        )
+                }
+            }).catch(
+                (error) => {
+                    console.log(error);
+                }
+            )
+        }
     }
 
     const [formErrors, setFormErrors] = useState({});
-    //const [dateError, setDateError] = useState(null);
 
 
     const validateApprenant = (val) => {
@@ -200,8 +210,6 @@ export const AddApprenant = () => {
             errors.adresse = "l'adresse est requis"
         } else if (val.adresse.length < 3) {
             errors.adresse = "l'adresse doit comporter plus de 3 caractères";
-        } else if (val.adresse.length > 15) {
-            errors.adresse = "l'adresse ne peut pas dépassé plus de 15 caractères";
         }
         if (val.cni === '') {
             errors.cni = "le numéro de carte d'identité est requis"
@@ -216,21 +224,24 @@ export const AddApprenant = () => {
             if (dateAtNow.getFullYear() - val.dateNaissance.getFullYear() <= 18) {
                 errors.dateNaissance = "l'apprenant doit avoir au moins 18 ans";
             }
-            // alert(dateAtNow.getFullYear());
-            // alert(val.dateNaissance.getFullYear());
         }
         if (val.lieuNaissance === '') {
             errors.lieuNaissance = "lieu de naissance est requis"
         } else if (val.lieuNaissance.length < 3) {
             errors.lieuNaissance = "lieu de naissance doit comporter plus de 3 caractères";
-        } else if (val.lieuNaissance.length > 15) {
-            errors.lieuNaissance = "lieu de naissance ne peut pas dépassé plus de 15 caractères";
         }
         if (val.numTuteur === '') {
             errors.numTuteur = "le numéro de Tuteur est requis"
         } else if (!regexPhone.test(val.numTuteur)) {
             errors.numTuteur = "le format numéro de Tuteur n'est pas valide";
         }
+        if (val.referentiel === '') {
+            errors.referentiel = "veuilez sélectionner un referentiel"
+        }
+        if (val.promo === '') {
+            errors.promo = "veuilez sélectionner une promo"
+        }
+
         return errors;
     };
 
@@ -255,10 +266,12 @@ export const AddApprenant = () => {
                                         variant="outlined"
                                         placeholder="prenom"
                                         onChange={(event) => {
+                                            setFormErrors({...formErrors, prenom: null})
                                             setValue({ ...value, prenom: event.target.value })
                                         }}
                                         name="prenom"
                                         value={value.prenom}
+                                        error={formErrors.prenom}
                                     />
                                 </FormControl>
                                 <p className={classes.formError}>{formErrors.prenom}</p>
@@ -272,10 +285,12 @@ export const AddApprenant = () => {
                                         variant="outlined"
                                         placeholder="nom"
                                         onChange={(event) => {
+                                            setFormErrors({...formErrors, nom: null})
                                             setValue({ ...value, nom: event.target.value })
                                         }}
                                         name="nom"
                                         value={value.nom}
+                                        error={formErrors.nom}
                                     />
                                 </FormControl>
                                 <p className={classes.formError}>{formErrors.nom}</p>
@@ -295,10 +310,11 @@ export const AddApprenant = () => {
                                                 id="dateNaissance"
                                                 value={value.dateNaissance}
                                                 onChange={(event) => {
+                                                    setFormErrors({...formErrors, dateNaissance: null})
                                                     setValue({ ...value, dateNaissance: event })
                                                 }}
                                                 defaultValue={null}
-                                                renderInput={(params) => <TextField {...params} />}
+                                                renderInput={(params) => <TextField {...params} error={formErrors.dateNaissance} />}
                                             />
                                         </Stack>
                                     </LocalizationProvider>
@@ -314,10 +330,12 @@ export const AddApprenant = () => {
                                         variant="outlined"
                                         placeholder="lieu de Naissance"
                                         onChange={(event) => {
+                                            setFormErrors({...formErrors, lieuNaissance: null})
                                             setValue({ ...value, lieuNaissance: event.target.value })
                                         }}
                                         name="lieuNaissance"
                                         value={value.lieuNaissance}
+                                        error={formErrors.lieuNaissance}
                                     />
                                 </FormControl>
                                 <p className={classes.formError}>{formErrors.lieuNaissance}</p>
@@ -334,10 +352,12 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="adresse"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, adresse: null})
                                                 setValue({ ...value, adresse: event.target.value })
                                             }}
                                             name="adresse"
                                             value={value.adresse}
+                                            error={formErrors.adresse}
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.adresse}</p>
@@ -351,10 +371,12 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="cni"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, cni: null})
                                                 setValue({ ...value, cni: event.target.value })
                                             }}
                                             name="cni"
                                             value={value.cni}
+                                            error={formErrors.cni}
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.cni}</p>
@@ -371,9 +393,12 @@ export const AddApprenant = () => {
                                             id="demo-simple-select"
                                             placeholder="referentiel"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, referentiel: null})
                                                 setValue({ ...value, referentiel: event.target.value })
                                             }}
+                                            value={value.referentiel}
                                             name="referentiel"
+                                            error={formErrors.referentiel}
                                         >
                                             {
                                                 referentiel.map((row) =>
@@ -384,6 +409,7 @@ export const AddApprenant = () => {
                                             }
                                         </Select>
                                     </FormControl>
+                                    <p className={classes.formError}>{formErrors.referentiel}</p>
                                 </Grid>
                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                     <FormControl fullWidth>
@@ -394,10 +420,12 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="email"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, email: null})
                                                 setValue({ ...value, email: event.target.value })
                                             }}
                                             name="email"
                                             value={value.email}
+                                            error={formErrors.email}
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.email}</p>
@@ -415,10 +443,12 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="numéro télephone"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, phone: null})
                                                 setValue({ ...value, phone: event.target.value })
                                             }}
                                             name="phone"
                                             value={value.phone}
+                                            error={formErrors.phone}
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.phone}</p>
@@ -432,10 +462,12 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="numéro de tuteur"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, numTuteur: null})
                                                 setValue({ ...value, numTuteur: event.target.value })
                                             }}
                                             name="numTuteur"
                                             value={value.numTuteur}
+                                            error={formErrors.numTuteur}
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.numTuteur}</p>
@@ -452,9 +484,12 @@ export const AddApprenant = () => {
                                             id="demo-simple-select"
                                             placeholder="promo"
                                             onChange={(event) => {
+                                                setFormErrors({...formErrors, promo: null})
                                                 setValue({ ...value, promo: event.target.value })
                                             }}
                                             name="promo"
+                                            error={formErrors.promo}
+                                            value={value.promo}
                                         >
                                             {
                                                 promos.map((row) =>
@@ -465,9 +500,10 @@ export const AddApprenant = () => {
                                             }
                                         </Select>
                                     </FormControl>
+                                    <p className={classes.formError}>{formErrors.promo}</p>
                                 </Grid>
                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    
+
                                 </Grid>
                             </Grid>
 
@@ -544,7 +580,7 @@ export const AddApprenant = () => {
                     />
                 </div>
             </Box>
-        </Layout>
+        </Layout >
     )
 
 }
