@@ -27,16 +27,16 @@ export const Structure = () => {
 
 
     React.useEffect(() => {
-        ListAllStructure().then(response => { 
+        ListAllStructure().then(response => {
             setStructure(response.data);
-            setLoading(false); 
+            setLoading(false);
         });
     }, []
     );
     function AddStructure() {
         Addstructure(nomStructure).then(response => {
             setLoading(true);
-            ListAllStructure().then(response => { 
+            ListAllStructure().then(response => {
                 setStructure(response.data);
                 setLoading(false);
             })
@@ -60,9 +60,9 @@ export const Structure = () => {
                 if (result.isConfirmed) {
                     Bloquerstructure(id).then(() => {
                         setLoading(true);
-                        ListAllStructure().then(response => { 
+                        ListAllStructure().then(response => {
                             setStructure(response.data);
-                            setLoading(false); 
+                            setLoading(false);
                         })
                     })
                 }
@@ -81,9 +81,9 @@ export const Structure = () => {
                 if (result.isConfirmed) {
                     DebloquerStructure(id).then(() => {
                         setLoading(true);
-                        ListAllStructure().then(response => { 
+                        ListAllStructure().then(response => {
                             setStructure(response.data);
-                            setLoading(false); 
+                            setLoading(false);
                         })
                     })
                 }
@@ -130,9 +130,27 @@ export const Structure = () => {
             sortable: false,
             renderCell: (params) => {
                 if (!params.row.isBlocked)
-                    return <Button variant="contained" style={{ backgroundColor: '#E9967A' }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Bloquer</Button>;
+                    return <Button variant="contained" sx={{
+                        backgroundColor: '#FF6600',
+                        color: "#000000",
+                        fontWeight: "bolder",
+                        '&:hover': {
+                            backgroundColor: '#000000',
+                            color: "#FFFFFF"
+                        }
+                    }}
+                        onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Bloquer</Button>;
                 else
-                    return <Button variant="contained" style={{ backgroundColor: 'green' }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Debloquer</Button>;
+                    return <Button variant="contained"
+                        sx={{
+                            backgroundColor: '#000000',
+                            color: "white",
+                            fontWeight: "bolder",
+                            '&:hover': {
+                                backgroundColor: '#FF6600',
+                                color: "#FFFFFF"
+                            }
+                        }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Debloquer</Button>;
             }
         },
 
@@ -146,7 +164,10 @@ export const Structure = () => {
                 <Grid className={classes.structureDiv}>
                     <Box sx={{
                         '& .super-app-theme--header': {
-                            backgroundColor: '#44C3CF',
+                            backgroundColor: '#696969',
+                            color: "#FFFFFF",
+                            textTransform: "uppercase",
+                            fontWeight: "bolder"
                         },
                     }}
                         className={classes.contentDiv}
@@ -157,8 +178,8 @@ export const Structure = () => {
                             variant='h5'
                             style={{
                                 marginBottom: "20px",
-                                borderLeft: "6px solid gray",
-                                color: "gray",
+                                borderLeft: "6px solid #000000",
+                                color: "#000000",
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
@@ -190,8 +211,8 @@ export const Structure = () => {
                             variant='h5'
                             style={{
                                 marginBottom: "20px",
-                                borderLeft: "6px solid gray",
-                                color: "gray",
+                                borderLeft: "6px solid #000000",
+                                color: "#000000",
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
@@ -220,7 +241,16 @@ export const Structure = () => {
                             <Button
                                 disabled={nomStructure.nomStructure === ''}
                                 variant="contained"
-                                style={{ margin: 'auto', display: "flex", backgroundColor: '#44C3CF' }}
+                                sx={{
+                                    margin: 'auto', display: "flex",
+                                    backgroundColor: '#FF6600',
+                                    color: "#000000",
+                                    fontWeight: "bolder",
+                                    '&:hover': {
+                                        backgroundColor: '#000000',
+                                        color: "#FFFFFF"
+                                    }
+                                }}
                                 onClick={AddStructure}>
                                 AJOUTER
                             </Button>

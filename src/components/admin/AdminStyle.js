@@ -5,12 +5,11 @@ const AdminStyle = makeStyles((theme) => ({
 
 
     visiteur: {
-        border: "2px solid #44C3CF",
+        border: "2px solid #000000",
         borderRadius: "50px !important",
         width: "15vw",
-        borderColor: "#44C3CF",
         '&:focus': {
-            borderColor: "#44C3CF",
+            borderColor: "#FF6600",
         },
         [theme.breakpoints.down('sm')]: {
             width: "100%",
@@ -55,12 +54,11 @@ const AdminStyle = makeStyles((theme) => ({
     },
     mysearch: {
         borderRadius: "50px !important",
-        border: "2px solid #44C3CF",
-        marginTop:"10px",
+        border: "1px solid #000000",
+        //marginTop:"10px",
         [theme.breakpoints.down('sm')]: {
             width: "100% !important"
         },
-
     },
     mytextsearch: {
         [theme.breakpoints.down('sm')]: {

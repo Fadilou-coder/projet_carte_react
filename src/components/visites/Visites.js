@@ -1,4 +1,3 @@
-/* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
 import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
@@ -16,6 +15,8 @@ import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
+import imgData from "../../assets/images/filigrane_logo.png"
+
 import dateTime from 'date-time';
 import {
     DataGrid,
@@ -30,13 +31,14 @@ import Swal from "sweetalert2";
 import { encode as base64_encode } from 'base-64';
 import { SearchOutlined } from '@mui/icons-material';
 
+
 var QRCode = require('qrcode.react')
 
 export const Visites = () => {
 
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
-    const [formErrors, setFormErrors] = useState( {});
+    const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = React.useState(true);
 
 
@@ -66,8 +68,9 @@ export const Visites = () => {
 
         return (
             <Pagination
-                color="primary"
-                variant="outlined"
+                color="standard"
+
+                iant="outlined"
                 shape="rounded"
                 page={page + 1}
                 count={pageCount}
@@ -78,13 +81,13 @@ export const Visites = () => {
         )
     }
 
-    function buttonSortir(donnees){
-        if (donnees.apprenant != null){
+    function buttonSortir(donnees) {
+        if (donnees.apprenant != null) {
             setLoading(true);
             SortieApp(donnees).then(() => {
                 chargerVisites(date, visiteur)
             })
-        }else {
+        } else {
             setLoading(true);
             SortieVisiteur(donnees).then(() => {
                 chargerVisites(date, visiteur)
@@ -153,7 +156,15 @@ export const Visites = () => {
             renderCell: (cellvalue) => {
                 if (cellvalue.row.dateSortie == null) {
                     return <Button
-                        sx={{ backgroundColor: "#BC6602", color: "white" }}
+                        sx={{
+                            backgroundColor: '#FF6600',
+                            color: "#000000",
+                            fontWeight: "bolder",
+                            '&:hover': {
+                                backgroundColor: '#000000',
+                                color: "#FFFFFF"
+                            }
+                        }}
                         onClick={() => buttonSortir(cellvalue.row)}
                     >
 
@@ -169,6 +180,21 @@ export const Visites = () => {
         },
 
     ]
+
+
+    function addWaterMark(doc) {
+        var totalPages = doc.internal.getNumberOfPages();
+
+        for (let i = 1; i <= totalPages; i++) {
+            doc.setPage(i);
+            doc.saveGraphicsState();
+            doc.setGState(new doc.GState({opacity: 0.2}));
+            doc.addImage(imgData, 'PNG', 150, 100, 500, 400);
+            doc.restoreGraphicsState();
+        }
+
+        return doc;
+    }
     const exportPDF = () => {
 
         const unit = "pt"
@@ -176,7 +202,7 @@ export const Visites = () => {
         const orientation = "landscape" // portrait or landscape
 
         const marginLeft = 40
-        const doc = new jsPDF(orientation, unit, size)
+        var doc = new jsPDF(orientation, unit, size)
 
         doc.setFontSize(15)
 
@@ -195,13 +221,15 @@ export const Visites = () => {
         let content = {
             startY: 50,
             head: headers,
-            body: dat
+            body: dat,
+            headStyles: { fillColor: [0, 0, 0] },
 
         }
 
         doc.text(title, marginLeft, 40)
         doc.autoTable(content)
-        doc.save("report.pdf")
+        doc = addWaterMark(doc);
+        doc.save("Rapport du " + date.toDateString())
     }
     const classes = VisiteStyle()
     const [open, setOpen] = React.useState(false)
@@ -246,18 +274,18 @@ export const Visites = () => {
             setLoading(true);
             if (visiteur === "") {
                 ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                  setLoading(false);
+                    setVisites(res.data);
+                    setLoading(false);
                 })
             } else if (visiteur === "apprenant") {
                 ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                  setLoading(false);
+                    setVisites(res.data);
+                    setLoading(false);
                 })
             } else if (visiteur === "visiteur") {
                 ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                  setVisites(res.data);
-                  setLoading(false);
+                    setVisites(res.data);
+                    setLoading(false);
                 })
             }
             if (res.status === 200) {
@@ -340,8 +368,8 @@ export const Visites = () => {
                     <Typography variant='h5'
                         style={{
                             marginBottom: "20px",
-                            borderLeft: "6px solid gray",
-                            color: "gray",
+                            borderLeft: "6px solid #000000",
+                            color: "#000000",
                             paddingLeft: "20px",
                             fontWeight: "bolder"
                         }}>
@@ -391,8 +419,8 @@ export const Visites = () => {
                                                             size="small"
                                                             {...params}
                                                             sx={{
-                                                                svg: { color: "#44C3CF" },
-                                                                input: { color: "#787486", fontWeight: "bold" },
+                                                                svg: { color: "#000000" },
+                                                                input: { color: "#000000", fontWeight: "bold" },
                                                                 label: { color: "#44C3CF" },
                                                                 width: "100%",
                                                             }}
@@ -415,7 +443,7 @@ export const Visites = () => {
 
                                             startAdornment={
                                                 <InputAdornment position="start">
-                                                    <PersonOutline  ></PersonOutline>
+                                                    <PersonOutline sx={{ color: "#000000" }}  ></PersonOutline>
                                                 </InputAdornment>}
 
                                         >
@@ -432,11 +460,17 @@ export const Visites = () => {
                                                 size='small'
                                                 id="search"
                                                 placeholder="rechercher"
-                                                style={{ fontWeight: "bolder", color: "#787486" }}
+                                                style={{
+                                                    fontWeight: "bolder",
+                                                    color: "#000000",
+                                                    '&:focus': {
+                                                        borderColor: "#FF6600",
+                                                    },
+                                                }}
 
                                                 startAdornment={
                                                     <InputAdornment position="start">
-                                                        <SearchOutlined></SearchOutlined>
+                                                        <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
                                                     </InputAdornment>
                                                 }
                                                 onChange={(event) => {
@@ -455,14 +489,17 @@ export const Visites = () => {
                                         endIcon={<AddCircleOutlined />}
                                         onClick={handleClickOpen}
                                         sx={{
-                                            backgroundColor: "#05888A",
+                                            backgroundColor: "#FF6600",
                                             fontFamily: "Arial",
                                             fontSize: "16px",
+                                            color: "#000000",
                                             marginRight: "10px",
                                             fontWeight: "bold",
                                             '&:hover': {
-                                                backgroundColor: "#F48322",
-                                                pointer: "cursor"
+                                                backgroundColor: "#000000",
+                                                pointer: "cursor",
+                                                color: "white"
+
                                             }
                                         }}
                                     >
@@ -475,11 +512,13 @@ export const Visites = () => {
                                             exportPDF()
                                         }}
                                         sx={{
-                                            backgroundColor: "#138A8A",
+                                            backgroundColor: "#FF6600",
                                             fontSize: "16px",
+                                            color: "#000000",
                                             fontWeight: "bold",
                                             '&:hover': {
-                                                backgroundColor: '#F48322',
+                                                backgroundColor: '#000000',
+                                                color: "white"
                                             }
                                         }}
                                     >
@@ -497,12 +536,15 @@ export const Visites = () => {
                             <Box sx={{
                                 boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                                 '& .super-app-theme--header': {
-                                    backgroundColor: '#44C3CF'
+                                    backgroundColor: '#696969',
+                                    color: "#FFFFFF",
+                                    fontWeight: "bold",
+                                    textTransform: "uppercase"
                                 },
                             }} className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
-                                    <h2 style={{ color: "#44C3CF" }}> Liste du {date.toDateString()}</h2>
+                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toDateString()}</h2>
                                     <DataGrid
                                         sx={{ boxShadow: "30px", width: "100%" }}
 

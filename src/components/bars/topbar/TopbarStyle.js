@@ -6,7 +6,7 @@ export const TopbarStyle = makeStyles(theme => ({
         [theme.breakpoints.up('sm')] : {
             marginLeft: '200px',
         },
-        backgroundColor:themeGeneral.palette.primary.light,
+        backgroundColor:"#000000",
         boxShadow:"none !important",
         color:'black',
         backgroundRepeat: "no-repeat",
@@ -17,9 +17,9 @@ export const TopbarStyle = makeStyles(theme => ({
         background:"none"
     },
     topbarAdmin: {
-        backgroundColor:themeGeneral.palette.primary.light,
         boxShadow:"none !important",
         color:'black',
+        backgroundColor:"#000000",
         backgroundRepeat: "no-repeat",
         backgroundSize:"cover",
         top: 0,

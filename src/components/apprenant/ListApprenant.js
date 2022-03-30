@@ -24,9 +24,10 @@ import React from 'react'
 import Layout from "../layout/Layout";
 import VisiteStyle from '../visites/VisiteStyle';
 import ListApprenantStyle from "./ApprenantStyle";
-import pp from "../../assets/images/ppuser.png";
-import odc from "../../assets/images/odc.jpeg";
+import Avatar from '@mui/material/Avatar';
+import odc from "../../assets/images/logo_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
+
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
@@ -42,6 +43,7 @@ export const ListApprenant = () => {
     const classes = VisiteStyle();
     const [search, setSearch] = React.useState('');
     const [loading, setLoading] = React.useState(true);
+
     var componentRef = React.createRef();
 
 
@@ -77,6 +79,7 @@ export const ListApprenant = () => {
 
 
     React.useEffect(() => {
+
         listAllReferentiels().then(res => {
             setReferentiels(res.data);
         });
@@ -204,6 +207,8 @@ export const ListApprenant = () => {
     const downloadQRCode = () => {
         // exportComponentAsJPEG(componentRef)
         const canvas = document.getElementById("qr-gen");
+
+
         const pngUrl = canvas
             .toDataURL("image/png")
             .replace("image/png", "image/octet-stream");
@@ -220,12 +225,13 @@ export const ListApprenant = () => {
     return (
         <Layout>
             <Typography variant='h5'
-             style={{
-                  marginBottom: "20px",
-                  borderLeft: "6px solid gray",
-                   color: "gray",
-                   paddingLeft: "20px",
-                   fontWeight:"bolder" }}>
+                        style={{
+                            marginBottom: "20px",
+                            borderLeft: "6px solid #000000",
+                            color: "#000000",
+                            paddingLeft: "20px",
+                            fontWeight: "bolder"
+                        }}>
                 LISTE DES APPRENANTS
             </Typography>
             <Box sx={{}} className={classes.visitePage} >
@@ -264,7 +270,7 @@ export const ListApprenant = () => {
                                     className={classes1.visiteur}
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <Notes sx={{ color: "#44C3CF" }} ></Notes>
+                                            <Notes sx={{ color: "#000000" }} ></Notes>
                                         </InputAdornment>}
 
                                 >
@@ -292,7 +298,7 @@ export const ListApprenant = () => {
 
                                     startAdornment={
                                         <InputAdornment position="start">
-                                            <Notes sx={{ color: "#44C3CF" }} ></Notes>
+                                            <Notes sx={{ color: "#000000" }} ></Notes>
                                         </InputAdornment>}
 
                                 >
@@ -306,17 +312,17 @@ export const ListApprenant = () => {
                             </div>
 
                             <div>
-                                <FormControl style={{ width: "100%", marginBottom:"20px" }}>
+                                <FormControl style={{ width: "100%", marginBottom: "20px" }}>
                                     <OutlinedInput
 
                                         id="email"
                                         placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#787486" }}
+                                        style={{ fontWeight: "bolder", color: "#000000" }}
                                         size="small"
                                         className={classes1.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined sx={{ color: "#44C3CF" }}></SearchOutlined>
+                                                <SearchOutlined sx={{ color: "#000000" }}></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -333,11 +339,13 @@ export const ListApprenant = () => {
 
                                 }}
                                 sx={{
-                                    backgroundColor: "#138A8A",
+                                    backgroundColor: "#FF6600",
+                                    color: "#000000",
                                     marginRight: "35px",
                                     fontWeight: "bolder",
                                     '&:hover': {
-                                        backgroundColor: '#F48322',
+                                        backgroundColor: '#000000',
+                                        color: "white"
                                     }
                                 }}
                                 endIcon={<AddCircleOutlined />}
@@ -357,7 +365,8 @@ export const ListApprenant = () => {
                                 borderRadius: "10px",
                                 width: "60%",
                                 '& .super-app-theme--header': {
-                                    backgroundColor: '#44C3CF',
+                                    backgroundColor: '#696969',
+                                    color: "white"
 
 
                                 },
@@ -385,6 +394,7 @@ export const ListApprenant = () => {
                                             if (apprenant.id !== params.row.id) {
                                                 if (isSelection === false) {
                                                     setApprenant(params.row);
+                                                    console.log(apprenant);
                                                 } else {
                                                     Swal.fire({
                                                         title: 'Attention?',
@@ -461,7 +471,7 @@ export const ListApprenant = () => {
                             >
                                 <Grid ref={componentRef}>
                                     <div className={classes1.avatarApprenant} >
-                                        <img src={odc} alt="" style={{ width: "20%" }} />
+                                        <img src={odc} alt="" style={{ width: "30%" }} />
                                         <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
                                         />
                                     </div>
@@ -608,16 +618,12 @@ export const ListApprenant = () => {
 
 
                                         </div>
-                                        <div
-                                            style={{
-                                                width: "29%",
-                                                height: "20vh",
-                                                background: `url(${pp})`,
-                                                backgroundRepeat: "no-repeat",
-                                                backgroundSize: "cover",
-
-                                            }}
-                                        >
+                                        <div>
+                                            <Avatar
+                                                src={`data:image/jpg;base64,${apprenant.avatar}`}
+                                                sx={{ width: 120, height: 125, marginTop: 4, marginRight: 3 }}
+                                                variant="square"
+                                            />
                                         </div>
                                     </div>
                                     <div style={{
@@ -690,10 +696,12 @@ export const ListApprenant = () => {
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        backgroundColor: "#F48322",
+                                        backgroundColor: '#FF6600',
+                                        color: "#000000",
                                         fontWeight: "bolder",
                                         '&:hover': {
-                                            backgroundColor: '#F48322',
+                                            backgroundColor: '#000000',
+                                            color: "#FFFFFF"
                                         }
                                     }}
                                     onClick={update}
@@ -703,10 +711,12 @@ export const ListApprenant = () => {
                                 <Button
                                     variant="contained"
                                     sx={{
-                                        backgroundColor: "#138A8A",
+                                        backgroundColor: '#FF6600',
+                                        color: "#000000",
                                         fontWeight: "bolder",
                                         '&:hover': {
-                                            backgroundColor: '#138A8A',
+                                            backgroundColor: '#000000',
+                                            color: "#FFFFFF"
                                         }
                                     }}
                                     endIcon={<DocumentScannerOutlined />}

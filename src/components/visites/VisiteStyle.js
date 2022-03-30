@@ -5,10 +5,10 @@ import themeGeneral from '../theme';
 const VisiteStyle = makeStyles(theme => ({
 
     visiteur: {
-        border: "2px solid #44C3CF",
+        border: "2px solid #000000",
         borderRadius: "10px",
         width: "15vw",
-        borderColor: "#44C3CF",
+        borderColor: "#000000",
         '&:focus': {
             borderColor: "#44C3CF",
         },
@@ -84,19 +84,19 @@ const VisiteStyle = makeStyles(theme => ({
             width: "100%",
             marginTop: "20px"
         },
-        border: "2px solid #44C3CF",
+        border: "2px solid #000000",
         color: "#787486",
         width: "12vw",
         borderRadius: "10px",
-        borderColor: "#44C3CF",
-        '&:focus': {
-            borderColor: "#44C3CF",
-        }
+        borderColor: "#000000",
+        
+        
     },
     mytextsearch: {
         [theme.breakpoints.down('sm')]: {
             width: "100%"
         },
+        
     },
     table: {
         width: "80%",
