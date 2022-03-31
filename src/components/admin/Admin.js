@@ -148,19 +148,23 @@ export const Admin = () => {
             headerName: 'Prenom',
             editable: true,
             flex: 1,
+            minWidth: 150,
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
             editable: true,
-            flex: 1
+            flex: 1,
+            minWidth: 150,
+
         },
         {
             field: 'email',
             headerClassName: 'super-app-theme--header',
             headerName: 'Email',
             editable: true,
+            minWidth: 150,
             flex: 1
         },
         {
@@ -168,6 +172,7 @@ export const Admin = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Téléphone',
             editable: true,
+            minWidth: 150,
             flex: 1
         },
         {
@@ -175,6 +180,7 @@ export const Admin = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Cni',
             editable: true,
+            minWidth: 150,
             flex: 1
         },
         {
@@ -183,6 +189,7 @@ export const Admin = () => {
             headerName: 'Blocked ?',
             editable: true,
             flex: 1,
+            minWidth: 150,
             sortable: false,
             renderCell: (params) => {
                 return <Checkbox onClick={() => bloquerAdmin(params.id, params.row.isbloqued)} checked={params.row.isbloqued} />;
@@ -262,7 +269,7 @@ export const Admin = () => {
                                         className={classes.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined  sx={{ color: "#000000" }} ></SearchOutlined>
+                                                <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -272,7 +279,7 @@ export const Admin = () => {
                                     />
                                 </FormControl>
                             </div>
-                          {/*  <div>
+                            {/*  <div>
                                 <FormControl style={{ width: "100%", marginBottom: "20px" }}>
                                     <OutlinedInput
 
@@ -302,14 +309,14 @@ export const Admin = () => {
                                 onClick={RedirectAddAdmin}
                                 sx={{
                                     backgroundColor: "#FF6600",
-                                    color:"#000000",
+                                    color: "#000000",
                                     fontFamily: "Arial",
                                     fontSize: "16px",
-                                    fontWeight:"bolder",
+                                    fontWeight: "bolder",
                                     marginBottom: "10px",
                                     '&:hover': {
                                         backgroundColor: "#000000",
-                                        color:"#FFFFFF",
+                                        color: "#FFFFFF",
                                         pointer: "cursor"
                                     }
                                 }}
@@ -323,9 +330,9 @@ export const Admin = () => {
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
                             backgroundColor: '#696969',
-                            color:"#FFFFFF",
-                            fontWeight:"bold",
-                            textTransform:"uppercase"
+                            color: "#FFFFFF",
+                            fontWeight: "bold",
+                            textTransform: "uppercase"
                         },
                     }} className={classes.tableau}>
 

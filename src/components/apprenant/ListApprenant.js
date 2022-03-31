@@ -148,18 +148,21 @@ export const ListApprenant = () => {
             field: 'code',
             headerClassName: 'super-app-theme--header',
             headerName: 'Numero Etudiant',
+            minWidth:150,
             flex: 1,
         },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
+            minWidth:150,
             flex: 1,
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
+            minWidth:150,
             flex: 1
         },
     ]

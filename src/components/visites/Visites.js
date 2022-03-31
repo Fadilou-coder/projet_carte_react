@@ -103,6 +103,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
             flex: 1,
+            minWidth:150,
             valueGetter: (params) => {
 
                 if (params.row.visiteur) {
@@ -117,6 +118,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
             flex: 1,
+            minWidth:150,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
                     return params.row.visiteur.nom
@@ -130,6 +132,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'cni',
             flex: 1,
+            minWidth:150,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
                     return params.row.visiteur.cni
@@ -143,6 +146,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Entree',
             flex: 1,
+            minWidth:150,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
                     return params.row.dateEntree.substr(11, 5)
@@ -154,6 +158,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
+            minWidth:150,
             renderCell: (cellvalue) => {
                 if (cellvalue.row.dateSortie == null) {
                     return <Button
@@ -189,7 +194,7 @@ export const Visites = () => {
         for (let i = 1; i <= totalPages; i++) {
             doc.setPage(i);
             doc.saveGraphicsState();
-            doc.setGState(new doc.GState({opacity: 0.2}));
+            doc.setGState(new doc.GState({ opacity: 0.2 }));
             doc.addImage(imgData, 'PNG', 150, 100, 500, 400);
             doc.restoreGraphicsState();
         }
@@ -548,7 +553,6 @@ export const Visites = () => {
                                     <h2 style={{ color: "#FF6600" }}> Liste du {date.toDateString()}</h2>
                                     <DataGrid
                                         sx={{ boxShadow: "30px", width: "100%" }}
-
                                         autoHeight
                                         pageSize={10}
                                         rowsPerPageOptions={[5, 10, 20]}
@@ -604,18 +608,34 @@ export const Visites = () => {
 
 
                     <div>
-                        <Dialog open={open} onClose={handleClose}>
+                        <Dialog open={open} onClose={handleClose} PaperProps={{
 
-                            <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER VISITEUR</DialogTitle>
-                            <hr style={{ borderTop: " 4px solid #138A8A", width: "20%", float: "left", marginLeft: "15px" }} />
+                            
+                            sx: {
+                                borderRadius: "10px",
+                                padding: "20px",
+                                // width: "25%", 
+                                maxWidth:{
+                                    lg:"30%",
+                                    md:"25%",
+                                    sm:"100%"
+                                }
+                            },
+                            
+                        }}>
+
+                            <DialogTitle variant="h5" className={classes.textTypo} style={{ fontWeight: "bold" }}>AJOUTER VISITEUR</DialogTitle>
+                            <div style={{ borderTop: " 4px solid #FF6600", width: "20%", }} />
                             <DialogContent>
-                                <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
+                                <p>Complétez le formulaire. Les champs marqué par
+                                    <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
                                 <Grid>
                                     <FormControl fullWidth>
                                         <label className={classes.labelText}>CNI<span style={{ color: 'red' }}>*</span> </label>
                                         <OutlinedInput
                                             id="cni"
                                             type="text"
+                                            size='small'
                                             variant="outlined"
                                             placeholder="Ex:cni"
                                             onChange={(event) => {
@@ -632,6 +652,7 @@ export const Visites = () => {
                                         <OutlinedInput
                                             id="prenom"
                                             type="text"
+                                            size='small'
                                             variant="outlined"
                                             placeholder="Ex:prenom"
                                             onChange={(event) => {
@@ -648,6 +669,7 @@ export const Visites = () => {
                                         <OutlinedInput
                                             id="nom"
                                             type="text"
+                                            size='small'
                                             variant="outlined"
                                             placeholder="Ex:nom"
                                             onChange={(event) => {
@@ -660,10 +682,11 @@ export const Visites = () => {
                                 </Grid>
                                 <Grid mt={2}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}> *</span> </label>
                                         <OutlinedInput
                                             id="telephone"
                                             type="text"
+                                            size='small'
                                             variant="outlined"
                                             placeholder="Ex:telephone"
                                             onChange={(event) => {
@@ -677,8 +700,9 @@ export const Visites = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}
+                                    size="small"
                                     sx={{
-                                        backgroundColor: "#BE0101",
+                                        backgroundColor: "#FF6600",
                                         fontFamily: "Arial", fontSize: "20px",
                                         marginTop: "10px",
                                         color: "#FFFFFF",
@@ -690,7 +714,7 @@ export const Visites = () => {
                                 >ANNULER</Button>
                                 <Button onClick={AjouterVisites}
                                     sx={{
-                                        backgroundColor: "#05888A",
+                                        backgroundColor: "#000000",
                                         fontFamily: "Arial", fontSize: "20px",
                                         marginTop: "10px",
                                         color: "#FFFFFF",
