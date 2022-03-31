@@ -1,6 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import jwtDecode from "jwt-decode";
-import {Navigate, Route} from "react-router-dom";
+import {Redirect, Route} from "react-router-dom";
 
 
 const PrivateRoute = ({component: Component, ...rest }) => {
@@ -31,7 +31,7 @@ const PrivateRoute = ({component: Component, ...rest }) => {
     if(isAuthenticated === null) {
         return (
             <Route {...rest} render={props =>
-                    <Navigate to="/visites"/>
+                    <Redirect to="/visites"/>
             }
             />
         )
@@ -39,7 +39,7 @@ const PrivateRoute = ({component: Component, ...rest }) => {
     return (
         <Route {...rest} render={props =>
             !isAuthenticated ? (
-                <Navigate to="/"/>
+                <Redirect to="/"/>
             ) : (
                 <Component {...props}/>
             )

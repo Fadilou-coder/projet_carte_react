@@ -36,7 +36,7 @@ const LeftBarDesign = () => {
                     key={key}
                     button
                     //key={item.id}
-                    onClick={() => useNavigate.push(item.path)}
+                    onClick={() => history.push(item.path)}
                     className={location.pathname === item.path ? classes.active : classes.notActive}
                 >
                     <ListItemIcon className={classes.linkIcon}>{item.icon}</ListItemIcon>
