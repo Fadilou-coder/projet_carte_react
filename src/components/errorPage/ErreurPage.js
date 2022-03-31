@@ -2,11 +2,11 @@ import React from 'react'
 import ErreurPageStyle from "./ErreurPageStyle";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import {useNavigate} from "react-router-dom";
+import {useHistory} from "react-router-dom";
 
 const ErreurPage = () => {
     const classes = ErreurPageStyle()
-    const navigate = useNavigate();
+    let history = useHistory();
     return (
         <div className="quizBg">
             <div className="container">
@@ -24,7 +24,7 @@ const ErreurPage = () => {
                         marginTop: "12px"
                     }}
                     onClick={()=>{
-                        navigate("/visites");
+                        history.push("/visites");
                     }}
 
                 >

@@ -29,7 +29,7 @@ import odc from "../../assets/images/logo_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo } from './ApprenantService';
 import Swal from "sweetalert2";
@@ -198,10 +198,10 @@ export const ListApprenant = () => {
 
     }
 
-    const navigate = useNavigate();
+    let history = useHistory();
 
     function RedirectAddApprenant() {
-        navigate("/add_apprenant");
+        history.push("/add_apprenant");
     }
 
     const downloadQRCode = () => {

@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 
 import Visites from "./components/visites/Visites";
@@ -18,7 +18,7 @@ function App() {
       <>
         <Router>
            {/* <Layout>*/}
-              <Routes>
+              <Switch>
                   <Route exact path="/" component={Login}/>
                   <Route  path="/login" component={Login}/>
                   <PrivateRoute path="/layout" component={Layout}/>
@@ -29,7 +29,7 @@ function App() {
                   <PrivateRoute path="/add_admin" component={AddAdmin} />
                   <PrivateRoute path="/add_apprenant" component={AddApprenant} />
                   <PrivateRoute path="*" component={ErreurPage} />
-              </Routes>
+              </Switch>
             {/*</Layout>*/}
         </Router>
       </>
