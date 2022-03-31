@@ -47,7 +47,7 @@ const LoginStyle = makeStyles(({
         opacity: "100% !important",
         backgroundColor: "white",
         borderRadius: "19px",
-        padding: " 10vh 5vw 15vh 5vw",
+        padding: " 5vh 5vw 5vh 5vw",
 
     },
     logo: {
