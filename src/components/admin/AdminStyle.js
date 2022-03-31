@@ -13,6 +13,7 @@ const AdminStyle = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             width: "100%",
+            marginBottom:"12px"
         },
     },
     filtre: {
