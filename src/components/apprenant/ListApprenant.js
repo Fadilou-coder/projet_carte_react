@@ -29,7 +29,7 @@ import odc from "../../assets/images/logo_ODC.png";
 import logosonatel from "../../assets/images/logoSA.png";
 
 import sacademy from "../../assets/images/logoODC.png";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Typography } from '@material-ui/core';
 import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo } from './ApprenantService';
 import Swal from "sweetalert2";
