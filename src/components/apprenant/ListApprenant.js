@@ -198,10 +198,10 @@ export const ListApprenant = () => {
 
     }
 
-    let history = useHistory();
+    const navigate = useNavigate();
 
     function RedirectAddApprenant() {
-        history.push("/add_apprenant");
+        navigate("/add_apprenant");
     }
 
     const downloadQRCode = () => {
