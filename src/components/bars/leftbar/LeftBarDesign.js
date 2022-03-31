@@ -3,11 +3,11 @@ import sonatelLogo from "../../../assets/images/logo_ODC.png"
 import { Avatar, ListItem, ListItemIcon, ListItemText, Typography } from "@material-ui/core";
 import { LeftBarStyle } from "./LeftBarStyle";
 import { LeftBarData } from './LeftBarData';
-import { useNavigate, useLocation } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 
 const LeftBarDesign = () => {
     const classes = LeftBarStyle();
-    const navigate = useNavigate();
+    const history = useHistory();
     const location = useLocation();
 
     const user = localStorage.getItem('user');
@@ -19,7 +19,7 @@ const LeftBarDesign = () => {
                     key={key}
                     button
                     //key={item.id}
-                    onClick={() => navigate(item.path)}
+                    onClick={() => history.push(item.path)}
                     className={location.pathname === item.path ? classes.active : classes.notActive}
                 >
                     <ListItemIcon className={classes.linkIcon}>{item.icon}</ListItemIcon>
@@ -36,7 +36,7 @@ const LeftBarDesign = () => {
                     key={key}
                     button
                     //key={item.id}
-                    onClick={() => navigate(item.path)}
+                    onClick={() => history.push(item.path)}
                     className={location.pathname === item.path ? classes.active : classes.notActive}
                 >
                     <ListItemIcon className={classes.linkIcon}>{item.icon}</ListItemIcon>

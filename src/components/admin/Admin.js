@@ -5,7 +5,7 @@ import Layout from "../layout/Layout";
 import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
 import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
 import AdminStyle from "./AdminStyle";
-import { useNavigate } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { FormControl, Typography } from '@material-ui/core';
 import {
     DataGrid,
@@ -40,10 +40,10 @@ export const Admin = () => {
         })
     }, []);
 
-    const navigate = useNavigate();
+    let history = useHistory();
 
     function RedirectAddAdmin() {
-        navigate("/add_admin");
+        history.push("/add_admin");
     }
 
     const chargerStructure = (value) => {
