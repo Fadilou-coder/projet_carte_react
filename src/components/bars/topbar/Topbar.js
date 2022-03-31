@@ -7,7 +7,7 @@ import { Typography } from "@mui/material";
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FindById, FindBySuperAdminId } from '../../admin/AdminService'
 import logoutImg from "../../../assets/images/logOut.jpeg"
 
@@ -39,11 +39,11 @@ const Topbar = ({ funcSetIsMobile }) => {
     const open = Boolean(anchorEl);
     const id = open ? 'simple-popover' : undefined;
 
-    let history = useHistory();
+    let navigate = useNavigate();
 
     const logout = () => {
         localStorage.removeItem('token');
-        history.push('/')
+        navigate('/')
     }
 
     React.useEffect(() => {
