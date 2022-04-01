@@ -90,5 +90,6 @@
     "react-remove-scroll-bar": "^2.2.0",
     "react-router-dom": "^5.3.0",
     "sweetalert2-react-content": "^4.2.0"
-  }
+  },
+  "dev": "docker-compose -f docker-compose.dev.yml up"
 }
