@@ -249,7 +249,9 @@ export const Admin = () => {
                                             <Notes sx={{ color: "#000000" }} ></Notes>
                                         </InputAdornment>}
                                 >
-                                    <MenuItem value={""}> Tous </MenuItem>
+                                    <MenuItem value={""}>
+                                        Tous
+                                    </MenuItem>
                                     {
                                         structure.map((element, i) => {
                                             if (!element.isBlocked) {
