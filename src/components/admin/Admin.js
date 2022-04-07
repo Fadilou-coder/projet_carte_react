@@ -253,7 +253,7 @@ export const Admin = () => {
                                     {
                                         structure.map((element, i) => {
                                             if (!element.isBlocked) {
-                                                return (<MenuItem value={"" + element.id}> {element.nomStructure} </MenuItem>)
+                                                return (<MenuItem value={element.id}> {element.nomStructure} </MenuItem>)
                                             }
                                         })
                                     }

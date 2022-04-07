@@ -8,9 +8,7 @@ const AdminStyle = makeStyles((theme) => ({
         border: "2px solid #000000",
         borderRadius: "50px !important",
         width: "15vw",
-        '&:focus': {
-            borderColor: "#FF6600",
-        },
+        color:'black',
         [theme.breakpoints.down('sm')]: {
             width: "100%",
             marginBottom:"12px"
