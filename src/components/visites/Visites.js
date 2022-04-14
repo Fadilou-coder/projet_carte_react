@@ -12,10 +12,12 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import { FormControl, Typography } from "@material-ui/core"
+import { FormControl, IconButton, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
+import CloseIcon from '@mui/icons-material/Close';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import dateTime from 'date-time';
 import {
@@ -30,8 +32,6 @@ import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { encode as base64_encode } from 'base-64';
 import { SearchOutlined } from '@mui/icons-material';
-
-
 var QRCode = require('qrcode.react')
 
 export const Visites = () => {
@@ -41,6 +41,7 @@ export const Visites = () => {
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = React.useState(true);
 
+    // const [showDialog, setShowDialog] = useState(false);
 
 
     const [values, setValues] = React.useState({
@@ -52,6 +53,7 @@ export const Visites = () => {
     })
     const [date, setDate] = React.useState(new Date())
     const [search, setSearch] = React.useState('');
+    const [showDialog, setShowDialog] = useState(false);
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
@@ -94,7 +96,6 @@ export const Visites = () => {
             })
         }
     }
-
 
     const columns = [
         {
@@ -240,6 +241,7 @@ export const Visites = () => {
 
     const handleClose = () => {
         setOpen(false)
+        setShowDialog(false)
     }
 
     function chargerVisites(ndate, value) {
@@ -378,14 +380,9 @@ export const Visites = () => {
                     <Box sx={{}} className={classes.visitePage} >
 
                         <Box style={{ width: "100%" }}>
-
-                            {/*
-                        On a la partie du triage et de l'impression
-                    */}
                             <Box
                                 className={classes.filtre}
-
-                            >
+                                >
 
                                 <Grid direction="row" spacing={5} alignItems="center" className={classes.champfiltre}>
                                     <div
@@ -530,9 +527,7 @@ export const Visites = () => {
                             </Box>
 
 
-                            {/*
-                        Nous avons ici le tableau des visite effectuées durant une journée
-                     */}
+                           
                             <Box sx={{
                                 boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                                 '& .super-app-theme--header': {
@@ -571,6 +566,9 @@ export const Visites = () => {
                                             })
                                         }
                                         columns={columns}
+                                        onRowClick={(params, event) => {
+                                            setShowDialog(true)
+                                          }}
                                         disableVirtualization
                                     >
                                     </DataGrid>
@@ -580,7 +578,6 @@ export const Visites = () => {
 
                         </Box>
                     </Box>
-
 
                     <QRCode
                         hidden
@@ -703,6 +700,77 @@ export const Visites = () => {
                             </DialogActions>
                         </Dialog>
                     </div>
+
+
+
+{/* Dialogue pour commenntaire */}
+                    <div>
+                    <Dialog open={showDialog} onClose={handleClose} 
+                            PaperProps={{
+                                style: {
+                                backgroundColor: ' #000000',
+                                boxShadow: 'none',
+                                height: "85%",
+                                 left: '40%',
+                                // display: 'flex',
+                                // float: 'right',
+                                // ['@media (min-width:780px)']: { // eslint-disable-line no-useless-computed-key
+                                //     left: '0'
+                                //   }
+                                },
+                    }} className={classes.dialog}>
+                            <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "#FFFFFF", paddingLeft: "20px" }}>
+                                COMMENTAIRE
+                                <IconButton
+                                        aria-label="close" 
+                                        onClick={handleClose}
+                                        sx={{
+                                            position: 'absolute',
+                                            right: 8,
+                                            top: 8,
+                                            float: 'right'
+                                        }}
+
+                                        style={{color: '#FFFFFF'}}
+                                    >
+                                    <CloseIcon/>
+                                </IconButton>
+                            </DialogTitle>
+                            <hr style={{ borderTop: " 4px solid #F48322", width: "20%", float: "left", marginLeft: "15px" }} />
+                            <DialogContent>
+                                <Grid>
+                                    <TextareaAutosize
+                                        aria-label="minimum height"
+                                        minRows={15}
+                                        placeholder="comment"
+                                        style={{ width: 300, borderRadius: '5px' }}
+                                    />
+                                </Grid>
+                                <DialogActions>
+                                <Button
+                                    sx={{
+                                        backgroundColor: "#FF6600",
+                                        fontFamily: "Arial",
+                                        fontSize: "16px",
+                                        color: "#000000",
+                                        fontWeight: "bold",
+                                        right: "80px",
+                                        marginTop: "15px",
+                                        '&:hover': {
+                                            backgroundColor: "#FFFFFF",
+                                            pointer: "cursor",
+                                            color: "#000000"
+                                        }
+                                    }}
+                                >
+                                    COMMENTER
+                                </Button>
+                            </DialogActions>
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+
+                    
                 </Grid>
             </Grid>
         </Layout>
