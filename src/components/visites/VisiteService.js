@@ -1,7 +1,8 @@
 import axios from "axios"
 import authHeader from "../../core/service/AuthHeader"
 
-const API_URL =  'https://projet-carte.herokuapp.com/api/';
+//const API_URL =  'https://projet-carte.herokuapp.com/api/';
+const API_URL = 'http://localhost:9000/api/';
 
     export const ListAllVisite = (date) => {
         return axios.get(API_URL + "visites/" + date, {headers: authHeader()});

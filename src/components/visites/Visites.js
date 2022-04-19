@@ -18,12 +18,7 @@ import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
 
 import dateTime from 'date-time';
-import {
-    DataGrid,
-    gridPageCountSelector,
-    gridPageSelector,
-    useGridApiContext,
-    useGridSelector,
+import {DataGrid, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector,
 } from '@mui/x-data-grid'
 import jsPDF from "jspdf"
 import "jspdf-autotable"

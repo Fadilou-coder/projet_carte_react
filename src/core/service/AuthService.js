@@ -1,6 +1,7 @@
 import axios from "axios"
 
-const API_URL =  'https://projet-carte.herokuapp.com/api/';
+//const API_URL =  'https://projet-carte.herokuapp.com/api/';
+const API_URL = 'http://localhost:9000/api/';
 
 class AuthService {
     login(email, password) {
@@ -30,7 +31,6 @@ class AuthService {
 
 export const isAuthenticated = () => {
     return !!localStorage.getItem("id");
-
 }
 
 export default new AuthService();
