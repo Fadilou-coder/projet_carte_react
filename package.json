@@ -22,6 +22,7 @@
     "axios": "^0.22.0",
     "base-64": "^1.0.0",
     "caniuse-lite": "^1.0.30001278",
+    "chart.js": "^3.7.1",
     "date-fns": "2.23.0",
     "date-time": "^4.0.0",
     "file-saver": "^2.0.5",
@@ -39,6 +40,7 @@
     "qrcode": "^1.5.0",
     "qrcode.react": "^1.0.1",
     "react": "^17.0.2",
+    "react-chartjs-2": "^4.1.0",
     "react-component-export-image": "^1.0.6",
     "react-date-picker": "^8.3.6",
     "react-dom": "^17.0.2",
@@ -83,12 +85,13 @@
   "devDependencies": {
     "@material-table/core": "^4.3.6",
     "@material-ui/core": "^4.12.3",
-    "@material-ui/lab": "^4.0.0-alpha.60",
     "eslint-config-react-app": "^6.0.0",
+    "faker": "^6.6.6",
     "react-hook-form": "^7.20.4",
     "react-redux": "^7.2.6",
     "react-remove-scroll-bar": "^2.2.0",
     "react-router-dom": "^5.3.0",
     "sweetalert2-react-content": "^4.2.0"
-  }
+  },
+  "dev": "docker-compose -f docker-compose.dev.yml up"
 }
