@@ -13,7 +13,7 @@ import {
     gridPageCountSelector,
     gridPageSelector,
     useGridApiContext,
-    useGridSelector,
+    useGridSelector
 } from '@mui/x-data-grid'
 import "jspdf-autotable"
 import { SearchOutlined } from '@mui/icons-material';
@@ -22,9 +22,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { ListAllPromo, AddPromo } from './PromoService'
+import { ListAllPromo, AddPromo, UpdatePromo } from './PromoService'
 import Swal from "sweetalert2";
-
 
 export const Promos = () => {
 
@@ -193,6 +192,31 @@ export const Promos = () => {
                 }
             ) 
     };
+    
+    const handleCommit = (e)=>{
+        const arrayEdit = promo.map(p=>{
+            if(p.id === e.id){
+               var data = {...p, [e.field]: e.value}
+               UpdatePromo(data, data.id).then(res => {
+                if (res.status === 200) {
+                    setPromo(res.data);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Modifier avec success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            }
+        });
+        setLoading(true);
+        ListAllPromo().then(response => {
+            setPromo(response.data);
+            setLoading(false);
+        });
+    }
     return (
         <Layout>
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
@@ -264,12 +288,15 @@ export const Promos = () => {
                                     </Button>
                                 </div>
                             </Box>
+                            {/* <div style={{width: '600px'}}>
+                                    {JSON.stringify(promo)}
+                            </div> */}
                             <Box className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
                                     <DataGrid
+                                        onCellEditCommit={handleCommit}
                                         sx={{ boxShadow: "30px", width: "100%" }}
-
                                         autoHeight
                                         pageSize={10}
                                         rowsPerPageOptions={[5, 10, 20]}
