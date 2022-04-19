@@ -8,7 +8,7 @@ const LeftBar = ({isMobile, funcSetIsMobile}) => {
     const classes = LeftBarStyle();
     return(
         <div>
-            <nav className={classes.drawer}>
+            <nav className={classes.drawer} sx={{marginTop:'20px'}}>
                 <Hidden xsDown implementation="css">
                     <Drawer
                         variant="permanent"

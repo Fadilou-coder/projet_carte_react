@@ -1,8 +1,7 @@
 import { Box, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React from 'react'
+import React, {useState} from 'react'
 import Layout from "../layout/Layout";
-import StructureStyle from "./StructureStyle";
 import Grid from '@material-ui/core/Grid';
 import Swal from "sweetalert2";
 
@@ -14,84 +13,16 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { Addstructure, Bloquerstructure, ListAllStructure, DebloquerStructure } from "./StructureService";
 import { Typography } from "@material-ui/core";
+import ReferentielStyle from './ReferentielStyle';
+import { ListAllReferentiel, AddReferentiel } from './ReferentielService';
 
 
 
-export const Structure = () => {
+export const Referentiel = () => {
 
-    const [structure, setStructure] = React.useState([]);
-    const [nomStructure, setNomStructure] = React.useState({ nomStructure: '' });
     const [loading, setLoading] = React.useState(true);
-
-    React.useEffect(() => {
-        ListAllStructure().then(response => {
-            setStructure(response.data);
-            setLoading(false);
-        });
-    }, []
-    );
-    function AddStructure() {
-        Addstructure(nomStructure).then(response => {
-            setLoading(true);
-            ListAllStructure().then(response => {
-                setStructure(response.data);
-                setLoading(false);
-            })
-            setNomStructure({ nomStructure: '' });
-        });
-    }
-
-
-    function BloquerSstructure(id, blocked) {
-        if (!blocked) {
-            Swal.fire({
-                title: 'Attention!!!',
-                text: "voulez vous vraiment bloquer cette structure!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: 'green',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'oui!',
-                cancelButtonText: 'Non!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Bloquerstructure(id).then(() => {
-                        setLoading(true);
-                        ListAllStructure().then(response => {
-                            setStructure(response.data);
-                            setLoading(false);
-                        })
-                    })
-                }
-            })
-        } else {
-            Swal.fire({
-                title: 'Attention!!!',
-                text: "voulez vous vraiment débloquer cette structure!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: 'green',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'oui!',
-                cancelButtonText: 'Non!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    DebloquerStructure(id).then(() => {
-                        setLoading(true);
-                        ListAllStructure().then(response => {
-                            setStructure(response.data);
-                            setLoading(false);
-                        })
-                    })
-                }
-            })
-        }
-
-    }
-
-
+    const [referentiel, setReferentiel] = React.useState({ libelle: '' });
 
     // Custom Pagination
     function CustomPagination() {
@@ -115,15 +46,21 @@ export const Structure = () => {
 
     const columns = [
         {
-            field: 'nomStructure',
+            field: 'id',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Nom Stucture',
+            headerName: 'ID',
             flex: 1
         },
         {
-            field: 'blocked',
+            field: 'libelle',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Blocked ?',
+            headerName: 'Référentiel',
+            flex: 1
+        },
+        {
+            field: 'bloquer',
+            headerClassName: 'super-app-theme--header',
+            headerName: 'Bloqué ?',
             editable: true,
             flex: 1,
             sortable: false,
@@ -138,7 +75,7 @@ export const Structure = () => {
                             color: "#FFFFFF"
                         }
                     }}
-                        onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Bloquer</Button>;
+                    >Bloquer</Button>;
                 else
                     return <Button variant="contained"
                         sx={{
@@ -149,13 +86,58 @@ export const Structure = () => {
                                 backgroundColor: '#FF6600',
                                 color: "#FFFFFF"
                             }
-                        }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Debloquer</Button>;
+                        }}>Debloquer</Button>;
             }
         },
 
 
     ]
-    const classes = StructureStyle();
+    const classes = ReferentielStyle();
+    const [formErrors, setFormErrors] = useState({});
+    const [setErrorPage] = useState(false);
+
+    const validateRef = (val) => {
+        const errors = {};
+        if (!val.libelle) {
+            errors.libelle = "Le libelle est requis"
+        } 
+        return errors;
+    }
+
+    React.useEffect(() => {
+        ListAllReferentiel().then(response => {
+            setReferentiel(response.data);
+            setLoading(false);
+        });
+    }, []
+    );
+
+
+    const handleSubmit = (event) => {
+        
+        setFormErrors(validateRef(referentiel))
+            event.preventDefault();
+         
+            AddReferentiel(referentiel).then(res => {
+            if (res.status === 200) {
+                Swal.fire(
+                    'Succes!',
+                    'Enregistrer avec succes.',
+                    'success'
+                ).then((res) => {
+                    setReferentiel({
+                        libelle: '',
+                    }) 
+                })
+            } 
+            setLoading(true);
+            }).catch(
+                (error) => {
+                    setErrorPage(true);
+                    console.log(error);
+                }
+            ) 
+    };
     return (
         <Layout>
             <Grid className={classes.structurePage}>
@@ -182,7 +164,7 @@ export const Structure = () => {
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
-                            LISTE DES STRUCTURES
+                            LISTE DES REFERENTIELS
                         </Typography>
 
 
@@ -197,15 +179,12 @@ export const Structure = () => {
                                 Pagination: CustomPagination,
                             }}
                             loading={loading}
-                            rows={structure}
+                            rows={referentiel}
                             columns={columns}
                         />
 
                     </Box>
-                    <Box
-                        className={classes.contentDiv}
-
-                    >
+                    <Box className={classes.contentDiv}>
                         <Typography
                             variant='h5'
                             style={{
@@ -215,7 +194,7 @@ export const Structure = () => {
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
-                            AJOUTER DES STRUCTURES
+                            AJOUTER REFERENTIEL
                         </Typography>
 
 
@@ -225,20 +204,23 @@ export const Structure = () => {
                             </Grid>
                         </Grid>
                         <TextField
-                            id="outlined-basic"
-                            label="Nom structure"
+                            id="libelle"
+                            name="libelle"
+                            type="text"
+                            value={referentiel.libelle}
                             variant="outlined"
+                            placeholder="libelle"
+                            onChange={(event) => {
+                                setFormErrors({...formErrors, libelle: null})
+                                setReferentiel({ ...referentiel, libelle: event.target.value })
+                            }}
+                                           
                             style={{ width: "100%", marginBottom: "20px" }}
-                            value={nomStructure.nomStructure}
-                            onChange={(event) => setNomStructure({
-                                ...nomStructure,
-                                nomStructure: event.target.value
-                            })}
                         />
-
+                        <p style={{color: 'red'}}>{formErrors.libelle}</p>
                         <div style={{}}>
                             <Button
-                                disabled={nomStructure.nomStructure === ''}
+                                disabled={referentiel.libelle === ''}
                                 variant="contained"
                                 sx={{
                                     margin: 'auto', display: "flex",
@@ -250,7 +232,8 @@ export const Structure = () => {
                                         color: "#FFFFFF"
                                     }
                                 }}
-                                onClick={AddStructure}>
+                                onClick={handleSubmit}
+                                >
                                 AJOUTER
                             </Button>
 
@@ -265,4 +248,4 @@ export const Structure = () => {
     )
 }
 
-export default Structure;
+export default Referentiel;
