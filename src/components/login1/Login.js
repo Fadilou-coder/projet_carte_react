@@ -96,7 +96,7 @@ const Login = (props) => {
     <>
       <Grid container className={classes.loginpage}>
 
-        <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2, marginTop: "12em", opacity: "80%"}} className={classes.loginContent}>
+        <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2}} className={classes.loginContent}>
 
           {/* <h1 className={classes.titre}>
             PLATEFORME DE POINTAGE DES APPRENANTS
