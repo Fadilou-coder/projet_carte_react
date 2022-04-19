@@ -12,7 +12,7 @@ export const LeftBarStyle = makeStyles(theme => ({
         display: "flex",
         alignItems: "center",
         backgroundColor: themeGeneral.palette.primary.white,
-        color: themeGeneral.palette.primary.white,
+        color: themeGeneral.palette.primary.white
     },
     drawerPaperSm: {
         width: "100%",
@@ -23,6 +23,7 @@ export const LeftBarStyle = makeStyles(theme => ({
     },
     logoDiv: {
         borderBottom: '1px solid ##000000',
+        marginBottom: '3em',
         padding: "45px 5px 30px 5px",
         "& .MuiAvatar-img": {
             color: 'transparent',
@@ -43,7 +44,11 @@ export const LeftBarStyle = makeStyles(theme => ({
         marginTop:"40px",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+
+        "& .MuiAvatar-root": {
+           display:"none",
+        }
     },
     active: {
         backgroundColor: "#FF6600",

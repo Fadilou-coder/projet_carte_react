@@ -38,7 +38,7 @@ const LeftBar = ({isMobile, funcSetIsMobile}) => {
                 </div>
         ) :
         <div>
-            <nav className={classes.drawer}>
+            <nav className={classes.drawer} sx={{marginTop:'20px'}}>
                 <Hidden xsDown implementation="css">
                     <Drawer
                         variant="permanent"

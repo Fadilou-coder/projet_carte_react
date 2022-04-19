@@ -55,7 +55,6 @@ const LeftBarDesign = () => {
             <div className={classes.logoDiv}>
                 <Avatar alt='Sonatel Academy' src={sonatelLogo} variant="square"
                     className={classes.logoStyle}
-                    style={{"& .MuiAvatar-root": {width: '100%'}}}
                 />
             </div>
             {myTab}
