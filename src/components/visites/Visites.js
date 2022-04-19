@@ -61,6 +61,9 @@ export const Visites = () => {
         })
     }, [date])
 
+
+   
+
     // Custom Pagination
     function CustomPagination() {
         const apiRef = useGridApiContext()
@@ -103,7 +106,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
             flex: 1,
-            minWidth:150,
+            minWidth: 150,
             valueGetter: (params) => {
 
                 if (params.row.visiteur) {
@@ -118,7 +121,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
             flex: 1,
-            minWidth:150,
+            minWidth: 150,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
                     return params.row.visiteur.nom
@@ -132,7 +135,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'cni',
             flex: 1,
-            minWidth:150,
+            minWidth: 150,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
                     return params.row.visiteur.cni
@@ -146,7 +149,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Entree',
             flex: 1,
-            minWidth:150,
+            minWidth: 150,
             valueGetter: (params) => {
                 if (params.row.dateEntree) {
                     return params.row.dateEntree.substr(11, 5)
@@ -158,7 +161,7 @@ export const Visites = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Sortie',
             flex: 1,
-            minWidth:150,
+            minWidth: 150,
             renderCell: (cellvalue) => {
                 if (cellvalue.row.dateSortie == null) {
                     return <Button
@@ -238,6 +241,8 @@ export const Visites = () => {
         doc.save("Rapport du " + date.toDateString())
     }
     const classes = VisiteStyle()
+
+
     const [open, setOpen] = React.useState(false)
 
     const handleClickOpen = () => {
@@ -248,6 +253,7 @@ export const Visites = () => {
         setOpen(false)
     }
 
+  
     function chargerVisites(ndate, value) {
         setVisiteur(value)
         setDate(ndate)
@@ -369,7 +375,7 @@ export const Visites = () => {
 
     return (
         <Layout>
-            <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
+            <Grid style={{ width: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
                         style={{
@@ -573,6 +579,14 @@ export const Visites = () => {
                                                 }
                                             }).map((row) => {
                                                 return row;
+                                                // return (
+                                                //     <Popper id={id} open={open1} anchorEl={anchorEl}>
+                                                //         <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+                                                //             {{ row }}
+                                                //         </Box>
+                                                //     </Popper>
+                                                // )
+
                                             })
                                         }
                                         columns={columns}
@@ -610,18 +624,18 @@ export const Visites = () => {
                     <div>
                         <Dialog open={open} onClose={handleClose} PaperProps={{
 
-                            
+
                             sx: {
                                 borderRadius: "10px",
                                 padding: "20px",
                                 // width: "25%", 
-                                maxWidth:{
-                                    lg:"30%",
-                                    md:"25%",
-                                    sm:"100%"
+                                maxWidth: {
+                                    lg: "30%",
+                                    md: "25%",
+                                    sm: "100%"
                                 }
                             },
-                            
+
                         }}>
 
                             <DialogTitle variant="h5" className={classes.textTypo} style={{ fontWeight: "bold" }}>AJOUTER VISITEUR</DialogTitle>

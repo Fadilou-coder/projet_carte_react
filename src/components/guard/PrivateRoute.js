@@ -31,7 +31,7 @@ const PrivateRoute = ({component: Component, ...rest }) => {
     if(isAuthenticated === null) {
         return (
             <Route {...rest} render={props =>
-                    <Redirect to="/visites"/>
+                    <Redirect to="/tableau_de_bord"/>
             }
             />
         )
