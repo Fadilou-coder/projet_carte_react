@@ -13,6 +13,7 @@ const AdminStyle = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             width: "100%",
+            marginBottom:"12px"
         },
     },
     filtre: {
@@ -30,19 +31,6 @@ const AdminStyle = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             display: "none !important",
         },
-    },
-    champfiltre: {
-        display: "flex",
-        alignItems:"self-end",
-        // justifyContent: "space-around",
-        gap: "20px",
-        width: "60%",
-        [theme.breakpoints.down('sm')]: {
-            display: "block",
-            width: "100%",
-            marginBottom: "20px"
-        },
-
     },
     subContainer: {
         padding: themeGeneral.spacing(1),
@@ -157,7 +145,6 @@ const AdminStyle = makeStyles((theme) => ({
         zIndex: 1,
         position: "absolute",
         width: "100%",
-        /* width: "99.6%",*/
         top: "58.5%",
         bottom: "56%"
     },

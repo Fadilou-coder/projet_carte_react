@@ -54,7 +54,8 @@ const LeftBarDesign = () => {
         <div>
             <div className={classes.logoDiv}>
                 <Avatar alt='Sonatel Academy' src={sonatelLogo} variant="square"
-                    className={classes.logoStyle} />
+                    className={classes.logoStyle}
+                />
             </div>
             {myTab}
         </div>

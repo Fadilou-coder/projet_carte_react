@@ -2,8 +2,8 @@
 import { Box, Button, OutlinedInput } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
-import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
-import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
+import { AddCircleOutlined } from '@mui/icons-material';
+import { InputAdornment, Pagination, PaginationItem } from '@mui/material';
 import AdminStyle from "./AdminStyle";
 import { useHistory } from "react-router-dom";
 import { FormControl, Typography } from '@material-ui/core';
@@ -16,27 +16,21 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin, BloquerAdmin, DebloquerAdmin, FindByStructure } from './AdminService';
-import { ListAllStructure } from '../structure/StructureService'
+import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
 
 
 export const Admin = () => {
 
-    const [structure, setStructure] = React.useState([]);
-
     const [admins, setAdmin] = React.useState([]);
     const [search, setSearch] = React.useState('');
     const [isLoaded, setIsLoaded] = React.useState(true);
 
     React.useEffect(() => {
-        ListAllStructure().then(res => {
-            setStructure(res.data)
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
-                setIsLoaded(false);
-            })
+        ListAllAdmin().then(res => {
+            setAdmin(res.data);
+            setIsLoaded(false);
         })
     }, []);
 
@@ -44,21 +38,6 @@ export const Admin = () => {
 
     function RedirectAddAdmin() {
         history.push("/add_admin");
-    }
-
-    const chargerStructure = (value) => {
-        setIsLoaded(true);
-        if (value === "") {
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
-                setIsLoaded(false);
-            })
-        } else {
-            FindByStructure(value).then(res => {
-                setAdmin(res.data)
-                setIsLoaded(false);
-            })
-        }
     }
 
     // Custom Pagination
@@ -148,19 +127,23 @@ export const Admin = () => {
             headerName: 'Prenom',
             editable: true,
             flex: 1,
+            minWidth: 150,
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
             editable: true,
-            flex: 1
+            flex: 1,
+            minWidth: 150,
+
         },
         {
             field: 'email',
             headerClassName: 'super-app-theme--header',
             headerName: 'Email',
             editable: true,
+            minWidth: 150,
             flex: 1
         },
         {
@@ -168,6 +151,7 @@ export const Admin = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Téléphone',
             editable: true,
+            minWidth: 150,
             flex: 1
         },
         {
@@ -175,6 +159,7 @@ export const Admin = () => {
             headerClassName: 'super-app-theme--header',
             headerName: 'Cni',
             editable: true,
+            minWidth: 150,
             flex: 1
         },
         {
@@ -183,6 +168,7 @@ export const Admin = () => {
             headerName: 'Blocked ?',
             editable: true,
             flex: 1,
+            minWidth: 150,
             sortable: false,
             renderCell: (params) => {
                 return <Checkbox onClick={() => bloquerAdmin(params.id, params.row.isbloqued)} checked={params.row.isbloqued} />;
@@ -217,41 +203,8 @@ export const Admin = () => {
                     >
 
                         <div className={classes.champfiltre}>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
-                                className={classes.champtextfiltre}
-                            >
-                                <FilterAltOutlined></FilterAltOutlined>
-                                Filtre
-                            </div>
 
-
-                            <div>
-                                <Select
-                                    size='small'
-                                    value={structure}
-                                    onChange={(event) => chargerStructure(event.target.value)}
-                                    className={classes.visiteur}
-
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <Notes sx={{ color: "#000000" }} ></Notes>
-                                        </InputAdornment>}
-                                >
-                                    <MenuItem value={""}> Tous </MenuItem>
-                                    {
-                                        structure.map((element, i) => {
-                                            if (!element.isBlocked) {
-                                                return (<MenuItem value={"" + element.id}> {element.nomStructure} </MenuItem>)
-                                            }
-                                        })
-                                    }
-                                </Select>
-                            </div>
+                            
                             <div className={classes.mysearch}>
                                 <FormControl className={classes.mytextsearch}>
                                     <OutlinedInput
@@ -262,7 +215,7 @@ export const Admin = () => {
                                         className={classes.mysearch}
                                         startAdornment={
                                             <InputAdornment position="start">
-                                                <SearchOutlined  sx={{ color: "#000000" }} ></SearchOutlined>
+                                                <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
                                             </InputAdornment>
                                         }
                                         onChange={(event) => {
@@ -272,7 +225,7 @@ export const Admin = () => {
                                     />
                                 </FormControl>
                             </div>
-                          {/*  <div>
+                            {/*  <div>
                                 <FormControl style={{ width: "100%", marginBottom: "20px" }}>
                                     <OutlinedInput
 
@@ -302,14 +255,14 @@ export const Admin = () => {
                                 onClick={RedirectAddAdmin}
                                 sx={{
                                     backgroundColor: "#FF6600",
-                                    color:"#000000",
+                                    color: "#000000",
                                     fontFamily: "Arial",
                                     fontSize: "16px",
-                                    fontWeight:"bolder",
+                                    fontWeight: "bolder",
                                     marginBottom: "10px",
                                     '&:hover': {
                                         backgroundColor: "#000000",
-                                        color:"#FFFFFF",
+                                        color: "#FFFFFF",
                                         pointer: "cursor"
                                     }
                                 }}
@@ -323,9 +276,9 @@ export const Admin = () => {
                         boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                         '& .super-app-theme--header': {
                             backgroundColor: '#696969',
-                            color:"#FFFFFF",
-                            fontWeight:"bold",
-                            textTransform:"uppercase"
+                            color: "#FFFFFF",
+                            fontWeight: "bold",
+                            textTransform: "uppercase"
                         },
                     }} className={classes.tableau}>
 
