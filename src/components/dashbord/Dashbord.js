@@ -12,40 +12,16 @@ import { ListApprenantsByPromo, ListPromos } from './Dashboard.service';
 const Dashbord = () => {
 
     const [promo, setPromo] = React.useState(8);
-    
-    const [nbApprenants, setnbApprenants]= React.useState();
+
+    const [nbApprenants, setnbApprenants] = React.useState();
 
     React.useEffect(() => {
-
-        // ListPromos().then(res => {
-        //     // console.log(res.data[res.data.length - 1].id);
-        //     // console.log(res.data[res.data.length - 1]);
-        //     console.log(res.data);
-
-        //     setPromo(res.data[res.data.length - 1].id);
-
-        // });
-
         ListApprenantsByPromo(promo).then(res => {
             console.log(res.data.length);
             setnbApprenants(res.data.length);
 
         })
-        // listAllReferentiels().then(res => {
-        //     setReferentiels(res.data);
-        // });
 
-        // ListPromos().then(res => {
-        //     setPromos(res.data);
-        //     setPromo(res.data[res.data.length - 1].id);
-        //     ListApprenantsByPromo(res.data[res.data.length - 1].id).then(res => {
-        //         setApprenants(res.data)
-        //         setApprenant(res.data[0]);
-        //         setLoading(false);
-        //     })
-        // });
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const classes = DashboardStyle();
@@ -150,7 +126,7 @@ const Dashbord = () => {
                                 </div>
                                 <div className={classes.nbVal}>
                                     <Typography variant='h3'>
-                                        {{ nbApprenants }}
+                                        {/* {{ nbApprenants }} */}
                                     </Typography>
                                     Apprenants
                                 </div>

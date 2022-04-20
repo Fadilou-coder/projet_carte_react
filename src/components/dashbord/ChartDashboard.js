@@ -31,21 +31,7 @@ export function ChartDashboard(props) {
       bodyFontFamily: "'Nunito', sans-serif",
     },
     responsive: true,
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            fontFamily: "'Nunito', sans-serif",
-            fontSize: 14,
-            beginAtZero: true,
-
-            max: 100,
-            stepSize: 5
-          }
-        }
-      ]
-    },
-    plugins: {
+     plugins: {
       legend: {
         position: "top",
       },
