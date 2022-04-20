@@ -8,4 +8,4 @@ export const ListAllReferentiel = () => {
 }
 
 export const AddReferentiel = (data) => { return axios.post(API_URL + "create", data, {headers: authHeader()}); }
-export const UpdateReferentiel = (id) => { return axios.get(API_URL + id, {headers: authHeader()}); }
+export const UpdateReferentiel = (data, id) => { return axios.put(API_URL + id, data, {headers: authHeader()}); }
