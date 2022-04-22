@@ -15,14 +15,16 @@ import {
 } from '@mui/x-data-grid';
 import { Typography } from "@material-ui/core";
 import ReferentielStyle from './ReferentielStyle';
-import { ListAllReferentiel, AddReferentiel } from './ReferentielService';
+import { ListAllReferentiel, AddReferentiel, UpdateReferentiel } from './ReferentielService';
 
 
 
 export const Referentiel = () => {
 
     const [loading, setLoading] = React.useState(true);
-    const [referentiel, setReferentiel] = React.useState({ libelle: '' });
+    const [referentiel, setReferentiel] = React.useState(
+        { libelle: '' }
+        );
 
     // Custom Pagination
     function CustomPagination() {
@@ -55,7 +57,8 @@ export const Referentiel = () => {
             field: 'libelle',
             headerClassName: 'super-app-theme--header',
             headerName: 'Référentiel',
-            flex: 1
+            flex: 1,
+            editable: true
         },
         {
             field: 'bloquer',
@@ -117,9 +120,9 @@ export const Referentiel = () => {
     const handleSubmit = (event) => {
         
         setFormErrors(validateRef(referentiel))
-            event.preventDefault();
          
             AddReferentiel(referentiel).then(res => {
+                console.log(referentiel);
             if (res.status === 200) {
                 Swal.fire(
                     'Succes!',
@@ -139,6 +142,30 @@ export const Referentiel = () => {
                 }
             ) 
     };
+    const handleCommit = (e)=>{
+        const arrayEdit = referentiel.map(r=>{
+            if(r.id === e.id){
+               var data = {...r, [e.field]: e.value}
+               UpdateReferentiel(data, data.id).then(res => {
+                if (res.status === 200) {
+                    setReferentiel(res.data);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Modifier avec success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            }
+        });
+        setLoading(true);
+        ListAllReferentiel().then(response => {
+            setReferentiel(response.data);
+            setLoading(false);
+        });
+    }
     return (
         <Layout>
             <Grid className={classes.structurePage}>
@@ -170,9 +197,8 @@ export const Referentiel = () => {
 
 
                         <DataGrid
-
+                            onCellEditCommit={handleCommit}
                             sx={{ boxShadow: "30px", width: "100%", }}
-
                             autoHeight
                             pageSize={6}
                             rowsPerPageOptions={[5, 10, 20]}
@@ -220,7 +246,7 @@ export const Referentiel = () => {
                         />
                         <p style={{color: 'red'}}>{formErrors.libelle}</p>
                         <div style={{}}>
-                            <Button
+                            <Button  onClick={handleSubmit}
                                 disabled={referentiel.libelle === ''}
                                 variant="contained"
                                 sx={{
@@ -233,7 +259,6 @@ export const Referentiel = () => {
                                         color: "#FFFFFF"
                                     }
                                 }}
-                                onClick={handleSubmit}
                                 >
                                 AJOUTER
                             </Button>
