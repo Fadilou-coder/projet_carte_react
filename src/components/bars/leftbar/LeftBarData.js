@@ -70,5 +70,14 @@ export const LeftBarData = [
         after: true,
         showBySuperAdmin: true,
         showByAdmin: true
+    },
+    {
+        id: 8,
+        title: "Appareils",
+        path:'/devices',
+        icon:<SupervisorAccountIcon/>,
+        after: true,
+        showBySuperAdmin: true,
+        showByAdmin: true
     }
 ]

@@ -8,15 +8,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { makeStyles } from "@material-ui/core";
 import Layout from "../layout/Layout";
-import { ListAllStructure } from "../structure/StructureService";
 import { SaveAdmin } from "./AdminService";
 import Swal from 'sweetalert2'
 import emailjs from '@emailjs/browser';
 
 
 function AddAdmin() {
-
-    const [structure, setStructure] = React.useState([]);
 
     const text = "ABCDEFGHIJKLM0123456789";
     var myPassword = "";
@@ -25,6 +22,8 @@ function AddAdmin() {
         myPassword += text.substring(word, word + 1);
     }
 
+    const isBlank = require('is-blank')
+
     const [admin, setAdmin] = React.useState({
         prenom: '',
         nom: '',
@@ -32,11 +31,11 @@ function AddAdmin() {
         email: '',
         addresse: '',
         password: myPassword,
-        cni: '',
-        structure: { id: 0 },
+        numPiece: '',
+        typePiece: 'CNI',
     });
 
-    const [formErrors, setFormErrors] = useState( {});
+    const [formErrors, setFormErrors] = useState({});
     const [setErrorPage] = useState(false);
 
     const classes = AdminStyle();
@@ -51,13 +50,6 @@ function AddAdmin() {
     }));
 
     const styles = useStyles();
-
-    React.useEffect(() => {
-            ListAllStructure().then(val => {
-                setStructure(val.data)
-            });
-        }, []
-    );
 
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
@@ -86,8 +78,8 @@ function AddAdmin() {
             email: '',
             addresse: '',
             password: myPassword,
-            cni: '',
-            structure: {id: 0},
+            numPiece: '',
+            typePiece: 'CNI',
         })
 
     };
@@ -107,10 +99,8 @@ function AddAdmin() {
 
     const validateAdmin = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
-        let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
-        let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
         const errors = {};
-        if (val.prenom === '') {
+        if (isBlank(val.prenom)) {
             errors.prenom = "prenom est requis"
         } else if (val.prenom.length < 3) {
             errors.prenom = "le prenom doit comporter plus de 3 caractères";
@@ -118,35 +108,24 @@ function AddAdmin() {
         else if (val.nom.length > 20) {
             errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
         }
-        if (val.nom === '') {
+        if (isBlank(val.nom)) {
             errors.nom = "nom est requis"
         } else if (val.nom.length < 2) {
-            errors.nom = "le nom doit comporter plus de 2 caractères";
+            errors.nom = "le nom doit comporter au moins 2 caractères";
         }
-        else if (val.nom.length > 10) {
-            errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
-        }
-        if (val.email === '') {
+        if (isBlank(val.email)) {
             errors.email = "le mail est requis"
         } else if (!regexMail.test(val.email)) {
             errors.email = "le format Email n'est pas valide";
         }
-        if (val.phone === '') {
+        if (isBlank(val.phone)) {
             errors.phone = "le numéro de télephone est requis"
-        } else if (!regexPhone.test(val.phone)) {
-            errors.phone = "le format numéro télephone n'est pas valide";
         }
-        if (val.addresse === '') {
+        if (isBlank(val.addresse)) {
             errors.addresse = "l'adresse est requis"
-        } else if (val.addresse.length < 3) {
-            errors.addresse = "l'adresse doit comporter plus de 3 caractères";
-        } else if (val.addresse.length > 15) {
-            errors.addresse = "l'adresse ne peut pas dépassé plus de 15 caractères";
         }
-        if (val.cni === '') {
-            errors.cni = "le numéro de carte d'identité est requis"
-        } else if (!regexCni.test(val.cni)) {
-            errors.cni = "le format numéro de carte d'identité n'est pas valide";
+        if (isBlank(val.numPiece)) {
+            errors.numPiece = "le numéro de piece est requis"
         }
         return errors;
     };
@@ -164,10 +143,10 @@ function AddAdmin() {
 
                         </Grid>
                         <form ref={form}>
-                            <Grid  container className={classes.subContainer}>
+                            <Grid container className={classes.subContainer}>
                                 <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
-                                <Grid xs={12} md={12} sm={12} container style={{ display:"flex", justifyContent:"center"}}>
-                                    <Grid xs={12} sm={12} md={4}  spacing={5} item>
+                                <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
+                                    <Grid xs={12} sm={12} md={4} spacing={5} item>
                                         <FormControl fullWidth>
                                             <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
@@ -244,10 +223,49 @@ function AddAdmin() {
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>addresse <span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}>Type de Piece<span style={{ color: 'red' }}>*</span> </label>
+                                                <Select
+                                                    labelId="demo-simple-select-label"
+                                                    id="demo-simple-select"
+                                                    placeholder="typePiece"
+                                                    onChange={(event) => {
+                                                        setFormErrors({ ...formErrors, promo: null })
+                                                        setAdmin({ ...admin, typePiece: event.target.value })
+                                                    }}
+                                                    name="typePiece"
+                                                    value={admin.typePiece}
+                                                >
+                                                    <MenuItem key="1" value="CNI"> CNI </MenuItem>
+                                                    <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
+                                                </Select>
+                                            </FormControl>
+                                            <p className={classes.formError}>{formErrors.typePiece}</p>
+                                        </Grid>
+                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                                            <FormControl fullWidth>
+                                                <label className={classes.labelText}>N° Piece <span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                     id="input"
-                                                    name="addresse"
+                                                    name="numPiece"
+                                                    type="text"
+                                                    variant="outlined"
+                                                    placeholder="Ex: numPiece"
+                                                    onChange={(event) => {
+                                                        setAdmin({ ...admin, numPiece: event.target.value })
+                                                    }}
+                                                    value={admin.numPiece}
+                                                />
+                                            </FormControl>
+                                            <p className={classes.formError}>{formErrors.numPiece}</p>
+                                        </Grid>
+                                    </Grid>
+                                    <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                                        <Grid xs={12} sm={12} md={4} item>
+                                            <FormControl fullWidth>
+                                                <label className={classes.labelText}>adresse <span style={{ color: 'red' }}>*</span> </label>
+                                                <OutlinedInput
+                                                    id="input"
+                                                    name="adresse"
                                                     type="text"
                                                     variant="outlined"
                                                     placeholder="Ex: addresse"
@@ -259,84 +277,30 @@ function AddAdmin() {
                                             </FormControl>
                                             <p className={classes.formError}>{formErrors.addresse}</p>
                                         </Grid>
-                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                            <FormControl fullWidth>
-                                                <label className={classes.labelText}>N° CNI <span style={{ color: 'red' }}>*</span> </label>
-                                                <OutlinedInput
-                                                    id="input"
-                                                    name="cni"
-                                                    type="text"
-                                                    variant="outlined"
-                                                    placeholder="Ex: cni"
-                                                    onChange={(event) => {
-                                                        setAdmin({ ...admin, cni: event.target.value })
-                                                    }}
-                                                    value={admin.cni}
-                                                />
-                                            </FormControl>
-                                            <p className={classes.formError}>{formErrors.cni}</p>
-                                        </Grid>
-                                    </Grid>
-
-
-                                    <Grid xs={12} sm={12} md={12} style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                        <Grid xs={12} sm={12} md={4} item>
-                                            <FormControl fullWidth>
-                                                <label className={classes.labelText}>Structure <span style={{ color: 'red' }}>*</span> </label>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="input"
-                                                    name="structure"
-                                                    label="Structure"
-                                                    sx={{
-                                                        borderRadius: "5px",
-                                                        '&:hover':
-                                                            {
-                                                                border: "2px solid #05888A",
-                                                            },
-                                                        '&:focus':
-                                                            {
-                                                                outline: "#05888A",
-                                                            }
-                                                    }}
-                                                    onChange={(event) => {
-                                                        setAdmin({ ...admin, structure: event.target.value })
-                                                    }}
-                                                    value={admin.structure}
-                                                >
-                                                    <MenuItem selected>Select</MenuItem>
-                                                    {structure.map(item => (
-                                                        <MenuItem value={item}>{item.nomStructure}</MenuItem>
-                                                    ))}
-
-
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                        </Grid>
+                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}> </Grid>
                                     </Grid>
                                     <Button type="submit" variant="contained"
-                                            id="button"
-                                            sx={{
-                                                backgroundColor: "#05888A",
-                                                fontFamily: "Arial", fontSize: "20px",
-                                                marginTop: "10px",
-                                                '&:hover': {
-                                                    backgroundColor: "#F48322",
-                                                    pointer: "cursor"
-                                                }
-                                            }}
-                                            onClick={handleSubmit}
+                                        id="button"
+                                        sx={{
+                                            backgroundColor: "#05888A",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            '&:hover': {
+                                                backgroundColor: "#F48322",
+                                                pointer: "cursor"
+                                            }
+                                        }}
+                                        onClick={handleSubmit}
                                     >AJOUTER</Button>
                                 </Grid>
+
                             </Grid>
-                            
+
                         </form>
                     </Grid>
                 </Box>
-            </Layout>
-        </React.Fragment>
+            </Layout >
+        </React.Fragment >
     )
 
 }

@@ -106,6 +106,7 @@ export const Referentiel = () => {
 
     React.useEffect(() => {
         ListAllReferentiel().then(response => {
+            console.log(response.data);
             setReferentiel(response.data);
             setLoading(false);
         });
