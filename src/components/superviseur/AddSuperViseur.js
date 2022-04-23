@@ -1,19 +1,17 @@
 import React, { useRef, useState } from "react";
 import { Grid } from "@material-ui/core";
 import Box from '@mui/material/Box';
-import AdminStyle from "./AdminStyle";
+import AdminStyle from "../admin/AdminStyle";
 import { FormControl, Typography } from "@material-ui/core";
 import { Button, OutlinedInput } from '@mui/material';
 import { makeStyles } from "@material-ui/core";
 import Layout from "../layout/Layout";
-import { SaveAdmin } from "./AdminService";
 import Swal from 'sweetalert2'
 import emailjs from '@emailjs/browser';
+import {SaveSuperViseur} from "./SuperviseurService";
 
 
-function AddAdmin() {
-
-   // const [structure, setStructure] = React.useState([]);
+function AddSuperViseur() {
 
     const text = "ABCDEFGHIJKLM0123456789";
     var myPassword = "";
@@ -29,8 +27,7 @@ function AddAdmin() {
         email: '',
         addresse: '',
         password: myPassword,
-        numPiece: '',
-       // structure: { id: 0 },
+        numPiece: ''
     });
 
     const [formErrors, setFormErrors] = useState( {});
@@ -49,22 +46,15 @@ function AddAdmin() {
 
     const styles = useStyles();
 
-  /*  React.useEffect(() => {
-            ListAllStructure().then(val => {
-                setStructure(val.data)
-            });
-        }, []
-    );*/
-
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
         event.preventDefault();
 
-        SaveAdmin(admin).then(res => {
+        SaveSuperViseur(admin).then(res => {
             Swal.fire({
                 position: 'center',
                 icon: 'success',
-                title: 'Admin enrégistré avec succes',
+                title: 'SuperViseur enrégistré avec succes',
                 showConfirmButton: true,
                 timer: 1500
             }).catch(
@@ -92,14 +82,12 @@ function AddAdmin() {
     const form = useRef();
 
     const sendEmail = (e) => {
-
         emailjs.sendForm('service_tuwme63', 'email_dv26pv8', form.current, 'aF00JTLiRllzze4TO')
             .then((result) => {
                 console.log(result.text);
             }, (error) => {
                 console.log(error.text);
             });
-
     };
 
     const validateAdmin = (val) => {
@@ -155,7 +143,7 @@ function AddAdmin() {
                     <Grid container spacing={2} >
                         <Grid item xs={12} sm={12} md={12}>
                             <Typography variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
-                                AJOUTER UN ADMIN
+                                AJOUTER UN SUPERVISEUR
                             </Typography>
                             <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float: "left", marginLeft: "15px" }} />
 
@@ -274,45 +262,6 @@ function AddAdmin() {
                                             <p className={classes.formError}>{formErrors.numPiece}</p>
                                         </Grid>
                                     </Grid>
-
-
-                                   {/* <Grid xs={12} sm={12} md={12} style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                        <Grid xs={12} sm={12} md={4} item>
-                                            <FormControl fullWidth>
-                                                <label className={classes.labelText}>Structure <span style={{ color: 'red' }}>*</span> </label>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="input"
-                                                    name="structure"
-                                                    label="Structure"
-                                                    sx={{
-                                                        borderRadius: "5px",
-                                                        '&:hover':
-                                                            {
-                                                                border: "2px solid #05888A",
-                                                            },
-                                                        '&:focus':
-                                                            {
-                                                                outline: "#05888A",
-                                                            }
-                                                    }}
-                                                    onChange={(event) => {
-                                                        setAdmin({ ...admin, structure: event.target.value })
-                                                    }}
-                                                    value={admin.structure}
-                                                >
-                                                    <MenuItem selected>Select</MenuItem>
-                                                    {structure.map(item => (
-                                                        <MenuItem value={item}>{item.nomStructure}</MenuItem>
-                                                    ))}
-
-
-                                                </Select>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                        </Grid>
-                                    </Grid>*/}
                                     <Button type="submit" variant="contained"
                                             id="button"
                                             sx={{
@@ -338,4 +287,4 @@ function AddAdmin() {
 
 }
 
-export default AddAdmin;
+export default AddSuperViseur;

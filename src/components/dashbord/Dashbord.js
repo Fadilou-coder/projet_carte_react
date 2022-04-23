@@ -7,45 +7,20 @@ import { ListItem } from '@mui/material';
 import DashboardStyle from "./Dashboard.style";
 import { ChartDashboard } from './ChartDashboard';
 import { ListApprenantsByPromo, ListPromos } from './Dashboard.service';
-// import faker from "faker";
 
 const Dashbord = () => {
 
-    const [promo, setPromo] = React.useState(8);
-    
+    const [promo ] = React.useState(8);
+
     const [nbApprenants, setnbApprenants]= React.useState(0);
 
     React.useEffect(() => {
-
-        // ListPromos().then(res => {
-        //     // console.log(res.data[res.data.length - 1].id);
-        //     // console.log(res.data[res.data.length - 1]);
-        //     console.log(res.data);
-
-        //     setPromo(res.data[res.data.length - 1].id);
-
-        // });
 
         ListApprenantsByPromo(promo).then(res => {
             console.log(res.data.length);
             setnbApprenants(res.data.length);
 
         })
-        // listAllReferentiels().then(res => {
-        //     setReferentiels(res.data);
-        // });
-
-        // ListPromos().then(res => {
-        //     setPromos(res.data);
-        //     setPromo(res.data[res.data.length - 1].id);
-        //     ListApprenantsByPromo(res.data[res.data.length - 1].id).then(res => {
-        //         setApprenants(res.data)
-        //         setApprenant(res.data[0]);
-        //         setLoading(false);
-        //     })
-        // });
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const classes = DashboardStyle();
@@ -103,11 +78,6 @@ const Dashbord = () => {
 
                                 >
                                     <MenuItem value={""}> Tous </MenuItem>
-                                    {/* {
-                                        referentiels.map((element, i) => {
-                                            return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
-                                        })
-                                    } */}
                                     <ListItem> AAAAAA</ListItem>
                                 </Select>
                             </div>

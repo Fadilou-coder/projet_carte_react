@@ -37,7 +37,7 @@ export const Promos = () => {
     );
     // const [showDialog, setShowDialog] = useState(false);
     const [open, setOpen] = React.useState(false)
-    const [search, setSearch] = React.useState('');
+    const [setSearch] = React.useState('');
 
 
         // Custom Dialog
@@ -131,7 +131,7 @@ export const Promos = () => {
             }
         }
     ]
-  
+
     const classes = PromoStyle();
     const [formErrors, setFormErrors] = useState({});
     const [setErrorPage] = useState(false);
@@ -140,17 +140,17 @@ export const Promos = () => {
         const errors = {};
         if (!val.libelle) {
             errors.libelle = "Le libelle est requis"
-        } 
-        
+        }
+
         if (!val.dateDebut) {
             errors.dateDebut = "Date début est requis"
         }
 
         if (!val.dateFin) {
             errors.dateFin = "Date fin est requis"
-        } 
+        }
         else if(val.dateFin <= val.dateDebut){
-            errors.dateFin = "Date fin est incorrect"   
+            errors.dateFin = "Date fin est incorrect"
         }
         return errors;
     };
@@ -163,12 +163,12 @@ export const Promos = () => {
     }, []
     );
 
-   
+
     const handleSubmit = (event) => {
-        
+
         setFormErrors(validatePromo(promo))
             event.preventDefault();
-         
+
         AddPromo(promo).then(res => {
             handleClose()
             if (res.status === 200) {
@@ -181,18 +181,18 @@ export const Promos = () => {
                         libelle: '',
                         dateDebut: '',
                         dateFin: '',
-                    }) 
+                    })
                 })
-            } 
+            }
             setLoading(true);
             }).catch(
                 (error) => {
                     setErrorPage(true);
                     console.log(error);
                 }
-            ) 
+            )
     };
-    
+
     const handleCommit = (e)=>{
         const arrayEdit = promo.map(p=>{
             if(p.id === e.id){
@@ -236,7 +236,7 @@ export const Promos = () => {
                                 className={classes.SearchAndAdd}
                                 >
 
-                                <Grid direction="row" spacing={5} alignItems="center">        
+                                <Grid direction="row" spacing={5} alignItems="center">
                                     <div className={classes.mysearch}>
                                         <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
                                             <OutlinedInput
@@ -314,7 +314,7 @@ export const Promos = () => {
 
                             </Box>
 
-                        </Box> 
+                        </Box>
 
 
                         <div>
@@ -338,7 +338,7 @@ export const Promos = () => {
                                                 setFormErrors({...formErrors, libelle: null})
                                                 setPromo({ ...promo, libelle: event.target.value })
                                             }}
-                                           
+
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.libelle}</p>
@@ -386,7 +386,7 @@ export const Promos = () => {
                                         </LocalizationProvider>
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.dateFin}</p>
-                                </Grid>                                
+                                </Grid>
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}

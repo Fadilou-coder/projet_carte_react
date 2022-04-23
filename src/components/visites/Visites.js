@@ -52,13 +52,14 @@ export const Visites = () => {
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+            console.log(res)
             setVisites(res.data.reverse());
             setLoading(false);
         })
     }, [date])
 
 
-   
+
 
     // Custom Pagination
     function CustomPagination() {
@@ -249,7 +250,7 @@ export const Visites = () => {
         setShowDialog(false)
     }
 
-  
+
     function chargerVisites(ndate, value) {
         setVisiteur(value)
         setDate(ndate)
@@ -532,8 +533,6 @@ export const Visites = () => {
 
                             </Box>
 
-
-                           
                             <Box sx={{
                                 boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                                 '& .super-app-theme--header': {
@@ -568,14 +567,6 @@ export const Visites = () => {
                                                 }
                                             }).map((row) => {
                                                 return row;
-                                                // return (
-                                                //     <Popper id={id} open={open1} anchorEl={anchorEl}>
-                                                //         <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-                                                //             {{ row }}
-                                                //         </Box>
-                                                //     </Popper>
-                                                // )
-
                                             })
                                         }
                                         columns={columns}
@@ -619,7 +610,7 @@ export const Visites = () => {
                             sx: {
                                 borderRadius: "10px",
                                 padding: "20px",
-                                // width: "25%", 
+                                // width: "25%",
                                 maxWidth: {
                                     lg: "30%",
                                     md: "25%",
@@ -737,25 +728,20 @@ export const Visites = () => {
 
 
 {/* Dialogue pour commenntaire */}
-                    <div>
-                    <Dialog open={showDialog} onClose={handleClose} 
+           <div>
+                    <Dialog open={showDialog} onClose={handleClose}
                             PaperProps={{
                                 style: {
                                 backgroundColor: ' #000000',
                                 boxShadow: 'none',
                                 height: "85%",
-                                 left: '40%',
-                                // display: 'flex',
-                                // float: 'right',
-                                // ['@media (min-width:780px)']: { // eslint-disable-line no-useless-computed-key
-                                //     left: '0'
-                                //   }
+                                 left: '40%'
                                 },
                     }} className={classes.dialog}>
                             <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "#FFFFFF", paddingLeft: "20px" }}>
                                 COMMENTAIRE
                                 <IconButton
-                                        aria-label="close" 
+                                        aria-label="close"
                                         onClick={handleClose}
                                         sx={{
                                             position: 'absolute',
@@ -802,8 +788,6 @@ export const Visites = () => {
                             </DialogContent>
                         </Dialog>
                     </div>
-
-                    
                 </Grid>
             </Grid>
         </Layout>
