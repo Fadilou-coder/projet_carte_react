@@ -9,6 +9,7 @@ import Layout from "../layout/Layout";
 import { SaveAdmin } from "./AdminService";
 import Swal from 'sweetalert2'
 import emailjs from '@emailjs/browser';
+import {isEmpty} from "rxjs";
 
 
 function AddAdmin() {
@@ -107,7 +108,7 @@ function AddAdmin() {
         let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
         let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
         const errors = {};
-        if (val.prenom === '') {
+        if (val.prenom === ''){
             errors.prenom = "prenom est requis"
         } else if (val.prenom.length < 3) {
             errors.prenom = "le prenom doit comporter plus de 3 caractères";
@@ -174,7 +175,7 @@ function AddAdmin() {
                                                 variant="outlined"
                                                 placeholder="Ex: prenom"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, prenom: event.target.value })
+                                                    setAdmin({ ...admin, prenom: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.prenom}
                                             />
@@ -191,7 +192,7 @@ function AddAdmin() {
                                                 variant="outlined"
                                                 placeholder="Ex: nom"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, nom: event.target.value })
+                                                    setAdmin({ ...admin, nom: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.nom}
                                             />
@@ -212,7 +213,7 @@ function AddAdmin() {
                                                 variant="outlined"
                                                 placeholder="Ex: phone"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, phone: event.target.value })
+                                                    setAdmin({ ...admin, phone: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.phone}
                                             />
@@ -229,7 +230,7 @@ function AddAdmin() {
                                                 variant="outlined"
                                                 placeholder="Ex:email"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, email: event.target.value })
+                                                    setAdmin({ ...admin, email: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.email}
                                             />
@@ -249,7 +250,7 @@ function AddAdmin() {
                                                     variant="outlined"
                                                     placeholder="Ex: addresse"
                                                     onChange={(event) => {
-                                                        setAdmin({ ...admin, addresse: event.target.value })
+                                                        setAdmin({ ...admin, addresse: event.target.value.replace(/\s/g, '') })
                                                     }}
                                                     value={admin.addresse}
                                                 />
@@ -266,7 +267,7 @@ function AddAdmin() {
                                                     variant="outlined"
                                                     placeholder="Ex: Numero Piece"
                                                     onChange={(event) => {
-                                                        setAdmin({ ...admin, numPiece: event.target.value })
+                                                        setAdmin({ ...admin, numPiece: event.target.value.replace(/\s/g, '') })
                                                     }}
                                                     value={admin.numPiece}
                                                 />

@@ -162,7 +162,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex: prenom"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, prenom: event.target.value })
+                                                    setAdmin({ ...admin, prenom: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.prenom}
                                             />
@@ -179,7 +179,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex: nom"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, nom: event.target.value })
+                                                    setAdmin({ ...admin, nom: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.nom}
                                             />
@@ -200,7 +200,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex: phone"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, phone: event.target.value })
+                                                    setAdmin({ ...admin, phone: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.phone}
                                             />
@@ -217,7 +217,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex:email"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, email: event.target.value })
+                                                    setAdmin({ ...admin, email: event.target.value.replace(/\s/g, '') })
                                                 }}
                                                 value={admin.email}
                                             />
@@ -237,7 +237,7 @@ function AddSuperViseur() {
                                                     variant="outlined"
                                                     placeholder="Ex: addresse"
                                                     onChange={(event) => {
-                                                        setAdmin({ ...admin, addresse: event.target.value })
+                                                        setAdmin({ ...admin, addresse: event.target.value.replace(/\s/g, '') })
                                                     }}
                                                     value={admin.addresse}
                                                 />
@@ -254,7 +254,7 @@ function AddSuperViseur() {
                                                     variant="outlined"
                                                     placeholder="Ex: Numero Piece"
                                                     onChange={(event) => {
-                                                        setAdmin({ ...admin, numPiece: event.target.value })
+                                                        setAdmin({ ...admin, numPiece: event.target.value.replace(/\s/g, '') })
                                                     }}
                                                     value={admin.numPiece}
                                                 />

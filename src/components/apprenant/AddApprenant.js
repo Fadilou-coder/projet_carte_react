@@ -267,7 +267,7 @@ export const AddApprenant = () => {
                                         placeholder="prenom"
                                         onChange={(event) => {
                                             setFormErrors({...formErrors, prenom: null})
-                                            setValue({ ...value, prenom: event.target.value })
+                                            setValue({ ...value, prenom: event.target.value.replace(/\s/g, '') })
                                         }}
                                         name="prenom"
                                         value={value.prenom}
@@ -286,7 +286,7 @@ export const AddApprenant = () => {
                                         placeholder="nom"
                                         onChange={(event) => {
                                             setFormErrors({...formErrors, nom: null})
-                                            setValue({ ...value, nom: event.target.value })
+                                            setValue({ ...value, nom: event.target.value.replace(/\s/g, '') })
                                         }}
                                         name="nom"
                                         value={value.nom}
@@ -331,7 +331,7 @@ export const AddApprenant = () => {
                                         placeholder="lieu de Naissance"
                                         onChange={(event) => {
                                             setFormErrors({...formErrors, lieuNaissance: null})
-                                            setValue({ ...value, lieuNaissance: event.target.value })
+                                            setValue({ ...value, lieuNaissance: event.target.value.replace(/\s/g, '') })
                                         }}
                                         name="lieuNaissance"
                                         value={value.lieuNaissance}
@@ -353,7 +353,7 @@ export const AddApprenant = () => {
                                             placeholder="adresse"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, adresse: null})
-                                                setValue({ ...value, adresse: event.target.value })
+                                                setValue({ ...value, adresse: event.target.value.replace(/\s/g, '') })
                                             }}
                                             name="adresse"
                                             value={value.adresse}
@@ -372,7 +372,7 @@ export const AddApprenant = () => {
                                             placeholder="cni"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, cni: null})
-                                                setValue({ ...value, cni: event.target.value })
+                                                setValue({ ...value, cni: event.target.value.replace(/\s/g, '') })
                                             }}
                                             name="cni"
                                             value={value.cni}
@@ -421,7 +421,7 @@ export const AddApprenant = () => {
                                             placeholder="email"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, email: null})
-                                                setValue({ ...value, email: event.target.value })
+                                                setValue({ ...value, email: event.target.value.replace(/\s/g, '') })
                                             }}
                                             name="email"
                                             value={value.email}
@@ -444,7 +444,7 @@ export const AddApprenant = () => {
                                             placeholder="numéro télephone"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, phone: null})
-                                                setValue({ ...value, phone: event.target.value })
+                                                setValue({ ...value, phone: event.target.value.replace(/\s/g, '') })
                                             }}
                                             name="phone"
                                             value={value.phone}
@@ -463,7 +463,7 @@ export const AddApprenant = () => {
                                             placeholder="numéro de tuteur"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, numTuteur: null})
-                                                setValue({ ...value, numTuteur: event.target.value })
+                                                setValue({ ...value, numTuteur: event.target.value.replace(/\s/g, '') })
                                             }}
                                             name="numTuteur"
                                             value={value.numTuteur}

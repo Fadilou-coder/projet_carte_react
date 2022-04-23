@@ -103,7 +103,7 @@ export const Referentiel = () => {
         const errors = {};
         if (!val.libelle) {
             errors.libelle = "Le libelle est requis"
-        } 
+        }
         return errors;
     }
 
@@ -117,9 +117,9 @@ export const Referentiel = () => {
 
 
     const handleSubmit = (event) => {
-        
+
         setFormErrors(validateRef(referentiel))
-         
+
             AddReferentiel(referentiel).then(res => {
                 console.log(referentiel);
             if (res.status === 200) {
@@ -130,16 +130,16 @@ export const Referentiel = () => {
                 ).then((res) => {
                     setReferentiel({
                         libelle: '',
-                    }) 
+                    })
                 })
-            } 
+            }
             setLoading(true);
             }).catch(
                 (error) => {
                     setErrorPage(true);
                     console.log(error);
                 }
-            ) 
+            )
     };
     const handleCommit = (e)=>{
         const arrayEdit = referentiel.map(r=>{
@@ -238,9 +238,9 @@ export const Referentiel = () => {
                             placeholder="libelle"
                             onChange={(event) => {
                                 setFormErrors({...formErrors, libelle: null})
-                                setReferentiel({ ...referentiel, libelle: event.target.value })
+                                setReferentiel({ ...referentiel, libelle: event.target.value.replace(/\s/g, '') })
                             }}
-                                           
+
                             style={{ width: "100%", marginBottom: "20px" }}
                         />
                         <p style={{color: 'red'}}>{formErrors.libelle}</p>

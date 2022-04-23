@@ -47,12 +47,6 @@ const Login = (props) => {
     const {name, value} = event.target;
     setFormValues({...formValues, [name]: value});
   }
- /* const handleChange = (e) => {
-      const {name, value} = e.target;
-      setFormValues({...formValues, [name]: value});
-      console.log(formValues);
-  }*/
-
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -103,7 +97,7 @@ const Login = (props) => {
           </h1> */}
           <Box
             sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, 1fr)', }}
-            className={classes.contenu} 
+            className={classes.contenu}
           >
             <Box className={classes.logo} >
              <img  style={{ width: "80%" }} src={logo} alt="" />

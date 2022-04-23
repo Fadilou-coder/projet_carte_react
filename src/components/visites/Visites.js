@@ -635,7 +635,7 @@ export const Visites = () => {
                                             variant="outlined"
                                             placeholder="Ex:numPiece"
                                             onChange={(event) => {
-                                                setValues({ ...values, numPiece: event.target.value })
+                                                setValues({ ...values, numPiece: event.target.value.replace(/\s/g, '') })
                                             }}
                                             value={values.numPiece}
                                         />
@@ -652,7 +652,7 @@ export const Visites = () => {
                                             variant="outlined"
                                             placeholder="Ex:prenom"
                                             onChange={(event) => {
-                                                setValues({ ...values, prenom: event.target.value })
+                                                setValues({ ...values, prenom: event.target.value.replace(/\s/g, '') })
                                             }}
                                             value={values.prenom}
                                         />
@@ -669,7 +669,7 @@ export const Visites = () => {
                                             variant="outlined"
                                             placeholder="Ex:nom"
                                             onChange={(event) => {
-                                                setValues({ ...values, nom: event.target.value })
+                                                setValues({ ...values, nom: event.target.value.replace(/\s/g, '') })
                                             }}
                                             value={values.nom}
                                         />
@@ -686,7 +686,7 @@ export const Visites = () => {
                                             variant="outlined"
                                             placeholder="Ex:telephone"
                                             onChange={(event) => {
-                                                setValues({ ...values, numTelephone: event.target.value })
+                                                setValues({ ...values, numTelephone: event.target.value.replace(/\s/g, '') })
                                             }}
                                             value={values.numTelephone}
                                         />

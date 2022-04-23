@@ -336,7 +336,7 @@ export const Promos = () => {
                                             placeholder="libelle"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, libelle: null})
-                                                setPromo({ ...promo, libelle: event.target.value })
+                                                setPromo({ ...promo, libelle: event.target.value.replace(/\s/g, '') })
                                             }}
 
                                         />
