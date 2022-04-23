@@ -143,7 +143,7 @@ export const Referentiel = () => {
             ) 
     };
     const handleCommit = (e)=>{
-        const arrayEdit = referentiel.map(r=>{
+        referentiel.map(r => {
             if(r.id === e.id){
                var data = {...r, [e.field]: e.value}
                UpdateReferentiel(data, data.id).then(res => {

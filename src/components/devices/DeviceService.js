@@ -8,4 +8,4 @@ export const ListAllDevice = () => {
 }
 
 export const AddDevice = (data) => { return axios.post(API_URL + "devices/", data, {headers: authHeader()}); }
-export const BloquerDevice = (id) => { return axios.delete(API_URL + "/devices/" + id, {headers: authHeader()}); }
+export const BloquerDevice = (id) => { return axios.delete(API_URL + "devices/" + id, {headers: authHeader()}); }

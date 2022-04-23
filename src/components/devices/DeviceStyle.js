@@ -1,11 +1,11 @@
 import { makeStyles } from "@material-ui/core";
 
-const StructureStyle = makeStyles((theme) => ({
+const DeviceStyle = makeStyles((theme) => ({
 
-    structurePage: {
+    DevicePage: {
         width: "100%",
     },
-    structureDiv: {
+    DeviceDiv: {
         display: "flex",
         gap: "100px",
         width: "100%",
@@ -27,4 +27,4 @@ const StructureStyle = makeStyles((theme) => ({
 
 }));
 
-export default StructureStyle;
+export default DeviceStyle;
