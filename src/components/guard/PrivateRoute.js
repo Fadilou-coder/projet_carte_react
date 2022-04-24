@@ -19,16 +19,13 @@ const PrivateRoute = ({component: Component, ...rest }) => {
                 setIsAuthenticated(false)
             } else {
                 setIsAuthenticated(true)
-                if(localStorage.getItem('user') === '["ADMIN"]' && window.location.pathname !== '/visites'){
-                    setIsAuthenticated(null);
-                }
             }
         } else {
             setIsAuthenticated(false)
         }
     },[])
 
-    if(isAuthenticated === null) {
+    if(localStorage.getItem('user') === '["ADMIN"]' && window.location.pathname !== '/visites') {
         return (
             <Route {...rest} render={props =>
                     <Redirect to="/visites"/>
@@ -38,7 +35,7 @@ const PrivateRoute = ({component: Component, ...rest }) => {
     }
     return (
         <Route {...rest} render={props =>
-            !isAuthenticated ? (
+            isAuthenticated === false ? (
                 <Redirect to="/"/>
             ) : (
                 <Component {...props}/>

@@ -105,7 +105,6 @@ export const Device = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-                    console.log(params);
                     return <Button variant="contained" sx={{
                         backgroundColor: '#FF6600',
                         color: "#000000",

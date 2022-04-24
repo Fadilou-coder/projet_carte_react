@@ -50,7 +50,7 @@ export const AddApprenant = () => {
         email: '',
         phone: '',
         adresse: '',
-        typePiece: 'numPiece',
+        typePiece: 'CNI',
         numPiece: '',
         referentiel: '',
         dateNaissance: '',
@@ -364,13 +364,13 @@ export const AddApprenant = () => {
                                                     id="demo-simple-select"
                                                     placeholder="typePiece"
                                                     onChange={(event) => {
-                                                        setFormErrors({ ...formErrors, promo: null })
+                                                        setFormErrors({ ...formErrors, typePiece: null })
                                                         setValue({ ...value, typePiece: event.target.value })
                                                     }}
                                                     name="typePiece"
                                                     value={value.typePiece}
                                                 >
-                                                    <MenuItem key="1" value="numPiece"> numPiece </MenuItem>
+                                                    <MenuItem key="1" value="CNI"> CNI </MenuItem>
                                                     <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
                                                 </Select>
                                             </FormControl>

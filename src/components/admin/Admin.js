@@ -155,9 +155,9 @@ export const Admin = () => {
             flex: 1
         },
         {
-            field: 'cni',
+            field: 'numPiece',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Cni',
+            headerName: 'Numéro Pièce',
             editable: true,
             minWidth: 150,
             flex: 1
@@ -174,8 +174,6 @@ export const Admin = () => {
                 return <Checkbox onClick={() => bloquerAdmin(params.id, params.row.isbloqued)} checked={params.row.isbloqued} />;
             }
         },
-
-
     ]
 
 
@@ -196,15 +194,13 @@ export const Admin = () => {
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
-                    {/* Gestion de l'entete de la liste des Reservations */}
-
                     <Box
                         className={classes.filtre}
                     >
 
                         <div className={classes.champfiltre}>
 
-                            
+
                             <div className={classes.mysearch}>
                                 <FormControl className={classes.mytextsearch}>
                                     <OutlinedInput
@@ -225,27 +221,6 @@ export const Admin = () => {
                                     />
                                 </FormControl>
                             </div>
-                            {/*  <div>
-                                <FormControl style={{ width: "100%", marginBottom: "20px" }}>
-                                    <OutlinedInput
-
-                                        id="email"
-                                        placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#000000" }}
-                                        size="small"
-                                        className={classes.mysearch}
-                                        startAdornment={
-                                            <InputAdornment position="start">
-                                                <SearchOutlined sx={{ color: "#000000" }}></SearchOutlined>
-                                            </InputAdornment>
-                                        }
-                                        onChange={(event) => {
-                                            setSearch(event.target.value);
-                                        }}
-                                    />
-                                </FormControl>
-                            </div>*/}
-
                         </div>
 
                         <Box textAlign="right">
@@ -302,7 +277,7 @@ export const Admin = () => {
                                             return val;
                                         } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
                                             || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
-                                            || val.cni.toLowerCase().includes(search.toLowerCase())) {
+                                            || val.numPiece.toLowerCase().includes(search.toLowerCase())) {
                                             return val;
                                         }
                                     }).map((row) => {

@@ -16,6 +16,7 @@ import Promo from './components/promo/Promo';
 import Referentiel from './components/referentiel/Referentiel';
 import Superviseur from './components/superviseur/Superviseur';
 import Device from './components/devices/Devices';
+import AddSuperViseur from "./components/superviseur/AddSuperViseur";
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
                   <PrivateRoute path="/promos" component={Promo} />
                   <PrivateRoute path="/referentiels" component={Referentiel} />
                   <PrivateRoute path="/superviseurs" component={Superviseur} />
+                  <PrivateRoute path="/add_superviseurs" component={AddSuperViseur} />
                   <PrivateRoute path="*" component={ErreurPage} />
               </Switch>
             {/*</Layout>*/}
