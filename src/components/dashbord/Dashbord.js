@@ -3,26 +3,176 @@ import Typography from "@mui/material/Typography";
 import Layout from "../layout/Layout";
 import { Grid, Select, InputAdornment, MenuItem, Box } from '@mui/material';
 import { FemaleOutlined, FilterAltOutlined, MaleOutlined, Notes } from '@mui/icons-material';
-import { ListItem } from '@mui/material';
 import DashboardStyle from "./Dashboard.style";
 import { ChartDashboard } from './ChartDashboard';
-import { ListApprenantsByPromo, ListPromos } from './Dashboard.service';
+// import { ListApprenantsByPromo, ListPromos, nbRetardPromo } from './Dashboard.service';
 // import faker from "faker";
+import { ListApprenantsByReferentielByPromo, ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
+import { nbAbsAllApp, nbRetardPromo } from './Dashboard.service';
+
+import Chart from "react-apexcharts";
+
+
+import ChartApex from './ChartApex';
 
 const Dashbord = () => {
 
-    const [promo, setPromo] = React.useState(8);
+    const [promo, setPromo] = React.useState(100);
+    const [allPromos, setAllPromos] = React.useState([]);
+
+
+    // Valeur des Absences globales
+    const [absences, setAbsences] = React.useState([]);
+
+    // Valeur des Retards globales
+    const [retards, setRetards] = React.useState([]);
+
+    // Chart Apex configuration
+    const [options, setObject] = React.useState({
+        chart: {
+            id: "basic-bar"
+        },
+        xaxis: {
+            categories: ["Janvier", "Fevrier", " Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]
+        }
+
+    });
+
+    // Pour Retards
+    const [series1, setSeries1] = React.useState([{
+        name: "series-2",
+        data: [80, 11, 11, 20, 40, 45, 50, 49, 60, 70, 91, 11],
+    }])
+
+    // Pour Absences 
+    const [series, setSeries] = React.useState([{
+        name: "series-1",
+        data: [80, 11, 11, 20, 40, 45, 50, 49, 60, 70, 91, 11],
+    }])
+
 
     const [nbApprenants, setnbApprenants] = React.useState();
 
+    const [nbHommes, setnbHommes] = React.useState(0);
+
+    const [nbFemmes, setnbFemmes] = React.useState(0);
+
+
+
+    // Initialiser Liste Reeferentiel
+    // const [referentiels, setReferentiels] = React.useState([]);
+
     React.useEffect(() => {
         ListApprenantsByPromo(promo).then(res => {
-            console.log(res.data.length);
+            console.log(res.data);
             setnbApprenants(res.data.length);
 
+            let nbhommes = 0;
+            let nbfemmes = 0;
+            res.data.map((element) => {
+                if (element.sexe === "M") {
+                    nbhommes++;
+                } else {
+                    nbfemmes++;
+                }
+            })
+
+            setnbHommes(nbhommes);
+            setnbFemmes(nbfemmes);
+
+        });
+
+        ListPromos().then(res => {
+            console.log(res.data);
+            setAllPromos(res.data);
+            let grandId = 0;
+            res.data.map((element) => {
+                // console.log(element.id);
+                if (grandId < element.id) {
+                    grandId = element.id;
+                }
+            });
+            setPromo(grandId);
         })
 
+        // listAllReferentiels().then(res => {
+        //     setReferentiels(res.data);
+        //     console.log(res.data)
+        // });
+
     }, []);
+
+
+
+    function chargerApprenant(idPromo) {
+
+        ListApprenantsByPromo(idPromo).then(res => {
+            // console.log(res.data);
+            setnbApprenants(res.data.length);
+
+            let nbhommes = 0;
+            let nbfemmes = 0;
+            res.data.map((element) => {
+                if (element.sexe === "M") {
+                    nbhommes++;
+                }
+            })
+
+            setnbHommes(nbhommes);
+            nbfemmes = res.data.length - nbhommes;
+            setnbFemmes(nbfemmes);
+
+        });
+
+        for (let i = 1; i < 12; i++) {
+
+            let valeurdate = i.toString();
+            let val = (i + 1).toString()
+            if (i.toString().length === 1) {
+                valeurdate = "0" + i.toString();
+            }
+            if (val.length === 1) {
+                val = "0" + val;
+            }
+
+            nbAbsAllApp(idPromo, "2022-" + (valeurdate) + "-01", "2022-" + (val) + "-01").then(r => {
+                var tmp = absences;
+                tmp.push(r.data);
+                setAbsences([]);
+                setAbsences(tmp);
+            });
+
+            nbRetardPromo(idPromo, "2022-" + (valeurdate) + "-01", "2022-" + (val) + "-01").then(r => {
+                var tmp = retards;
+                tmp.push(r.data);
+                setRetards([]);
+                setRetards(tmp);
+            });
+            
+        }
+
+
+        setSeries([{
+            name: "series-1",
+            data: absences,
+        }]);
+
+        setSeries1([{
+            name: "series-2",
+            data: retards,
+        }])
+
+        // console.log(retards)
+        console.log(series1)
+
+
+
+
+    }
+
+
+
+
 
     const classes = DashboardStyle();
 
@@ -67,7 +217,7 @@ const Dashbord = () => {
                                     style={{ fontWeight: "bolder", width: "100%", borderRadius: "10px", border: "2px solid black" }}
                                     onChange={(event) => {
                                         // setReferentiel(event.target.value)
-                                        // chargerApprenant(event.target.value, promo)
+                                        chargerApprenant(event.target.value)
                                     }}
 
                                     // className={classes1.visiteur}
@@ -79,12 +229,12 @@ const Dashbord = () => {
 
                                 >
                                     <MenuItem value={""}> Tous </MenuItem>
-                                    {/* {
-                                        referentiels.map((element, i) => {
+                                    {
+                                        allPromos.map((element, i) => {
                                             return (<MenuItem value={element.id}> {element.libelle} </MenuItem>)
                                         })
-                                    } */}
-                                    <ListItem> AAAAAA</ListItem>
+                                    }
+
                                 </Select>
                             </div>
                         </div>
@@ -126,7 +276,7 @@ const Dashbord = () => {
                                 </div>
                                 <div className={classes.nbVal}>
                                     <Typography variant='h3'>
-                                        {/* {{ nbApprenants }} */}
+                                        {nbApprenants}
                                     </Typography>
                                     Apprenants
                                 </div>
@@ -147,7 +297,7 @@ const Dashbord = () => {
                                 </div>
                                 <div className={classes.nbVal}>
                                     <Typography variant='h3'>
-                                        42
+                                        {nbHommes}
                                     </Typography >
                                     Hommes
                                 </div>
@@ -168,7 +318,8 @@ const Dashbord = () => {
                                 </div>
                                 <div className={classes.nbVal}>
                                     <Typography variant='h3'>
-                                        20
+                                        {nbFemmes}
+
                                     </Typography>
                                     Femmes
                                 </div>
@@ -183,7 +334,17 @@ const Dashbord = () => {
                     <Box className={classes.chartStyle}>
                         <div
                             style={{ width: "48%" }}>
-                            <ChartDashboard titre="retard" color="#FF6600" ></ChartDashboard>
+                            {/* <ChartDashboard titre="retard" color="#FF6600" ></ChartDashboard> */}
+                            {/* <ChartApex chargerChart={absences} ></ChartApex> */}
+                            <Chart
+                                options={options}
+                                series={series}
+                                type="bar"
+                                width="100%"
+                                height={500}
+                            />
+
+
                         </div>
                         <div
                             style={{
@@ -193,7 +354,14 @@ const Dashbord = () => {
 
                             }}
                         >
-                            <ChartDashboard titre="absence" color="#000000"></ChartDashboard>
+                            {/* <ChartDashboard titre="absence" color="#000000"></ChartDashboard> */}
+                            <Chart
+                                options={options}
+                                series={series1}
+                                type="bar"
+                                width="100%"
+                            />
+
                         </div>
                     </Box>
 
