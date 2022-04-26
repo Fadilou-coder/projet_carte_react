@@ -50,6 +50,7 @@ export const AddApprenant = () => {
         email: '',
         phone: '',
         adresse: '',
+        sexe: '',
         typePiece: 'CNI',
         numPiece: '',
         referentiel: '',
@@ -114,9 +115,10 @@ export const AddApprenant = () => {
     };
 
     const PostApprenant = () => {
+        console.log(value)
         setFormErrors(validateApprenant(value));
         let formData = new FormData();
-        const data = ["prenom", "nom", "email", "phone", "adresse", "typePiece", "numPiece", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
+        const data = ["prenom", "nom", "email", "phone", "adresse", "sexe", "typePiece", "numPiece", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
         var valide = true;
         data.forEach((app) => {
             if (value[app] !== '') {
@@ -202,8 +204,9 @@ export const AddApprenant = () => {
         }
         if (isBlank(val.adresse)) {
             errors.adresse = "l'adresse est requis"
-        } else if (val.adresse.length < 3) {
-            errors.adresse = "l'adresse doit comporter plus de 3 caractères";
+        }
+        if (isBlank(val.sexe)) {
+            errors.sexe = "Choisissez le sexe"
         }
         if (isBlank(val.numPiece)) {
             errors.numPiece = "le numéro de carte d'identité est requis"
@@ -253,14 +256,14 @@ export const AddApprenant = () => {
                         <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
                             <Grid xs={12} sm={12} md={4} className={styles.marginAlll} spacing={5} item>
                                 <FormControl fullWidth>
-                                    <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
+                                    <label className={classes.labelText}>Prénom<span style={{ color: 'red' }}>*</span> </label>
                                     <OutlinedInput
                                         id="nom"
                                         type="text"
                                         variant="outlined"
                                         placeholder="prenom"
                                         onChange={(event) => {
-                                            setFormErrors({...formErrors, prenom: null})
+                                            setFormErrors({ ...formErrors, prenom: null })
                                             setValue({ ...value, prenom: event.target.value })
                                         }}
                                         name="prenom"
@@ -279,7 +282,7 @@ export const AddApprenant = () => {
                                         variant="outlined"
                                         placeholder="nom"
                                         onChange={(event) => {
-                                            setFormErrors({...formErrors, nom: null})
+                                            setFormErrors({ ...formErrors, nom: null })
                                             setValue({ ...value, nom: event.target.value })
                                         }}
                                         name="nom"
@@ -304,7 +307,7 @@ export const AddApprenant = () => {
                                                 id="dateNaissance"
                                                 value={value.dateNaissance}
                                                 onChange={(event) => {
-                                                    setFormErrors({...formErrors, dateNaissance: null})
+                                                    setFormErrors({ ...formErrors, dateNaissance: null })
                                                     setValue({ ...value, dateNaissance: event })
                                                 }}
                                                 defaultValue={null}
@@ -324,7 +327,7 @@ export const AddApprenant = () => {
                                         variant="outlined"
                                         placeholder="lieu de Naissance"
                                         onChange={(event) => {
-                                            setFormErrors({...formErrors, lieuNaissance: null})
+                                            setFormErrors({ ...formErrors, lieuNaissance: null })
                                             setValue({ ...value, lieuNaissance: event.target.value })
                                         }}
                                         name="lieuNaissance"
@@ -346,7 +349,7 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="adresse"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, adresse: null})
+                                                setFormErrors({ ...formErrors, adresse: null })
                                                 setValue({ ...value, adresse: event.target.value })
                                             }}
                                             name="adresse"
@@ -357,38 +360,38 @@ export const AddApprenant = () => {
                                     <p className={classes.formError}>{formErrors.adresse}</p>
                                 </Grid>
                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                            <FormControl fullWidth>
-                                                <label className={classes.labelText}>Type de Piece<span style={{ color: 'red' }}>*</span> </label>
-                                                <Select
-                                                    labelId="demo-simple-select-label"
-                                                    id="demo-simple-select"
-                                                    placeholder="typePiece"
-                                                    onChange={(event) => {
-                                                        setFormErrors({ ...formErrors, typePiece: null })
-                                                        setValue({ ...value, typePiece: event.target.value })
-                                                    }}
-                                                    name="typePiece"
-                                                    value={value.typePiece}
-                                                >
-                                                    <MenuItem key="1" value="CNI"> CNI </MenuItem>
-                                                    <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
-                                                </Select>
-                                            </FormControl>
-                                            <p className={classes.formError}>{formErrors.typePiece}</p>
-                                        </Grid>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            placeholder="typePiece"
+                                            onChange={(event) => {
+                                                setFormErrors({ ...formErrors, typePiece: null })
+                                                setValue({ ...value, typePiece: event.target.value })
+                                            }}
+                                            name="typePiece"
+                                            value={value.typePiece}
+                                        >
+                                            <MenuItem key="1" value="CNI"> CNI </MenuItem>
+                                            <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.typePiece}</p>
+                                </Grid>
                             </Grid>
 
 
                             <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                 <Grid xs={12} sm={12} md={4} spacing={5} item>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Referentiel<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>Référentiel<span style={{ color: 'red' }}>*</span> </label>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
                                             placeholder="referentiel"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, referentiel: null})
+                                                setFormErrors({ ...formErrors, referentiel: null })
                                                 setValue({ ...value, referentiel: event.target.value })
                                             }}
                                             value={value.referentiel}
@@ -408,14 +411,14 @@ export const AddApprenant = () => {
                                 </Grid>
                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>N° Piece<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>N° Pièce<span style={{ color: 'red' }}>*</span> </label>
                                         <OutlinedInput
                                             id="numPiece"
                                             type="text"
                                             variant="outlined"
                                             placeholder="numPiece"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, numPiece: null})
+                                                setFormErrors({ ...formErrors, numPiece: null })
                                                 setValue({ ...value, numPiece: event.target.value })
                                             }}
                                             name="numPiece"
@@ -431,14 +434,14 @@ export const AddApprenant = () => {
                             <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                 <Grid xs={12} sm={12} md={4} spacing={5} item>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>Téléphone<span style={{ color: 'red' }}>*</span> </label>
                                         <OutlinedInput
                                             id="telephone"
                                             type="text"
                                             variant="outlined"
                                             placeholder="numéro télephone"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, phone: null})
+                                                setFormErrors({ ...formErrors, phone: null })
                                                 setValue({ ...value, phone: event.target.value })
                                             }}
                                             name="phone"
@@ -457,7 +460,7 @@ export const AddApprenant = () => {
                                             variant="outlined"
                                             placeholder="email"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, email: null})
+                                                setFormErrors({ ...formErrors, email: null })
                                                 setValue({ ...value, email: event.target.value })
                                             }}
                                             name="email"
@@ -479,7 +482,7 @@ export const AddApprenant = () => {
                                             id="demo-simple-select"
                                             placeholder="promo"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, promo: null})
+                                                setFormErrors({ ...formErrors, promo: null })
                                                 setValue({ ...value, promo: event.target.value })
                                             }}
                                             name="promo"
@@ -499,14 +502,14 @@ export const AddApprenant = () => {
                                 </Grid>
                                 <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Telephone tuteur<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>Téléphone tuteur<span style={{ color: 'red' }}>*</span> </label>
                                         <OutlinedInput
                                             id="teltuteur"
                                             type="text"
                                             variant="outlined"
                                             placeholder="numéro de tuteur"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, numTuteur: null})
+                                                setFormErrors({ ...formErrors, numTuteur: null })
                                                 setValue({ ...value, numTuteur: event.target.value })
                                             }}
                                             name="numTuteur"
@@ -515,6 +518,32 @@ export const AddApprenant = () => {
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.numTuteur}</p>
+                                </Grid>
+                            </Grid>
+
+                            <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center" }}>
+                                <Grid xs={12} sm={12} md={4} item style={{ justifyContent: "center", marginTop: "25px", marginLeft: "15px" }}>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Sexe<span style={{ color: 'red' }}>*</span> </label>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            placeholder="sexe"
+                                            onChange={(event) => {
+                                                setFormErrors({ ...formErrors, sexe: null })
+                                                setValue({ ...value, sexe: event.target.value })
+                                            }}
+                                            name="sexe"
+                                            error={formErrors.sexe}
+                                            value={value.sexe}
+                                        >
+                                            <MenuItem key="1" value="M"> M </MenuItem>
+                                            <MenuItem key="2" value="F"> F </MenuItem>
+                                        </Select>
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.sexe}</p>
+                                </Grid>
+                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
                                 </Grid>
                             </Grid>
 

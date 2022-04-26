@@ -198,7 +198,7 @@ const Superviseur = () => {
                                 }}
                                 loading={isLoaded}
                                 rows={
-                                    admins.filter((val) => {
+                                    admins.filter(function(val) {
                                         if (search === "") {
                                             return val;
                                         } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
@@ -206,6 +206,7 @@ const Superviseur = () => {
                                             || val.numPiece.toLowerCase().includes(search.toLowerCase())) {
                                             return val;
                                         }
+                                        return val;
                                     }).map((row) => {
                                         return row;
                                     })

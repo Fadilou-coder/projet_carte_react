@@ -146,7 +146,7 @@ function AddAdmin() {
                                 <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
                                     <Grid xs={12} sm={12} md={4} spacing={5} item>
                                         <FormControl fullWidth>
-                                            <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
+                                            <label htmlFor="prenom" className={classes.labelText}>Prénom <span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
                                                 id="ok"
                                                 name="prenom"
@@ -221,7 +221,7 @@ function AddAdmin() {
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>Type de Piece<span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
                                                 <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
@@ -241,7 +241,7 @@ function AddAdmin() {
                                         </Grid>
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>N° Piece <span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}>N° Pièce <span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                     id="input"
                                                     name="numPiece"
@@ -260,7 +260,7 @@ function AddAdmin() {
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>adresse <span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}> Adresse <span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                     id="input"
                                                     name="adresse"

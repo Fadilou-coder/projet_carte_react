@@ -194,7 +194,7 @@ export const Promos = () => {
     };
 
     const handleCommit = (e)=>{
-        const arrayEdit = promo.map(p=>{
+        promo.array.forEach(p => {
             if(p.id === e.id){
                var data = {...p, [e.field]: e.value}
                UpdatePromo(data, data.id).then(res => {

@@ -6,7 +6,7 @@ import { FemaleOutlined, FilterAltOutlined, MaleOutlined, Notes } from '@mui/ico
 import { ListItem } from '@mui/material';
 import DashboardStyle from "./Dashboard.style";
 import { ChartDashboard } from './ChartDashboard';
-import { ListApprenantsByPromo, ListPromos } from './Dashboard.service';
+import { ListApprenantsByPromo } from './Dashboard.service';
 
 const Dashbord = () => {
 
@@ -21,7 +21,7 @@ const Dashbord = () => {
             setnbApprenants(res.data.length);
 
         })
-    }, []);
+    }, [promo]);
 
     const classes = DashboardStyle();
 
