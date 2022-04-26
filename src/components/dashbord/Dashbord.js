@@ -4,16 +4,23 @@ import Layout from "../layout/Layout";
 import { Grid, Select, InputAdornment, MenuItem, Box } from '@mui/material';
 import { FemaleOutlined, FilterAltOutlined, MaleOutlined, Notes } from '@mui/icons-material';
 import DashboardStyle from "./Dashboard.style";
-import { ChartDashboard } from './ChartDashboard';
+// import { ChartDashboard } from './ChartDashboard';
+
+
 // import { ListApprenantsByPromo, ListPromos, nbRetardPromo } from './Dashboard.service';
 // import faker from "faker";
 import { ListApprenantsByReferentielByPromo, ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
 import { nbAbsAllApp, nbRetardPromo } from './Dashboard.service';
 
 import Chart from "react-apexcharts";
+import { ChartDashboard } from './ChartDashboard';
+
+// import { Bar } from "react-chartjs-2";
+// import faker from "faker";
 
 
-import ChartApex from './ChartApex';
+
+// import ChartApex from './ChartApex';
 
 const Dashbord = () => {
 
@@ -26,6 +33,59 @@ const Dashbord = () => {
 
     // Valeur des Retards globales
     const [retards, setRetards] = React.useState([]);
+
+
+    // ChartJS configuration
+    const [optionschart, setOptionChart] = React.useState({
+        tooltips: {
+            titleAlign: "center",
+            titleMarginBottom: 8,
+            bodyFontFamily: "'Nunito', sans-serif",
+        },
+        responsive: true,
+        plugins: {
+            legend: {
+                position: "top",
+            },
+            title: {
+                display: true,
+                text: "Test",
+            },
+            hover: {
+                mode: 'label'
+            }
+
+        },
+    });
+
+
+    const mois = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
+
+
+    const [dataChart, setDataChart] = React.useState([{
+        mois,
+        datasets: [
+            {
+                label: "Donnees ",
+                data: {
+                    Janvier: 10,
+                    Fevrier: 20,
+                    Mars: 60,
+                    Avril: 45,
+                    Mai: 21,
+                    Juin: 34,
+                    Juillet: 40,
+                    Aout: 20,
+                    Septembre: 73,
+                    Octobre: 12,
+                    Novembre: 56,
+                    Decembre: 10
+                },
+                backgroundColor: "#FF6600",
+            },
+
+        ],
+    }])
 
     // Chart Apex configuration
     const [options, setObject] = React.useState({
@@ -94,11 +154,7 @@ const Dashbord = () => {
             });
             setPromo(grandId);
         })
-
-        // listAllReferentiels().then(res => {
-        //     setReferentiels(res.data);
-        //     console.log(res.data)
-        // });
+       
 
     }, []);
 
@@ -148,22 +204,22 @@ const Dashbord = () => {
                 setRetards([]);
                 setRetards(tmp);
             });
-            
+
         }
 
 
-        setSeries([{
-            name: "series-1",
-            data: absences,
-        }]);
+        // setSeries([{
+        //     name: "series-1",
+        //     data: absences,
+        // }]);
 
-        setSeries1([{
-            name: "series-2",
-            data: retards,
-        }])
+        // setSeries1([{
+        //     name: "series-2",
+        //     data: retards,
+        // }])
 
-        // console.log(retards)
-        console.log(series1)
+        // // console.log(retards)
+        // console.log(series1)
 
 
 
@@ -334,16 +390,16 @@ const Dashbord = () => {
                     <Box className={classes.chartStyle}>
                         <div
                             style={{ width: "48%" }}>
-                            {/* <ChartDashboard titre="retard" color="#FF6600" ></ChartDashboard> */}
+                            <ChartDashboard donneesabsences={absences} titre="retard" color="#FF6600" ></ChartDashboard>
                             {/* <ChartApex chargerChart={absences} ></ChartApex> */}
-                            <Chart
+                            {/* <Chart
                                 options={options}
                                 series={series}
                                 type="bar"
                                 width="100%"
                                 height={500}
-                            />
-
+                            /> */}
+                            {/* <Bar options={optionschart} data={dataChart} /> */}
 
                         </div>
                         <div
@@ -354,13 +410,13 @@ const Dashbord = () => {
 
                             }}
                         >
-                            {/* <ChartDashboard titre="absence" color="#000000"></ChartDashboard> */}
-                            <Chart
+                            <ChartDashboard titre="absence" color="#000000"></ChartDashboard>
+                            {/* <Chart
                                 options={options}
                                 series={series1}
                                 type="bar"
                                 width="100%"
-                            />
+                            /> */}
 
                         </div>
                     </Box>

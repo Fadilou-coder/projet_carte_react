@@ -23,6 +23,8 @@ ChartJS.register(
 
 export function ChartDashboard(props) {
 
+  console.log(props.donneesabsences);
+
   const options = {
 
     tooltips: {
@@ -31,7 +33,7 @@ export function ChartDashboard(props) {
       bodyFontFamily: "'Nunito', sans-serif",
     },
     responsive: true,
-     plugins: {
+    plugins: {
       legend: {
         position: "top",
       },
@@ -55,17 +57,17 @@ export function ChartDashboard(props) {
       {
         label: "Donnees " + props.titre,
         data: {
-          Janvier: 10,
-          Fevrier: 20,
-          Mars: 60,
-          Avril: 45,
-          Mai: 21,
-          Juin: 34,
-          Juillet: 40,
-          Aout: 20,
-          Septembre: 73,
-          Octobre: 12,
-          Novembre: 56,
+          Janvier: props.donneesabsences ? props.donneesabsences[0] : 10,
+          Fevrier: props.donneesabsences ? props.donneesabsences[1] : 20,
+          Mars: props.donneesabsences ? props.donneesabsences[2] : 60,
+          Avril: props.donneesabsences ? props.donneesabsences[3] : 45,
+          Mai: props.donneesabsences ? props.donneesabsences[4] : 21,
+          Juin: props.donneesabsences ? props.donneesabsences[5] : 34,
+          Juillet: props.donneesabsences ? props.donneesabsences[6] : 40,
+          Aout: props.donneesabsences ? props.donneesabsences[7] : 20,
+          Septembre: props.donneesabsences ? props.donneesabsences[8] : 73,
+          Octobre: props.donneesabsences ? props.donneesabsences[9] : 12,
+          Novembre:props.donneesabsences ? props.donneesabsences[10] : 56,
           Decembre: 10
         },
         backgroundColor: props.color,
@@ -74,7 +76,7 @@ export function ChartDashboard(props) {
     ],
   };
 
-  console.log(<Bar options={options} data={data} />);
+  // console.log(<Bar options={options} data={data} />);
 
   return <Bar options={options} data={data} />;
 }
