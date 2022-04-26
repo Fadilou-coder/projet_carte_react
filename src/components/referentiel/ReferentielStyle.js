@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-const StructureStyle = makeStyles((theme) => ({
+const ReferentielStyle = makeStyles((theme) => ({
 
     structurePage: {
         width: "100%",
@@ -27,4 +27,4 @@ const StructureStyle = makeStyles((theme) => ({
 
 }));
 
-export default StructureStyle;
+export default ReferentielStyle;

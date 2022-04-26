@@ -12,6 +12,13 @@ export const LeftBarStyle = makeStyles(theme => ({
         display: "flex",
         alignItems: "center",
         backgroundColor: themeGeneral.palette.primary.white,
+        color: themeGeneral.palette.primary.white
+    },
+    drawerPaperSm: {
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+        backgroundColor: themeGeneral.palette.primary.white,
         color: themeGeneral.palette.primary.white,
     },
     logoDiv: {
@@ -23,12 +30,13 @@ export const LeftBarStyle = makeStyles(theme => ({
             width: "100%",
             height: "100%",
             display: "flex",
-
-            /* object-fit: cover; */
             textAlign: 'center',
             textIndent: '10000px',
             objectFit: 'fill',
-        }
+        },
+        "& .MuiAvatar-root MuiAvatar-square jss22": {
+            width: "100%",
+        },
     },
     logoStyle: {
         width: "100%",
@@ -36,7 +44,11 @@ export const LeftBarStyle = makeStyles(theme => ({
         marginTop:"40px",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+
+        "& .MuiAvatar-root": {
+           display:"none",
+        }
     },
     active: {
         backgroundColor: "#FF6600",

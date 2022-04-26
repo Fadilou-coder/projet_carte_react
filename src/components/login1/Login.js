@@ -47,12 +47,6 @@ const Login = (props) => {
     const {name, value} = event.target;
     setFormValues({...formValues, [name]: value});
   }
- /* const handleChange = (e) => {
-      const {name, value} = e.target;
-      setFormValues({...formValues, [name]: value});
-      console.log(formValues);
-  }*/
-
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -60,13 +54,17 @@ const Login = (props) => {
     setIsSubmit(true);
      setOpen(true);
     AuthService.login(username, password).then(
-    (res) => {
-      props.history.push("/visites");
+    () => {
+      if(localStorage.getItem('user') !== '["APPRENANT"]')
+        props.history.push("/visites");
+      else{
+        setOpen(false);
+        setErrorPage(true);
+      }
     }
     ).catch((e)=>{
      setOpen(false);
       setErrorPage(true);
-      console.log("Login ou Mot de Passe Incorrect!!!")
     });
 }
 
@@ -103,7 +101,7 @@ const Login = (props) => {
           </h1> */}
           <Box
             sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, 1fr)', }}
-            className={classes.contenu} 
+            className={classes.contenu}
           >
             <Box className={classes.logo} >
              <img  style={{ width: "80%" }} src={logo} alt="" />

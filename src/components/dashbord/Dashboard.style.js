@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/core";
-import themeGeneral from '../theme';
 
 const DashboardStyle = makeStyles(themeGeneral => ({
 
@@ -13,7 +12,7 @@ const DashboardStyle = makeStyles(themeGeneral => ({
         [themeGeneral.breakpoints.down('sm')]: {
             width: "100%"
         },
-        
+
     },
 
 

@@ -2,8 +2,8 @@
 import { Box, Button, OutlinedInput } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
-import { FilterAltOutlined, Notes, AddCircleOutlined } from '@mui/icons-material';
-import { InputAdornment, MenuItem, Select, Pagination, PaginationItem } from '@mui/material';
+import { AddCircleOutlined } from '@mui/icons-material';
+import { InputAdornment, Pagination, PaginationItem } from '@mui/material';
 import AdminStyle from "./AdminStyle";
 import { useHistory } from "react-router-dom";
 import { FormControl, Typography } from '@material-ui/core';
@@ -16,27 +16,21 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin, BloquerAdmin, DebloquerAdmin, FindByStructure } from './AdminService';
-import { ListAllStructure } from '../structure/StructureService'
+import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
 
 
 export const Admin = () => {
 
-    const [structure, setStructure] = React.useState([]);
-
     const [admins, setAdmin] = React.useState([]);
     const [search, setSearch] = React.useState('');
     const [isLoaded, setIsLoaded] = React.useState(true);
 
     React.useEffect(() => {
-        ListAllStructure().then(res => {
-            setStructure(res.data)
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
-                setIsLoaded(false);
-            })
+        ListAllAdmin().then(res => {
+            setAdmin(res.data);
+            setIsLoaded(false);
         })
     }, []);
 
@@ -44,21 +38,6 @@ export const Admin = () => {
 
     function RedirectAddAdmin() {
         history.push("/add_admin");
-    }
-
-    const chargerStructure = (value) => {
-        setIsLoaded(true);
-        if (value === "") {
-            ListAllAdmin().then(res => {
-                setAdmin(res.data);
-                setIsLoaded(false);
-            })
-        } else {
-            FindByStructure(value).then(res => {
-                setAdmin(res.data)
-                setIsLoaded(false);
-            })
-        }
     }
 
     // Custom Pagination
@@ -176,9 +155,9 @@ export const Admin = () => {
             flex: 1
         },
         {
-            field: 'cni',
+            field: 'numPiece',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Cni',
+            headerName: 'Numéro Pièce',
             editable: true,
             minWidth: 150,
             flex: 1
@@ -195,8 +174,6 @@ export const Admin = () => {
                 return <Checkbox onClick={() => bloquerAdmin(params.id, params.row.isbloqued)} checked={params.row.isbloqued} />;
             }
         },
-
-
     ]
 
 
@@ -217,50 +194,13 @@ export const Admin = () => {
             <Box sx={{}} className={classes.visitePage} >
 
                 <Box style={{ width: "100%" }}>
-                    {/* Gestion de l'entete de la liste des Reservations */}
-
                     <Box
                         className={classes.filtre}
                     >
 
                         <div className={classes.champfiltre}>
-                            <div style={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                flexWrap: 'wrap',
-                                color: "gray"
-                            }}
-                                className={classes.champtextfiltre}
-                            >
-                                <FilterAltOutlined></FilterAltOutlined>
-                                Filtre
-                            </div>
 
 
-                            <div>
-                                <Select
-                                    size='small'
-                                    value={structure}
-                                    onChange={(event) => chargerStructure(event.target.value)}
-                                    className={classes.visiteur}
-
-                                    startAdornment={
-                                        <InputAdornment position="start">
-                                            <Notes sx={{ color: "#000000" }} ></Notes>
-                                        </InputAdornment>}
-                                >
-                                    <MenuItem value={""}>
-                                        Tous
-                                    </MenuItem>
-                                    {
-                                        structure.map((element, i) => {
-                                            if (!element.isBlocked) {
-                                                return (<MenuItem value={element.id}> {element.nomStructure} </MenuItem>)
-                                            }
-                                        })
-                                    }
-                                </Select>
-                            </div>
                             <div className={classes.mysearch}>
                                 <FormControl className={classes.mytextsearch}>
                                     <OutlinedInput
@@ -281,27 +221,6 @@ export const Admin = () => {
                                     />
                                 </FormControl>
                             </div>
-                            {/*  <div>
-                                <FormControl style={{ width: "100%", marginBottom: "20px" }}>
-                                    <OutlinedInput
-
-                                        id="email"
-                                        placeholder="rechercher"
-                                        style={{ fontWeight: "bolder", color: "#000000" }}
-                                        size="small"
-                                        className={classes.mysearch}
-                                        startAdornment={
-                                            <InputAdornment position="start">
-                                                <SearchOutlined sx={{ color: "#000000" }}></SearchOutlined>
-                                            </InputAdornment>
-                                        }
-                                        onChange={(event) => {
-                                            setSearch(event.target.value);
-                                        }}
-                                    />
-                                </FormControl>
-                            </div>*/}
-
                         </div>
 
                         <Box textAlign="right">
@@ -358,7 +277,7 @@ export const Admin = () => {
                                             return val;
                                         } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
                                             || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
-                                            || val.cni.toLowerCase().includes(search.toLowerCase())) {
+                                            || val.numPiece.toLowerCase().includes(search.toLowerCase())) {
                                             return val;
                                         }
                                     }).map((row) => {
