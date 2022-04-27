@@ -16,7 +16,6 @@ const LeftBarDesign = () => {
                 <ListItem
                     key={key}
                     button
-                    //key={item.id}
                     onClick={() => history.push(item.path)}
                     className={location.pathname === item.path ? classes.active : classes.notActive}
                 >
@@ -33,7 +32,6 @@ const LeftBarDesign = () => {
                 <ListItem
                     key={key}
                     button
-                    //key={item.id}
                     onClick={() => history.push(item.path)}
                     className={location.pathname === item.path ? classes.active : classes.notActive}
                 >

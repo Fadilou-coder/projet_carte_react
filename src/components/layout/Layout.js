@@ -24,8 +24,7 @@ const Layout = ({ children }) => {
             <Topbar funcSetIsMobile={funcSetIsMobile} />
             <main className={classes.children}>
                 <div className={classes.topbarWidth} />
-                {/*Affic  */}
-
+                
                 {children}
 
             </main>

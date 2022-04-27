@@ -17,4 +17,6 @@ const API_URL = 'http://localhost:8080/api/';
 
     export const BloquerAdmin = (id) => { return axios.delete(API_URL + "admin/" + id, {headers: authHeader()}); }
 
+    export const updateAdmin = (data, id) => { return axios.put(API_URL + "admin/" + id, data, {headers: authHeader()}); }
+
     export const DebloquerAdmin = (id) => { return axios.put(API_URL + "admin/debloquer/" + id, {}, {headers: authHeader()}); }
