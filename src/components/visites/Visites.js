@@ -517,27 +517,29 @@ export const Visites = () => {
                                     className={classes.ajoutScan}
 
                                 >
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<AddCircleOutlined />}
-                                        onClick={handleClickOpen}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontFamily: "Arial",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            marginRight: "10px",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: "#000000",
-                                                pointer: "cursor",
-                                                color: "white"
+                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<AddCircleOutlined />}
+                                            onClick={handleClickOpen}
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                marginRight: "10px",
+                                                fontWeight: "bold",
+                                                '&:hover': {
+                                                    backgroundColor: "#000000",
+                                                    pointer: "cursor",
+                                                    color: "white"
 
-                                            }
-                                        }}
-                                    >
-                                        AJOUTER
-                                    </Button>
+                                                }
+                                            }}
+                                        >
+                                            AJOUTER
+                                        </Button> : null
+                                    }
                                     <Button
                                         variant="contained"
                                         endIcon={<DocumentScannerOutlined />}
@@ -603,8 +605,9 @@ export const Visites = () => {
                                             setComment({ ...comment, apprenant: params.row.apprenant })
                                             if (params.row.apprenant) {
                                                 findComments(params.row.apprenant.id);
+                                                setShowDialog(true)
                                             }
-                                            setShowDialog(true)
+
                                         }}
                                         disableVirtualization
                                     >
@@ -816,7 +819,7 @@ export const Visites = () => {
                                         overflowY: 'auto',
                                     }}
                                 >
-                                    {(localStorage.getItem('user') === "['ADMIN']") ?
+                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
                                         <TextareaAutosize
                                             aria-label="minimum height"
                                             minRows={15}
@@ -838,7 +841,7 @@ export const Visites = () => {
                                         </div>
                                     }
                                 </Grid>
-                                {(localStorage.getItem('user') === "['ADMIN']") ?
+                                {(localStorage.getItem('user') === '["ADMIN"]') ?
                                     <DialogActions>
                                         <Button
                                             sx={{

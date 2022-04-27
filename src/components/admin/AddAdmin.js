@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core";
 import Layout from "../layout/Layout";
 import { SaveAdmin } from "./AdminService";
 import Swal from 'sweetalert2'
-import emailjs from '@emailjs/browser';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
@@ -53,50 +52,44 @@ function AddAdmin() {
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
         event.preventDefault();
-
-        SaveAdmin(admin).then((res) => {
-            if (res.status === 200) {
-                Swal.fire(
-                    'Succes!',
-                    'Admin Enregistrer avec succes.',
-                    'success'
-                ).then(() => {
-                    setAdmin({
-                        prenom: ' ',
-                        nom: '',
-                        phone: '',
-                        email: '',
-                        addresse: '',
-                        password: myPassword,
-                        numPiece: '',
-                        typePiece: 'CNI',
+        if(Object.keys(validateAdmin(admin)).length === 0)
+            SaveAdmin(admin).then((res) => {
+                if (res.status === 200) {
+                    Swal.fire(
+                        'Succes!',
+                        'Admin Enregistrer avec succes.',
+                        'success'
+                    ).then(() => {
+                        setAdmin({
+                            prenom: ' ',
+                            nom: '',
+                            phone: '',
+                            email: '',
+                            addresse: '',
+                            password: myPassword,
+                            numPiece: '',
+                            typePiece: 'CNI',
+                        })
                     })
-                    sendEmail(event);
-                })
-            }
-            
-        }).catch(
-            (error) => {
-                console.log(error);
-            }
-        )
-
-        
-
+                }
+                
+            }).catch(
+                (error) => {
+                    console.log(error.response.data.errors);
+                    const err = {}
+                    for (let index = 0; index < error.response.data.errors.length; index++) {
+                      if(error.response.data.errors[index] === 'un utilisateur avec ce email existe deja dans la base de données')
+                        err.email = error.response.data.errors[index]
+                      if(error.response.data.errors[index] === 'un utilisateur avec ce numero téléphone existe deja dans la base de données')
+                        err.phone = error.response.data.errors[index]
+                        
+                    }
+                    setFormErrors(err);
+                }
+            )
     };
 
     const form = useRef();
-
-    const sendEmail = (e) => {
-
-        emailjs.sendForm('service_tuwme63', 'email_dv26pv8', form.current, 'aF00JTLiRllzze4TO')
-            .then((result) => {
-                console.log(result.text);
-            }, (error) => {
-                console.log(error.text);
-            });
-
-    };
 
     const validateAdmin = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");

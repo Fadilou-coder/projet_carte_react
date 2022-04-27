@@ -16,7 +16,7 @@ const Layout = ({ children }) => {
 
     return (
         <div className={classes.root}>
-            {(localStorage.getItem("user") === '["SUPER_ADMIN"]') ?
+            {(localStorage.getItem("user") === '["SUPER_ADMIN"]' || localStorage.getItem('user') === '["SUPERVISEUR"]') ?
                 <LeftBar isMobile={isMobile}
                     funcSetIsMobile={funcSetIsMobile}
                 /> : null

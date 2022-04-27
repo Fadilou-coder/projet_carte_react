@@ -10,10 +10,8 @@ const LeftBarDesign = () => {
     const history = useHistory();
     const location = useLocation();
 
-    const user = localStorage.getItem('user');
-
     const myTab = LeftBarData.map((item, key) =>
-        (item.showBySuperAdmin === true && user.includes("SUPER_ADMIN")) ? (
+        (item.showBySuperAdmin === true && (localStorage.getItem('user') === '["SUPER_ADMIN"]' || localStorage.getItem('user') === '["SUPERVISEUR"]')) ? (
             item.after ? (
                 <ListItem
                     key={key}
@@ -30,7 +28,7 @@ const LeftBarDesign = () => {
                     </ListItemText>
                 </ListItem>
             ) : null
-        ) : (item.showByAdmin === false && user.includes("ADMIN")) ? (
+        ) : (item.showByAdmin === false) ? (
             item.after ? (
                 <ListItem
                     key={key}
