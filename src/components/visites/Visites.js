@@ -545,7 +545,7 @@ export const Visites = () => {
                             }} className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
-                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toDateString()}</h2>
+                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
                                     <DataGrid
                                         sx={{ boxShadow: "30px", width: "100%" }}
                                         autoHeight
