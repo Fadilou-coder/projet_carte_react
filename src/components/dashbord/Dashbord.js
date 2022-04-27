@@ -208,21 +208,6 @@ const Dashbord = () => {
         }
 
 
-        // setSeries([{
-        //     name: "series-1",
-        //     data: absences,
-        // }]);
-
-        // setSeries1([{
-        //     name: "series-2",
-        //     data: retards,
-        // }])
-
-        // // console.log(retards)
-        // console.log(series1)
-
-
-
 
     }
 
@@ -390,7 +375,7 @@ const Dashbord = () => {
                     <Box className={classes.chartStyle}>
                         <div
                             style={{ width: "48%" }}>
-                            <ChartDashboard donneesabsences={absences} titre="retard" color="#FF6600" ></ChartDashboard>
+                            <ChartDashboard donneesretards={retards} titre="retard" color="#FF6600" ></ChartDashboard>
                             {/* <ChartApex chargerChart={absences} ></ChartApex> */}
                             {/* <Chart
                                 options={options}
@@ -410,14 +395,7 @@ const Dashbord = () => {
 
                             }}
                         >
-                            <ChartDashboard titre="absence" color="#000000"></ChartDashboard>
-                            {/* <Chart
-                                options={options}
-                                series={series1}
-                                type="bar"
-                                width="100%"
-                            /> */}
-
+                            <ChartDashboard donneesabsences={absences} titre="absence" color="#000000"></ChartDashboard>
                         </div>
                     </Box>
 

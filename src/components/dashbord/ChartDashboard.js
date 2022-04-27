@@ -23,8 +23,31 @@ ChartJS.register(
 
 export function ChartDashboard(props) {
 
-  console.log(props.donneesabsences);
+  console.log(props.donneesretards);
 
+  let donneescharts = [
+    100,
+    20,
+    60,
+    45,
+   21,
+    34,
+    40,
+    20,
+    73,
+     12,
+     56,
+   10
+  ];
+
+  if (props.donneesabsences) {
+    donneescharts = props.donneesabsences;
+  }
+
+
+  if (props.donneesretards) {
+    donneescharts = props.donneesretards;
+  }
   const options = {
 
     tooltips: {
@@ -56,20 +79,7 @@ export function ChartDashboard(props) {
     datasets: [
       {
         label: "Donnees " + props.titre,
-        data: {
-          Janvier: props.donneesabsences ? props.donneesabsences[0] : 10,
-          Fevrier: props.donneesabsences ? props.donneesabsences[1] : 20,
-          Mars: props.donneesabsences ? props.donneesabsences[2] : 60,
-          Avril: props.donneesabsences ? props.donneesabsences[3] : 45,
-          Mai: props.donneesabsences ? props.donneesabsences[4] : 21,
-          Juin: props.donneesabsences ? props.donneesabsences[5] : 34,
-          Juillet: props.donneesabsences ? props.donneesabsences[6] : 40,
-          Aout: props.donneesabsences ? props.donneesabsences[7] : 20,
-          Septembre: props.donneesabsences ? props.donneesabsences[8] : 73,
-          Octobre: props.donneesabsences ? props.donneesabsences[9] : 12,
-          Novembre:props.donneesabsences ? props.donneesabsences[10] : 56,
-          Decembre: 10
-        },
+        data: donneescharts,
         backgroundColor: props.color,
       },
 
