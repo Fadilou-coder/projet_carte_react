@@ -12,3 +12,13 @@ export const ListApprenantsByPromo = (id) => {
 export const ListPromos = () => {
     return axios.get(API_URL + "promos", { headers: authHeader() });
 }
+
+
+export const nbRetardPromo = (id,datedebut,datefin) => {
+    return axios.get(API_URL + "promos/"+id+"/nbrRetardAllApp/"+datedebut+"/"+datefin, { headers: authHeader() });
+}
+
+
+export const nbAbsAllApp = (id,datedebut,datefin) => {
+    return axios.get(API_URL + "promos/"+id+"/nbrAbsAllApp/"+datedebut+"/"+datefin, { headers: authHeader() });
+}

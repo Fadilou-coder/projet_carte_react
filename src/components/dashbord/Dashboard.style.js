@@ -23,7 +23,6 @@ const DashboardStyle = makeStyles(themeGeneral => ({
         marginTop: "20px",
         [themeGeneral.breakpoints.down('xs')]: {
             display: "block",
-
         }
     },
     nbValue: {
@@ -39,7 +38,6 @@ const DashboardStyle = makeStyles(themeGeneral => ({
             padding: "20px 0",
             marginBottom: "10px"
         }
-
     },
     nbVal: {
         color: "#FF6600",
@@ -49,12 +47,11 @@ const DashboardStyle = makeStyles(themeGeneral => ({
         width: "25%",
 
     },
-    chartStyle : {
-        display:"flex",
-        gap:"20px",
-        marginBottom:"20px"
-        }
-
+    chartStyle: {
+        display: "flex",
+        gap: "20px",
+        marginBottom: "20px"
+    }
 
 }));
 

@@ -78,9 +78,9 @@ function AddAdmin() {
                     console.log(error.response.data.errors);
                     const err = {}
                     for (let index = 0; index < error.response.data.errors.length; index++) {
-                      if(error.response.data.errors[index] === 'un utilisateur avec ce email existe deja dans la base de données')
+                      if(error.response.data.errors[index].includes('email'))
                         err.email = error.response.data.errors[index]
-                      if(error.response.data.errors[index] === 'un utilisateur avec ce numero téléphone existe deja dans la base de données')
+                      if(error.response.data.errors[index].includes('téléphone'))
                         err.phone = error.response.data.errors[index]
                         
                     }
