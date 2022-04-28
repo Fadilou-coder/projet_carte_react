@@ -13,12 +13,12 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-import { FormControl, IconButton, Typography } from "@material-ui/core"
+import { FormControl, Typography } from "@material-ui/core"
 import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
-import CloseIcon from '@mui/icons-material/Close';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
+//import CloseIcon from '@mui/icons-material/Close';
+//import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import dateTime from 'date-time';
 import {
@@ -32,16 +32,16 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import Commentaire from './Commentaire'
 var QRCode = require('qrcode.react')
 
-export const Visites = () => {
+export const Visites = (props) => {
 
     const [visiteur, setVisiteur] = React.useState("");
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = React.useState(true);
 
-    // const [showDialog, setShowDialog] = useState(false);
 
 
     const [values, setValues] = React.useState({
@@ -573,18 +573,12 @@ export const Visites = () => {
                                                 }
                                             }).map((row) => {
                                                 return row;
-                                                // return (
-                                                //     <Popper id={id} open={open1} anchorEl={anchorEl}>
-                                                //         <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-                                                //             {{ row }}
-                                                //         </Box>
-                                                //     </Popper>
-                                                // )
-
                                             })
                                         }
                                         columns={columns}
                                         onRowClick={(params, event) => {
+                                            console.log("params "+params.id);
+                                            console.log("event "+ props);
                                             setShowDialog(true)
                                           }}
                                         disableVirtualization
@@ -624,7 +618,6 @@ export const Visites = () => {
                             sx: {
                                 borderRadius: "10px",
                                 padding: "20px",
-                                // width: "25%", 
                                 maxWidth: {
                                     lg: "30%",
                                     md: "25%",
@@ -743,74 +736,21 @@ export const Visites = () => {
 
 {/* Dialogue pour commenntaire */}
                     <div>
-                    <Dialog open={showDialog} onClose={handleClose} 
-                            PaperProps={{
-                                style: {
-                                backgroundColor: ' #000000',
-                                boxShadow: 'none',
-                                height: "85%",
-                                 left: '40%',
-                                // display: 'flex',
-                                // float: 'right',
-                                // ['@media (min-width:780px)']: { // eslint-disable-line no-useless-computed-key
-                                //     left: '0'
-                                //   }
-                                },
-                    }} className={classes.dialog}>
-                            <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "#FFFFFF", paddingLeft: "20px" }}>
-                                COMMENTAIRE
-                                <IconButton
-                                        aria-label="close" 
-                                        onClick={handleClose}
-                                        sx={{
-                                            position: 'absolute',
-                                            right: 8,
-                                            top: 8,
-                                            float: 'right'
-                                        }}
+                    <Dialog open={showDialog} onClose={handleClose}
+                     PaperProps={{
+                        style: {
+                        backgroundColor: ' #000000',
+                        boxShadow: 'none',
+                        height: "85%",
+                         left: '40%',
+                        },
+            }} className={classes.dialog}
+                    >
+                    <Commentaire comments={props}/>
 
-                                        style={{color: '#FFFFFF'}}
-                                    >
-                                    <CloseIcon/>
-                                </IconButton>
-                            </DialogTitle>
-                            <hr style={{ borderTop: " 4px solid #F48322", width: "20%", float: "left", marginLeft: "15px" }} />
-                            <DialogContent>
-                                <Grid>
-                                    <TextareaAutosize
-                                        aria-label="minimum height"
-                                        minRows={15}
-                                        placeholder="comment"
-                                        style={{ width: 300, borderRadius: '5px' }}
-                                    />
-                                </Grid>
-                                <DialogActions>
-                                <Button
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial",
-                                        fontSize: "16px",
-                                        color: "#000000",
-                                        fontWeight: "bold",
-                                        right: "80px",
-                                        marginTop: "15px",
-                                        '&:hover': {
-                                            backgroundColor: "#FFFFFF",
-                                            pointer: "cursor",
-                                            color: "#000000"
-                                        }
-                                    }}
-                                >
-                                    COMMENTER
-                                </Button>
-                            </DialogActions>
-                            <div className={classes.comment} >
-                                <p style={{color: "#FFFFFF"}}>Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.</p>
-                                <p style={{color: "#FFFFFF"}}>Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.</p>
-                                <p style={{color: "#FFFFFF"}}>Le lorem ipsum est, en imprimerie, une suite de mots sans signification utilisée à titre provisoire pour calibrer une mise en page, le texte définitif venant remplacer le faux-texte dès qu'il est prêt ou que la mise en page est achevée. Généralement, on utilise un texte en faux latin, le Lorem ipsum ou Lipsum.</p>
-                            </div>
-                            </DialogContent>
-                        </Dialog>
+                    </Dialog> 
+
+                    
                     </div>
 
                     
