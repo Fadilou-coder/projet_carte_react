@@ -25,7 +25,6 @@ export const Structure = () => {
     const [nomStructure, setNomStructure] = React.useState({ nomStructure: '' });
     const [loading, setLoading] = React.useState(true);
 
-
     React.useEffect(() => {
         ListAllStructure().then(response => {
             setStructure(response.data);

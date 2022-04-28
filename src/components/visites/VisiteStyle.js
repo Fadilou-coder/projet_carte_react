@@ -33,7 +33,7 @@ const VisiteStyle = makeStyles(theme => ({
     },
 
     ajoutScan: {
-        width: "35%",
+        // width: "35%",
         display: "flex",
         justifyContent: "end",
         [theme.breakpoints.down('sm')]: {
@@ -92,6 +92,11 @@ const VisiteStyle = makeStyles(theme => ({
         
         
     },
+    dialog:{
+        [theme.breakpoints.down('sm')]: {
+            left: "0"
+        },
+    },
     mytextsearch: {
         [theme.breakpoints.down('sm')]: {
             width: "100%"
@@ -119,7 +124,6 @@ const VisiteStyle = makeStyles(theme => ({
             fontSize: "20px"
         }
     }
-
 }));
 
 export default VisiteStyle;

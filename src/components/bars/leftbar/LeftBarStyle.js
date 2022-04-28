@@ -12,7 +12,7 @@ export const LeftBarStyle = makeStyles(theme => ({
         display: "flex",
         alignItems: "center",
         backgroundColor: themeGeneral.palette.primary.white,
-        color: themeGeneral.palette.primary.white,
+        color: themeGeneral.palette.primary.white
     },
     logoDiv: {
         borderBottom: '1px solid ##000000',
@@ -36,7 +36,11 @@ export const LeftBarStyle = makeStyles(theme => ({
         marginTop:"40px",
         display:"flex",
         justifyContent:"center",
-        alignItems:"center"
+        alignItems:"center",
+
+        "& .MuiAvatar-root": {
+           display:"none",
+        }
     },
     active: {
         backgroundColor: "#FF6600",

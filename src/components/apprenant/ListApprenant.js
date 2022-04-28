@@ -53,13 +53,13 @@ export const ListApprenant = () => {
     // Initialiser Liste Reeferentiel
     const [referentiels, setReferentiels] = React.useState([]);
 
-    // Initialiser Liste Promos 
+    // Initialiser Liste Promos
     const [promos, setPromos] = React.useState([]);
 
 
     const [referentiel, setReferentiel] = React.useState("");
 
-    // Initialiser Liste Promos 
+    // Initialiser Liste Promos
     const [promo, setPromo] = React.useState("");
 
 
@@ -79,6 +79,7 @@ export const ListApprenant = () => {
 
 
     React.useEffect(() => {
+
         listAllReferentiels().then(res => {
             setReferentiels(res.data);
         });
@@ -86,9 +87,11 @@ export const ListApprenant = () => {
         ListPromos().then(res => {
             setPromos(res.data);
             setPromo(res.data[res.data.length - 1].id);
-            ListApprenantsByPromo(res.data[res.data.length - 1].id).then(res => {
-                setApprenants(res.data)
-                setApprenant(res.data[0]);
+            ListApprenantsByPromo(res.data[res.data.length - 1].id).then(response => {
+                if (response.data.length > 0) {
+                    setApprenants(response.data)
+                    setApprenant(response.data[0]);
+                }
                 setLoading(false);
             })
         });
@@ -102,14 +105,18 @@ export const ListApprenant = () => {
         setLoading(true);
         if (idRef === "") {
             ListApprenantsByPromo(idPr).then(res => {
-                setApprenants(res.data)
-                setApprenant(res.data[0]);
+                if (res.data.length > 0) {
+                    setApprenants(res.data)
+                    setApprenant(res.data[0]);
+                }
                 setLoading(false);
             })
         } else {
             ListApprenantsByReferentielByPromo(idRef, idPr).then(res => {
-                setApprenants(res.data);
-                setApprenant(res.data[0]);
+                if (res.data.length > 0) {
+                    setApprenants(res.data)
+                    setApprenant(res.data[0]);
+                }
                 setLoading(false);
             })
         }
@@ -147,18 +154,21 @@ export const ListApprenant = () => {
             field: 'code',
             headerClassName: 'super-app-theme--header',
             headerName: 'Numero Etudiant',
+            minWidth: 150,
             flex: 1,
         },
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Prenom',
+            minWidth: 150,
             flex: 1,
         },
         {
             field: 'nom',
             headerClassName: 'super-app-theme--header',
             headerName: 'Nom',
+            minWidth: 150,
             flex: 1
         },
     ]
@@ -426,16 +436,17 @@ export const ListApprenant = () => {
                                     }}
                                     loading={loading}
                                     rows={
-                                        apprenants.filter((val) => {
-                                            if (search === "") {
-                                                return val;
-                                            } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
-                                                || val.code.toLowerCase().includes(search.toLowerCase())) {
-                                                return val;
-                                            }
-                                        }).map((row) => {
-                                            return row;
-                                        })
+                                        apprenants.length > 0 ?
+                                            apprenants.filter((val) => {
+                                                if (search === "") {
+                                                    return val;
+                                                } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                                    || val.code.toLowerCase().includes(search.toLowerCase())) {
+                                                    return val;
+                                                }
+                                            }).map((row) => {
+                                                return row;
+                                            }) : apprenants
                                     }
                                     columns={columns}
                                     getRowClassName={() => 'apprenant-table--row'}
@@ -618,11 +629,11 @@ export const ListApprenant = () => {
 
                                         </div>
                                         <div>
-                                        <Avatar
-                                            src={`data:image/jpg;base64,${apprenant.avatar}`}
-                                            sx={{ width: 120, height: 125, marginTop: 4, marginRight: 3 }}
-                                            variant="square"
-                                        />
+                                            <Avatar
+                                                src={`data:image/jpg;base64,${apprenant.avatar}`}
+                                                sx={{ width: 120, height: 125, marginTop: 4, marginRight: 3 }}
+                                                variant="square"
+                                            />
                                         </div>
                                     </div>
                                     <div style={{
