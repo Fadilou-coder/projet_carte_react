@@ -22,9 +22,12 @@ import { ListAllReferentiel, AddReferentiel, UpdateReferentiel } from './Referen
 export const Referentiel = () => {
 
     const [loading, setLoading] = React.useState(true);
+    const [referentiels, setReferentiels] = React.useState([]);
     const [referentiel, setReferentiel] = React.useState(
         { libelle: '' }
         );
+
+    const isBlank = require('is-blank')
 
     // Custom Pagination
     function CustomPagination() {
@@ -101,7 +104,7 @@ export const Referentiel = () => {
 
     const validateRef = (val) => {
         const errors = {};
-        if (!val.libelle) {
+        if (isBlank(val.libelle)) {
             errors.libelle = "Le libelle est requis"
         }
         return errors;
@@ -109,8 +112,7 @@ export const Referentiel = () => {
 
     React.useEffect(() => {
         ListAllReferentiel().then(response => {
-            console.log(response.data);
-            setReferentiel(response.data);
+            setReferentiels(response.data);
             setLoading(false);
         });
     }, []
@@ -118,17 +120,15 @@ export const Referentiel = () => {
 
 
     const handleSubmit = (event) => {
-
-        setFormErrors(validateRef(referentiel))
-
+        setFormErrors(validateRef(referentiel));
+        event.preventDefault();
             AddReferentiel(referentiel).then(res => {
-                console.log(referentiel);
             if (res.status === 200) {
                 Swal.fire(
                     'Succes!',
                     'Enregistrer avec succes.',
                     'success'
-                ).then((res) => {
+                ).then(() => {
                     setReferentiel({
                         libelle: '',
                     })
@@ -138,7 +138,6 @@ export const Referentiel = () => {
             }).catch(
                 (error) => {
                     setErrorPage(true);
-                    console.log(error);
                 }
             )
     };
@@ -206,7 +205,7 @@ export const Referentiel = () => {
                                 Pagination: CustomPagination,
                             }}
                             loading={loading}
-                            rows={referentiel}
+                            rows={referentiels}
                             columns={columns}
                         />
 
@@ -238,15 +237,14 @@ export const Referentiel = () => {
                             variant="outlined"
                             placeholder="libelle"
                             onChange={(event) => {
-                                setFormErrors({...formErrors, libelle: null})
-                                setReferentiel({ ...referentiel, libelle: event.target.value.replace(/\s/g, '') })
+                                setReferentiel({ ...referentiel, libelle: event.target.value })
                             }}
 
                             style={{ width: "100%", marginBottom: "20px" }}
                         />
                         <p style={{color: 'red'}}>{formErrors.libelle}</p>
                         <div style={{}}>
-                            <Button  onClick={handleSubmit}
+                            <Button onClick={() => handleSubmit()}
                                 disabled={referentiel.libelle === ''}
                                 variant="contained"
                                 sx={{

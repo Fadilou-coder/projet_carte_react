@@ -28,6 +28,8 @@ import Swal from "sweetalert2";
 export const Promos = () => {
 
     const [loading, setLoading] = React.useState(true);
+
+    const [promos, setPromos] = React.useState([]);
     const [promo, setPromo] = React.useState(
         {
             libelle: '',
@@ -39,6 +41,7 @@ export const Promos = () => {
     const [open, setOpen] = React.useState(false)
     const [setSearch] = React.useState('');
 
+    const isBlank = require('is-blank')
 
         // Custom Dialog
     const handleClickOpen = () => {
@@ -138,7 +141,7 @@ export const Promos = () => {
 
     const validatePromo = (val) => {
         const errors = {};
-        if (!val.libelle) {
+        if (isBlank(val.libelle)) {
             errors.libelle = "Le libelle est requis"
         }
 
@@ -157,7 +160,7 @@ export const Promos = () => {
 
     React.useEffect(() => {
         ListAllPromo().then(response => {
-            setPromo(response.data);
+            setPromos(response.data);
             setLoading(false);
         });
     }, []
@@ -165,10 +168,8 @@ export const Promos = () => {
 
 
     const handleSubmit = (event) => {
-
         setFormErrors(validatePromo(promo))
-            event.preventDefault();
-
+        event.preventDefault();
         AddPromo(promo).then(res => {
             handleClose()
             if (res.status === 200) {
@@ -176,7 +177,7 @@ export const Promos = () => {
                     'Succes!',
                     'Enregistrer avec succes.',
                     'success'
-                ).then((res) => {
+                ).then(() => {
                     setPromo({
                         libelle: '',
                         dateDebut: '',
@@ -194,7 +195,7 @@ export const Promos = () => {
     };
 
     const handleCommit = (e)=>{
-        const arrayEdit = promo.map(p=>{
+            promo.map(p=>{
             if(p.id === e.id){
                var data = {...p, [e.field]: e.value}
                UpdatePromo(data, data.id).then(res => {
@@ -305,7 +306,7 @@ export const Promos = () => {
                                             // Toolbar: CustomToolbar,
                                         }}
                                         loading={loading}
-                                        rows={promo}
+                                        rows={promos}
                                         columns={columns}
                                         disableVirtualization
                                     >
@@ -336,7 +337,7 @@ export const Promos = () => {
                                             placeholder="libelle"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, libelle: null})
-                                                setPromo({ ...promo, libelle: event.target.value.replace(/\s/g, '') })
+                                                setPromo({ ...promo, libelle: event.target.value })
                                             }}
 
                                         />
@@ -401,7 +402,7 @@ export const Promos = () => {
                                         }
                                     }}
                                 >ANNULER</Button>
-                                <Button onClick={handleSubmit}
+                                <Button onClick={() => handleSubmit()}
                                     sx={{
                                         backgroundColor: "#FF6600",
                                         fontFamily: "Arial", fontSize: "20px",

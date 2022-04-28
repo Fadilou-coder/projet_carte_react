@@ -21,7 +21,6 @@ function AddAdmin() {
         var word = Math.round(Math.random() * text.length);
         myPassword += text.substring(word, word + 1);
     }
-
     const isBlank = require('is-blank')
 
     const [admin, setAdmin] = React.useState({
@@ -35,7 +34,9 @@ function AddAdmin() {
         typePiece: 'CNI',
     });
 
-    const [formErrors, setFormErrors] = useState({});
+    const [formErrors, setFormErrors] = useState([]);
+
+   // const [error, setError] = useState([]);
 
     const classes = AdminStyle();
     const useStyles = makeStyles((theme) => ({
@@ -53,36 +54,41 @@ function AddAdmin() {
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
         event.preventDefault();
-
-        SaveAdmin(admin).then((res) => {
-            if (res.status === 200) {
-                Swal.fire(
-                    'Succes!',
-                    'Admin Enregistrer avec succes.',
-                    'success'
-                ).then(() => {
-                    setAdmin({
-                        prenom: ' ',
-                        nom: '',
-                        phone: '',
-                        email: '',
-                        addresse: '',
-                        password: myPassword,
-                        numPiece: '',
-                        typePiece: 'CNI',
+        if(Object.keys(validateAdmin(admin)).length === 0)
+            SaveAdmin(admin).then((res) => {
+                if (res.status === 200) {
+                    Swal.fire(
+                        'Succes!',
+                        'Admin Enregistrer avec succes.',
+                        'success'
+                    ).then(() => {
+                        setAdmin({
+                            prenom: ' ',
+                            nom: '',
+                            phone: '',
+                            email: '',
+                            addresse: '',
+                            password: myPassword,
+                            numPiece: '',
+                            typePiece: 'CNI',
+                        })
                     })
-                    sendEmail(event);
-                })
-            }
-            
-        }).catch(
-            (error) => {
-                console.log(error);
-            }
-        )
+                }
 
-        
+            }).catch(
+                (error) => {
+                    console.log(error.response.data.errors);
+                    const err = {}
+                    for (let index = 0; index < error.response.data.errors.length; index++) {
+                        if(error.response.data.errors[index].includes('email'))
+                            err.email = error.response.data.errors[index]
+                        if(error.response.data.errors[index].includes('téléphone'))
+                            err.phone = error.response.data.errors[index]
 
+                    }
+                    setFormErrors(err);
+                }
+            )
     };
 
     const form = useRef();
@@ -100,7 +106,7 @@ function AddAdmin() {
 
     const validateAdmin = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
-        const errors = {};
+        let errors = {};
         if (isBlank(val.prenom)) {
             errors.prenom = "prenom est requis"
         } else if (val.prenom.length < 3) {
@@ -150,6 +156,7 @@ function AddAdmin() {
                                             <OutlinedInput
                                                 id="ok"
                                                 name="prenom"
+                                                required
                                                 type="text"
                                                 variant="outlined"
                                                 placeholder="Ex: prenom"
@@ -167,6 +174,7 @@ function AddAdmin() {
                                             <OutlinedInput
                                                 id="input"
                                                 name="nom"
+                                                required
                                                 type="text"
                                                 variant="outlined"
                                                 placeholder="Ex: nom"
@@ -180,7 +188,6 @@ function AddAdmin() {
                                     </Grid>
                                 </Grid>
 
-
                                 <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                     <Grid xs={12} sm={12} md={4} item>
                                         <FormControl fullWidth>
@@ -188,6 +195,7 @@ function AddAdmin() {
                                             <OutlinedInput
                                                 id="input"
                                                 name="phone"
+                                                required
                                                 type="text"
                                                 variant="outlined"
                                                 placeholder="Ex: phone"
@@ -198,6 +206,16 @@ function AddAdmin() {
                                             />
                                         </FormControl>
                                         <p className={classes.formError}>{formErrors.phone}</p>
+                                       {/* <div className={classes.formError}>
+                                            {error?.map((item, index) => {
+                                              return (
+                                                  <div>
+                                                  <p key={index}>{item}</p>
+                                                      test
+                                                  </div>)
+
+                                            })}
+                                        </div>*/}
                                     </Grid>
                                     <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                         <FormControl fullWidth>
@@ -206,6 +224,7 @@ function AddAdmin() {
                                                 id="input"
                                                 name="email"
                                                 type="email"
+                                                required
                                                 variant="outlined"
                                                 placeholder="Ex:email"
                                                 onChange={(event) => {
@@ -215,9 +234,15 @@ function AddAdmin() {
                                             />
                                         </FormControl>
                                         <p className={classes.formError}>{formErrors.email}</p>
+                                        {/*{error?.map((item, index) => {
+                                            return (
+                                                <div>
+                                                    <p key={index}>{item}</p>
+                                                    test
+                                                </div>)
+
+                                        })}*/}
                                     </Grid>
-
-
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
@@ -245,6 +270,7 @@ function AddAdmin() {
                                                 <OutlinedInput
                                                     id="input"
                                                     name="numPiece"
+                                                    required
                                                     type="text"
                                                     variant="outlined"
                                                     placeholder="Ex: numPiece"
@@ -264,6 +290,7 @@ function AddAdmin() {
                                                 <OutlinedInput
                                                     id="input"
                                                     name="adresse"
+                                                    required
                                                     type="text"
                                                     variant="outlined"
                                                     placeholder="Ex: addresse"
