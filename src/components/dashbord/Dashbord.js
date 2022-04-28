@@ -4,11 +4,7 @@ import Layout from "../layout/Layout";
 import { Grid, Select, InputAdornment, MenuItem, Box } from '@mui/material';
 import { FemaleOutlined, FilterAltOutlined, MaleOutlined, Notes } from '@mui/icons-material';
 import DashboardStyle from "./Dashboard.style";
-// import { ChartDashboard } from './ChartDashboard';
 
-
-// import { ListApprenantsByPromo, ListPromos, nbRetardPromo } from './Dashboard.service';
-// import faker from "faker";
 import {  ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
 import { nbAbsAllApp, nbRetardPromo } from './Dashboard.service';
 
@@ -77,7 +73,7 @@ const Dashbord = () => {
         })
        
 
-    }, []);
+    }, [promo]);
 
 
 

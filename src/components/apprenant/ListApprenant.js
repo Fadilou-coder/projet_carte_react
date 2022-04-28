@@ -202,7 +202,8 @@ export const ListApprenant = () => {
         newApp.append('email', apprenant.email);
         newApp.append('phone', apprenant.phone);
         newApp.append('adresse', apprenant.addresse);
-        newApp.append('cni', '1234543212345');
+        newApp.append('typePiece', '');
+        newApp.append('numPiece', '');
         newApp.append('dateNaissance', apprenant.dateNaissance);
         newApp.append('lieuNaissance', apprenant.lieuNaissance);
         newApp.append('numTuteur', apprenant.numTuteur);
@@ -425,7 +426,6 @@ export const ListApprenant = () => {
                                             if (apprenant.id !== params.row.id) {
                                                 if (isSelection === false) {
                                                     setApprenant(params.row);
-                                                    console.log(apprenant);
                                                 } else {
                                                     Swal.fire({
                                                         title: 'Attention?',

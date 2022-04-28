@@ -164,22 +164,22 @@ export const Referentiel = () => {
             }
         )
     };
-    const handleCommit = (e) => {
-        referentiel.map(r => {
-            if (r.id === e.id) {
-                var data = { ...r, [e.field]: e.value }
-                UpdateReferentiel(data, data.id).then(res => {
-                    if (res.status === 200) {
-                        setReferentiel(res.data);
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Modifier avec success',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    }
-                })
+    const handleCommit = (e)=>{
+        referentiel.forEach(r => {
+            if(r.id === e.id){
+               var data = {...r, [e.field]: e.value}
+               UpdateReferentiel(data, data.id).then(res => {
+                if (res.status === 200) {
+                    setReferentiel(res.data);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Modifier avec success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
             }
         });
         setLoading(true);

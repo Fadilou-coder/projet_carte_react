@@ -8,7 +8,6 @@ import { makeStyles } from "@material-ui/core";
 import Layout from "../layout/Layout";
 import { SaveAdmin } from "./AdminService";
 import Swal from 'sweetalert2'
-import emailjs from '@emailjs/browser';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 
@@ -53,50 +52,44 @@ function AddAdmin() {
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
         event.preventDefault();
-
-        SaveAdmin(admin).then((res) => {
-            if (res.status === 200) {
-                Swal.fire(
-                    'Succes!',
-                    'Admin Enregistrer avec succes.',
-                    'success'
-                ).then(() => {
-                    setAdmin({
-                        prenom: ' ',
-                        nom: '',
-                        phone: '',
-                        email: '',
-                        addresse: '',
-                        password: myPassword,
-                        numPiece: '',
-                        typePiece: 'CNI',
+        if(Object.keys(validateAdmin(admin)).length === 0)
+            SaveAdmin(admin).then((res) => {
+                if (res.status === 200) {
+                    Swal.fire(
+                        'Succes!',
+                        'Admin Enregistrer avec succes.',
+                        'success'
+                    ).then(() => {
+                        setAdmin({
+                            prenom: ' ',
+                            nom: '',
+                            phone: '',
+                            email: '',
+                            addresse: '',
+                            password: myPassword,
+                            numPiece: '',
+                            typePiece: 'CNI',
+                        })
                     })
-                    sendEmail(event);
-                })
-            }
-            
-        }).catch(
-            (error) => {
-                console.log(error);
-            }
-        )
-
-        
-
+                }
+                
+            }).catch(
+                (error) => {
+                    console.log(error.response.data.errors);
+                    const err = {}
+                    for (let index = 0; index < error.response.data.errors.length; index++) {
+                      if(error.response.data.errors[index].includes('email'))
+                        err.email = error.response.data.errors[index]
+                      if(error.response.data.errors[index].includes('téléphone'))
+                        err.phone = error.response.data.errors[index]
+                        
+                    }
+                    setFormErrors(err);
+                }
+            )
     };
 
     const form = useRef();
-
-    const sendEmail = (e) => {
-
-        emailjs.sendForm('service_tuwme63', 'email_dv26pv8', form.current, 'aF00JTLiRllzze4TO')
-            .then((result) => {
-                console.log(result.text);
-            }, (error) => {
-                console.log(error.text);
-            });
-
-    };
 
     const validateAdmin = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
@@ -146,7 +139,7 @@ function AddAdmin() {
                                 <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
                                     <Grid xs={12} sm={12} md={4} spacing={5} item>
                                         <FormControl fullWidth>
-                                            <label htmlFor="prenom" className={classes.labelText}>Prenom <span style={{ color: 'red' }}>*</span> </label>
+                                            <label htmlFor="prenom" className={classes.labelText}>Prénom <span style={{ color: 'red' }}>*</span> </label>
                                             <OutlinedInput
                                                 id="ok"
                                                 name="prenom"
@@ -221,7 +214,7 @@ function AddAdmin() {
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>Type de Piece<span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
                                                 <Select
                                                     labelId="demo-simple-select-label"
                                                     id="demo-simple-select"
@@ -241,7 +234,7 @@ function AddAdmin() {
                                         </Grid>
                                         <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>N° Piece <span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}>N° Pièce <span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                     id="input"
                                                     name="numPiece"
@@ -260,7 +253,7 @@ function AddAdmin() {
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
-                                                <label className={classes.labelText}>adresse <span style={{ color: 'red' }}>*</span> </label>
+                                                <label className={classes.labelText}> Adresse <span style={{ color: 'red' }}>*</span> </label>
                                                 <OutlinedInput
                                                     id="input"
                                                     name="adresse"

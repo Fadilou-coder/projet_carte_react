@@ -215,22 +215,22 @@ export const Promos = () => {
         )
     };
 
-    const handleCommit = (e) => {
-        const arrayEdit = promo.map(p => {
-            if (p.id === e.id) {
-                var data = { ...p, [e.field]: e.value }
-                UpdatePromo(data, data.id).then(res => {
-                    if (res.status === 200) {
-                        setPromo(res.data);
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Modifier avec success',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    }
-                })
+    const handleCommit = (e)=>{
+        promo.array.forEach(p => {
+            if(p.id === e.id){
+               var data = {...p, [e.field]: e.value}
+               UpdatePromo(data, data.id).then(res => {
+                if (res.status === 200) {
+                    setPromo(res.data);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Modifier avec success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
             }
         });
         setLoading(true);

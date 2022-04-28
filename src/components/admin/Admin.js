@@ -197,6 +197,15 @@ export const Admin = () => {
         },
     ]
 
+    const updateAdmin = (params) => {
+        console.log(params)
+
+        // setIsLoaded(true)
+        // updateAdmin(params, params.id).then(() => {
+        //     setIsLoaded(false)
+        // })
+    }
+
 
     const classes = AdminStyle();
     return (
@@ -309,6 +318,9 @@ export const Admin = () => {
                                 }
                                 columns={columns}
                                 disableVirtualization
+                                // onCellEditStop={(params: GridCellEditStopParams, event: MuiEvent) => {
+
+                                // }}
                             />
                         </div>
 
