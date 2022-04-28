@@ -9,18 +9,12 @@ import DashboardStyle from "./Dashboard.style";
 
 // import { ListApprenantsByPromo, ListPromos, nbRetardPromo } from './Dashboard.service';
 // import faker from "faker";
-import { ListApprenantsByReferentielByPromo, ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
+import {  ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
 import { nbAbsAllApp, nbRetardPromo } from './Dashboard.service';
 
-import Chart from "react-apexcharts";
 import { ChartDashboard } from './ChartDashboard';
 
-// import { Bar } from "react-chartjs-2";
-// import faker from "faker";
 
-
-
-// import ChartApex from './ChartApex';
 
 const Dashbord = () => {
 
@@ -33,83 +27,6 @@ const Dashbord = () => {
 
     // Valeur des Retards globales
     const [retards, setRetards] = React.useState([]);
-
-
-    // ChartJS configuration
-    const [optionschart, setOptionChart] = React.useState({
-        tooltips: {
-            titleAlign: "center",
-            titleMarginBottom: 8,
-            bodyFontFamily: "'Nunito', sans-serif",
-        },
-        responsive: true,
-        plugins: {
-            legend: {
-                position: "top",
-            },
-            title: {
-                display: true,
-                text: "Test",
-            },
-            hover: {
-                mode: 'label'
-            }
-
-        },
-    });
-
-
-    const mois = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-
-
-    const [dataChart, setDataChart] = React.useState([{
-        mois,
-        datasets: [
-            {
-                label: "Donnees ",
-                data: {
-                    Janvier: 10,
-                    Fevrier: 20,
-                    Mars: 60,
-                    Avril: 45,
-                    Mai: 21,
-                    Juin: 34,
-                    Juillet: 40,
-                    Aout: 20,
-                    Septembre: 73,
-                    Octobre: 12,
-                    Novembre: 56,
-                    Decembre: 10
-                },
-                backgroundColor: "#FF6600",
-            },
-
-        ],
-    }])
-
-    // Chart Apex configuration
-    const [options, setObject] = React.useState({
-        chart: {
-            id: "basic-bar"
-        },
-        xaxis: {
-            categories: ["Janvier", "Fevrier", " Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]
-        }
-
-    });
-
-    // Pour Retards
-    const [series1, setSeries1] = React.useState([{
-        name: "series-2",
-        data: [80, 11, 11, 20, 40, 45, 50, 49, 60, 70, 91, 11],
-    }])
-
-    // Pour Absences 
-    const [series, setSeries] = React.useState([{
-        name: "series-1",
-        data: [80, 11, 11, 20, 40, 45, 50, 49, 60, 70, 91, 11],
-    }])
-
 
     const [nbApprenants, setnbApprenants] = React.useState();
 
