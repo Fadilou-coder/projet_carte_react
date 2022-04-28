@@ -49,9 +49,11 @@ const Dashbord = () => {
             res.data.map((element) => {
                 if (element.sexe === "M") {
                     nbhommes++;
+                    
                 } else {
                     nbfemmes++;
                 }
+                return element;
             })
 
             setnbHommes(nbhommes);
@@ -68,6 +70,8 @@ const Dashbord = () => {
                 if (grandId < element.id) {
                     grandId = element.id;
                 }
+
+                return element;
             });
             setPromo(grandId);
         })
@@ -89,6 +93,8 @@ const Dashbord = () => {
                 if (element.sexe === "M") {
                     nbhommes++;
                 }
+
+                return element;
             })
 
             setnbHommes(nbhommes);
