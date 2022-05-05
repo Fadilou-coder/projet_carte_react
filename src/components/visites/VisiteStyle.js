@@ -123,6 +123,9 @@ const VisiteStyle = makeStyles(theme => ({
             width: "10%",
             fontSize: "20px"
         }
+    },
+    comment:{
+        width: "20em"
     }
 }));
 

@@ -119,39 +119,39 @@ export const Promos = () => {
             headerName: 'Date Fin',
             flex: 1,
             editable: true,
-        },
-        {
-            field: 'bloquer',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Bloqué ?',
-            editable: true,
-            flex: 1,
-            sortable: false,
-            renderCell: (params) => {
-                if (!params.row.isBlocked)
-                    return <Button variant="contained" sx={{
-                        backgroundColor: '#FF6600',
-                        color: "#000000",
-                        fontWeight: "bolder",
-                        '&:hover': {
-                            backgroundColor: '#000000',
-                            color: "#FFFFFF"
-                        }
-                    }}
-                    >Bloquer</Button>;
-                else
-                    return <Button variant="contained"
-                        sx={{
-                            backgroundColor: '#000000',
-                            color: "white",
-                            fontWeight: "bolder",
-                            '&:hover': {
-                                backgroundColor: '#FF6600',
-                                color: "#FFFFFF"
-                            }
-                        }}>Debloquer</Button>;
-            }
-        }
+        // },
+        // {
+        //     field: 'bloquer',
+        //     headerClassName: 'super-app-theme--header',
+        //     headerName: 'Bloqué ?',
+        //     editable: true,
+        //     flex: 1,
+        //     sortable: false,
+        //     renderCell: (params) => {
+        //         if (!params.row.isBlocked)
+        //             return <Button variant="contained" sx={{
+        //                 backgroundColor: '#FF6600',
+        //                 color: "#000000",
+        //                 fontWeight: "bolder",
+        //                 '&:hover': {
+        //                     backgroundColor: '#000000',
+        //                     color: "#FFFFFF"
+        //                 }
+        //             }}
+        //             >Bloquer</Button>;
+        //         else
+        //             return <Button variant="contained"
+        //                 sx={{
+        //                     backgroundColor: '#000000',
+        //                     color: "white",
+        //                     fontWeight: "bolder",
+        //                     '&:hover': {
+        //                         backgroundColor: '#FF6600',
+        //                         color: "#FFFFFF"
+        //                     }
+        //                 }}>Debloquer</Button>;
+        //     }
+         }
     ]
 
     const classes = PromoStyle();
