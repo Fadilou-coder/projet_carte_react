@@ -44,9 +44,12 @@ function CustomNoRowsOverlay() {
 export const Referentiel = () => {
 
     const [loading, setLoading] = React.useState(true);
+    const [referentiels, setReferentiels] = React.useState([]);
     const [referentiel, setReferentiel] = React.useState(
         { libelle: '' }
     );
+
+    const isBlank = require('is-blank')
 
     // Custom Pagination
     function CustomPagination() {
@@ -123,7 +126,7 @@ export const Referentiel = () => {
 
     const validateRef = (val) => {
         const errors = {};
-        if (!val.libelle) {
+        if (isBlank(val.libelle)) {
             errors.libelle = "Le libelle est requis"
         }
         return errors;
@@ -131,8 +134,7 @@ export const Referentiel = () => {
 
     React.useEffect(() => {
         ListAllReferentiel().then(response => {
-            console.log(response.data);
-            setReferentiel(response.data);
+            setReferentiels(response.data);
             setLoading(false);
         });
     }, []
@@ -150,19 +152,18 @@ export const Referentiel = () => {
                     'Succes!',
                     'Enregistrer avec succes.',
                     'success'
-                ).then((res) => {
+                ).then(() => {
                     setReferentiel({
                         libelle: '',
                     })
                 })
             }
             setLoading(true);
-        }).catch(
-            (error) => {
-                setErrorPage(true);
-                console.log(error);
-            }
-        )
+            }).catch(
+                (error) => {
+                    setErrorPage(true);
+                }
+            )
     };
     const handleCommit = (e)=>{
         referentiel.forEach(r => {
@@ -230,7 +231,7 @@ export const Referentiel = () => {
 
                             }}
                             loading={loading}
-                            rows={referentiel}
+                            rows={referentiels}
                             columns={columns}
                         />
 

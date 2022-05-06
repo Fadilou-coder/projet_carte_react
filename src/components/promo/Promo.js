@@ -178,11 +178,11 @@ export const Promos = () => {
     };
 
     React.useEffect(() => {
-        ListAllPromo().then(response => {
-            setPromo(response.data);
-            setLoading(false);
-        });
-    }, []
+            ListAllPromo().then(response => {
+                setPromo(response.data);
+                setLoading(false);
+            });
+        }, []
     );
 
 
@@ -218,19 +218,19 @@ export const Promos = () => {
     const handleCommit = (e)=>{
         promo.array.forEach(p => {
             if(p.id === e.id){
-               var data = {...p, [e.field]: e.value}
-               UpdatePromo(data, data.id).then(res => {
-                if (res.status === 200) {
-                    setPromo(res.data);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Modifier avec success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                }
-            })
+                var data = {...p, [e.field]: e.value}
+                UpdatePromo(data, data.id).then(res => {
+                    if (res.status === 200) {
+                        setPromo(res.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Modifier avec success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                })
             }
         });
         setLoading(true);
@@ -244,13 +244,13 @@ export const Promos = () => {
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
-                        style={{
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "20px",
-                            fontWeight: "bolder"
-                        }}>
+                                style={{
+                                    marginBottom: "20px",
+                                    borderLeft: "6px solid #000000",
+                                    color: "#000000",
+                                    paddingLeft: "20px",
+                                    fontWeight: "bolder"
+                                }}>
                         LISTE DES PROMOTIONS
                     </Typography>
                     <Box style={{ width: "100%" }}>
@@ -324,7 +324,10 @@ export const Promos = () => {
                                     rowsPerPageOptions={[5, 10, 20]}
                                     components={{
                                         Pagination: CustomPagination,
+<<<<<<< HEAD
                                         NoRowsOverlay: CustomNoRowsOverlay,
+=======
+>>>>>>> acb15f3bcff2f89b1f6b88d7b24a65af3daf6d82
                                         // Toolbar: CustomToolbar,
                                     }}
                                     loading={loading}
@@ -338,8 +341,13 @@ export const Promos = () => {
                         </Box>
 
                     </Box>
+<<<<<<< HEAD
 
 
+=======
+
+
+>>>>>>> acb15f3bcff2f89b1f6b88d7b24a65af3daf6d82
                     <div>
                         <Dialog open={open} onClose={handleClose}>
 
@@ -413,28 +421,28 @@ export const Promos = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}
-                                    sx={{
-                                        backgroundColor: "#BE0101",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#F32018",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#BE0101",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#F32018",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >ANNULER</Button>
                                 <Button onClick={handleSubmit}
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#000000",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#000000",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >AJOUTER
                                 </Button>
                             </DialogActions>

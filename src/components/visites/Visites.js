@@ -327,6 +327,7 @@ export const Visites = (props) => {
     // fONCTION POURGENERE PDF
     const AjouterVisites = () => {
         setFormErrors(validateVisite(values));
+        if(Object.keys(validateVisite(values)).length === 0)
         SaveVisitesVisieur({ 'visiteur': values }).then(res => {
             handleClose()
             downloadQRCode();
@@ -384,8 +385,6 @@ export const Visites = (props) => {
     };
 
     const validateVisite = (val) => {
-        let regexnumPiece = new RegExp("(^[1-2])[0-9]{12}$");
-        let regexPhone = new RegExp("^(33|7[5-8])[0-9]{7}$");
         const errors = {};
         if (val.prenom === '') {
             errors.prenom = "prenom est requis"
@@ -406,14 +405,9 @@ export const Visites = (props) => {
 
         if (val.numTelephone === '') {
             errors.numTelephone = "le numéro de télephone est requis"
-        } else if (!regexPhone.test(val.numTelephone)) {
-            errors.numTelephone = "le format numéro télephone n'est pas valide";
         }
-
         if (val.numPiece === '') {
             errors.numPiece = "le numéro de pièce est requis"
-        } else if (!regexnumPiece.test(val.numPiece)) {
-            errors.numPiece = "le format numéro de carte d'identité n'est pas valide";
         }
         return errors;
     };

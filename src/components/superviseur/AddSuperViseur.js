@@ -9,6 +9,7 @@ import Layout from "../layout/Layout";
 import Swal from 'sweetalert2'
 import emailjs from '@emailjs/browser';
 import {SaveSuperViseur} from "./SuperviseurService";
+import isBlank from "is-blank";
 
 
 function AddSuperViseur() {
@@ -20,6 +21,8 @@ function AddSuperViseur() {
         myPassword += text.substring(word, word + 1);
     }
 
+    const isBlank = require('is-blank')
+
     const [admin, setAdmin] = React.useState({
         prenom: '',
         nom: '',
@@ -30,7 +33,7 @@ function AddSuperViseur() {
         numPiece: ''
     });
 
-    const [formErrors, setFormErrors] = useState( {});
+    const [formErrors, setFormErrors] = useState( []);
     const [setErrorPage] = useState(false);
 
     const classes = AdminStyle();
@@ -49,7 +52,7 @@ function AddSuperViseur() {
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
         event.preventDefault();
-
+        if(Object.keys(validateAdmin(admin)).length === 0)
         SaveSuperViseur(admin).then(res => {
             Swal.fire({
                 position: 'center',
@@ -60,12 +63,21 @@ function AddSuperViseur() {
             }).catch(
                 (error) => {
                     setErrorPage(true);
-                    console.log(error);
+                    console.log(error.response.data.errors);
+                    const err = {}
+                    for (let index = 0; index < error.response.data.errors.length; index++) {
+                        if(error.response.data.errors[index].includes('email'))
+                            err.email = error.response.data.errors[index]
+                        if(error.response.data.errors[index].includes('téléphone'))
+                            err.phone = error.response.data.errors[index]
+                        if(error.response.data.errors[index].includes('piece'))
+                            err.numPiece = error.response.data.errors[index];
+                    }
+                    setFormErrors(err);
                 }
             )
             sendEmail(event);
         })
-
         setAdmin({
             prenom: ' ',
             nom: '',
@@ -76,7 +88,6 @@ function AddSuperViseur() {
             numPiece: '',
             //structure: {id: 0},
         })
-
     };
 
     const form = useRef();
@@ -95,7 +106,7 @@ function AddSuperViseur() {
         let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
         let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
         const errors = {};
-        if (val.prenom === '') {
+        if (isBlank(val.prenom)) {
             errors.prenom = "prenom est requis"
         } else if (val.prenom.length < 3) {
             errors.prenom = "le prenom doit comporter plus de 3 caractères";
@@ -103,7 +114,7 @@ function AddSuperViseur() {
         else if (val.nom.length > 20) {
             errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
         }
-        if (val.nom === '') {
+        if (isBlank(val.nom)) {
             errors.nom = "nom est requis"
         } else if (val.nom.length < 2) {
             errors.nom = "le nom doit comporter plus de 2 caractères";
@@ -111,24 +122,24 @@ function AddSuperViseur() {
         else if (val.nom.length > 10) {
             errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
         }
-        if (val.email === '') {
+        if (isBlank(val.email)) {
             errors.email = "le mail est requis"
         } else if (!regexMail.test(val.email)) {
             errors.email = "le format Email n'est pas valide";
         }
-        if (val.phone === '') {
+        if (isBlank(val.phone)) {
             errors.phone = "le numéro de télephone est requis"
         } else if (!regexPhone.test(val.phone)) {
             errors.phone = "le format numéro télephone n'est pas valide";
         }
-        if (val.addresse === '') {
+        if (isBlank(val.addresse)) {
             errors.addresse = "l'adresse est requis"
         } else if (val.addresse.length < 3) {
             errors.addresse = "l'adresse doit comporter plus de 3 caractères";
         } else if (val.addresse.length > 15) {
             errors.addresse = "l'adresse ne peut pas dépassé plus de 15 caractères";
         }
-        if (val.numPiece === '') {
+        if (isBlank(val.numPiece)) {
             errors.numPiece = "le numéro de piece d'identité est requis"
         } else if (!regexCni.test(val.numPiece)) {
             errors.numPiece = "le format numéro de piece d'identité  n'est pas valide";
@@ -162,7 +173,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex: prenom"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, prenom: event.target.value.replace(/\s/g, '') })
+                                                    setAdmin({ ...admin, prenom: event.target.value})
                                                 }}
                                                 value={admin.prenom}
                                             />
@@ -179,7 +190,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex: nom"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, nom: event.target.value.replace(/\s/g, '') })
+                                                    setAdmin({ ...admin, nom: event.target.value})
                                                 }}
                                                 value={admin.nom}
                                             />
@@ -200,7 +211,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex: phone"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, phone: event.target.value.replace(/\s/g, '') })
+                                                    setAdmin({ ...admin, phone: event.target.value})
                                                 }}
                                                 value={admin.phone}
                                             />
@@ -217,7 +228,7 @@ function AddSuperViseur() {
                                                 variant="outlined"
                                                 placeholder="Ex:email"
                                                 onChange={(event) => {
-                                                    setAdmin({ ...admin, email: event.target.value.replace(/\s/g, '') })
+                                                    setAdmin({ ...admin, email: event.target.value})
                                                 }}
                                                 value={admin.email}
                                             />
@@ -237,7 +248,7 @@ function AddSuperViseur() {
                                                     variant="outlined"
                                                     placeholder="Ex: addresse"
                                                     onChange={(event) => {
-                                                        setAdmin({ ...admin, addresse: event.target.value.replace(/\s/g, '') })
+                                                        setAdmin({ ...admin, addresse: event.target.value})
                                                     }}
                                                     value={admin.addresse}
                                                 />
@@ -254,7 +265,7 @@ function AddSuperViseur() {
                                                     variant="outlined"
                                                     placeholder="Ex: Numero Piece"
                                                     onChange={(event) => {
-                                                        setAdmin({ ...admin, numPiece: event.target.value.replace(/\s/g, '') })
+                                                        setAdmin({ ...admin, numPiece: event.target.value})
                                                     }}
                                                     value={admin.numPiece}
                                                 />
