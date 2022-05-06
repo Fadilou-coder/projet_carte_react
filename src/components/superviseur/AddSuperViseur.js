@@ -33,7 +33,7 @@ function AddSuperViseur() {
         numPiece: ''
     });
 
-    const [formErrors, setFormErrors] = useState( {});
+    const [formErrors, setFormErrors] = useState( []);
     const [setErrorPage] = useState(false);
 
     const classes = AdminStyle();
@@ -52,7 +52,7 @@ function AddSuperViseur() {
     const handleSubmit = (event) => {
         setFormErrors(validateAdmin(admin));
         event.preventDefault();
-
+        if(Object.keys(validateAdmin(admin)).length === 0)
         SaveSuperViseur(admin).then(res => {
             Swal.fire({
                 position: 'center',
@@ -63,12 +63,21 @@ function AddSuperViseur() {
             }).catch(
                 (error) => {
                     setErrorPage(true);
-                    console.log(error);
+                    console.log(error.response.data.errors);
+                    const err = {}
+                    for (let index = 0; index < error.response.data.errors.length; index++) {
+                        if(error.response.data.errors[index].includes('email'))
+                            err.email = error.response.data.errors[index]
+                        if(error.response.data.errors[index].includes('téléphone'))
+                            err.phone = error.response.data.errors[index]
+                        if(error.response.data.errors[index].includes('piece'))
+                            err.numPiece = error.response.data.errors[index];
+                    }
+                    setFormErrors(err);
                 }
             )
             sendEmail(event);
         })
-
         setAdmin({
             prenom: ' ',
             nom: '',
@@ -79,7 +88,6 @@ function AddSuperViseur() {
             numPiece: '',
             //structure: {id: 0},
         })
-
     };
 
     const form = useRef();

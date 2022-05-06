@@ -14,7 +14,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, IconButton, Typography } from "@material-ui/core"
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
+import { ListAllVisite, ListCommentsApp, ListVisitesApp, ListVisitesVisteur, SaveCommentApp, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
 import CloseIcon from '@mui/icons-material/Close';
@@ -48,6 +48,15 @@ export const Visites = () => {
         numTelephone: '',
 
     })
+
+    const [comment, setComment] = React.useState({
+        commentaire: '',
+        apprenant: {
+            id: 0
+        },
+
+    })
+    const [commentsApp, setCommentsApp] = React.useState([])
     const [date, setDate] = React.useState(new Date())
     const [search, setSearch] = React.useState('');
     const [showDialog, setShowDialog] = useState(false);
@@ -58,6 +67,46 @@ export const Visites = () => {
             setLoading(false);
         })
     }, [date])
+
+    const commenter = () => {
+        SaveCommentApp(comment).then(() => {
+            setComment({
+                commentaire: '',
+                apprenant: {
+                    id: 0
+                }
+            })
+        })
+    }
+
+    const findComments = (id) => {
+        ListCommentsApp(id).then((res) => {
+            setCommentsApp(res.data);
+        })
+    }
+
+    // Custom Datagrid No Rows show
+
+    function CustomNoRowsOverlay() {
+        return (
+
+            <Grid sx={{ display: "flex", justifyContent: "center", }}>
+                <div>
+                    <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
+                        Tableau Vide
+                    </Box>
+                    <Box sx={{ width: "80px" }} >
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+
+                    </Box>
+                </div>
+            </Grid >
+
+        );
+    }
 
 
 
@@ -101,7 +150,7 @@ export const Visites = () => {
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Prenom',
+            headerName: 'Prénom',
             flex: 1,
             minWidth: 150,
             valueGetter: (params) => {
@@ -278,6 +327,7 @@ export const Visites = () => {
     // fONCTION POURGENERE PDF
     const AjouterVisites = () => {
         setFormErrors(validateVisite(values));
+        if(Object.keys(validateVisite(values)).length === 0)
         SaveVisitesVisieur({ 'visiteur': values }).then(res => {
             handleClose()
             downloadQRCode();
@@ -335,8 +385,6 @@ export const Visites = () => {
     };
 
     const validateVisite = (val) => {
-        let regexnumPiece = new RegExp("(^[1-2])[0-9]{12}$");
-        let regexPhone = new RegExp("^(33|7[5-8])[0-9]{7}$");
         const errors = {};
         if (val.prenom === '') {
             errors.prenom = "prenom est requis"
@@ -357,17 +405,17 @@ export const Visites = () => {
 
         if (val.numTelephone === '') {
             errors.numTelephone = "le numéro de télephone est requis"
-        } else if (!regexPhone.test(val.numTelephone)) {
-            errors.numTelephone = "le format numéro télephone n'est pas valide";
         }
-
         if (val.numPiece === '') {
             errors.numPiece = "le numéro de pièce est requis"
-        } else if (!regexnumPiece.test(val.numPiece)) {
-            errors.numPiece = "le format numéro de carte d'identité n'est pas valide";
         }
         return errors;
     };
+
+    function loadMoreItems(event) {
+        if (event.target.scrollTop === event.target.scrollHeight) {
+        }
+    }
 
 
 
@@ -432,7 +480,6 @@ export const Visites = () => {
                                                         />
                                                     )
                                                 }}
-                                            // renderInput={(params) => <TextField {...params} />}
                                             />
                                         </LocalizationProvider>
                                     </div>
@@ -489,27 +536,29 @@ export const Visites = () => {
                                     className={classes.ajoutScan}
 
                                 >
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<AddCircleOutlined />}
-                                        onClick={handleClickOpen}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontFamily: "Arial",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            marginRight: "10px",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: "#000000",
-                                                pointer: "cursor",
-                                                color: "white"
+                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<AddCircleOutlined />}
+                                            onClick={handleClickOpen}
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                marginRight: "10px",
+                                                fontWeight: "bold",
+                                                '&:hover': {
+                                                    backgroundColor: "#000000",
+                                                    pointer: "cursor",
+                                                    color: "white"
 
-                                            }
-                                        }}
-                                    >
-                                        AJOUTER
-                                    </Button>
+                                                }
+                                            }}
+                                        >
+                                            AJOUTER
+                                        </Button> : null
+                                    }
                                     <Button
                                         variant="contained"
                                         endIcon={<DocumentScannerOutlined />}
@@ -545,7 +594,7 @@ export const Visites = () => {
                             }} className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
-                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toDateString()}</h2>
+                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
                                     <DataGrid
                                         sx={{ boxShadow: "30px", width: "100%" }}
                                         autoHeight
@@ -553,6 +602,7 @@ export const Visites = () => {
                                         rowsPerPageOptions={[5, 10, 20]}
                                         components={{
                                             Pagination: CustomPagination,
+                                            NoRowsOverlay: CustomNoRowsOverlay,
                                             // Toolbar: CustomToolbar,
                                         }}
                                         loading={loading}
@@ -572,7 +622,12 @@ export const Visites = () => {
                                         }
                                         columns={columns}
                                         onRowClick={(params, event) => {
-                                            setShowDialog(true)
+                                            setComment({ ...comment, apprenant: params.row.apprenant })
+                                            if (params.row.apprenant) {
+                                                findComments(params.row.apprenant.id);
+                                                setShowDialog(true)
+                                            }
+
                                         }}
                                         disableVirtualization
                                     >
@@ -628,7 +683,7 @@ export const Visites = () => {
                                     <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
                                 <Grid>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Type de Piece<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
                                         <Select
                                             labelId="demo-simple-select-label"
                                             id="demo-simple-select"
@@ -665,7 +720,7 @@ export const Visites = () => {
                                 </Grid>
                                 <Grid mt={2}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>Prénom<span style={{ color: 'red' }}>*</span> </label>
                                         <OutlinedInput
                                             id="prenom"
                                             type="text"
@@ -699,7 +754,7 @@ export const Visites = () => {
                                 </Grid>
                                 <Grid mt={2}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}> *</span> </label>
+                                        <label className={classes.labelText}>Téléphone<span style={{ color: 'red' }}> *</span> </label>
                                         <OutlinedInput
                                             id="telephone"
                                             type="text"
@@ -770,7 +825,6 @@ export const Visites = () => {
                                         top: 8,
                                         float: 'right'
                                     }}
-
                                     style={{ color: '#FFFFFF' }}
                                 >
                                     <CloseIcon />
@@ -778,34 +832,58 @@ export const Visites = () => {
                             </DialogTitle>
                             <hr style={{ borderTop: " 4px solid #F48322", width: "20%", float: "left", marginLeft: "15px" }} />
                             <DialogContent>
-                                <Grid>
-                                    <TextareaAutosize
-                                        aria-label="minimum height"
-                                        minRows={15}
-                                        placeholder="comment"
-                                        style={{ width: 300, borderRadius: '5px' }}
-                                    />
-                                </Grid>
-                                <DialogActions>
-                                    <Button
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontFamily: "Arial",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            fontWeight: "bold",
-                                            right: "80px",
-                                            marginTop: "15px",
-                                            '&:hover': {
-                                                backgroundColor: "#FFFFFF",
-                                                pointer: "cursor",
-                                                color: "#000000"
+                                <Grid container
+                                    onScroll={loadMoreItems}
+                                    style={{
+                                        maxHeight: 950,
+                                        overflowY: 'auto',
+                                    }}
+                                >
+                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                        <TextareaAutosize
+                                            aria-label="minimum height"
+                                            minRows={15}
+                                            placeholder="comment"
+                                            style={{ width: 300, borderRadius: '5px' }}
+                                            onChange={(event) => {
+                                                setComment({ ...comment, commentaire: event.target.value })
+                                            }}
+                                            value={comment.commentaire}
+                                        /> :
+                                        <div>
+                                            {
+                                                commentsApp.map((row) => (
+                                                    <Typography key={row.id} variant='h6' style={{ color: 'white' }}>
+                                                        {row.commentaire}
+                                                    </Typography>
+                                                ))
                                             }
-                                        }}
-                                    >
-                                        COMMENTER
-                                    </Button>
-                                </DialogActions>
+                                        </div>
+                                    }
+                                </Grid>
+                                {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                    <DialogActions>
+                                        <Button
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                fontWeight: "bold",
+                                                right: "80px",
+                                                marginTop: "15px",
+                                                '&:hover': {
+                                                    backgroundColor: "#FFFFFF",
+                                                    pointer: "cursor",
+                                                    color: "#000000"
+                                                }
+                                            }}
+                                            onClick={commenter}
+                                        >
+                                            COMMENTER
+                                        </Button>
+                                    </DialogActions> : null
+                                }
                             </DialogContent>
                         </Dialog>
                     </div>

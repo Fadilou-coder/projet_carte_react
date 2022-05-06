@@ -28,8 +28,6 @@ import Swal from "sweetalert2";
 export const Promos = () => {
 
     const [loading, setLoading] = React.useState(true);
-
-    const [promos, setPromos] = React.useState([]);
     const [promo, setPromo] = React.useState(
         {
             libelle: '',
@@ -41,9 +39,8 @@ export const Promos = () => {
     const [open, setOpen] = React.useState(false)
     const [setSearch] = React.useState('');
 
-    const isBlank = require('is-blank')
 
-        // Custom Dialog
+    // Custom Dialog
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -122,15 +119,15 @@ export const Promos = () => {
                     >Bloquer</Button>;
                 else
                     return <Button variant="contained"
-                        sx={{
-                            backgroundColor: '#000000',
-                            color: "white",
-                            fontWeight: "bolder",
-                            '&:hover': {
-                                backgroundColor: '#FF6600',
-                                color: "#FFFFFF"
-                            }
-                        }}>Debloquer</Button>;
+                                   sx={{
+                                       backgroundColor: '#000000',
+                                       color: "white",
+                                       fontWeight: "bolder",
+                                       '&:hover': {
+                                           backgroundColor: '#FF6600',
+                                           color: "#FFFFFF"
+                                       }
+                                   }}>Debloquer</Button>;
             }
         }
     ]
@@ -141,7 +138,7 @@ export const Promos = () => {
 
     const validatePromo = (val) => {
         const errors = {};
-        if (isBlank(val.libelle)) {
+        if (!val.libelle) {
             errors.libelle = "Le libelle est requis"
         }
 
@@ -159,17 +156,19 @@ export const Promos = () => {
     };
 
     React.useEffect(() => {
-        ListAllPromo().then(response => {
-            setPromos(response.data);
-            setLoading(false);
-        });
-    }, []
+            ListAllPromo().then(response => {
+                setPromo(response.data);
+                setLoading(false);
+            });
+        }, []
     );
 
 
     const handleSubmit = (event) => {
+
         setFormErrors(validatePromo(promo))
         event.preventDefault();
+
         AddPromo(promo).then(res => {
             handleClose()
             if (res.status === 200) {
@@ -177,7 +176,7 @@ export const Promos = () => {
                     'Succes!',
                     'Enregistrer avec succes.',
                     'success'
-                ).then(() => {
+                ).then((res) => {
                     setPromo({
                         libelle: '',
                         dateDebut: '',
@@ -186,30 +185,30 @@ export const Promos = () => {
                 })
             }
             setLoading(true);
-            }).catch(
-                (error) => {
-                    setErrorPage(true);
-                    console.log(error);
-                }
-            )
+        }).catch(
+            (error) => {
+                setErrorPage(true);
+                console.log(error);
+            }
+        )
     };
 
     const handleCommit = (e)=>{
-            promo.map(p=>{
+        promo.array.forEach(p => {
             if(p.id === e.id){
-               var data = {...p, [e.field]: e.value}
-               UpdatePromo(data, data.id).then(res => {
-                if (res.status === 200) {
-                    setPromo(res.data);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Modifier avec success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                }
-            })
+                var data = {...p, [e.field]: e.value}
+                UpdatePromo(data, data.id).then(res => {
+                    if (res.status === 200) {
+                        setPromo(res.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Modifier avec success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                })
             }
         });
         setLoading(true);
@@ -223,102 +222,102 @@ export const Promos = () => {
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
-                        style={{
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "20px",
-                            fontWeight: "bolder"
-                        }}>
+                                style={{
+                                    marginBottom: "20px",
+                                    borderLeft: "6px solid #000000",
+                                    color: "#000000",
+                                    paddingLeft: "20px",
+                                    fontWeight: "bolder"
+                                }}>
                         LISTE DES PROMOTIONS
                     </Typography>
-                        <Box style={{ width: "100%" }}>
-                            <Box
-                                className={classes.SearchAndAdd}
-                                >
+                    <Box style={{ width: "100%" }}>
+                        <Box
+                            className={classes.SearchAndAdd}
+                        >
 
-                                <Grid direction="row" spacing={5} alignItems="center">
-                                    <div className={classes.mysearch}>
-                                        <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
-                                            <OutlinedInput
-                                                size='small'
-                                                id="search"
-                                                placeholder="rechercher"
-                                                style={{
-                                                    fontWeight: "bolder",
-                                                    color: "#000000",
-                                                    '&:focus': {
-                                                        borderColor: "#FF6600",
-                                                    },
-                                                }}
+                            <Grid direction="row" spacing={5} alignItems="center">
+                                <div className={classes.mysearch}>
+                                    <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
+                                        <OutlinedInput
+                                            size='small'
+                                            id="search"
+                                            placeholder="rechercher"
+                                            style={{
+                                                fontWeight: "bolder",
+                                                color: "#000000",
+                                                '&:focus': {
+                                                    borderColor: "#FF6600",
+                                                },
+                                            }}
 
-                                                startAdornment={
-                                                    <InputAdornment position="start">
-                                                        <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
-                                                    </InputAdornment>
-                                                }
-                                                onChange={(event) => {
-                                                    setSearch(event.target.value);
-                                                }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                </Grid>
-                                <div>
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<AddCircleOutlined />}
-                                        onClick={handleClickOpen}
-                                        className={classes.addBtn}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontFamily: "Arial",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            marginRight: "10px",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: "#000000",
-                                                pointer: "cursor",
-                                                color: "white"
-
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                    <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
+                                                </InputAdornment>
                                             }
-                                        }}
-                                    >
-                                        AJOUTER
-                                    </Button>
+                                            onChange={(event) => {
+                                                setSearch(event.target.value);
+                                            }}
+                                        />
+                                    </FormControl>
                                 </div>
-                            </Box>
-                            {/* <div style={{width: '600px'}}>
+                            </Grid>
+                            <div>
+                                <Button
+                                    variant="contained"
+                                    endIcon={<AddCircleOutlined />}
+                                    onClick={handleClickOpen}
+                                    className={classes.addBtn}
+                                    sx={{
+                                        backgroundColor: "#FF6600",
+                                        fontFamily: "Arial",
+                                        fontSize: "16px",
+                                        color: "#000000",
+                                        marginRight: "10px",
+                                        fontWeight: "bold",
+                                        '&:hover': {
+                                            backgroundColor: "#000000",
+                                            pointer: "cursor",
+                                            color: "white"
+
+                                        }
+                                    }}
+                                >
+                                    AJOUTER
+                                </Button>
+                            </div>
+                        </Box>
+                        {/* <div style={{width: '600px'}}>
                                     {JSON.stringify(promo)}
                             </div> */}
-                            <Box className={classes.tableau}>
+                        <Box className={classes.tableau}>
 
-                                <div style={{ width: "100%" }}>
-                                    <DataGrid
-                                        onCellEditCommit={handleCommit}
-                                        sx={{ boxShadow: "30px", width: "100%" }}
-                                        autoHeight
-                                        pageSize={10}
-                                        rowsPerPageOptions={[5, 10, 20]}
-                                        components={{
-                                            Pagination: CustomPagination,
-                                            // Toolbar: CustomToolbar,
-                                        }}
-                                        loading={loading}
-                                        rows={promos}
-                                        columns={columns}
-                                        disableVirtualization
-                                    >
-                                    </DataGrid>
-                                </div>
-
-                            </Box>
+                            <div style={{ width: "100%" }}>
+                                <DataGrid
+                                    onCellEditCommit={handleCommit}
+                                    sx={{ boxShadow: "30px", width: "100%" }}
+                                    autoHeight
+                                    pageSize={10}
+                                    rowsPerPageOptions={[5, 10, 20]}
+                                    components={{
+                                        Pagination: CustomPagination,
+                                        // Toolbar: CustomToolbar,
+                                    }}
+                                    loading={loading}
+                                    rows={promo}
+                                    columns={columns}
+                                    disableVirtualization
+                                >
+                                </DataGrid>
+                            </div>
 
                         </Box>
 
+                    </Box>
 
-                        <div>
+
+                    <div>
                         <Dialog open={open} onClose={handleClose}>
 
                             <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER PROMOTION</DialogTitle>
@@ -337,7 +336,7 @@ export const Promos = () => {
                                             placeholder="libelle"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, libelle: null})
-                                                setPromo({ ...promo, libelle: event.target.value })
+                                                setPromo({ ...promo, libelle: event.target.value.replace(/\s/g, '') })
                                             }}
 
                                         />
@@ -391,28 +390,28 @@ export const Promos = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}
-                                    sx={{
-                                        backgroundColor: "#BE0101",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#F32018",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#BE0101",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#F32018",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >ANNULER</Button>
-                                <Button onClick={() => handleSubmit()}
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#000000",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                <Button onClick={handleSubmit}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#000000",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >AJOUTER
                                 </Button>
                             </DialogActions>
