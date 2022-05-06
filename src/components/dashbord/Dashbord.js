@@ -12,7 +12,7 @@ import { ChartDashboard } from './ChartDashboard';
 
 
 
-const Dashbord = () => {
+const Dashbord = () =>{
 
     const [promo, setPromo] = React.useState(100);
     const [allPromos, setAllPromos] = React.useState([]);

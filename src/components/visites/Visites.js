@@ -13,17 +13,12 @@ import Dialog from '@mui/material/Dialog'
 import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
-<<<<<<< HEAD
 import { FormControl, IconButton, Typography } from "@material-ui/core"
 import { ListAllVisite, ListCommentsApp, ListVisitesApp, ListVisitesVisteur, SaveCommentApp, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
-=======
-import { FormControl, Typography } from "@material-ui/core"
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
->>>>>>> bb221f42d3d23c070b281f1f5a3b9b3c81579274
 import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
-//import CloseIcon from '@mui/icons-material/Close';
-//import TextareaAutosize from '@mui/material/TextareaAutosize';
+import CloseIcon from '@mui/icons-material/Close'
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import dateTime from 'date-time';
 import {
@@ -633,7 +628,6 @@ export const Visites = (props) => {
                                         }
                                         columns={columns}
                                         onRowClick={(params, event) => {
-<<<<<<< HEAD
                                             setComment({ ...comment, apprenant: params.row.apprenant })
                                             if (params.row.apprenant) {
                                                 findComments(params.row.apprenant.id);
@@ -641,12 +635,6 @@ export const Visites = (props) => {
                                             }
 
                                         }}
-=======
-                                            console.log("params "+params.id);
-                                            console.log("event "+ props);
-                                            setShowDialog(true)
-                                          }}
->>>>>>> bb221f42d3d23c070b281f1f5a3b9b3c81579274
                                         disableVirtualization
                                     >
                                     </DataGrid>
@@ -684,10 +672,6 @@ export const Visites = (props) => {
                             sx: {
                                 borderRadius: "10px",
                                 padding: "20px",
-<<<<<<< HEAD
-                                // width: "25%",
-=======
->>>>>>> bb221f42d3d23c070b281f1f5a3b9b3c81579274
                                 maxWidth: {
                                     lg: "30%",
                                     md: "25%",
@@ -826,7 +810,6 @@ export const Visites = (props) => {
 
                     {/* Dialogue pour commenntaire */}
                     <div>
-<<<<<<< HEAD
                         <Dialog open={showDialog} onClose={handleClose}
                             PaperProps={{
                                 style: {
@@ -908,23 +891,6 @@ export const Visites = (props) => {
                                 }
                             </DialogContent>
                         </Dialog>
-=======
-                    <Dialog open={showDialog} onClose={handleClose}
-                     PaperProps={{
-                        style: {
-                        backgroundColor: ' #000000',
-                        boxShadow: 'none',
-                        height: "85%",
-                         left: '40%',
-                        },
-            }} className={classes.dialog}
-                    >
-                    <Commentaire comments={props}/>
-
-                    </Dialog> 
-
-                    
->>>>>>> bb221f42d3d23c070b281f1f5a3b9b3c81579274
                     </div>
                 </Grid>
             </Grid>
