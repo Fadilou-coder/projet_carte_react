@@ -38,6 +38,8 @@ export const Visites = (props) => {
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = React.useState(true);
 
+    const isBlank = require('is-blank')
+
 
 
     const [values, setValues] = React.useState({
