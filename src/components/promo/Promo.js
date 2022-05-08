@@ -324,10 +324,7 @@ export const Promos = () => {
                                     rowsPerPageOptions={[5, 10, 20]}
                                     components={{
                                         Pagination: CustomPagination,
-<<<<<<< HEAD
                                         NoRowsOverlay: CustomNoRowsOverlay,
-=======
->>>>>>> acb15f3bcff2f89b1f6b88d7b24a65af3daf6d82
                                         // Toolbar: CustomToolbar,
                                     }}
                                     loading={loading}
@@ -341,13 +338,8 @@ export const Promos = () => {
                         </Box>
 
                     </Box>
-<<<<<<< HEAD
 
 
-=======
-
-
->>>>>>> acb15f3bcff2f89b1f6b88d7b24a65af3daf6d82
                     <div>
                         <Dialog open={open} onClose={handleClose}>
 
