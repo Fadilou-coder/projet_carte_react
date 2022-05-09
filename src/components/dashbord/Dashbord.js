@@ -4,13 +4,15 @@ import Layout from "../layout/Layout";
 import { Grid, Select, InputAdornment, MenuItem, Box } from '@mui/material';
 import { FemaleOutlined, FilterAltOutlined, MaleOutlined, Notes } from '@mui/icons-material';
 import DashboardStyle from "./Dashboard.style";
-import { ListApprenantsByReferentielByPromo, ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
+
+import {  ListApprenantsByPromo, ListPromos } from '../apprenant/ApprenantService';
 import { nbAbsAllApp, nbRetardPromo } from './Dashboard.service';
 
-import Chart from "react-apexcharts";
 import { ChartDashboard } from './ChartDashboard';
 
-const Dashbord = () => {
+
+
+const Dashbord = () =>{
 
     const [promo, setPromo] = React.useState(100);
     const [allPromos, setAllPromos] = React.useState([]);
@@ -21,83 +23,6 @@ const Dashbord = () => {
 
     // Valeur des Retards globales
     const [retards, setRetards] = React.useState([]);
-
-
-    // ChartJS configuration
-    const [optionschart, setOptionChart] = React.useState({
-        tooltips: {
-            titleAlign: "center",
-            titleMarginBottom: 8,
-            bodyFontFamily: "'Nunito', sans-serif",
-        },
-        responsive: true,
-        plugins: {
-            legend: {
-                position: "top",
-            },
-            title: {
-                display: true,
-                text: "Test",
-            },
-            hover: {
-                mode: 'label'
-            }
-
-        },
-    });
-
-
-    const mois = ["Janvier", "Fevrier", "Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"];
-
-
-    const [dataChart, setDataChart] = React.useState([{
-        mois,
-        datasets: [
-            {
-                label: "Donnees ",
-                data: {
-                    Janvier: 10,
-                    Fevrier: 20,
-                    Mars: 60,
-                    Avril: 45,
-                    Mai: 21,
-                    Juin: 34,
-                    Juillet: 40,
-                    Aout: 20,
-                    Septembre: 73,
-                    Octobre: 12,
-                    Novembre: 56,
-                    Decembre: 10
-                },
-                backgroundColor: "#FF6600",
-            },
-
-        ],
-    }])
-
-    // Chart Apex configuration
-    const [options, setObject] = React.useState({
-        chart: {
-            id: "basic-bar"
-        },
-        xaxis: {
-            categories: ["Janvier", "Fevrier", " Mars", "Avril", "Mai", "Juin", "Juillet", "Aout", "Septembre", "Octobre", "Novembre", "Decembre"]
-        }
-
-    });
-
-    // Pour Retards
-    const [series1, setSeries1] = React.useState([{
-        name: "series-2",
-        data: [80, 11, 11, 20, 40, 45, 50, 49, 60, 70, 91, 11],
-    }])
-
-    // Pour Absences 
-    const [series, setSeries] = React.useState([{
-        name: "series-1",
-        data: [80, 11, 11, 20, 40, 45, 50, 49, 60, 70, 91, 11],
-    }])
-
 
     const [nbApprenants, setnbApprenants] = React.useState();
 
@@ -120,9 +45,11 @@ const Dashbord = () => {
             res.data.map((element) => {
                 if (element.sexe === "M") {
                     nbhommes++;
+
                 } else {
                     nbfemmes++;
                 }
+                return element;
             })
 
             setnbHommes(nbhommes);
@@ -139,14 +66,14 @@ const Dashbord = () => {
                 if (grandId < element.id) {
                     grandId = element.id;
                 }
+
+                return element;
             });
             setPromo(grandId);
         })
-       
+
 
     }, [promo]);
-
-
 
     function chargerApprenant(idPromo) {
 
@@ -160,6 +87,8 @@ const Dashbord = () => {
                 if (element.sexe === "M") {
                     nbhommes++;
                 }
+
+                return element;
             })
 
             setnbHommes(nbhommes);
@@ -195,11 +124,7 @@ const Dashbord = () => {
 
         }
 
-
-
     }
-
-
 
 
 
@@ -210,13 +135,13 @@ const Dashbord = () => {
             <Grid style={{ width: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
-                        style={{
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "15px",
-                            fontWeight: "bolder"
-                        }}>
+                                style={{
+                                    marginBottom: "20px",
+                                    borderLeft: "6px solid #000000",
+                                    color: "#000000",
+                                    paddingLeft: "15px",
+                                    fontWeight: "bolder"
+                                }}>
                         DASHBOARD
                     </Typography>
                     <Box
@@ -242,14 +167,10 @@ const Dashbord = () => {
                             >
                                 <Select
                                     size='small'
-                                    // value={referentiels[0].libelle}
                                     style={{ fontWeight: "bolder", width: "100%", borderRadius: "10px", border: "2px solid black" }}
                                     onChange={(event) => {
-                                        // setReferentiel(event.target.value)
                                         chargerApprenant(event.target.value)
                                     }}
-
-                                    // className={classes1.visiteur}
 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -290,7 +211,6 @@ const Dashbord = () => {
                                                     lg: "3vw",
                                                     sm: "5vw"
                                                 }
-                                                // backgroundColor: "#FFF333"
                                             }}
                                             xmlns="http://www.w3.org/2000/svg"
                                             aria-hidden="true" role="img" class="iconify iconify--ph" width="32" height="32"
@@ -364,16 +284,6 @@ const Dashbord = () => {
                         <div
                             style={{ width: "48%" }}>
                             <ChartDashboard donneesretards={retards} titre="retard" color="#FF6600" ></ChartDashboard>
-                            {/* <ChartApex chargerChart={absences} ></ChartApex> */}
-                            {/* <Chart
-                                options={options}
-                                series={series}
-                                type="bar"
-                                width="100%"
-                                height={500}
-                            /> */}
-                            {/* <Bar options={optionschart} data={dataChart} /> */}
-
                         </div>
                         <div
                             style={{

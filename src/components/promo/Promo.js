@@ -1,5 +1,5 @@
 import { Box, Grid, OutlinedInput, InputAdornment, Button, Pagination, PaginationItem } from '@mui/material'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Layout from "../layout/Layout"
 import { AddCircleOutlined } from '@mui/icons-material'
 import { FormControl, Typography } from "@material-ui/core"
@@ -25,6 +25,28 @@ import TextField from '@mui/material/TextField';
 import { ListAllPromo, AddPromo, UpdatePromo } from './PromoService'
 import Swal from "sweetalert2";
 
+function CustomNoRowsOverlay() {
+    return (
+
+        <Grid sx={{ display: "flex", justifyContent: "center", }}>
+            <div>
+                <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
+                    Tableau Vide
+                </Box>
+                <Box sx={{ width: "80px" }} >
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+
+                </Box>
+            </div>
+        </Grid >
+
+    );
+}
+
+
 export const Promos = () => {
 
     const [loading, setLoading] = React.useState(true);
@@ -40,7 +62,7 @@ export const Promos = () => {
     const [setSearch] = React.useState('');
 
 
-        // Custom Dialog
+    // Custom Dialog
     const handleClickOpen = () => {
         setOpen(true)
     }
@@ -149,25 +171,25 @@ export const Promos = () => {
         if (!val.dateFin) {
             errors.dateFin = "Date fin est requis"
         }
-        else if(val.dateFin <= val.dateDebut){
+        else if (val.dateFin <= val.dateDebut) {
             errors.dateFin = "Date fin est incorrect"
         }
         return errors;
     };
 
     React.useEffect(() => {
-        ListAllPromo().then(response => {
-            setPromo(response.data);
-            setLoading(false);
-        });
-    }, []
+            ListAllPromo().then(response => {
+                setPromo(response.data);
+                setLoading(false);
+            });
+        }, []
     );
 
 
     const handleSubmit = (event) => {
 
         setFormErrors(validatePromo(promo))
-            event.preventDefault();
+        event.preventDefault();
 
         AddPromo(promo).then(res => {
             handleClose()
@@ -185,30 +207,30 @@ export const Promos = () => {
                 })
             }
             setLoading(true);
-            }).catch(
-                (error) => {
-                    setErrorPage(true);
-                    console.log(error);
-                }
-            )
+        }).catch(
+            (error) => {
+                setErrorPage(true);
+                console.log(error);
+            }
+        )
     };
 
     const handleCommit = (e)=>{
         promo.array.forEach(p => {
             if(p.id === e.id){
-               var data = {...p, [e.field]: e.value}
-               UpdatePromo(data, data.id).then(res => {
-                if (res.status === 200) {
-                    setPromo(res.data);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Modifier avec success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                }
-            })
+                var data = {...p, [e.field]: e.value}
+                UpdatePromo(data, data.id).then(res => {
+                    if (res.status === 200) {
+                        setPromo(res.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Modifier avec success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                })
             }
         });
         setLoading(true);
@@ -222,106 +244,107 @@ export const Promos = () => {
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
-                        style={{
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "20px",
-                            fontWeight: "bolder"
-                        }}>
+                                style={{
+                                    marginBottom: "20px",
+                                    borderLeft: "6px solid #000000",
+                                    color: "#000000",
+                                    paddingLeft: "20px",
+                                    fontWeight: "bolder"
+                                }}>
                         LISTE DES PROMOTIONS
                     </Typography>
-                        <Box style={{ width: "100%" }}>
-                            <Box
-                                className={classes.SearchAndAdd}
-                                >
+                    <Box style={{ width: "100%" }}>
+                        <Box
+                            className={classes.SearchAndAdd}
+                        >
 
-                                <Grid direction="row" spacing={5} alignItems="center">
-                                    <div className={classes.mysearch}>
-                                        <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
-                                            <OutlinedInput
-                                                size='small'
-                                                id="search"
-                                                placeholder="rechercher"
-                                                style={{
-                                                    fontWeight: "bolder",
-                                                    color: "#000000",
-                                                    '&:focus': {
-                                                        borderColor: "#FF6600",
-                                                    },
-                                                }}
+                            <Grid direction="row" spacing={5} alignItems="center">
+                                <div className={classes.mysearch}>
+                                    <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
+                                        <OutlinedInput
+                                            size='small'
+                                            id="search"
+                                            placeholder="rechercher"
+                                            style={{
+                                                fontWeight: "bolder",
+                                                color: "#000000",
+                                                '&:focus': {
+                                                    borderColor: "#FF6600",
+                                                },
+                                            }}
 
-                                                startAdornment={
-                                                    <InputAdornment position="start">
-                                                        <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
-                                                    </InputAdornment>
-                                                }
-                                                onChange={(event) => {
-                                                    setSearch(event.target.value);
-                                                }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                </Grid>
-                                <div>
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<AddCircleOutlined />}
-                                        onClick={handleClickOpen}
-                                        className={classes.addBtn}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontFamily: "Arial",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            marginRight: "10px",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: "#000000",
-                                                pointer: "cursor",
-                                                color: "white"
-
+                                            startAdornment={
+                                                <InputAdornment position="start">
+                                                    <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
+                                                </InputAdornment>
                                             }
-                                        }}
-                                    >
-                                        AJOUTER
-                                    </Button>
+                                            onChange={(event) => {
+                                                setSearch(event.target.value);
+                                            }}
+                                        />
+                                    </FormControl>
                                 </div>
-                            </Box>
-                            {/* <div style={{width: '600px'}}>
+                            </Grid>
+                            <div>
+                                <Button
+                                    variant="contained"
+                                    endIcon={<AddCircleOutlined />}
+                                    onClick={handleClickOpen}
+                                    className={classes.addBtn}
+                                    sx={{
+                                        backgroundColor: "#FF6600",
+                                        fontFamily: "Arial",
+                                        fontSize: "16px",
+                                        color: "#000000",
+                                        marginRight: "10px",
+                                        fontWeight: "bold",
+                                        '&:hover': {
+                                            backgroundColor: "#000000",
+                                            pointer: "cursor",
+                                            color: "white"
+
+                                        }
+                                    }}
+                                >
+                                    AJOUTER
+                                </Button>
+                            </div>
+                        </Box>
+                        {/* <div style={{width: '600px'}}>
                                     {JSON.stringify(promo)}
                             </div> */}
-                            <Box className={classes.tableau}>
+                        <Box className={classes.tableau}>
 
-                                <div style={{ width: "100%" }}>
-                                    <DataGrid
-                                        onCellEditCommit={handleCommit}
-                                        sx={{ boxShadow: "30px", width: "100%" }}
-                                        autoHeight
-                                        pageSize={10}
-                                        rowsPerPageOptions={[5, 10, 20]}
-                                        components={{
-                                            Pagination: CustomPagination,
-                                            // Toolbar: CustomToolbar,
-                                        }}
-                                        loading={loading}
-                                        rows={promo}
-                                        columns={columns}
-                                        disableVirtualization
-                                    >
-                                    </DataGrid>
-                                </div>
-
-                            </Box>
+                            <div style={{ width: "100%" }}>
+                                <DataGrid
+                                    onCellEditCommit={handleCommit}
+                                    sx={{ boxShadow: "30px", width: "100%" }}
+                                    autoHeight
+                                    pageSize={10}
+                                    rowsPerPageOptions={[5, 10, 20]}
+                                    components={{
+                                        Pagination: CustomPagination,
+                                        NoRowsOverlay: CustomNoRowsOverlay,
+                                        // Toolbar: CustomToolbar,
+                                    }}
+                                    loading={loading}
+                                    rows={promo}
+                                    columns={columns}
+                                    disableVirtualization
+                                >
+                                </DataGrid>
+                            </div>
 
                         </Box>
 
+                    </Box>
 
-                        <div>
+
+                    <div>
                         <Dialog open={open} onClose={handleClose}>
 
                             <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>AJOUTER PROMOTION</DialogTitle>
-                            <hr className={classes.lineHr}/>
+                            <hr className={classes.lineHr} />
                             <DialogContent>
                                 <p>Complétez le formulaire. Les champs marqué par <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
                                 <Grid>
@@ -335,7 +358,7 @@ export const Promos = () => {
                                             variant="outlined"
                                             placeholder="libelle"
                                             onChange={(event) => {
-                                                setFormErrors({...formErrors, libelle: null})
+                                                setFormErrors({ ...formErrors, libelle: null })
                                                 setPromo({ ...promo, libelle: event.target.value.replace(/\s/g, '') })
                                             }}
 
@@ -354,11 +377,11 @@ export const Promos = () => {
                                                     id="dateDebut"
                                                     value={promo.dateDebut}
                                                     onChange={(event) => {
-                                                        setFormErrors({...formErrors, dateDebut: null})
+                                                        setFormErrors({ ...formErrors, dateDebut: null })
                                                         setPromo({ ...promo, dateDebut: event })
                                                     }}
                                                     defaultValue={null}
-                                                    renderInput={(params) => <TextField {...params} error={formErrors.dateDebut}/>}
+                                                    renderInput={(params) => <TextField {...params} error={formErrors.dateDebut} />}
                                                 />
                                             </Stack>
                                         </LocalizationProvider>
@@ -376,11 +399,11 @@ export const Promos = () => {
                                                     id="dateFin"
                                                     value={promo.dateFin}
                                                     onChange={(event) => {
-                                                        setFormErrors({...formErrors, dateFin: null})
+                                                        setFormErrors({ ...formErrors, dateFin: null })
                                                         setPromo({ ...promo, dateFin: event })
                                                     }}
                                                     defaultValue={null}
-                                                    renderInput={(params) => <TextField {...params} error={formErrors.dateFin}/>}
+                                                    renderInput={(params) => <TextField {...params} error={formErrors.dateFin} />}
                                                 />
                                             </Stack>
                                         </LocalizationProvider>
@@ -390,28 +413,28 @@ export const Promos = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}
-                                    sx={{
-                                        backgroundColor: "#BE0101",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#F32018",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#BE0101",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#F32018",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >ANNULER</Button>
                                 <Button onClick={handleSubmit}
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#000000",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#000000",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >AJOUTER
                                 </Button>
                             </DialogActions>

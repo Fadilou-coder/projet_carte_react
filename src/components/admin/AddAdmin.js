@@ -33,7 +33,9 @@ function AddAdmin() {
         typePiece: 'CNI',
     });
 
-    const [formErrors, setFormErrors] = useState({});
+    const [formErrors, setFormErrors] = useState([]);
+
+   // const [error, setError] = useState([]);
 
     const classes = AdminStyle();
     const useStyles = makeStyles((theme) => ({
@@ -71,7 +73,6 @@ function AddAdmin() {
                         })
                     })
                 }
-                
             }).catch(
                 (error) => {
                     console.log(error.response.data.errors);
@@ -81,7 +82,8 @@ function AddAdmin() {
                         err.email = error.response.data.errors[index]
                       if(error.response.data.errors[index].includes('téléphone'))
                         err.phone = error.response.data.errors[index]
-                        
+                      if(error.response.data.errors[index].includes('piece'))
+                          err.numPiece = error.response.data.errors[index];
                     }
                     setFormErrors(err);
                 }
@@ -92,7 +94,7 @@ function AddAdmin() {
 
     const validateAdmin = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
-        const errors = {};
+        let errors = {};
         if (isBlank(val.prenom)) {
             errors.prenom = "prenom est requis"
         } else if (val.prenom.length < 3) {
@@ -142,6 +144,7 @@ function AddAdmin() {
                                             <OutlinedInput
                                                 id="ok"
                                                 name="prenom"
+                                                required
                                                 type="text"
                                                 variant="outlined"
                                                 placeholder="Ex: prenom"
@@ -159,6 +162,7 @@ function AddAdmin() {
                                             <OutlinedInput
                                                 id="input"
                                                 name="nom"
+                                                required
                                                 type="text"
                                                 variant="outlined"
                                                 placeholder="Ex: nom"
@@ -172,7 +176,6 @@ function AddAdmin() {
                                     </Grid>
                                 </Grid>
 
-
                                 <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                     <Grid xs={12} sm={12} md={4} item>
                                         <FormControl fullWidth>
@@ -180,6 +183,7 @@ function AddAdmin() {
                                             <OutlinedInput
                                                 id="input"
                                                 name="phone"
+                                                required
                                                 type="text"
                                                 variant="outlined"
                                                 placeholder="Ex: phone"
@@ -198,6 +202,7 @@ function AddAdmin() {
                                                 id="input"
                                                 name="email"
                                                 type="email"
+                                                required
                                                 variant="outlined"
                                                 placeholder="Ex:email"
                                                 onChange={(event) => {
@@ -208,8 +213,6 @@ function AddAdmin() {
                                         </FormControl>
                                         <p className={classes.formError}>{formErrors.email}</p>
                                     </Grid>
-
-
                                     <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                                         <Grid xs={12} sm={12} md={4} item>
                                             <FormControl fullWidth>
@@ -237,6 +240,7 @@ function AddAdmin() {
                                                 <OutlinedInput
                                                     id="input"
                                                     name="numPiece"
+                                                    required
                                                     type="text"
                                                     variant="outlined"
                                                     placeholder="Ex: numPiece"
@@ -256,6 +260,7 @@ function AddAdmin() {
                                                 <OutlinedInput
                                                     id="input"
                                                     name="adresse"
+                                                    required
                                                     type="text"
                                                     variant="outlined"
                                                     placeholder="Ex: addresse"

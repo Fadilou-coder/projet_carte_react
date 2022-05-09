@@ -1,6 +1,6 @@
 import { Box, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Layout from "../layout/Layout";
 import Grid from '@material-ui/core/Grid';
 import Swal from "sweetalert2";
@@ -19,12 +19,37 @@ import { ListAllReferentiel, AddReferentiel, UpdateReferentiel } from './Referen
 
 
 
+function CustomNoRowsOverlay() {
+    return (
+
+        <Grid sx={{ display: "flex", justifyContent: "center", }}>
+            <div>
+                <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
+                    Tableau Vide
+                </Box>
+                <Box sx={{ width: "80px" }} >
+
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+
+                </Box>
+            </div>
+        </Grid >
+
+    );
+}
+
+
 export const Referentiel = () => {
 
     const [loading, setLoading] = React.useState(true);
+    const [referentiels, setReferentiels] = React.useState([]);
     const [referentiel, setReferentiel] = React.useState(
         { libelle: '' }
-        );
+    );
+
+    const isBlank = require('is-blank')
 
     // Custom Pagination
     function CustomPagination() {
@@ -101,7 +126,7 @@ export const Referentiel = () => {
 
     const validateRef = (val) => {
         const errors = {};
-        if (!val.libelle) {
+        if (isBlank(val.libelle)) {
             errors.libelle = "Le libelle est requis"
         }
         return errors;
@@ -109,8 +134,7 @@ export const Referentiel = () => {
 
     React.useEffect(() => {
         ListAllReferentiel().then(response => {
-            console.log(response.data);
-            setReferentiel(response.data);
+            setReferentiels(response.data);
             setLoading(false);
         });
     }, []
@@ -121,14 +145,14 @@ export const Referentiel = () => {
 
         setFormErrors(validateRef(referentiel))
 
-            AddReferentiel(referentiel).then(res => {
-                console.log(referentiel);
+        AddReferentiel(referentiel).then(res => {
+            console.log(referentiel);
             if (res.status === 200) {
                 Swal.fire(
                     'Succes!',
                     'Enregistrer avec succes.',
                     'success'
-                ).then((res) => {
+                ).then(() => {
                     setReferentiel({
                         libelle: '',
                     })
@@ -138,7 +162,6 @@ export const Referentiel = () => {
             }).catch(
                 (error) => {
                     setErrorPage(true);
-                    console.log(error);
                 }
             )
     };
@@ -204,9 +227,11 @@ export const Referentiel = () => {
                             rowsPerPageOptions={[5, 10, 20]}
                             components={{
                                 Pagination: CustomPagination,
+                                NoRowsOverlay: CustomNoRowsOverlay,
+
                             }}
                             loading={loading}
-                            rows={referentiel}
+                            rows={referentiels}
                             columns={columns}
                         />
 
@@ -238,15 +263,15 @@ export const Referentiel = () => {
                             variant="outlined"
                             placeholder="libelle"
                             onChange={(event) => {
-                                setFormErrors({...formErrors, libelle: null})
+                                setFormErrors({ ...formErrors, libelle: null })
                                 setReferentiel({ ...referentiel, libelle: event.target.value.replace(/\s/g, '') })
                             }}
 
                             style={{ width: "100%", marginBottom: "20px" }}
                         />
-                        <p style={{color: 'red'}}>{formErrors.libelle}</p>
+                        <p style={{ color: 'red' }}>{formErrors.libelle}</p>
                         <div style={{}}>
-                            <Button  onClick={handleSubmit}
+                            <Button onClick={handleSubmit}
                                 disabled={referentiel.libelle === ''}
                                 variant="contained"
                                 sx={{
@@ -259,7 +284,7 @@ export const Referentiel = () => {
                                         color: "#FFFFFF"
                                     }
                                 }}
-                                >
+                            >
                                 AJOUTER
                             </Button>
 

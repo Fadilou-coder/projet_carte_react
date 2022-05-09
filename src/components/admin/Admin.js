@@ -1,5 +1,5 @@
 /* eslint-disable array-callback-return */
-import { Box, Button, OutlinedInput } from '@mui/material';
+import { Box, Button, Grid, OutlinedInput } from '@mui/material';
 import React from 'react'
 import Layout from "../layout/Layout";
 import { AddCircleOutlined } from '@mui/icons-material';
@@ -38,6 +38,27 @@ export const Admin = () => {
 
     function RedirectAddAdmin() {
         history.push("/add_admin");
+    }
+
+    function CustomNoRowsOverlay() {
+        return (
+
+            <Grid sx={{ display: "flex", justifyContent: "center", }}>
+                <div>
+                    <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
+                        Tableau Vide
+                    </Box>
+                    <Box sx={{ width: "80px" }} >
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+
+                    </Box>
+                </div>
+            </Grid >
+
+        );
     }
 
     // Custom Pagination
@@ -277,6 +298,8 @@ export const Admin = () => {
                                 rowsPerPageOptions={[5, 10, 20]}
                                 components={{
                                     Pagination: CustomPagination,
+                                    NoRowsOverlay: CustomNoRowsOverlay,
+
                                     // Toolbar: CustomToolbar,
                                 }}
                                 loading={isLoaded}
