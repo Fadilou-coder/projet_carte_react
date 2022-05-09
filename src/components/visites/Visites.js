@@ -388,27 +388,21 @@ export const Visites = (props) => {
 
     const validateVisite = (val) => {
         const errors = {};
-        if (val.prenom === '') {
+        if (isBlank(val.prenom)) {
             errors.prenom = "prenom est requis"
         } else if (val.prenom.length < 3) {
             errors.prenom = "le prenom doit comporter plus de 3 caractères";
         }
-        else if (val.nom.length > 20) {
-            errors.nom = "le nom ne peut pas dépassé plus de 20 caractères";
-        }
-        if (val.nom === '') {
+        if (isBlank(val.nom)) {
             errors.nom = "nom est requis"
         } else if (val.nom.length < 2) {
             errors.nom = "le nom doit comporter plus de 2 caractères";
         }
-        else if (val.nom.length > 10) {
-            errors.nom = "le nom ne peut pas dépassé plus de 10 caractères";
-        }
 
-        if (val.numTelephone === '') {
+        if (isBlank(val.numTelephone)) {
             errors.numTelephone = "le numéro de télephone est requis"
         }
-        if (val.numPiece === '') {
+        if (isBlank(val.numPiece)) {
             errors.numPiece = "le numéro de pièce est requis"
         }
         return errors;

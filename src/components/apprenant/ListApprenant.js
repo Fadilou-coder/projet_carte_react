@@ -365,26 +365,29 @@ export const ListApprenant = () => {
                             </div>
                         </div>
                         <Box textAlign="right">
-                            <Button
-                                variant="contained"
-                                style={{
+                            {
+                                (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                    <Button
+                                        variant="contained"
+                                        style={{
 
-                                }}
-                                sx={{
-                                    backgroundColor: "#FF6600",
-                                    color: "#000000",
-                                    marginRight: "35px",
-                                    fontWeight: "bolder",
-                                    '&:hover': {
-                                        backgroundColor: '#000000',
-                                        color: "white"
-                                    }
-                                }}
-                                endIcon={<AddCircleOutlined />}
-                                onClick={RedirectAddApprenant}
-                            >
-                                Ajouter
-                            </Button>
+                                        }}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            color: "#000000",
+                                            marginRight: "35px",
+                                            fontWeight: "bolder",
+                                            '&:hover': {
+                                                backgroundColor: '#000000',
+                                                color: "white"
+                                            }
+                                        }}
+                                        endIcon={<AddCircleOutlined />}
+                                        onClick={RedirectAddApprenant}
+                                    >
+                                        Ajouter
+                                    </Button> : null
+                            }
                         </Box>
 
                     </div>

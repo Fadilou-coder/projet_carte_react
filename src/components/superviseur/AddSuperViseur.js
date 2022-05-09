@@ -9,7 +9,6 @@ import Layout from "../layout/Layout";
 import Swal from 'sweetalert2'
 import emailjs from '@emailjs/browser';
 import {SaveSuperViseur} from "./SuperviseurService";
-import isBlank from "is-blank";
 
 
 function AddSuperViseur() {
@@ -103,8 +102,6 @@ function AddSuperViseur() {
 
     const validateAdmin = (val) => {
         let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
-        let regexCni = new RegExp("(^[1-2])[0-9]{12}$");
-        let regexPhone = new RegExp("^(33|7[05-8])[0-9]{7}$");
         const errors = {};
         if (isBlank(val.prenom)) {
             errors.prenom = "prenom est requis"
@@ -129,8 +126,6 @@ function AddSuperViseur() {
         }
         if (isBlank(val.phone)) {
             errors.phone = "le numéro de télephone est requis"
-        } else if (!regexPhone.test(val.phone)) {
-            errors.phone = "le format numéro télephone n'est pas valide";
         }
         if (isBlank(val.addresse)) {
             errors.addresse = "l'adresse est requis"
@@ -141,8 +136,6 @@ function AddSuperViseur() {
         }
         if (isBlank(val.numPiece)) {
             errors.numPiece = "le numéro de piece d'identité est requis"
-        } else if (!regexCni.test(val.numPiece)) {
-            errors.numPiece = "le format numéro de piece d'identité  n'est pas valide";
         }
         return errors;
     };
