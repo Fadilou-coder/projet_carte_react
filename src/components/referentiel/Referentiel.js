@@ -217,76 +217,80 @@ export const Referentiel = () => {
                             }}>
                             LISTE DES REFERENTIELS
                         </Typography>
+                                <DataGrid
+                                    style={localStorage.getItem('user') === '["SUPER_ADMIN"]' ? { width: '100%' } : { width: '200%' }}
+                                    onCellEditCommit={handleCommit}
+                                    sx={{ boxShadow: "30px" }}
+                                    autoHeight
+                                    pageSize={6}
+                                    rowsPerPageOptions={[5, 10, 20]}
+                                    components={{
+                                        Pagination: CustomPagination,
+                                        NoRowsOverlay: CustomNoRowsOverlay,
 
-
-                        <DataGrid
-                            onCellEditCommit={handleCommit}
-                            sx={{ boxShadow: "30px", width: "100%", }}
-                            autoHeight
-                            pageSize={6}
-                            rowsPerPageOptions={[5, 10, 20]}
-                            components={{
-                                Pagination: CustomPagination,
-                                NoRowsOverlay: CustomNoRowsOverlay,
-
-                            }}
-                            loading={loading}
-                            rows={referentiels}
-                            columns={columns}
-                        />
-
+                                    }}
+                                    loading={loading}
+                                    rows={referentiels}
+                                    columns={columns}
+                                />
                     </Box>
                     <Box className={classes.contentDiv}>
-                        <Typography
-                            variant='h5'
-                            style={{
-                                marginBottom: "20px",
-                                borderLeft: "6px solid #000000",
-                                color: "#000000",
-                                paddingLeft: "20px",
-                                fontWeight: "bolder"
-                            }}>
-                            AJOUTER REFERENTIEL
-                        </Typography>
-
-
+                        {
+                            (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                <Typography
+                                    variant='h5'
+                                    style={{
+                                        marginBottom: "20px",
+                                        borderLeft: "6px solid #000000",
+                                        color: "#000000",
+                                        paddingLeft: "20px",
+                                        fontWeight: "bolder"
+                                    }}>
+                                    AJOUTER REFERENTIEL
+                                </Typography>
+                                : null
+                        }
                         <Grid container wrap="nowrap" spacing={2}>
 
                             <Grid item xs>
                             </Grid>
                         </Grid>
-                        <TextField
-                            id="libelle"
-                            name="libelle"
-                            type="text"
-                            value={referentiel.libelle}
-                            variant="outlined"
-                            placeholder="libelle"
-                            onChange={(event) => {
-                                setFormErrors({ ...formErrors, libelle: null })
-                                setReferentiel({ ...referentiel, libelle: event.target.value.replace(/\s/g, '') })
-                            }}
+                        {(localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                <TextField
+                                    id="libelle"
+                                    name="libelle"
+                                    type="text"
+                                    value={referentiel.libelle}
+                                    variant="outlined"
+                                    placeholder="libelle"
+                                    onChange={(event) => {
+                                        setFormErrors({ ...formErrors, libelle: null })
+                                        setReferentiel({ ...referentiel, libelle: event.target.value.replace(/\s/g, '') })
+                                    }}
 
-                            style={{ width: "100%", marginBottom: "20px" }}
-                        />
+                                    style={{ width: "100%", marginBottom: "20px" }}
+                                /> : null
+                        }
                         <p style={{ color: 'red' }}>{formErrors.libelle}</p>
                         <div style={{}}>
-                            <Button onClick={handleSubmit}
-                                disabled={referentiel.libelle === ''}
-                                variant="contained"
-                                sx={{
-                                    margin: 'auto', display: "flex",
-                                    backgroundColor: '#FF6600',
-                                    color: "#000000",
-                                    fontWeight: "bolder",
-                                    '&:hover': {
-                                        backgroundColor: '#000000',
-                                        color: "#FFFFFF"
-                                    }
-                                }}
-                            >
-                                AJOUTER
-                            </Button>
+                            {(localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                    <Button onClick={handleSubmit}
+                                            disabled={referentiel.libelle === ''}
+                                            variant="contained"
+                                            sx={{
+                                                margin: 'auto', display: "flex",
+                                                backgroundColor: '#FF6600',
+                                                color: "#000000",
+                                                fontWeight: "bolder",
+                                                '&:hover': {
+                                                    backgroundColor: '#000000',
+                                                    color: "#FFFFFF"
+                                                }
+                                            }}
+                                    >
+                                        AJOUTER
+                                    </Button> : null
+                            }
 
                         </div>
 

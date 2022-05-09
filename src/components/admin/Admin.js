@@ -303,7 +303,6 @@ export const Admin = () => {
             }
         },
     ]
-
     const updateAdmin = (admin, id) => {
         setIsLoaded(true)
         console.log(admin)
@@ -314,8 +313,6 @@ export const Admin = () => {
         })
         setIsLoaded(false)
     }
-
-
     const classes = AdminStyle();
     return (
         <Layout>
@@ -363,26 +360,28 @@ export const Admin = () => {
                         </div>
 
                         <Box textAlign="right">
-                            <Button
-                                variant="contained"
-                                endIcon={<AddCircleOutlined />}
-                                onClick={RedirectAddAdmin}
-                                sx={{
-                                    backgroundColor: "#FF6600",
-                                    color: "#000000",
-                                    fontFamily: "Arial",
-                                    fontSize: "16px",
-                                    fontWeight: "bolder",
-                                    marginBottom: "10px",
-                                    '&:hover': {
-                                        backgroundColor: "#000000",
-                                        color: "#FFFFFF",
-                                        pointer: "cursor"
-                                    }
-                                }}
-                            >
-                                Ajouter
-                            </Button>
+                            {(localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                <Button
+                                    variant="contained"
+                                    endIcon={<AddCircleOutlined />}
+                                    onClick={RedirectAddAdmin}
+                                    sx={{
+                                        backgroundColor: "#FF6600",
+                                        color: "#000000",
+                                        fontFamily: "Arial",
+                                        fontSize: "16px",
+                                        fontWeight: "bolder",
+                                        marginBottom: "10px",
+                                        '&:hover': {
+                                            backgroundColor: "#000000",
+                                            color: "#FFFFFF",
+                                            pointer: "cursor"
+                                        }
+                                    }}
+                                >
+                                    Ajouter
+                                </Button> : null
+                            }
                         </Box>
                     </Box>
 
@@ -427,18 +426,12 @@ export const Admin = () => {
                                 }
                                 columns={columns}
                                 disableVirtualization
-                                // onCellEditStop={(params: GridCellEditStopParams, event: MuiEvent) => {
-
-                               // }}
                                onCellValueChanged = {(params) => updateAdmin(params)}
                             />
                         </div>
-
                     </Box>
-
                 </Box>
             </Box>
-
         </Layout>
     )
 }

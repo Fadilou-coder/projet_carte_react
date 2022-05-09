@@ -119,38 +119,6 @@ export const Promos = () => {
             headerName: 'Date Fin',
             flex: 1,
             editable: true,
-        // },
-        // {
-        //     field: 'bloquer',
-        //     headerClassName: 'super-app-theme--header',
-        //     headerName: 'Bloqué ?',
-        //     editable: true,
-        //     flex: 1,
-        //     sortable: false,
-        //     renderCell: (params) => {
-        //         if (!params.row.isBlocked)
-        //             return <Button variant="contained" sx={{
-        //                 backgroundColor: '#FF6600',
-        //                 color: "#000000",
-        //                 fontWeight: "bolder",
-        //                 '&:hover': {
-        //                     backgroundColor: '#000000',
-        //                     color: "#FFFFFF"
-        //                 }
-        //             }}
-        //             >Bloquer</Button>;
-        //         else
-        //             return <Button variant="contained"
-        //                 sx={{
-        //                     backgroundColor: '#000000',
-        //                     color: "white",
-        //                     fontWeight: "bolder",
-        //                     '&:hover': {
-        //                         backgroundColor: '#FF6600',
-        //                         color: "#FFFFFF"
-        //                     }
-        //                 }}>Debloquer</Button>;
-        //     }
          }
     ]
 
@@ -286,28 +254,31 @@ export const Promos = () => {
                                 </div>
                             </Grid>
                             <div>
-                                <Button
-                                    variant="contained"
-                                    endIcon={<AddCircleOutlined />}
-                                    onClick={handleClickOpen}
-                                    className={classes.addBtn}
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial",
-                                        fontSize: "16px",
-                                        color: "#000000",
-                                        marginRight: "10px",
-                                        fontWeight: "bold",
-                                        '&:hover': {
-                                            backgroundColor: "#000000",
-                                            pointer: "cursor",
-                                            color: "white"
+                                {
+                                    (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<AddCircleOutlined />}
+                                            onClick={handleClickOpen}
+                                            className={classes.addBtn}
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                marginRight: "10px",
+                                                fontWeight: "bold",
+                                                '&:hover': {
+                                                    backgroundColor: "#000000",
+                                                    pointer: "cursor",
+                                                    color: "white"
 
-                                        }
-                                    }}
-                                >
-                                    AJOUTER
-                                </Button>
+                                                }
+                                            }}
+                                        >
+                                            AJOUTER
+                                        </Button> : null
+                                }
                             </div>
                         </Box>
                         {/* <div style={{width: '600px'}}>
