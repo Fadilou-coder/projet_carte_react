@@ -115,7 +115,7 @@ export const AddApprenant = () => {
     };
 
     const PostApprenant = () => {
-        console.log(value)
+        // console.log(value)
         setFormErrors(validateApprenant(value));
         let formData = new FormData();
         const data = ["prenom", "nom", "email", "phone", "adresse", "sexe", "typePiece", "numPiece", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
@@ -172,7 +172,8 @@ export const AddApprenant = () => {
                 }
             }).catch(
                 (error) => {
-                    console.log(error);
+                    // console.log(error);      
+                    console.log(error.response)
                 }
             )
         }
