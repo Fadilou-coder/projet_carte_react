@@ -17,14 +17,22 @@ import {
 } from "@mui/icons-material";
 import {DataGrid, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector} from "@mui/x-data-grid";
 import {useHistory} from "react-router-dom";
-import {ListAllSuperViseur} from "./SuperviseurService";
+import {ListAllSuperViseur, editSuperViseur} from "./SuperviseurService";
 
 const Superviseur = () => {
 
     const [admins, setAdmin] = React.useState([]);
     const [search, setSearch] = React.useState('');
     const [isLoaded, setIsLoaded] = React.useState(true);
-
+    const [superviseur, setSuperviseur] = React.useState({
+      prenom: "",
+      nom: "",
+      email: "",
+      phone: "",
+      numPiece: "",
+      addresse: "",
+      password: ""
+    });
     React.useEffect(() => {
         ListAllSuperViseur().then(res => {
             setAdmin(res.data);
@@ -58,6 +66,16 @@ const Superviseur = () => {
         );
     }
 
+    const updateSuperviseur = (data, id) => {
+      setIsLoaded(true)
+      editSuperViseur(data, id).then(() => {
+        ListAllSuperViseur().then(res => {
+          setAdmin(res.data);
+        })
+      })
+      setIsLoaded(false);
+    }
+
     const columns = [
         {
             field: 'prenom',
@@ -66,6 +84,26 @@ const Superviseur = () => {
             editable: true,
             flex: 1,
             minWidth: 150,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="prenom"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setSuperviseur({ ...superviseur, prenom: event.target.value })
+                        }}
+                        value={superviseur.prenom === "" ? params.value : superviseur.prenom}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateSuperviseur(superviseur, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'nom',
@@ -74,7 +112,26 @@ const Superviseur = () => {
             editable: true,
             flex: 1,
             minWidth: 150,
-
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="nom"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setSuperviseur({ ...superviseur, nom: event.target.value })
+                        }}
+                        value={superviseur.nom === "" ? params.value : superviseur.nom}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateSuperviseur(superviseur, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'email',
@@ -82,7 +139,27 @@ const Superviseur = () => {
             headerName: 'Email',
             editable: true,
             minWidth: 150,
-            flex: 1
+            flex: 1,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="email"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setSuperviseur({ ...superviseur, email: event.target.value })
+                        }}
+                        value={superviseur.email === "" ? params.value : superviseur.email}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateSuperviseur(superviseur, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'phone',
@@ -90,7 +167,27 @@ const Superviseur = () => {
             headerName: 'Téléphone',
             editable: true,
             minWidth: 150,
-            flex: 1
+            flex: 1,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="phone"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setSuperviseur({ ...superviseur, phone: event.target.value })
+                        }}
+                        value={superviseur.phone === "" ? params.value : superviseur.phone}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateSuperviseur(superviseur, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'numPiece',
@@ -98,7 +195,27 @@ const Superviseur = () => {
             headerName: 'Numéro Pièce',
             editable: true,
             minWidth: 150,
-            flex: 1
+            flex: 1,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="numPiece"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setSuperviseur({ ...superviseur, numPiece: event.target.value })
+                        }}
+                        value={superviseur.numPiece === "" ? params.value : superviseur.numPiece}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateSuperviseur(superviseur, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
     ]
 
@@ -202,7 +319,7 @@ const Superviseur = () => {
                                         if (search === "") {
                                             return val;
                                         } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
-                                            || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
+                                            || val.email.toLowerCase().includes(search.toLowerCase()) || val.numPiece.toLowerCase().includes(search.toLowerCase())
                                             || val.numPiece.toLowerCase().includes(search.toLowerCase())) {
                                             return val;
                                         }
