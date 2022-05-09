@@ -152,9 +152,8 @@ export const Device = () => {
 
 
                         <DataGrid
-
-                            sx={{ boxShadow: "30px", width: "100%", }}
-
+                            style={localStorage.getItem('user') === '["SUPER_ADMIN"]' ? { width: '100%' } : { width: '200%' }}
+                            sx={{ boxShadow: "30px" }}
                             autoHeight
                             pageSize={6}
                             rowsPerPageOptions={[5, 10, 20]}

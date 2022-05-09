@@ -16,20 +16,27 @@ import {
 } from '@mui/x-data-grid';
 
 import Checkbox from '@mui/material/Checkbox';
-import { ListAllAdmin, BloquerAdmin, DebloquerAdmin } from './AdminService';
+import { ListAllAdmin, BloquerAdmin, DebloquerAdmin, updateFieldAdmin } from './AdminService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
 
 
 export const Admin = () => {
 
-    const [admins, setAdmin] = React.useState([]);
+    const [admins, setAdmins] = React.useState([]);
     const [search, setSearch] = React.useState('');
     const [isLoaded, setIsLoaded] = React.useState(true);
-
+    const [admin, setAdmin] = React.useState({
+      prenom: "",
+      nom: "",
+      email: "",
+      phone: "",
+      numPiece: "",
+      addresse: ""
+    });
     React.useEffect(() => {
         ListAllAdmin().then(res => {
-            setAdmin(res.data);
+            setAdmins(res.data);
             setIsLoaded(false);
         })
     }, []);
@@ -102,7 +109,7 @@ export const Admin = () => {
                         ).then((res) => {
                             setIsLoaded(true);
                             ListAllAdmin().then(res => {
-                                setAdmin(res.data);
+                                setAdmins(res.data);
                                 setIsLoaded(false);
                             })
                         })
@@ -129,7 +136,7 @@ export const Admin = () => {
                         ).then((res) => {
                             setIsLoaded(true);
                             ListAllAdmin().then(res => {
-                                setAdmin(res.data);
+                                setAdmins(res.data);
                                 setIsLoaded(false);
                             })
                         })
@@ -149,6 +156,26 @@ export const Admin = () => {
             editable: true,
             flex: 1,
             minWidth: 150,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="prenom"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setAdmin({ ...admin, prenom: event.target.value })
+                        }}
+                        value={admin.prenom === "" ? params.value : admin.prenom}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateAdmin(admin, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'nom',
@@ -157,6 +184,26 @@ export const Admin = () => {
             editable: true,
             flex: 1,
             minWidth: 150,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="nom"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setAdmin({ ...admin, nom: event.target.value })
+                        }}
+                        value={admin.nom === "" ? params.value : admin.nom}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateAdmin(admin, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
 
         },
         {
@@ -165,7 +212,27 @@ export const Admin = () => {
             headerName: 'Email',
             editable: true,
             minWidth: 150,
-            flex: 1
+            flex: 1,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="email"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setAdmin({ ...admin, email: event.target.value })
+                        }}
+                        value={admin.email === "" ? params.value : admin.email}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateAdmin(admin, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'phone',
@@ -173,7 +240,27 @@ export const Admin = () => {
             headerName: 'Téléphone',
             editable: true,
             minWidth: 150,
-            flex: 1
+            flex: 1,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="phone"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setAdmin({ ...admin, phone: event.target.value })
+                        }}
+                        value={admin.phone === "" ? params.value : admin.phone}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateAdmin(admin, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'numPiece',
@@ -181,7 +268,27 @@ export const Admin = () => {
             headerName: 'Numéro Pièce',
             editable: true,
             minWidth: 150,
-            flex: 1
+            flex: 1,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="numPiece"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setAdmin({ ...admin, numPiece: event.target.value })
+                        }}
+                        value={admin.numPiece === "" ? params.value : admin.numPiece}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateAdmin(admin, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'blocked',
@@ -196,7 +303,16 @@ export const Admin = () => {
             }
         },
     ]
-
+    const updateAdmin = (admin, id) => {
+        setIsLoaded(true)
+        console.log(admin)
+        updateFieldAdmin(admin, id).then(() => {
+          ListAllAdmin().then(res => {
+            setAdmins(res.data);
+          })
+        })
+        setIsLoaded(false)
+    }
     const classes = AdminStyle();
     return (
         <Layout>
@@ -299,7 +415,7 @@ export const Admin = () => {
                                     admins.filter((val) => {
                                         if (search === "") {
                                             return val;
-                                        } else if (val.prenom.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
+                                        } else if (val.email.toLowerCase().includes(search.toLowerCase()) || val.nom.toLowerCase().includes(search.toLowerCase())
                                             || val.email.toLowerCase().includes(search.toLowerCase()) || val.phone.toLowerCase().includes(search.toLowerCase())
                                             || val.numPiece.toLowerCase().includes(search.toLowerCase())) {
                                             return val;
@@ -310,6 +426,7 @@ export const Admin = () => {
                                 }
                                 columns={columns}
                                 disableVirtualization
+                               onCellValueChanged = {(params) => updateAdmin(params)}
                             />
                         </div>
                     </Box>

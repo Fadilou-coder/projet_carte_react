@@ -217,24 +217,22 @@ export const Referentiel = () => {
                             }}>
                             LISTE DES REFERENTIELS
                         </Typography>
+                                <DataGrid
+                                    style={localStorage.getItem('user') === '["SUPER_ADMIN"]' ? { width: '100%' } : { width: '200%' }}
+                                    onCellEditCommit={handleCommit}
+                                    sx={{ boxShadow: "30px" }}
+                                    autoHeight
+                                    pageSize={6}
+                                    rowsPerPageOptions={[5, 10, 20]}
+                                    components={{
+                                        Pagination: CustomPagination,
+                                        NoRowsOverlay: CustomNoRowsOverlay,
 
-
-                        <DataGrid
-                            onCellEditCommit={handleCommit}
-                            sx={{ boxShadow: "30px", width: "100%", }}
-                            autoHeight
-                            pageSize={6}
-                            rowsPerPageOptions={[5, 10, 20]}
-                            components={{
-                                Pagination: CustomPagination,
-                                NoRowsOverlay: CustomNoRowsOverlay,
-
-                            }}
-                            loading={loading}
-                            rows={referentiels}
-                            columns={columns}
-                        />
-
+                                    }}
+                                    loading={loading}
+                                    rows={referentiels}
+                                    columns={columns}
+                                />
                     </Box>
                     <Box className={classes.contentDiv}>
                         {
