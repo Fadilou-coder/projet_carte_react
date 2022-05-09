@@ -8,4 +8,4 @@ export const ListAllPromo = () => {
 }
 
 export const AddPromo = (data) => { return axios.post(API_URL + "create", data, {headers: authHeader()}); }
-export const UpdatePromo = (id) => { return axios.get(API_URL + id, {headers: authHeader()}); }
+export const UpdatePromo = (data, id) => { return axios.put(API_URL + id, data, {headers: authHeader()}); }

@@ -14,7 +14,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, IconButton, Typography } from "@material-ui/core"
-import { ListAllVisite, ListVisitesApp, ListVisitesVisteur, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
+import { ListAllVisite, ListCommentsApp, ListVisitesApp, ListVisitesVisteur, SaveCommentApp, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
 import CloseIcon from '@mui/icons-material/Close';
@@ -22,11 +22,7 @@ import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 import dateTime from 'date-time';
 import {
-    DataGrid,
-    gridPageCountSelector,
-    gridPageSelector,
-    useGridApiContext,
-    useGridSelector,
+    DataGrid, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector,
 } from '@mui/x-data-grid'
 import jsPDF from "jspdf"
 import "jspdf-autotable"
@@ -45,12 +41,22 @@ export const Visites = () => {
 
 
     const [values, setValues] = React.useState({
-        cni: '',
+        typePiece: 'CNI',
+        numPiece: '',
         prenom: '',
         nom: '',
         numTelephone: '',
 
     })
+
+    const [comment, setComment] = React.useState({
+        commentaire: '',
+        apprenant: {
+            id: 0
+        },
+
+    })
+    const [commentsApp, setCommentsApp] = React.useState([])
     const [date, setDate] = React.useState(new Date())
     const [search, setSearch] = React.useState('');
     const [showDialog, setShowDialog] = useState(false);
@@ -62,8 +68,48 @@ export const Visites = () => {
         })
     }, [date])
 
+    const commenter = () => {
+        SaveCommentApp(comment).then(() => {
+            setComment({
+                commentaire: '',
+                apprenant: {
+                    id: 0
+                }
+            })
+        })
+    }
 
-   
+    const findComments = (id) => {
+        ListCommentsApp(id).then((res) => {
+            setCommentsApp(res.data);
+        })
+    }
+
+    // Custom Datagrid No Rows show
+
+    function CustomNoRowsOverlay() {
+        return (
+
+            <Grid sx={{ display: "flex", justifyContent: "center", }}>
+                <div>
+                    <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
+                        Tableau Vide
+                    </Box>
+                    <Box sx={{ width: "80px" }} >
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+
+                    </Box>
+                </div>
+            </Grid >
+
+        );
+    }
+
+
+
 
     // Custom Pagination
     function CustomPagination() {
@@ -104,7 +150,7 @@ export const Visites = () => {
         {
             field: 'prenom',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Prenom',
+            headerName: 'Prénom',
             flex: 1,
             minWidth: 150,
             valueGetter: (params) => {
@@ -131,16 +177,16 @@ export const Visites = () => {
             }
         },
         {
-            field: 'cni',
+            field: 'numPiece',
             headerClassName: 'super-app-theme--header',
-            headerName: 'cni',
+            headerName: 'numPiece',
             flex: 1,
             minWidth: 150,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
-                    return params.row.visiteur.cni
+                    return params.row.visiteur.numPiece
                 } else if (params.row.apprenant) {
-                    return params.row.apprenant.cni
+                    return params.row.apprenant.numPiece
                 }
             }
         },
@@ -216,12 +262,12 @@ export const Visites = () => {
         doc.setFontSize(15)
 
         const title = "Liste du " + date.toDateString()
-        const headers = [["Prenom", "Nom", "cni", "Entree", "Sortie"]]
+        const headers = [["Prenom", "Nom", "numPiece", "Entree", "Sortie"]]
 
         const dat = visites.map(elt => [
             elt.visiteur ? elt.visiteur.prenom : elt.apprenant.prenom,
             elt.visiteur ? elt.visiteur.nom : elt.apprenant.nom,
-            elt.visiteur ? elt.visiteur.cni : elt.apprenant.cni,
+            elt.visiteur ? elt.visiteur.numPiece : elt.apprenant.numPiece,
             elt.dateEntree ? elt.dateEntree.substr(11, 5) : null,
             elt.dateSortie ? elt.dateSortie.substr(11, 5) : null,
         ]
@@ -254,7 +300,7 @@ export const Visites = () => {
         setShowDialog(false)
     }
 
-  
+
     function chargerVisites(ndate, value) {
         setVisiteur(value)
         setDate(ndate)
@@ -308,7 +354,7 @@ export const Visites = () => {
                     'success'
                 ).then((res) => {
                     setValues({
-                        cni: '',
+                        numPiece: '',
                         prenom: '',
                         nom: '',
                         numTelephone: '',
@@ -338,7 +384,7 @@ export const Visites = () => {
     };
 
     const validateVisite = (val) => {
-        let regexcni = new RegExp("(^[1-2])[0-9]{12}$");
+        let regexnumPiece = new RegExp("(^[1-2])[0-9]{12}$");
         let regexPhone = new RegExp("^(33|7[5-8])[0-9]{7}$");
         const errors = {};
         if (val.prenom === '') {
@@ -364,13 +410,18 @@ export const Visites = () => {
             errors.numTelephone = "le format numéro télephone n'est pas valide";
         }
 
-        if (val.cni === '') {
-            errors.cni = "le numéro de carte d'identité est requis"
-        } else if (!regexcni.test(val.cni)) {
-            errors.cni = "le format numéro de carte d'identité n'est pas valide";
+        if (val.numPiece === '') {
+            errors.numPiece = "le numéro de pièce est requis"
+        } else if (!regexnumPiece.test(val.numPiece)) {
+            errors.numPiece = "le format numéro de carte d'identité n'est pas valide";
         }
         return errors;
     };
+
+    function loadMoreItems(event) {
+        if (event.target.scrollTop === event.target.scrollHeight) {
+        }
+    }
 
 
 
@@ -393,7 +444,7 @@ export const Visites = () => {
                         <Box style={{ width: "100%" }}>
                             <Box
                                 className={classes.filtre}
-                                >
+                            >
 
                                 <Grid direction="row" spacing={5} alignItems="center" className={classes.champfiltre}>
                                     <div
@@ -435,7 +486,6 @@ export const Visites = () => {
                                                         />
                                                     )
                                                 }}
-                                            // renderInput={(params) => <TextField {...params} />}
                                             />
                                         </LocalizationProvider>
                                     </div>
@@ -492,27 +542,29 @@ export const Visites = () => {
                                     className={classes.ajoutScan}
 
                                 >
-                                    <Button
-                                        variant="contained"
-                                        endIcon={<AddCircleOutlined />}
-                                        onClick={handleClickOpen}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontFamily: "Arial",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            marginRight: "10px",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: "#000000",
-                                                pointer: "cursor",
-                                                color: "white"
+                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<AddCircleOutlined />}
+                                            onClick={handleClickOpen}
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                marginRight: "10px",
+                                                fontWeight: "bold",
+                                                '&:hover': {
+                                                    backgroundColor: "#000000",
+                                                    pointer: "cursor",
+                                                    color: "white"
 
-                                            }
-                                        }}
-                                    >
-                                        AJOUTER
-                                    </Button>
+                                                }
+                                            }}
+                                        >
+                                            AJOUTER
+                                        </Button> : null
+                                    }
                                     <Button
                                         variant="contained"
                                         endIcon={<DocumentScannerOutlined />}
@@ -537,8 +589,6 @@ export const Visites = () => {
 
                             </Box>
 
-
-                           
                             <Box sx={{
                                 boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
                                 '& .super-app-theme--header': {
@@ -550,7 +600,7 @@ export const Visites = () => {
                             }} className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
-                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toDateString()}</h2>
+                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
                                     <DataGrid
                                         sx={{ boxShadow: "30px", width: "100%" }}
                                         autoHeight
@@ -558,6 +608,7 @@ export const Visites = () => {
                                         rowsPerPageOptions={[5, 10, 20]}
                                         components={{
                                             Pagination: CustomPagination,
+                                            NoRowsOverlay: CustomNoRowsOverlay,
                                             // Toolbar: CustomToolbar,
                                         }}
                                         loading={loading}
@@ -566,27 +617,24 @@ export const Visites = () => {
                                                 if (search === "") {
                                                     return val;
                                                 } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
-                                                    || val.visiteur?.cni.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
-                                                    || val.apprenant?.cni.toLowerCase().includes(search.toLowerCase())) {
+                                                    || val.visiteur?.numPiece.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
+                                                    || val.apprenant?.numPiece.toLowerCase().includes(search.toLowerCase())) {
 
                                                     return val;
                                                 }
                                             }).map((row) => {
                                                 return row;
-                                                // return (
-                                                //     <Popper id={id} open={open1} anchorEl={anchorEl}>
-                                                //         <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
-                                                //             {{ row }}
-                                                //         </Box>
-                                                //     </Popper>
-                                                // )
-
                                             })
                                         }
                                         columns={columns}
                                         onRowClick={(params, event) => {
-                                            setShowDialog(true)
-                                          }}
+                                            setComment({ ...comment, apprenant: params.row.apprenant })
+                                            if (params.row.apprenant) {
+                                                findComments(params.row.apprenant.id);
+                                                setShowDialog(true)
+                                            }
+
+                                        }}
                                         disableVirtualization
                                     >
                                     </DataGrid>
@@ -600,7 +648,7 @@ export const Visites = () => {
                     <QRCode
                         hidden
                         id="qr-gen"
-                        value={'{ "cni":"' + values.cni + '", \n "prenom":"' + values.prenom + '", \n "nom":"' + values.nom + '", \n "date": "' + dateTime({ date: new Date() }) + '"}'}
+                        value={'{ "numPiece":"' + values.numPiece + '", \n "prenom":"' + values.prenom + '", \n "nom":"' + values.nom + '", \n "date": "' + dateTime({ date: new Date() }) + '"}'}
                         size={400}
                         level={"H"}
                         includeMargin={true}
@@ -624,7 +672,7 @@ export const Visites = () => {
                             sx: {
                                 borderRadius: "10px",
                                 padding: "20px",
-                                // width: "25%", 
+                                // width: "25%",
                                 maxWidth: {
                                     lg: "30%",
                                     md: "25%",
@@ -641,24 +689,44 @@ export const Visites = () => {
                                     <span style={{ color: 'red' }}>*</span>  sont <span style={{ color: 'red' }}> obligatoires </span></p>
                                 <Grid>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>CNI<span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="cni"
-                                            type="text"
-                                            size='small'
-                                            variant="outlined"
-                                            placeholder="Ex:cni"
+                                        <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
+                                        <Select
+                                            labelId="demo-simple-select-label"
+                                            id="demo-simple-select"
+                                            placeholder="typePiece"
                                             onChange={(event) => {
-                                                setValues({ ...values, cni: event.target.value })
+                                                setFormErrors({ ...formErrors, promo: null })
+                                                setValues({ ...values, typePiece: event.target.value })
                                             }}
-                                            value={values.cni}
-                                        />
+                                            name="typePiece"
+                                            value={values.typePiece}
+                                        >
+                                            <MenuItem key="1" value="CNI"> CNI </MenuItem>
+                                            <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
+                                        </Select>
                                     </FormControl>
-                                    <p className={classes.formError}>{formErrors.cni}</p>
+                                    <p className={classes.formError}>{formErrors.typePiece}</p>
                                 </Grid>
                                 <Grid mt={2}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Prenom<span style={{ color: 'red' }}>*</span> </label>
+                                        <label className={classes.labelText}>N° de pièce<span style={{ color: 'red' }}>*</span> </label>
+                                        <OutlinedInput
+                                            id="numPiece"
+                                            type="text"
+                                            size='small'
+                                            variant="outlined"
+                                            placeholder="Ex:numPiece"
+                                            onChange={(event) => {
+                                                setValues({ ...values, numPiece: event.target.value })
+                                            }}
+                                            value={values.numPiece}
+                                        />
+                                    </FormControl>
+                                    <p className={classes.formError}>{formErrors.numPiece}</p>
+                                </Grid>
+                                <Grid mt={2}>
+                                    <FormControl fullWidth>
+                                        <label className={classes.labelText}>Prénom<span style={{ color: 'red' }}>*</span> </label>
                                         <OutlinedInput
                                             id="prenom"
                                             type="text"
@@ -692,7 +760,7 @@ export const Visites = () => {
                                 </Grid>
                                 <Grid mt={2}>
                                     <FormControl fullWidth>
-                                        <label className={classes.labelText}>Telephone<span style={{ color: 'red' }}> *</span> </label>
+                                        <label className={classes.labelText}>Téléphone<span style={{ color: 'red' }}> *</span> </label>
                                         <OutlinedInput
                                             id="telephone"
                                             type="text"
@@ -741,74 +809,90 @@ export const Visites = () => {
 
 
 
-{/* Dialogue pour commenntaire */}
+                    {/* Dialogue pour commenntaire */}
                     <div>
-                    <Dialog open={showDialog} onClose={handleClose} 
+                        <Dialog open={showDialog} onClose={handleClose}
                             PaperProps={{
                                 style: {
-                                backgroundColor: ' #000000',
-                                boxShadow: 'none',
-                                height: "85%",
-                                 left: '40%',
-                                // display: 'flex',
-                                // float: 'right',
-                                // ['@media (min-width:780px)']: { // eslint-disable-line no-useless-computed-key
-                                //     left: '0'
-                                //   }
+                                    backgroundColor: ' #000000',
+                                    boxShadow: 'none',
+                                    height: "85%",
+                                    left: '40%'
                                 },
-                    }} className={classes.dialog}>
+                            }} className={classes.dialog}>
                             <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "#FFFFFF", paddingLeft: "20px" }}>
                                 COMMENTAIRE
                                 <IconButton
-                                        aria-label="close" 
-                                        onClick={handleClose}
-                                        sx={{
-                                            position: 'absolute',
-                                            right: 8,
-                                            top: 8,
-                                            float: 'right'
-                                        }}
-
-                                        style={{color: '#FFFFFF'}}
-                                    >
-                                    <CloseIcon/>
+                                    aria-label="close"
+                                    onClick={handleClose}
+                                    sx={{
+                                        position: 'absolute',
+                                        right: 8,
+                                        top: 8,
+                                        float: 'right'
+                                    }}
+                                    style={{ color: '#FFFFFF' }}
+                                >
+                                    <CloseIcon />
                                 </IconButton>
                             </DialogTitle>
                             <hr style={{ borderTop: " 4px solid #F48322", width: "20%", float: "left", marginLeft: "15px" }} />
                             <DialogContent>
-                                <Grid>
-                                    <TextareaAutosize
-                                        aria-label="minimum height"
-                                        minRows={15}
-                                        placeholder="comment"
-                                        style={{ width: 300, borderRadius: '5px' }}
-                                    />
-                                </Grid>
-                                <DialogActions>
-                                <Button
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial",
-                                        fontSize: "16px",
-                                        color: "#000000",
-                                        fontWeight: "bold",
-                                        right: "80px",
-                                        marginTop: "15px",
-                                        '&:hover': {
-                                            backgroundColor: "#FFFFFF",
-                                            pointer: "cursor",
-                                            color: "#000000"
-                                        }
+                                <Grid container
+                                    onScroll={loadMoreItems}
+                                    style={{
+                                        maxHeight: 950,
+                                        overflowY: 'auto',
                                     }}
                                 >
-                                    COMMENTER
-                                </Button>
-                            </DialogActions>
+                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                        <TextareaAutosize
+                                            aria-label="minimum height"
+                                            minRows={15}
+                                            placeholder="comment"
+                                            style={{ width: 300, borderRadius: '5px' }}
+                                            onChange={(event) => {
+                                                setComment({ ...comment, commentaire: event.target.value })
+                                            }}
+                                            value={comment.commentaire}
+                                        /> :
+                                        <div>
+                                            {
+                                                commentsApp.map((row) => (
+                                                    <Typography key={row.id} variant='h6' style={{ color: 'white' }}>
+                                                        {row.commentaire}
+                                                    </Typography>
+                                                ))
+                                            }
+                                        </div>
+                                    }
+                                </Grid>
+                                {(localStorage.getItem('user') === '["ADMIN"]') ?
+                                    <DialogActions>
+                                        <Button
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                fontWeight: "bold",
+                                                right: "80px",
+                                                marginTop: "15px",
+                                                '&:hover': {
+                                                    backgroundColor: "#FFFFFF",
+                                                    pointer: "cursor",
+                                                    color: "#000000"
+                                                }
+                                            }}
+                                            onClick={commenter}
+                                        >
+                                            COMMENTER
+                                        </Button>
+                                    </DialogActions> : null
+                                }
                             </DialogContent>
                         </Dialog>
                     </div>
-
-                    
                 </Grid>
             </Grid>
         </Layout>

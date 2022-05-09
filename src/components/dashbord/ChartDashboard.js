@@ -23,6 +23,31 @@ ChartJS.register(
 
 export function ChartDashboard(props) {
 
+  console.log(props.donneesretards);
+
+  let donneescharts = [
+    100,
+    20,
+    60,
+    45,
+   21,
+    34,
+    40,
+    20,
+    73,
+     12,
+     56,
+   10
+  ];
+
+  if (props.donneesabsences) {
+    donneescharts = props.donneesabsences;
+  }
+
+
+  if (props.donneesretards) {
+    donneescharts = props.donneesretards;
+  }
   const options = {
 
     tooltips: {
@@ -31,20 +56,6 @@ export function ChartDashboard(props) {
       bodyFontFamily: "'Nunito', sans-serif",
     },
     responsive: true,
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            fontFamily: "'Nunito', sans-serif",
-            fontSize: 14,
-            beginAtZero: true,
-
-            max: 100,
-            stepSize: 5
-          }
-        }
-      ]
-    },
     plugins: {
       legend: {
         position: "top",
@@ -68,27 +79,14 @@ export function ChartDashboard(props) {
     datasets: [
       {
         label: "Donnees " + props.titre,
-        data: {
-          Janvier: 10,
-          Fevrier: 20,
-          Mars: 60,
-          Avril: 45,
-          Mai: 21,
-          Juin: 34,
-          Juillet: 40,
-          Aout: 20,
-          Septembre: 73,
-          Octobre: 12,
-          Novembre: 56,
-          Decembre: 10
-        },
+        data: donneescharts,
         backgroundColor: props.color,
       },
 
     ],
   };
 
-  console.log(<Bar options={options} data={data} />);
+  // console.log(<Bar options={options} data={data} />);
 
   return <Bar options={options} data={data} />;
 }

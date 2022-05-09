@@ -2,6 +2,7 @@ import axios from "axios"
 import authHeader from "../../core/service/AuthHeader"
 
 const API_URL =  'https://projet-carte.herokuapp.com/api/';
+// const API_URL = 'http://localhost:8080/api/';
 
     export const ListAllVisite = (date) => {
         return axios.get(API_URL + "visites/" + date, {headers: authHeader()});
@@ -12,6 +13,10 @@ const API_URL =  'https://projet-carte.herokuapp.com/api/';
     export const ListVisitesVisteur = (date) => { return axios.get(API_URL + "visites/" + date + "/visiteur", {headers: authHeader()}); }
 
     export const SaveVisitesApp = (data) => { return axios.post(API_URL + "visites/create/apprenant", data, {headers: authHeader()}); }
+
+    export const SaveCommentApp = (data) => { return axios.post(API_URL + "apprenants/comments", data, {headers: authHeader()}); }
+
+    export const ListCommentsApp = (id) => { return axios.get(API_URL + "apprenants/" + id + "/comments", {headers: authHeader()}); }
 
     export const SaveVisitesVisieur = (data) => { return axios.post(API_URL + "visites/create/visiteur", data, {headers: authHeader()}); }
 

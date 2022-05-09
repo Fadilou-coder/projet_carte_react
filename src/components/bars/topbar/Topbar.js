@@ -3,12 +3,12 @@ import { AppBar, Toolbar, IconButton, Avatar } from "@material-ui/core";
 import { TopbarStyle } from "./TopbarStyle";
 import MenuIcon from '@material-ui/icons/Menu'
 import styled from "styled-components";
-import { Typography } from "@mui/material";
+import { Typography} from "@mui/material";
 import Popover from '@mui/material/Popover';
 import Button from '@mui/material/Button';
 import ExitToAppRoundedIcon from '@mui/icons-material/ExitToAppRounded';
 import { useHistory } from "react-router-dom";
-import { FindById, FindBySuperAdminId } from '../../admin/AdminService'
+import { FindById, FindBySuperAdminId, FindBySuperviseurId } from '../../admin/AdminService'
 import logoutImg from "../../../assets/images/logOut.jpeg"
 
 const Topbar = ({ funcSetIsMobile }) => {
@@ -47,14 +47,21 @@ const Topbar = ({ funcSetIsMobile }) => {
     }
 
     React.useEffect(() => {
+            console.log(localStorage.getItem('user'))
             if (localStorage.getItem('user') === '["ADMIN"]') {
                 FindById(localStorage.getItem('id')).then(res => {
                     setAdmin(res.data);
                 })
             }else{
-                FindBySuperAdminId(localStorage.getItem('id')).then(res => {
-                    setAdmin(res.data);
-                })
+                if(localStorage.getItem('user') === '["SUPER_ADMIN"]'){
+                    FindBySuperAdminId(localStorage.getItem('id')).then(res => {
+                        setAdmin(res.data);
+                    })
+                }else{
+                    FindBySuperviseurId(localStorage.getItem('id')).then(res => {
+                        setAdmin(res.data);
+                    })
+                }
             }
         }, []
     );

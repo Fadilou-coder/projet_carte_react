@@ -13,7 +13,7 @@ import {
     gridPageCountSelector,
     gridPageSelector,
     useGridApiContext,
-    useGridSelector,
+    useGridSelector
 } from '@mui/x-data-grid'
 import "jspdf-autotable"
 import { SearchOutlined } from '@mui/icons-material';
@@ -22,9 +22,8 @@ import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import { ListAllPromo, AddPromo } from './PromoService'
+import { ListAllPromo, AddPromo, UpdatePromo } from './PromoService'
 import Swal from "sweetalert2";
-
 
 export const Promos = () => {
 
@@ -38,7 +37,7 @@ export const Promos = () => {
     );
     // const [showDialog, setShowDialog] = useState(false);
     const [open, setOpen] = React.useState(false)
-    const [search, setSearch] = React.useState('');
+    const [setSearch] = React.useState('');
 
 
         // Custom Dialog
@@ -132,7 +131,7 @@ export const Promos = () => {
             }
         }
     ]
-  
+
     const classes = PromoStyle();
     const [formErrors, setFormErrors] = useState({});
     const [setErrorPage] = useState(false);
@@ -141,17 +140,17 @@ export const Promos = () => {
         const errors = {};
         if (!val.libelle) {
             errors.libelle = "Le libelle est requis"
-        } 
-        
+        }
+
         if (!val.dateDebut) {
             errors.dateDebut = "Date début est requis"
         }
 
         if (!val.dateFin) {
             errors.dateFin = "Date fin est requis"
-        } 
+        }
         else if(val.dateFin <= val.dateDebut){
-            errors.dateFin = "Date fin est incorrect"   
+            errors.dateFin = "Date fin est incorrect"
         }
         return errors;
     };
@@ -164,12 +163,12 @@ export const Promos = () => {
     }, []
     );
 
-   
+
     const handleSubmit = (event) => {
-        
+
         setFormErrors(validatePromo(promo))
             event.preventDefault();
-         
+
         AddPromo(promo).then(res => {
             handleClose()
             if (res.status === 200) {
@@ -182,17 +181,42 @@ export const Promos = () => {
                         libelle: '',
                         dateDebut: '',
                         dateFin: '',
-                    }) 
+                    })
                 })
-            } 
+            }
             setLoading(true);
             }).catch(
                 (error) => {
                     setErrorPage(true);
                     console.log(error);
                 }
-            ) 
+            )
     };
+
+    const handleCommit = (e)=>{
+        promo.array.forEach(p => {
+            if(p.id === e.id){
+               var data = {...p, [e.field]: e.value}
+               UpdatePromo(data, data.id).then(res => {
+                if (res.status === 200) {
+                    setPromo(res.data);
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Modifier avec success',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                }
+            })
+            }
+        });
+        setLoading(true);
+        ListAllPromo().then(response => {
+            setPromo(response.data);
+            setLoading(false);
+        });
+    }
     return (
         <Layout>
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
@@ -212,7 +236,7 @@ export const Promos = () => {
                                 className={classes.SearchAndAdd}
                                 >
 
-                                <Grid direction="row" spacing={5} alignItems="center">        
+                                <Grid direction="row" spacing={5} alignItems="center">
                                     <div className={classes.mysearch}>
                                         <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
                                             <OutlinedInput
@@ -264,12 +288,15 @@ export const Promos = () => {
                                     </Button>
                                 </div>
                             </Box>
+                            {/* <div style={{width: '600px'}}>
+                                    {JSON.stringify(promo)}
+                            </div> */}
                             <Box className={classes.tableau}>
 
                                 <div style={{ width: "100%" }}>
                                     <DataGrid
+                                        onCellEditCommit={handleCommit}
                                         sx={{ boxShadow: "30px", width: "100%" }}
-
                                         autoHeight
                                         pageSize={10}
                                         rowsPerPageOptions={[5, 10, 20]}
@@ -287,7 +314,7 @@ export const Promos = () => {
 
                             </Box>
 
-                        </Box> 
+                        </Box>
 
 
                         <div>
@@ -309,9 +336,9 @@ export const Promos = () => {
                                             placeholder="libelle"
                                             onChange={(event) => {
                                                 setFormErrors({...formErrors, libelle: null})
-                                                setPromo({ ...promo, libelle: event.target.value })
+                                                setPromo({ ...promo, libelle: event.target.value.replace(/\s/g, '') })
                                             }}
-                                           
+
                                         />
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.libelle}</p>
@@ -359,7 +386,7 @@ export const Promos = () => {
                                         </LocalizationProvider>
                                     </FormControl>
                                     <p className={classes.formError}>{formErrors.dateFin}</p>
-                                </Grid>                                
+                                </Grid>
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}

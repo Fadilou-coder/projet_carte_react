@@ -5,6 +5,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import ApiIcon from '@mui/icons-material/Api';
 import BallotIcon from '@mui/icons-material/Ballot';
+import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
 
 export const LeftBarData = [
     {
@@ -67,6 +68,15 @@ export const LeftBarData = [
         title: "Superviseurs",
         path:'/superviseurs',
         icon:<SupervisorAccountIcon/>,
+        after: true,
+        showBySuperAdmin: true,
+        showByAdmin: true
+    },
+    {
+        id: 8,
+        title: "Appareils",
+        path:'/devices',
+        icon:<DeviceUnknownIcon/>,
         after: true,
         showBySuperAdmin: true,
         showByAdmin: true

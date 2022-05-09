@@ -2,7 +2,7 @@ import { Box, Button, Pagination, PaginationItem } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React from 'react'
 import Layout from "../layout/Layout";
-import StructureStyle from "./StructureStyle";
+import DeviceStyle from "./DeviceStyle";
 import Grid from '@material-ui/core/Grid';
 import Swal from "sweetalert2";
 
@@ -14,41 +14,60 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { Addstructure, Bloquerstructure, ListAllStructure, DebloquerStructure } from "./StructureService";
+import { AddDevice, BloquerDevice, ListAllDevice } from "./DeviceService";
 import { Typography } from "@material-ui/core";
 
 
 
-export const Structure = () => {
+export const Device = () => {
 
-    const [structure, setStructure] = React.useState([]);
-    const [nomStructure, setNomStructure] = React.useState({ nomStructure: '' });
+    const [device, setDevice] = React.useState([]);
+    const [newDevice, setNewDevice] = React.useState({ macAdress: '' });
     const [loading, setLoading] = React.useState(true);
 
     React.useEffect(() => {
-        ListAllStructure().then(response => {
-            setStructure(response.data);
+        ListAllDevice().then(response => {
+            setDevice(response.data);
             setLoading(false);
         });
     }, []
     );
-    function AddStructure() {
-        Addstructure(nomStructure).then(response => {
+    function AddNewDevice() {
+        AddDevice(newDevice).then(() => {
             setLoading(true);
-            ListAllStructure().then(response => {
-                setStructure(response.data);
+            ListAllDevice().then(response => {
+                setDevice(response.data);
                 setLoading(false);
             })
-            setNomStructure({ nomStructure: '' });
+            setNewDevice({ macAdress: '' });
         });
     }
 
+    function CustomNoRowsOverlay() {
+        return (
 
-    function BloquerSstructure(id, blocked) {
-        if (!blocked) {
+            <Grid sx={{ display: "flex", justifyContent: "center", }}>
+                <div>
+                    <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
+                        Tableau Vide
+                    </Box>
+                    <Box sx={{ width: "80px" }} >
+
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                        </svg>
+
+                    </Box>
+                </div>
+            </Grid >
+
+        );
+    }
+
+    function BloquerDeviceById(id) {
             Swal.fire({
                 title: 'Attention!!!',
-                text: "voulez vous vraiment bloquer cette structure!",
+                text: "voulez vous vraiment bloquer cette Device!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: 'green',
@@ -57,37 +76,15 @@ export const Structure = () => {
                 cancelButtonText: 'Non!',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Bloquerstructure(id).then(() => {
+                    BloquerDevice(id).then(() => {
                         setLoading(true);
-                        ListAllStructure().then(response => {
-                            setStructure(response.data);
+                        ListAllDevice().then(response => {
+                            setDevice(response.data);
                             setLoading(false);
                         })
                     })
                 }
             })
-        } else {
-            Swal.fire({
-                title: 'Attention!!!',
-                text: "voulez vous vraiment débloquer cette structure!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: 'green',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'oui!',
-                cancelButtonText: 'Non!',
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    DebloquerStructure(id).then(() => {
-                        setLoading(true);
-                        ListAllStructure().then(response => {
-                            setStructure(response.data);
-                            setLoading(false);
-                        })
-                    })
-                }
-            })
-        }
 
     }
 
@@ -115,9 +112,9 @@ export const Structure = () => {
 
     const columns = [
         {
-            field: 'nomStructure',
+            field: 'macAdress',
             headerClassName: 'super-app-theme--header',
-            headerName: 'Nom Stucture',
+            headerName: 'ID Appareil',
             flex: 1
         },
         {
@@ -128,7 +125,6 @@ export const Structure = () => {
             flex: 1,
             sortable: false,
             renderCell: (params) => {
-                if (!params.row.isBlocked)
                     return <Button variant="contained" sx={{
                         backgroundColor: '#FF6600',
                         color: "#000000",
@@ -138,29 +134,18 @@ export const Structure = () => {
                             color: "#FFFFFF"
                         }
                     }}
-                        onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Bloquer</Button>;
-                else
-                    return <Button variant="contained"
-                        sx={{
-                            backgroundColor: '#000000',
-                            color: "white",
-                            fontWeight: "bolder",
-                            '&:hover': {
-                                backgroundColor: '#FF6600',
-                                color: "#FFFFFF"
-                            }
-                        }} onClick={() => BloquerSstructure(params.id, params.row.isBlocked)}>Debloquer</Button>;
+                        onClick={() => BloquerDeviceById(params.row.macAdress)}>Bloquer</Button>;
             }
         },
 
 
     ]
-    const classes = StructureStyle();
+    const classes = DeviceStyle();
     return (
         <Layout>
-            <Grid className={classes.structurePage}>
+            <Grid className={classes.DevicePage}>
 
-                <Grid className={classes.structureDiv}>
+                <Grid className={classes.DeviceDiv}>
                     <Box sx={{
                         '& .super-app-theme--header': {
                             backgroundColor: '#696969',
@@ -182,7 +167,7 @@ export const Structure = () => {
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
-                            LISTE DES STRUCTURES
+                            LISTE DES Appareils
                         </Typography>
 
 
@@ -195,9 +180,11 @@ export const Structure = () => {
                             rowsPerPageOptions={[5, 10, 20]}
                             components={{
                                 Pagination: CustomPagination,
+                                NoRowsOverlay: CustomNoRowsOverlay,
+
                             }}
                             loading={loading}
-                            rows={structure}
+                            rows={device}
                             columns={columns}
                         />
 
@@ -215,7 +202,7 @@ export const Structure = () => {
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
-                            AJOUTER DES STRUCTURES
+                            AJOUTER DES APPAREILS
                         </Typography>
 
 
@@ -226,19 +213,19 @@ export const Structure = () => {
                         </Grid>
                         <TextField
                             id="outlined-basic"
-                            label="Nom structure"
+                            label="Id Appareil"
                             variant="outlined"
                             style={{ width: "100%", marginBottom: "20px" }}
-                            value={nomStructure.nomStructure}
-                            onChange={(event) => setNomStructure({
-                                ...nomStructure,
-                                nomStructure: event.target.value
+                            value={newDevice.macAdress}
+                            onChange={(event) => setNewDevice({
+                                ...newDevice,
+                                macAdress: event.target.value
                             })}
                         />
 
                         <div style={{}}>
                             <Button
-                                disabled={nomStructure.nomStructure === ''}
+                                disabled={newDevice.macAdress === ''}
                                 variant="contained"
                                 sx={{
                                     margin: 'auto', display: "flex",
@@ -250,7 +237,7 @@ export const Structure = () => {
                                         color: "#FFFFFF"
                                     }
                                 }}
-                                onClick={AddStructure}>
+                                onClick={AddNewDevice}>
                                 AJOUTER
                             </Button>
 
@@ -265,4 +252,4 @@ export const Structure = () => {
     )
 }
 
-export default Structure;
+export default Device;
