@@ -150,26 +150,29 @@ const Superviseur = () => {
                         </div>
 
                         <Box textAlign="right">
-                            <Button
-                                variant="contained"
-                                endIcon={<AddCircleOutlined />}
-                                onClick={RedirectAddAdmin}
-                                sx={{
-                                    backgroundColor: "#FF6600",
-                                    color: "#000000",
-                                    fontFamily: "Arial",
-                                    fontSize: "16px",
-                                    fontWeight: "bolder",
-                                    marginBottom: "10px",
-                                    '&:hover': {
-                                        backgroundColor: "#000000",
-                                        color: "#FFFFFF",
-                                        pointer: "cursor"
-                                    }
-                                }}
-                            >
-                                Ajouter
-                            </Button>
+                            {
+                                (localStorage.getItem('user') === '["SUPER_ADMIN]') ?
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<AddCircleOutlined />}
+                                        onClick={RedirectAddAdmin}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            color: "#000000",
+                                            fontFamily: "Arial",
+                                            fontSize: "16px",
+                                            fontWeight: "bolder",
+                                            marginBottom: "10px",
+                                            '&:hover': {
+                                                backgroundColor: "#000000",
+                                                color: "#FFFFFF",
+                                                pointer: "cursor"
+                                            }
+                                        }}
+                                    >
+                                        Ajouter
+                                    </Button> : null
+                            }
                         </Box>
                     </Box>
 
