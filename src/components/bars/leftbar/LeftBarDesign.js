@@ -49,7 +49,7 @@ const LeftBarDesign = () => {
     return (
         <div>
             <div className={classes.logoDiv}>
-                <Avatar alt='Sonatel Academy' src={sonatelLogo} variant="square"
+                <img alt='Sonatel Academy' src={sonatelLogo} 
                     className={classes.logoStyle}
                 />
             </div>
