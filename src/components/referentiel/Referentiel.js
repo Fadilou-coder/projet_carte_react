@@ -46,7 +46,7 @@ export const Referentiel = () => {
     const [loading, setLoading] = React.useState(true);
     const [referentiels, setReferentiels] = React.useState([]);
     const [referentiel, setReferentiel] = React.useState(
-        { libelle: '' }
+        { libelle: "" } 
     );
 
     const isBlank = require('is-blank')
@@ -166,23 +166,26 @@ export const Referentiel = () => {
             )
     };
     const handleCommit = (e)=>{
-        referentiel.forEach(r => {
-            if(r.id === e.id){
-               var data = {...r, [e.field]: e.value}
-               UpdateReferentiel(data, data.id).then(res => {
-                if (res.status === 200) {
-                    setReferentiel(res.data);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Modifier avec success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+        console.log(e);
+        if(referentiels){
+            referentiels.forEach(r => {
+                if(r.id === e.id){
+                   var data = {...r, [e.field]: e.value}
+                   UpdateReferentiel(data, data.id).then(res => {
+                    if (res.status === 200) {
+                        setReferentiel(res.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Modifier avec success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                })
                 }
-            })
-            }
-        });
+            });
+        }
         setLoading(true);
         ListAllReferentiel().then(response => {
             setReferentiel(response.data);

@@ -426,7 +426,8 @@ export const Admin = () => {
                                 }
                                 columns={columns}
                                 disableVirtualization
-                               onCellValueChanged = {(params) => updateAdmin(params)}
+                               //onCellValueChanged = {(params) => updateAdmin(params)}
+                               onCellEditCommit={updateAdmin}
                             />
                         </div>
                     </Box>
