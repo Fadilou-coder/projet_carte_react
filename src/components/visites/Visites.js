@@ -353,7 +353,7 @@ export const Visites = (props) => {
     // fONCTION POURGENERE PDF
     const AjouterVisites = () => {
         setFormErrors(validateVisite(values));
-        if(Object.keys(validateVisite(values)).length === 0)
+        if(Object.keys(validateVisite(values)).length === 0){
         SaveVisitesVisieur({ 'visiteur': values }).then(res => {
             handleClose()
             downloadQRCode();
@@ -395,6 +395,7 @@ export const Visites = (props) => {
             }
         )
     }
+    }
 
     const downloadQRCode = () => {
         // Generate download with use canvas and stream
@@ -434,6 +435,8 @@ export const Visites = (props) => {
 
     function loadMoreItems(event) {
         if (event.target.scrollTop === event.target.scrollHeight) {
+          // TODO document why this block is empty
+        
         }
     }
 
@@ -686,6 +689,7 @@ export const Visites = (props) => {
                             sx: {
                                 borderRadius: "10px",
                                 padding: "20px",
+                                // width: "25%",
                                 maxWidth: {
                                     lg: "30%",
                                     md: "25%",
