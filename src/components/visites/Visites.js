@@ -14,7 +14,7 @@ import DialogActions from '@mui/material/DialogActions'
 import DialogContent from '@mui/material/DialogContent'
 import DialogTitle from '@mui/material/DialogTitle'
 import { FormControl, IconButton, Typography } from "@material-ui/core"
-import { ListAllVisite, ListCommentsApp, ListVisitesApp, ListVisitesVisteur, SaveCommentApp, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
+import { updateVisiteur, ListAllVisite, ListCommentsApp, ListVisitesApp, ListVisitesVisteur, SaveCommentApp, SaveVisitesVisieur, SortieApp, SortieVisiteur } from './VisiteService'
 import logosonatel from "../../assets/images/logoSA.png"
 import imgData from "../../assets/images/filigrane_logo.png"
 import CloseIcon from '@mui/icons-material/Close'
@@ -28,7 +28,6 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
-import { update } from 'lodash'
 var QRCode = require('qrcode.react')
 
 export const Visites = (props) => {
@@ -149,7 +148,11 @@ export const Visites = (props) => {
     }
 
     const updateValues = (data, id)=>{
-      console.log(data, id)
+      setLoading(true)
+      updateVisiteur(data, id).then(() => {
+        chargerVisites(date, visiteur);
+      })
+      setLoading(false);
     }
 
     const columns = [
@@ -159,7 +162,6 @@ export const Visites = (props) => {
             headerName: 'Prénom',
             flex: 1,
             minWidth: 150,
-            editable: (params) => params.row.visiteur,
             valueGetter: (params) => {
                 if (params.row.visiteur) {
                     return params.row.visiteur.prenom
@@ -167,6 +169,7 @@ export const Visites = (props) => {
                     return params.row.apprenant.prenom
                 }
             },
+            editable: (params) => params.row.visiteur,
             renderEditCell: (params) => (
               <FormControl fullWidth>
                 <OutlinedInput
@@ -176,12 +179,12 @@ export const Visites = (props) => {
                         type="text"
                         variant="outlined"
                         onChange={(event) => {
-                          setValues({ ...values, prenom: event.target.value })
+                          setValues({ ...values, prenom: event.target.value , typePiece: ""})
                         }}
                         value={values.prenom === "" ? params.value : values.prenom}
                         onKeyDown={(event) => {
                           if (event.key === 'Enter') {
-                            updateValues(values, params.id)
+                            updateValues(values, params.row.visiteur.id)
                           }
                         }}
                       />
@@ -200,7 +203,28 @@ export const Visites = (props) => {
                 } else if (params.row.apprenant) {
                     return params.row.apprenant.nom
                 }
-            }
+            },
+            editable: (params) => params.row.visiteur,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="nom"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setValues({ ...values, nom: event.target.value , typePiece: ""})
+                        }}
+                        value={values.nom === "" ? params.value : values.nom}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateValues(values, params.row.visiteur.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'numPiece',
@@ -214,7 +238,28 @@ export const Visites = (props) => {
                 } else if (params.row.apprenant) {
                     return params.row.apprenant.numPiece
                 }
-            }
+            },
+            editable: (params) => params.row.visiteur,
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="numPiece"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setValues({ ...values, numPiece: event.target.value , typePiece: ""})
+                        }}
+                        value={values.numPiece === "" ? params.value : values.numPiece}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateValues(values, params.row.visiteur.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'dateEntree',
@@ -436,7 +481,7 @@ export const Visites = (props) => {
     function loadMoreItems(event) {
         if (event.target.scrollTop === event.target.scrollHeight) {
           // TODO document why this block is empty
-        
+
         }
     }
 
