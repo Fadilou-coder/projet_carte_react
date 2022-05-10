@@ -14,6 +14,10 @@ const AdminStyle = makeStyles((theme) => ({
             marginBottom:"12px"
         },
     },
+    error: {
+        backgroundColor: 'red',
+        color: 'red'
+    },
     filtre: {
         display: "flex",
         justifyContent: "space-between",

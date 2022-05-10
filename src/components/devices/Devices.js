@@ -152,9 +152,8 @@ export const Device = () => {
 
 
                         <DataGrid
-
-                            sx={{ boxShadow: "30px", width: "100%", }}
-
+                            style={localStorage.getItem('user') === '["SUPER_ADMIN"]' ? { width: '100%' } : { width: '200%' }}
+                            sx={{ boxShadow: "30px" }}
                             autoHeight
                             pageSize={6}
                             rowsPerPageOptions={[5, 10, 20]}
@@ -171,54 +170,59 @@ export const Device = () => {
                         className={classes.contentDiv}
 
                     >
-                        <Typography
-                            variant='h5'
-                            style={{
-                                marginBottom: "20px",
-                                borderLeft: "6px solid #000000",
-                                color: "#000000",
-                                paddingLeft: "20px",
-                                fontWeight: "bolder"
-                            }}>
-                            AJOUTER DES APPAREIL
-                        </Typography>
-
-
+                        {
+                            (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                <Typography
+                                    variant='h5'
+                                    style={{
+                                        marginBottom: "20px",
+                                        borderLeft: "6px solid #000000",
+                                        color: "#000000",
+                                        paddingLeft: "20px",
+                                        fontWeight: "bolder"
+                                    }}>
+                                    AJOUTER DES APPAREIL
+                                </Typography> : null
+                        }
                         <Grid container wrap="nowrap" spacing={2}>
 
                             <Grid item xs>
                             </Grid>
                         </Grid>
-                        <TextField
-                            id="outlined-basic"
-                            label="Id Appareil"
-                            variant="outlined"
-                            style={{ width: "100%", marginBottom: "20px" }}
-                            value={newDevice.macAdress}
-                            onChange={(event) => setNewDevice({
-                                ...newDevice,
-                                macAdress: event.target.value
-                            })}
-                        />
-
+                        {
+                            (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                <TextField
+                                    id="outlined-basic"
+                                    label="Id Appareil"
+                                    variant="outlined"
+                                    style={{ width: "100%", marginBottom: "20px" }}
+                                    value={newDevice.macAdress}
+                                    onChange={(event) => setNewDevice({
+                                        ...newDevice,
+                                        macAdress: event.target.value
+                                    })}
+                                /> : null
+                        }
                         <div style={{}}>
-                            <Button
-                                disabled={newDevice.macAdress === ''}
-                                variant="contained"
-                                sx={{
-                                    margin: 'auto', display: "flex",
-                                    backgroundColor: '#FF6600',
-                                    color: "#000000",
-                                    fontWeight: "bolder",
-                                    '&:hover': {
-                                        backgroundColor: '#000000',
-                                        color: "#FFFFFF"
-                                    }
-                                }}
-                                onClick={AddNewDevice}>
-                                AJOUTER
-                            </Button>
-
+                            {
+                                (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                    <Button
+                                        disabled={newDevice.macAdress === ''}
+                                        variant="contained"
+                                        sx={{
+                                            margin: 'auto', display: "flex",
+                                            backgroundColor: '#FF6600',
+                                            color: "#000000",
+                                            fontWeight: "bolder",
+                                            '&:hover': {
+                                                backgroundColor: '#000000',
+                                                color: "#FFFFFF"
+                                            }
+                                        }}
+                                        onClick={AddNewDevice}>
+                                        AJOUTER
+                                    </Button> : null
+                            }
                         </div>
 
                     </Box>

@@ -12,7 +12,7 @@ import { ChartDashboard } from './ChartDashboard';
 
 
 
-const Dashbord = () => {
+const Dashbord = () =>{
 
     const [promo, setPromo] = React.useState(100);
     const [allPromos, setAllPromos] = React.useState([]);
@@ -45,7 +45,7 @@ const Dashbord = () => {
             res.data.map((element) => {
                 if (element.sexe === "M") {
                     nbhommes++;
-                    
+
                 } else {
                     nbfemmes++;
                 }
@@ -71,11 +71,9 @@ const Dashbord = () => {
             });
             setPromo(grandId);
         })
-       
+
 
     }, [promo]);
-
-
 
     function chargerApprenant(idPromo) {
 
@@ -126,11 +124,7 @@ const Dashbord = () => {
 
         }
 
-
-
     }
-
-
 
 
 
@@ -141,13 +135,13 @@ const Dashbord = () => {
             <Grid style={{ width: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
-                        style={{
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "15px",
-                            fontWeight: "bolder"
-                        }}>
+                                style={{
+                                    marginBottom: "20px",
+                                    borderLeft: "6px solid #000000",
+                                    color: "#000000",
+                                    paddingLeft: "15px",
+                                    fontWeight: "bolder"
+                                }}>
                         DASHBOARD
                     </Typography>
                     <Box
@@ -173,14 +167,10 @@ const Dashbord = () => {
                             >
                                 <Select
                                     size='small'
-                                    // value={referentiels[0].libelle}
                                     style={{ fontWeight: "bolder", width: "100%", borderRadius: "10px", border: "2px solid black" }}
                                     onChange={(event) => {
-                                        // setReferentiel(event.target.value)
                                         chargerApprenant(event.target.value)
                                     }}
-
-                                    // className={classes1.visiteur}
 
                                     startAdornment={
                                         <InputAdornment position="start">
@@ -221,7 +211,6 @@ const Dashbord = () => {
                                                     lg: "3vw",
                                                     sm: "5vw"
                                                 }
-                                                // backgroundColor: "#FFF333"
                                             }}
                                             xmlns="http://www.w3.org/2000/svg"
                                             aria-hidden="true" role="img" class="iconify iconify--ph" width="32" height="32"
@@ -295,16 +284,6 @@ const Dashbord = () => {
                         <div
                             style={{ width: "48%" }}>
                             <ChartDashboard donneesretards={retards} titre="retard" color="#FF6600" ></ChartDashboard>
-                            {/* <ChartApex chargerChart={absences} ></ChartApex> */}
-                            {/* <Chart
-                                options={options}
-                                series={series}
-                                type="bar"
-                                width="100%"
-                                height={500}
-                            /> */}
-                            {/* <Bar options={optionschart} data={dataChart} /> */}
-
                         </div>
                         <div
                             style={{

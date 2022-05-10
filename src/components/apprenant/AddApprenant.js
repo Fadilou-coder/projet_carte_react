@@ -29,12 +29,9 @@ export const AddApprenant = () => {
 
     const isBlank = require('is-blank')
 
-
-
     const classes = ApprenantStyle();
     const useStyles = makeStyles((theme) => ({
         gridStyle: {
-
             marginLeft: "50px",
             [theme.breakpoints.down("sm")]: {
                 marginLeft: "0px",
@@ -115,7 +112,6 @@ export const AddApprenant = () => {
     };
 
     const PostApprenant = () => {
-        // console.log(value)
         setFormErrors(validateApprenant(value));
         let formData = new FormData();
         const data = ["prenom", "nom", "email", "phone", "adresse", "sexe", "typePiece", "numPiece", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
@@ -133,6 +129,7 @@ export const AddApprenant = () => {
             valide = false;
         }
         if (valide) {
+            if(Object.keys(validateApprenant(value)).length === 0)
             saveApprenant(formData).then((res) => {
                 if (res.status === 200) {
                     setnewApp(res.data);
@@ -172,14 +169,22 @@ export const AddApprenant = () => {
                 }
             }).catch(
                 (error) => {
-                    // console.log(error);      
-                    console.log(error.response)
+                    const err = {}
+                    for (let index = 0; index < error.response.data.errors.length; index++){
+                        if(error.response.data.errors[index].includes("email"))
+                            err.email = error.response.data.errors[index];
+                        if(error.response.data.errors[index].includes("telephone"))
+                            err.phone = error.response.data.errors[index];
+                        if(error.response.data.errors[index].includes("num"))
+                            err.numPiece = error.response.data.errors[index];
+                    }
+                    setFormErrors(err);
                 }
             )
         }
     }
 
-    const [formErrors, setFormErrors] = useState({});
+    const [formErrors, setFormErrors] = useState([]);
 
 
     const validateApprenant = (val) => {

@@ -119,39 +119,7 @@ export const Promos = () => {
             headerName: 'Date Fin',
             flex: 1,
             editable: true,
-        },
-        {
-            field: 'bloquer',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Bloqué ?',
-            editable: true,
-            flex: 1,
-            sortable: false,
-            renderCell: (params) => {
-                if (!params.row.isBlocked)
-                    return <Button variant="contained" sx={{
-                        backgroundColor: '#FF6600',
-                        color: "#000000",
-                        fontWeight: "bolder",
-                        '&:hover': {
-                            backgroundColor: '#000000',
-                            color: "#FFFFFF"
-                        }
-                    }}
-                    >Bloquer</Button>;
-                else
-                    return <Button variant="contained"
-                        sx={{
-                            backgroundColor: '#000000',
-                            color: "white",
-                            fontWeight: "bolder",
-                            '&:hover': {
-                                backgroundColor: '#FF6600',
-                                color: "#FFFFFF"
-                            }
-                        }}>Debloquer</Button>;
-            }
-        }
+         }
     ]
 
     const classes = PromoStyle();
@@ -178,11 +146,11 @@ export const Promos = () => {
     };
 
     React.useEffect(() => {
-        ListAllPromo().then(response => {
-            setPromo(response.data);
-            setLoading(false);
-        });
-    }, []
+            ListAllPromo().then(response => {
+                setPromo(response.data);
+                setLoading(false);
+            });
+        }, []
     );
 
 
@@ -218,19 +186,19 @@ export const Promos = () => {
     const handleCommit = (e)=>{
         promo.array.forEach(p => {
             if(p.id === e.id){
-               var data = {...p, [e.field]: e.value}
-               UpdatePromo(data, data.id).then(res => {
-                if (res.status === 200) {
-                    setPromo(res.data);
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Modifier avec success',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                }
-            })
+                var data = {...p, [e.field]: e.value}
+                UpdatePromo(data, data.id).then(res => {
+                    if (res.status === 200) {
+                        setPromo(res.data);
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Modifier avec success',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                    }
+                })
             }
         });
         setLoading(true);
@@ -244,13 +212,13 @@ export const Promos = () => {
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
                 <Grid style={localStorage.getItem('user') === '["ADMIN"]' ? { width: '80%' } : { width: '100%' }}>
                     <Typography variant='h5'
-                        style={{
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "20px",
-                            fontWeight: "bolder"
-                        }}>
+                                style={{
+                                    marginBottom: "20px",
+                                    borderLeft: "6px solid #000000",
+                                    color: "#000000",
+                                    paddingLeft: "20px",
+                                    fontWeight: "bolder"
+                                }}>
                         LISTE DES PROMOTIONS
                     </Typography>
                     <Box style={{ width: "100%" }}>
@@ -286,28 +254,31 @@ export const Promos = () => {
                                 </div>
                             </Grid>
                             <div>
-                                <Button
-                                    variant="contained"
-                                    endIcon={<AddCircleOutlined />}
-                                    onClick={handleClickOpen}
-                                    className={classes.addBtn}
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial",
-                                        fontSize: "16px",
-                                        color: "#000000",
-                                        marginRight: "10px",
-                                        fontWeight: "bold",
-                                        '&:hover': {
-                                            backgroundColor: "#000000",
-                                            pointer: "cursor",
-                                            color: "white"
+                                {
+                                    (localStorage.getItem('user') === '["SUPER_ADMIN"]') ?
+                                        <Button
+                                            variant="contained"
+                                            endIcon={<AddCircleOutlined />}
+                                            onClick={handleClickOpen}
+                                            className={classes.addBtn}
+                                            sx={{
+                                                backgroundColor: "#FF6600",
+                                                fontFamily: "Arial",
+                                                fontSize: "16px",
+                                                color: "#000000",
+                                                marginRight: "10px",
+                                                fontWeight: "bold",
+                                                '&:hover': {
+                                                    backgroundColor: "#000000",
+                                                    pointer: "cursor",
+                                                    color: "white"
 
-                                        }
-                                    }}
-                                >
-                                    AJOUTER
-                                </Button>
+                                                }
+                                            }}
+                                        >
+                                            AJOUTER
+                                        </Button> : null
+                                }
                             </div>
                         </Box>
                         {/* <div style={{width: '600px'}}>
@@ -413,28 +384,28 @@ export const Promos = () => {
                             </DialogContent>
                             <DialogActions>
                                 <Button onClick={handleClose}
-                                    sx={{
-                                        backgroundColor: "#BE0101",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#F32018",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#BE0101",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#F32018",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >ANNULER</Button>
                                 <Button onClick={handleSubmit}
-                                    sx={{
-                                        backgroundColor: "#FF6600",
-                                        fontFamily: "Arial", fontSize: "20px",
-                                        marginTop: "10px",
-                                        color: "#FFFFFF",
-                                        '&:hover': {
-                                            backgroundColor: "#000000",
-                                            pointer: "cursor"
-                                        }
-                                    }}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            fontFamily: "Arial", fontSize: "20px",
+                                            marginTop: "10px",
+                                            color: "#FFFFFF",
+                                            '&:hover': {
+                                                backgroundColor: "#000000",
+                                                pointer: "cursor"
+                                            }
+                                        }}
                                 >AJOUTER
                                 </Button>
                             </DialogActions>
