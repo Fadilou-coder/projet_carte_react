@@ -34,12 +34,11 @@ export const LeftBarStyle = makeStyles(theme => ({
             textIndent: '10000px',
             objectFit: 'fill',
         },
-        "& .MuiAvatar-root MuiAvatar-square jss22": {
+        "& .MuiAvatar-root": {
             width: "100%",
         },
     },
     logoStyle: {
-        width: "100%",
         height:"auto",
         marginTop:"40px",
         display:"flex",
