@@ -28,6 +28,7 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import { update } from 'lodash'
 var QRCode = require('qrcode.react')
 
 export const Visites = (props) => {
@@ -147,6 +148,10 @@ export const Visites = (props) => {
         }
     }
 
+    const updateValues = (data, id)=>{
+      console.log(data, id)
+    }
+
     const columns = [
         {
             field: 'prenom',
@@ -154,14 +159,34 @@ export const Visites = (props) => {
             headerName: 'Prénom',
             flex: 1,
             minWidth: 150,
+            editable: (params) => params.row.visiteur,
             valueGetter: (params) => {
-
                 if (params.row.visiteur) {
                     return params.row.visiteur.prenom
                 } else if (params.row.apprenant) {
                     return params.row.apprenant.prenom
                 }
-            }
+            },
+            renderEditCell: (params) => (
+              <FormControl fullWidth>
+                <OutlinedInput
+                        id="ok"
+                        name="prenom"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                          setValues({ ...values, prenom: event.target.value })
+                        }}
+                        value={values.prenom === "" ? params.value : values.prenom}
+                        onKeyDown={(event) => {
+                          if (event.key === 'Enter') {
+                            updateValues(values, params.id)
+                          }
+                        }}
+                      />
+              </FormControl>
+            )
         },
         {
             field: 'nom',

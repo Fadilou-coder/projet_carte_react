@@ -308,7 +308,6 @@ const Superviseur = () => {
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
-
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
