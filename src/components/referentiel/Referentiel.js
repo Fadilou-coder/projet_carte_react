@@ -1,4 +1,4 @@
-import { Box, Button, Pagination, PaginationItem } from '@mui/material';
+import {Box, Button, OutlinedInput, Pagination, PaginationItem} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import React, { useState } from 'react'
 import Layout from "../layout/Layout";
@@ -13,10 +13,9 @@ import {
     useGridApiContext,
     useGridSelector,
 } from '@mui/x-data-grid';
-import { Typography } from "@material-ui/core";
+import {FormControl, Typography} from "@material-ui/core";
 import ReferentielStyle from './ReferentielStyle';
 import { ListAllReferentiel, AddReferentiel, UpdateReferentiel } from './ReferentielService';
-
 
 
 function CustomNoRowsOverlay() {
@@ -46,7 +45,7 @@ export const Referentiel = () => {
     const [loading, setLoading] = React.useState(true);
     const [referentiels, setReferentiels] = React.useState([]);
     const [referentiel, setReferentiel] = React.useState(
-        { libelle: "" } 
+        { libelle: "" }
     );
 
     const isBlank = require('is-blank')
@@ -76,49 +75,35 @@ export const Referentiel = () => {
             field: 'id',
             headerClassName: 'super-app-theme--header',
             headerName: 'ID',
-            flex: 1
+            flex: 1,
         },
         {
             field: 'libelle',
             headerClassName: 'super-app-theme--header',
             headerName: 'Référentiel',
             flex: 1,
-            editable: true
-        },
-        {
-            field: 'bloquer',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Bloqué ?',
             editable: true,
-            flex: 1,
-            sortable: false,
-            renderCell: (params) => {
-                if (!params.row.isBlocked)
-                    return <Button variant="contained" sx={{
-                        backgroundColor: '#FF6600',
-                        color: "#000000",
-                        fontWeight: "bolder",
-                        '&:hover': {
-                            backgroundColor: '#000000',
-                            color: "#FFFFFF"
-                        }
-                    }}
-                    >Bloquer</Button>;
-                else
-                    return <Button variant="contained"
-                        sx={{
-                            backgroundColor: '#000000',
-                            color: "white",
-                            fontWeight: "bolder",
-                            '&:hover': {
-                                backgroundColor: '#FF6600',
-                                color: "#FFFFFF"
+            renderEditCell: (params) => (
+                <FormControl fullWidth>
+                    <OutlinedInput
+                        id="ok"
+                        name="libelle"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setReferentiel({ ...referentiel, libelle: event.target.value })
+                        }}
+                        value={referentiel.libelle === "" ? params.value : referentiel.libelle}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                updateReferentiels(referentiel, params.id)
                             }
-                        }}>Debloquer</Button>;
-            }
-        },
-
-
+                        }}
+                    />
+                </FormControl>
+            )
+        }
     ]
     const classes = ReferentielStyle();
     const [formErrors, setFormErrors] = useState({});
@@ -142,11 +127,8 @@ export const Referentiel = () => {
 
 
     const handleSubmit = (event) => {
-
         setFormErrors(validateRef(referentiel))
-
         AddReferentiel(referentiel).then(res => {
-            console.log(referentiel);
             if (res.status === 200) {
                 Swal.fire(
                     'Succes!',
@@ -165,33 +147,24 @@ export const Referentiel = () => {
                 }
             )
     };
-    const handleCommit = (e)=>{
-        console.log(e);
-        if(referentiels){
-            referentiels.forEach(r => {
-                if(r.id === e.id){
-                   var data = {...r, [e.field]: e.value}
-                   UpdateReferentiel(data, data.id).then(res => {
-                    if (res.status === 200) {
-                        setReferentiel(res.data);
-                        Swal.fire({
-                            position: 'center',
-                            icon: 'success',
-                            title: 'Modifier avec success',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
-                    }
+
+    const updateReferentiels = (promo, id) => {
+        setLoading(true)
+        UpdateReferentiel(promo, id).then(() => {
+            ListAllReferentiel().then(res => {
+                setReferentiels(res.data);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Modifier avec success',
+                    showConfirmButton: false,
+                    timer: 1500
                 })
-                }
-            });
-        }
-        setLoading(true);
-        ListAllReferentiel().then(response => {
-            setReferentiel(response.data);
-            setLoading(false);
-        });
+            })
+        })
+        setLoading(false)
     }
+
     return (
         <Layout>
             <Grid className={classes.structurePage}>
@@ -222,7 +195,7 @@ export const Referentiel = () => {
                         </Typography>
                                 <DataGrid
                                     style={localStorage.getItem('user') === '["SUPER_ADMIN"]' ? { width: '100%' } : { width: '200%' }}
-                                    onCellEditCommit={handleCommit}
+                                    onCellEditCommit={updateReferentiels}
                                     sx={{ boxShadow: "30px" }}
                                     autoHeight
                                     pageSize={6}

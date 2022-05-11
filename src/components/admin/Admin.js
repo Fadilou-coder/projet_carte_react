@@ -309,6 +309,13 @@ export const Admin = () => {
         updateFieldAdmin(admin, id).then(() => {
           ListAllAdmin().then(res => {
             setAdmins(res.data);
+              Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Modifier avec success',
+                  showConfirmButton: false,
+                  timer: 1500
+              })
           })
         })
         setIsLoaded(false)

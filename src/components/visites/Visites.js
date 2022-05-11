@@ -151,6 +151,13 @@ export const Visites = (props) => {
       setLoading(true)
       updateVisiteur(data, id).then(() => {
         chargerVisites(date, visiteur);
+          Swal.fire({
+              position: 'center',
+              icon: 'success',
+              title: 'Modifier avec success',
+              showConfirmButton: false,
+              timer: 1500
+          })
       })
       setLoading(false);
     }
