@@ -49,7 +49,8 @@ function CustomNoRowsOverlay() {
 
 export const Promos = () => {
 
-    const [loading, setLoading] = React.useState(true);
+    const [isLoading, setIsLoading] = React.useState(true);
+    const [promos, setPromos] = React.useState([]);
     const [promo, setPromo] = React.useState(
         {
             libelle: '',
@@ -61,6 +62,84 @@ export const Promos = () => {
     const [open, setOpen] = React.useState(false)
     const [setSearch] = React.useState('');
 
+    React.useEffect(() => {
+            ListAllPromo().then(response => {
+                setPromos(response.data);
+                setIsLoading(false);
+            });
+        }, []);
+
+
+    const handleSubmit = (event) => {
+        setFormErrors(validatePromo(promo))
+        event.preventDefault();
+        AddPromo(promo).then(res => {
+            handleClose()
+            if (res.status === 200) {
+                Swal.fire(
+                    'Succes!',
+                    'Enregistrer avec succes.',
+                    'success'
+                ).then((res) => {
+                    setPromos({
+                        libelle: '',
+                        dateDebut: '',
+                        dateFin: '',
+                    })
+                })
+            }
+            setIsLoading(true);
+        }).catch(
+            (error) => {
+                setErrorPage(true);
+                console.log(error);
+            }
+        )
+    };
+
+    const updatePromos = (promo, id) => {
+        setIsLoading(true)
+        UpdatePromo(promo, id).then(() => {
+            ListAllPromo().then(res => {
+                setPromos(res.data);
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Modifier avec success',
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+            })
+        })
+        setIsLoading(false)
+    }
+
+    /* const updatePromos = (e)=>{
+         if(promo){
+             promo.forEach(p => {
+                 if(p.id === e.id){
+                     var data = {...p, [e.field]: e.value}
+                     UpdatePromo(data, data.id).then(res => {
+                         if (res.status === 200) {
+                             setPromos(res.data);
+                             Swal.fire({
+                                 position: 'center',
+                                 icon: 'success',
+                                 title: 'Modifier avec success',
+                                 showConfirmButton: false,
+                                 timer: 1500
+                             })
+                         }
+                     })
+                 }
+             });
+         }
+         setIsLoading(true);
+         ListAllPromo().then(response => {
+             setPromos(response.data);
+             setIsLoading(false);
+         });
+     }*/
 
     // Custom Dialog
     const handleClickOpen = () => {
@@ -93,18 +172,38 @@ export const Promos = () => {
     }
 
     const columns = [
-        {
+      /*  {
             field: 'id',
             headerClassName: 'super-app-theme--header',
             headerName: 'ID',
             flex: 1,
-        },
+        },*/
         {
             field: 'libelle',
             headerClassName: 'super-app-theme--header',
             headerName: 'Promo',
             flex: 1,
             editable: true,
+            renderEditCell: (params) => (
+                <FormControl fullWidth>
+                    <OutlinedInput
+                        id="ok"
+                        name="libelle"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setPromo({ ...promo, libelle: event.target.value })
+                        }}
+                        value={promo.libelle === "" ? params.value : promo.libelle}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                updatePromos(promo, params.id)
+                            }
+                        }}
+                    />
+                </FormControl>
+            )
         },
         {
             field: 'dateDebut',
@@ -112,6 +211,26 @@ export const Promos = () => {
             headerName: 'Date début',
             flex: 1,
             editable: true,
+            renderEditCell: (params) => (
+                <FormControl fullWidth>
+                    <OutlinedInput
+                        id="ok"
+                        name="dateDebut"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setPromo({ ...promo, dateDebut: event.target.value })
+                        }}
+                        value={promo.dateDebut === "" ? params.value : promo.dateDebut}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                updatePromos(promo, params.id)
+                            }
+                        }}
+                    />
+                </FormControl>
+            )
         },
         {
             field: 'dateFin',
@@ -119,6 +238,26 @@ export const Promos = () => {
             headerName: 'Date Fin',
             flex: 1,
             editable: true,
+            renderEditCell: (params) => (
+                <FormControl fullWidth>
+                    <OutlinedInput
+                        id="ok"
+                        name="dateFin"
+                        required
+                        type="text"
+                        variant="outlined"
+                        onChange={(event) => {
+                            setPromo({ ...promo, dateFin: event.target.value })
+                        }}
+                        value={promo.dateFin === "" ? params.value : promo.dateFin}
+                        onKeyDown={(event) => {
+                            if (event.key === 'Enter') {
+                                updatePromos(promo, params.id)
+                            }
+                        }}
+                    />
+                </FormControl>
+            )
          }
     ]
 
@@ -145,70 +284,6 @@ export const Promos = () => {
         return errors;
     };
 
-    React.useEffect(() => {
-            ListAllPromo().then(response => {
-                setPromo(response.data);
-                setLoading(false);
-            });
-        }, []
-    );
-
-
-    const handleSubmit = (event) => {
-
-        setFormErrors(validatePromo(promo))
-        event.preventDefault();
-
-        AddPromo(promo).then(res => {
-            handleClose()
-            if (res.status === 200) {
-                Swal.fire(
-                    'Succes!',
-                    'Enregistrer avec succes.',
-                    'success'
-                ).then((res) => {
-                    setPromo({
-                        libelle: '',
-                        dateDebut: '',
-                        dateFin: '',
-                    })
-                })
-            }
-            setLoading(true);
-        }).catch(
-            (error) => {
-                setErrorPage(true);
-                console.log(error);
-            }
-        )
-    };
-
-    const handleCommit = (e)=>{
-        if(promo){
-            promo.forEach(p => {
-                if(p.id === e.id){
-                    var data = {...p, [e.field]: e.value}
-                    UpdatePromo(data, data.id).then(res => {
-                        if (res.status === 200) {
-                            setPromo(res.data);
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: 'Modifier avec success',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                        }
-                    })
-                }
-            });
-        }
-        setLoading(true);
-        ListAllPromo().then(response => {
-            setPromo(response.data);
-            setLoading(false);
-        });
-    }
     return (
         <Layout>
             <Grid style={{ widt: "100%", display: 'flex', justifyContent: "center", alignItems: "center" }}>
@@ -283,14 +358,9 @@ export const Promos = () => {
                                 }
                             </div>
                         </Box>
-                        {/* <div style={{width: '600px'}}>
-                                    {JSON.stringify(promo)}
-                            </div> */}
                         <Box className={classes.tableau}>
-
                             <div style={{ width: "100%" }}>
                                 <DataGrid
-                                    onCellEditCommit={handleCommit}
                                     sx={{ boxShadow: "30px", width: "100%" }}
                                     autoHeight
                                     pageSize={10}
@@ -300,12 +370,12 @@ export const Promos = () => {
                                         NoRowsOverlay: CustomNoRowsOverlay,
                                         // Toolbar: CustomToolbar,
                                     }}
-                                    loading={loading}
-                                    rows={promo}
+                                    loading={isLoading}
+                                    rows={promos}
                                     columns={columns}
                                     disableVirtualization
-                                >
-                                </DataGrid>
+                                    onCellEditCommit={updatePromos}
+                                />
                             </div>
 
                         </Box>
@@ -332,7 +402,7 @@ export const Promos = () => {
                                             placeholder="libelle"
                                             onChange={(event) => {
                                                 setFormErrors({ ...formErrors, libelle: null })
-                                                setPromo({ ...promo, libelle: event.target.value.replace(/\s/g, '') })
+                                                setPromo({ ...promo, libelle: event.target.value})
                                             }}
 
                                         />
