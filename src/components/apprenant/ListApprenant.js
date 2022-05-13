@@ -99,7 +99,7 @@ export const ListApprenant = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-  let ValueQR = 'https://pointage-mxq50ote8-fadilou-coder.vercel.app/appreant/' + apprenant.id;
+  let ValueQR = 'https://pointage-odc.vercel.app/apprenant/' + apprenant.id;
 
 
 
