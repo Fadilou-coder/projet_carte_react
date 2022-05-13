@@ -99,6 +99,8 @@ export const ListApprenant = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
+  let ValueQR = 'https://pointage-mxq50ote8-fadilou-coder.vercel.app/appreant/' + apprenant.id;
+
 
 
 
@@ -707,13 +709,32 @@ export const ListApprenant = () => {
                                         >
                                             {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
                                             <QRCode
-                                                value={apprenant.code}
+                                                value= {ValueQR}
                                                 size={90}
                                                 bgColor={"#ffffff"}
                                                 fgColor={"#138A8A"}
                                                 level={"H"}
                                                 includeMargin={false}
                                                 renderAs={"svg"}
+                                                imageSettings={{
+                                                    src: `${logosonatel}`,
+                                                    x: null,
+                                                    y: null,
+                                                    height: 30,
+                                                    width: 30,
+                                                    excavate: false,
+                                                }}
+                                            />
+
+                                          <QRCode
+                                                hidden
+                                                id="qr-gen"
+                                                value={apprenant.code}
+                                                size={400}
+                                                level={"H"}
+                                                includeMargin={true}
+                                                bgColor={"#ffffff"}
+                                                fgColor={"#138A8A"}
                                                 imageSettings={{
                                                     src: `${logosonatel}`,
                                                     x: null,
