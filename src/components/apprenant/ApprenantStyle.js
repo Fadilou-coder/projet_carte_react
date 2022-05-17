@@ -90,7 +90,7 @@ const ApprenantStyle = makeStyles((theme) => ({
         [theme.breakpoints.down('sm')]: {
             width: "100% !important"
         },
-        
+
     },
     table: {
         display: "flex",
@@ -106,8 +106,13 @@ const ApprenantStyle = makeStyles((theme) => ({
         [theme.breakpoints.down('md')]: {
             width: "80% !important",
             margin: "0 auto !important",
+            [theme.breakpoints.down(600)]: {
+              width: "90% !important",
+              margin: "2% !important"
+            },
 
         },
+
         backgroundColor: "white"
     }
     ,
@@ -186,7 +191,10 @@ const ApprenantStyle = makeStyles((theme) => ({
     infoUser: {
         display: "flex",
         justifyContent: "space-between",
-        backgroundColor: "white"
+        backgroundColor: "white",
+      [theme.breakpoints.down(600)]: {
+        fontSize: "10px !important"
+      },
 
     },
     input: {

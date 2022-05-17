@@ -40,15 +40,17 @@ export const CarteApprenant = () => {
 
 
   return (
-    <Grid style={{
-      backgroundColor: "white",
-      display: "flex",
-      justifyContent: "center"
-    }}>
+    <Grid
+      sx={{
+        width: "34%",
+        height: "100%",
+      }}
+      className={classes1.detailUser}
+    >
       <Box
         sx={{
           marginTop: "10%",
-          width: "60%",
+          width: "100%",
           height: "100%",
           borderRadius: "10px",
           border: "1px solid #138A8A",
@@ -65,7 +67,7 @@ export const CarteApprenant = () => {
           </div>
           <div className={classes1.infoUser}>
             <div style={{ width: "70%", backgroundColor: "white" }}>
-              <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
+              <Typography style={{ fontWeight: "bold", backgroundColor: "white" }}>
                 {apprenant.prenom} {apprenant.nom}
               </Typography>
               <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
@@ -87,15 +89,13 @@ export const CarteApprenant = () => {
 
 
             </div>
-            {apprenant.avatar != null ?
               <div>
                 <Avatar
                   src={`data:image/jpg;base64,${apprenant.avatar}`}
-                  sx={{ width: 120, height: 125, marginTop: 4, marginRight: 3 }}
+                  sx={{ width: 90, height: 90, marginTop: 4, marginRight: 0.5 }}
                   variant="square"
                 />
-              </div> : null
-            }
+              </div>
           </div>
           <div style={{
             display: "flex",
@@ -104,10 +104,10 @@ export const CarteApprenant = () => {
           }}>
             <div
               style={{
-                width: "70%",
                 backgroundColor: "white"
+              }}
 
-              }} >
+            >
               <Typography style={{
                 fontWeight: "bold",
                 fontStyle: "italic",

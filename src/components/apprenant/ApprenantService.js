@@ -8,7 +8,7 @@ export const ListAllApprenant = () => {
 }
 
 export const FindApprenantByCode = (code) => {
-  return axios.get(API_URL + "apprenants/" + code, { headers: authHeader() });
+  return axios.get(API_URL + "apprenant/code/" + code, { headers: authHeader() });
 }
 
 export const putApprenant = (data, id) => {
