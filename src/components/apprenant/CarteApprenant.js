@@ -55,14 +55,14 @@ export const CarteApprenant = () => {
           borderRadius: "10px",
           border: "1px solid #138A8A",
           boxShadow: "2",
-          padding: "2px 10px 10px 20px",
+          padding: "2px 5px 10px 20px",
 
         }}
       >
         <Grid>
           <div className={classes1.avatarApprenant} >
             <img src={odc} alt="" style={{ width: "30%" }} />
-            <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
+            <img src={sacademy} alt="" style={{ height: "100%", width: "25%"}}
             />
           </div>
           <div className={classes1.infoUser}>
