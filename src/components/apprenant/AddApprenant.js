@@ -60,9 +60,8 @@ export const AddApprenant = () => {
 
     });
 
-    const [newApp, setnewApp] = React.useState({
-        code: ''
-    })
+    const [valueQrCode, setValueQrCode] = React.useState("")
+
 
     React.useEffect(() => {
         listAllReferentiels().then((res) => {
@@ -132,7 +131,7 @@ export const AddApprenant = () => {
             if(Object.keys(validateApprenant(value)).length === 0)
             saveApprenant(formData).then((res) => {
                 if (res.status === 200) {
-                    setnewApp(res.data);
+                  setValueQrCode("https://pointage-odc.vercel.app/apprenant/" + res.data.code);
                     const canvas = document.getElementById("qr-gen");
 
                     canvas.toBlob(function (blob) {
