@@ -608,7 +608,7 @@ export const AddApprenant = () => {
                     <QRCode
                         hidden
                         id="qr-gen"
-                        value={newApp.code}
+                        value={valueQrCode}
                         size={400}
                         level={"H"}
                         includeMargin={true}
