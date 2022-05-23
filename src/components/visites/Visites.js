@@ -36,6 +36,10 @@ export const Visites = (props) => {
     const [visites, setVisites] = React.useState([]);
     const [formErrors, setFormErrors] = useState({});
     const [loading, setLoading] = React.useState(true);
+    const [commentsApp, setCommentsApp] = React.useState([])
+    const [date, setDate] = React.useState(new Date())
+    const [search, setSearch] = React.useState('');
+    const [showDialog, setShowDialog] = useState(false);
 
     const isBlank = require('is-blank')
 
@@ -52,15 +56,13 @@ export const Visites = (props) => {
 
     const [comment, setComment] = React.useState({
         commentaire: '',
+        date: date.toLocaleDateString("en-CA"),
         apprenant: {
             id: 0
         },
 
     })
-    const [commentsApp, setCommentsApp] = React.useState([])
-    const [date, setDate] = React.useState(new Date())
-    const [search, setSearch] = React.useState('');
-    const [showDialog, setShowDialog] = useState(false);
+
 
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
