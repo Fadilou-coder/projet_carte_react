@@ -7,7 +7,6 @@ import ApiIcon from '@mui/icons-material/Api';
 import BallotIcon from '@mui/icons-material/Ballot';
 import DeviceUnknownIcon from '@mui/icons-material/DeviceUnknown';
 
-
 export const LeftBarData = [
     {
         id: 1,
@@ -81,14 +80,5 @@ export const LeftBarData = [
         after: true,
         showBySuperAdmin: true,
         showByAdmin: true
-    },
-    // {
-    //     id: 9,
-    //     title: "Commentaires",
-    //     path:'/commentaires',
-    //     icon:<CommentSharp/>,
-    //     after: true,
-    //     showBySuperAdmin: true,
-    //     showByAdmin: true
-    // }
+    }
 ]

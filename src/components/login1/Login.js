@@ -22,12 +22,12 @@ const Login = (props) => {
     showPassword: false,
   });
 
-  const initialValues = { username: "", password: "" };
+  const initialValues = {username: "", password: ""};
   const [formValues, setFormValues] = useState(initialValues);
-  const [formErrors, setFormErrors] = useState({});
+  const [formErrors, setFormErrors] = useState( {});
   const [isSubmit, setIsSubmit] = useState(false);
 
-  const [open, setOpen] = React.useState(false);
+  const [ open, setOpen] = React.useState(false);
 
   const handleClickShowPassword = () => {
     setValues({
@@ -37,48 +37,48 @@ const Login = (props) => {
   };
 
   const handleUsernameChange = (event) => {
-    setUsername(event.target.value);
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+     setUsername(event.target.value);
+    const {name, value} = event.target;
+    setFormValues({...formValues, [name]: value});
   }
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
-    const { name, value } = event.target;
-    setFormValues({ ...formValues, [name]: value });
+    const {name, value} = event.target;
+    setFormValues({...formValues, [name]: value});
   }
 
   const handleLogin = (event) => {
     event.preventDefault();
     setFormErrors(validate(formValues));
     setIsSubmit(true);
-    setOpen(true);
+     setOpen(true);
     AuthService.login(username, password).then(
-      () => {
-        if (localStorage.getItem('user') !== '["APPRENANT"]')
-          props.history.push("/visites");
-        else {
-          setOpen(false);
-          setErrorPage(true);
-        }
+    () => {
+      if(localStorage.getItem('user') !== '["APPRENANT"]')
+        props.history.push("/visites");
+      else{
+        setOpen(false);
+        setErrorPage(true);
       }
-    ).catch((e) => {
-      setOpen(false);
+    }
+    ).catch((e)=>{
+     setOpen(false);
       setErrorPage(true);
     });
-  }
+}
 
   const validate = (val) => {
     const errors = {};
-    if (!val.username) {
+    if(!val.username){
       errors.username = "email est requis"
     }
-    if (!val.password) {
+    if(!val.password){
       errors.password = "password est requis"
-    } else if (val.password.length < 3) {
+    } else if(val.password.length < 3){
       errors.password = "le mot de passe doit comporter plus de 3 caractères";
     }
-    else if (val.password.length > 10) {
+    else if(val.password.length > 10){
       errors.password = "le mot de passe ne peut pas dépassé plus de 10 caractères";
     }
     return errors;
@@ -86,21 +86,21 @@ const Login = (props) => {
 
   const classes = LoginStyle();
 
-  const btn = username === '' || password === '' ? <Button disabled sx={{ backgroundColor: "#FF6600", width: "100%", marginTop: "30px", '&:hover': { backgroundColor: "#000000" } }} variant="contained" onClick={handleLogin}
-  >Se connecter</Button> : <Button sx={{ backgroundColor: "#FF6600", width: "100%", marginTop: "30px", '&:hover': { backgroundColor: "#000000" } }} variant="contained" onClick={handleLogin}
+  const btn = username === '' || password === '' ? <Button disabled sx={{ backgroundColor: "#FF6600", width: "100%", marginTop: "30px", '&:hover':{backgroundColor: "#000000"} }} variant="contained" onClick={handleLogin}
+  >Se connecter</Button> : <Button sx={{ backgroundColor: "#FF6600", width: "100%", marginTop: "30px", '&:hover':{backgroundColor: "#000000"} }} variant="contained" onClick={handleLogin}
   >Se connecter</Button>
 
   return (
     <>
       <Grid container className={classes.loginpage}>
 
-        <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2 }} className={classes.loginContent}>
+        <Grid borderRadius="25%" style={{ width: '100%', zIndex: 2}} className={classes.loginContent}>
           <Box
             sx={{ display: 'grid', gap: 1, gridTemplateColumns: 'repeat(2, 1fr)', }}
             className={classes.contenu}
           >
             <Box className={classes.logo} >
-              <img style={{ width: "80%" }} src={logo} alt="" />
+             <img  style={{ width: "80%" }} src={logo} alt="" />
             </Box>
 
             <Stack alignItems={"center"} spacing={2}>
@@ -113,7 +113,7 @@ const Login = (props) => {
                 Entrer vos informations de connexion
               </Typography>
               {errorPage === true && isSubmit ? (
-                <div className={classes.formError} >Login ou mot de passe incorrect!!!</div>
+                  <div className={classes.formError} >Login ou mot de passe incorrect!!!</div>
               ) : null}
 
               {/* Input Email */}
