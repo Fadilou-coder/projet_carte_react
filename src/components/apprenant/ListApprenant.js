@@ -91,6 +91,7 @@ export const ListApprenant = () => {
         if (response.data.length > 0) {
           setApprenants(response.data)
           setApprenant(response.data[0]);
+          console.log(response.data);
         }
         setLoading(false);
       })
@@ -209,6 +210,7 @@ export const ListApprenant = () => {
     newApp.append('dateNaissance', apprenant.dateNaissance);
     newApp.append('lieuNaissance', apprenant.lieuNaissance);
     newApp.append('numTuteur', apprenant.numTuteur);
+    
     if (apprenant.avatar !== null) {
       newApp.append('avatar', apprenant.avatar);
     }
@@ -449,6 +451,7 @@ export const ListApprenant = () => {
                             } else {
                               ListAllApprenant().then(res => {
                                 setApprenants(res.data);
+                                
                               });
                               setIsSelection(false)
                             }
@@ -552,6 +555,24 @@ export const ListApprenant = () => {
                           <EasyEdit
                             type={Types.TEXT}
                             value={apprenant.code}
+                            onSave={(val) => {
+                              apprenant.code = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+                      </Typography>
+                      <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
+                        <Stack direction="row" spacing={1} >
+                          <div>
+                            Email:
+                          </div>
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.email}
                             onSave={(val) => {
                               apprenant.code = val;
                               setApprenant(apprenant);
