@@ -12,6 +12,7 @@ export const FindApprenantByCode = (code) => {
 }
 
 export const putApprenant = (data, id) => {
+
     return axios.put(API_URL + "apprenants/" + id, data,
     {
         headers: authHeader(),
@@ -56,6 +57,14 @@ export const ListPromos = () => {
 
 export const ListApprenantsByReferentielByPromo = (idRef, idPr) => {
     return axios.get(API_URL + "referentiel/"+idRef+"/promo/"+idPr+"/apprenants", { headers: authHeader() });
+}
+
+export const nbAbsencesApprenant = (id,datedebut,datefin) => {
+    return axios.get(API_URL + "apprenants/"+id+"/nbrAbs/"+datedebut+"/"+datefin, { headers: authHeader() });
+}
+
+export const nbRetartdsApprenant = (id,datedebut,datefin) => {
+    return axios.get(API_URL + "apprenants/"+id+"/nbrRetard/"+datedebut+"/"+datefin, { headers: authHeader() });
 }
 
 

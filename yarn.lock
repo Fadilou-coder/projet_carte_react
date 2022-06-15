@@ -10587,6 +10587,14 @@ react-beautiful-dnd@^13.0.0:
     redux "^4.0.4"
     use-memo-one "^1.1.1"
 
+react-box-flip@^1.0.6:
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/react-box-flip/-/react-box-flip-1.0.6.tgz#0bb963bb62a908e78042172bd6d592724a59cd1f"
+  integrity sha512-AewBDlJM9VFAmXYgOH1UfVA5tByCLdpJ+8mMOA3eORz5cyF5F3+nFZh3H3aTIge5CQSCPFXBoW5xTsp2qMMLmA==
+  dependencies:
+    clsx "^1.1.1"
+    prop-types "^15.7.2"
+
 react-calendar@^3.3.1:
   version "3.7.0"
   resolved "https://registry.yarnpkg.com/react-calendar/-/react-calendar-3.7.0.tgz#951d56e91afb33b1c1e019cb790349fbffcc6894"

@@ -147,7 +147,7 @@ export const Device = () => {
                                 paddingLeft: "20px",
                                 fontWeight: "bolder"
                             }}>
-                            LISTE DES Appareils
+                            LISTE DES APPAREILS
                         </Typography>
 
 
