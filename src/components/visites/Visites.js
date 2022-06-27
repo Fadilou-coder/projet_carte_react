@@ -50,7 +50,6 @@ export const Visites = (props) => {
 
     const handleClickImpression = (event) => {
         setAnchorEl(event.currentTarget);
-        console.log(csvData);
     };
 
     const handleCloseImpression = e => {
