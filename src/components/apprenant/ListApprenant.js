@@ -254,7 +254,6 @@ export const ListApprenant = () => {
 
   function update() {
     let newApp = new FormData();
-    const ref = { id: apprenant.referentiel.id, libelle: apprenant.referentiel.libelle };
     newApp.append('prenom', apprenant.prenom);
     newApp.append('nom', apprenant.nom);
     newApp.append('email', apprenant.email);
@@ -493,7 +492,7 @@ export const ListApprenant = () => {
                     }
                   }}
                   autoHeight
-                  pageSize={10}
+                  pageSize={10} 
                   rowsPerPageOptions={[5, 10, 20]}
 
                   onRowClick={(params, event) => {

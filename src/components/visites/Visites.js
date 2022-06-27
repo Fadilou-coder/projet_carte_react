@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
-import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem } from '@mui/material'
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem, Menu } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
@@ -28,6 +28,8 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import { MenuButton, MenuLink, MenuList } from '@reach/menu-button'
+import { CSVLink } from 'react-csv';
 var QRCode = require('qrcode.react')
 
 export const Visites = (props) => {
@@ -40,9 +42,34 @@ export const Visites = (props) => {
     const [date, setDate] = React.useState(new Date())
     const [search, setSearch] = React.useState('');
     const [showDialog, setShowDialog] = useState(false);
+    const [csvData, setCsvData] = React.useState([['Prenom', 'Nom', 'numPiece', 'Entree', 'Sortie', 'Type']]);
+
+    // Configuration du button Impression
+    const [anchorEl, setAnchorEl] = React.useState(null);
+    const openImpression = Boolean(anchorEl);
+
+    const handleClickImpression = (event) => {
+        setAnchorEl(event.currentTarget);
+        console.log(csvData);
+    };
+
+    const handleCloseImpression = e => {
+        console.log(e.target.innerText); // => This logs menu item text.
+
+        if (e.target.innerText === "PDF") {
+            exportPDF();
+        }
+        setAnchorEl(null)
+    }
+
+    // const csvData = [
+    //     { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
+    //     { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
+    //     { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
+    // ];
+
 
     const isBlank = require('is-blank')
-
 
 
     const [values, setValues] = React.useState({
@@ -67,6 +94,20 @@ export const Visites = (props) => {
     React.useEffect(() => {
         ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
             setVisites(res.data.reverse());
+            // console.log(res.data.reverse());
+            res.data.reverse().map((visite) => {
+
+                if (visite.apprenant === null) {
+                    const newvalue = [visite.visiteur.prenom, visite.visiteur.nom, visite.visiteur.numPiece, visite.dateEntree, visite.dateSortie, 'Visiteur']
+                    // setCsvData({...csvData, newvalue})
+                    csvData.push(newvalue);
+                }
+                //  else {
+                //      const newvalue =[visite.apprenant.prenom, visite.apprenant.nom, visite.apprenant.numPiece, visite.dateEntree, visite.dateSortie, 'Apprenant'];
+                //     setCsvData({...csvData, newvalue})
+
+                // }
+            });
             setLoading(false);
         })
     }, [date])
@@ -149,19 +190,19 @@ export const Visites = (props) => {
         }
     }
 
-    const updateValues = (data, id)=>{
-      setLoading(true)
-      updateVisiteur(data, id).then(() => {
-        chargerVisites(date, visiteur);
-          Swal.fire({
-              position: 'center',
-              icon: 'success',
-              title: 'Modifier avec success',
-              showConfirmButton: false,
-              timer: 1500
-          })
-      })
-      setLoading(false);
+    const updateValues = (data, id) => {
+        setLoading(true)
+        updateVisiteur(data, id).then(() => {
+            chargerVisites(date, visiteur);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Modifier avec success',
+                showConfirmButton: false,
+                timer: 1500
+            })
+        })
+        setLoading(false);
     }
 
     const columns = [
@@ -180,24 +221,24 @@ export const Visites = (props) => {
             },
             editable: (params) => params.row.visiteur,
             renderEditCell: (params) => (
-              <FormControl fullWidth>
-                <OutlinedInput
+                <FormControl fullWidth>
+                    <OutlinedInput
                         id="ok"
                         name="prenom"
                         required
                         type="text"
                         variant="outlined"
                         onChange={(event) => {
-                          setValues({ ...values, prenom: event.target.value , typePiece: ""})
+                            setValues({ ...values, prenom: event.target.value, typePiece: "" })
                         }}
                         value={values.prenom === "" ? params.value : values.prenom}
                         onKeyDown={(event) => {
-                          if (event.key === 'Enter') {
-                            updateValues(values, params.row.visiteur.id)
-                          }
+                            if (event.key === 'Enter') {
+                                updateValues(values, params.row.visiteur.id)
+                            }
                         }}
-                      />
-              </FormControl>
+                    />
+                </FormControl>
             )
         },
         {
@@ -215,24 +256,24 @@ export const Visites = (props) => {
             },
             editable: (params) => params.row.visiteur,
             renderEditCell: (params) => (
-              <FormControl fullWidth>
-                <OutlinedInput
+                <FormControl fullWidth>
+                    <OutlinedInput
                         id="ok"
                         name="nom"
                         required
                         type="text"
                         variant="outlined"
                         onChange={(event) => {
-                          setValues({ ...values, nom: event.target.value , typePiece: ""})
+                            setValues({ ...values, nom: event.target.value, typePiece: "" })
                         }}
                         value={values.nom === "" ? params.value : values.nom}
                         onKeyDown={(event) => {
-                          if (event.key === 'Enter') {
-                            updateValues(values, params.row.visiteur.id)
-                          }
+                            if (event.key === 'Enter') {
+                                updateValues(values, params.row.visiteur.id)
+                            }
                         }}
-                      />
-              </FormControl>
+                    />
+                </FormControl>
             )
         },
         {
@@ -250,24 +291,24 @@ export const Visites = (props) => {
             },
             editable: (params) => params.row.visiteur,
             renderEditCell: (params) => (
-              <FormControl fullWidth>
-                <OutlinedInput
+                <FormControl fullWidth>
+                    <OutlinedInput
                         id="ok"
                         name="numPiece"
                         required
                         type="text"
                         variant="outlined"
                         onChange={(event) => {
-                          setValues({ ...values, numPiece: event.target.value , typePiece: ""})
+                            setValues({ ...values, numPiece: event.target.value, typePiece: "" })
                         }}
                         value={values.numPiece === "" ? params.value : values.numPiece}
                         onKeyDown={(event) => {
-                          if (event.key === 'Enter') {
-                            updateValues(values, params.row.visiteur.id)
-                          }
+                            if (event.key === 'Enter') {
+                                updateValues(values, params.row.visiteur.id)
+                            }
                         }}
-                      />
-              </FormControl>
+                    />
+                </FormControl>
             )
         },
         {
@@ -407,48 +448,48 @@ export const Visites = (props) => {
     // fONCTION POURGENERE PDF
     const AjouterVisites = () => {
         setFormErrors(validateVisite(values));
-        if(Object.keys(validateVisite(values)).length === 0){
-        SaveVisitesVisieur({ 'visiteur': values }).then(res => {
-            handleClose()
-            downloadQRCode();
-            setLoading(true);
-            if (visiteur === "") {
-                ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                    setVisites(res.data);
-                    setLoading(false);
-                })
-            } else if (visiteur === "apprenant") {
-                ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                    setVisites(res.data);
-                    setLoading(false);
-                })
-            } else if (visiteur === "visiteur") {
-                ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                    setVisites(res.data);
-                    setLoading(false);
-                })
-            }
-            if (res.status === 200) {
-                Swal.fire(
-                    'Succes!',
-                    'Enregistrer avec succes.',
-                    'success'
-                ).then((res) => {
-                    setValues({
-                        numPiece: '',
-                        prenom: '',
-                        nom: '',
-                        numTelephone: '',
-
+        if (Object.keys(validateVisite(values)).length === 0) {
+            SaveVisitesVisieur({ 'visiteur': values }).then(res => {
+                handleClose()
+                downloadQRCode();
+                setLoading(true);
+                if (visiteur === "") {
+                    ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
+                        setVisites(res.data);
+                        setLoading(false);
                     })
-                })
-            }
-        }).catch(
-            (error) => {
-                console.log(error);
-            }
-        )
-    }
+                } else if (visiteur === "apprenant") {
+                    ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
+                        setVisites(res.data);
+                        setLoading(false);
+                    })
+                } else if (visiteur === "visiteur") {
+                    ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
+                        setVisites(res.data);
+                        setLoading(false);
+                    })
+                }
+                if (res.status === 200) {
+                    Swal.fire(
+                        'Succes!',
+                        'Enregistrer avec succes.',
+                        'success'
+                    ).then((res) => {
+                        setValues({
+                            numPiece: '',
+                            prenom: '',
+                            nom: '',
+                            numTelephone: '',
+
+                        })
+                    })
+                }
+            }).catch(
+                (error) => {
+                    console.log(error);
+                }
+            )
+        }
     }
 
     const downloadQRCode = () => {
@@ -489,7 +530,7 @@ export const Visites = (props) => {
 
     function loadMoreItems(event) {
         if (event.target.scrollTop === event.target.scrollHeight) {
-          // TODO document why this block is empty
+            // TODO document why this block is empty
 
         }
     }
@@ -636,7 +677,42 @@ export const Visites = (props) => {
                                             AJOUTER
                                         </Button> : null
                                     }
+
                                     <Button
+                                        id="basic-button"
+                                        aria-controls={openImpression ? 'basic-menu' : undefined}
+                                        aria-haspopup="true"
+                                        aria-expanded={openImpression ? 'true' : undefined}
+                                        onClick={handleClickImpression}
+                                        variant="contained"
+                                        endIcon={<DocumentScannerOutlined />}
+                                        sx={{
+                                            backgroundColor: "#FF6600",
+                                            fontSize: "16px",
+                                            color: "#000000",
+                                            fontWeight: "bold",
+                                            '&:hover': {
+                                                backgroundColor: '#000000',
+                                                color: "white"
+                                            }
+                                        }}
+                                    >
+                                        Imprimer
+                                    </Button>
+                                    <Menu
+                                        id="basic-menu"
+                                        anchorEl={anchorEl}
+                                        open={openImpression}
+                                        onClose={handleCloseImpression}
+                                        MenuListProps={{
+                                            'aria-labelledby': 'basic-button',
+                                        }}
+                                    >
+
+                                        <MenuItem onClick={handleCloseImpression}>PDF</MenuItem>
+                                        <CSVLink filename={'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} data={csvData}> <MenuItem onClick={handleCloseImpression}>EXCEL</MenuItem></CSVLink>
+                                    </Menu>
+                                    {/* <Button
                                         variant="contained"
                                         endIcon={<DocumentScannerOutlined />}
                                         onClick={(params, event) => {
@@ -654,7 +730,7 @@ export const Visites = (props) => {
                                         }}
                                     >
                                         Impression
-                                    </Button>
+                                    </Button> */}
 
                                 </div>
 
@@ -916,6 +992,7 @@ export const Visites = (props) => {
                                         overflowY: 'auto',
                                     }}
                                 >
+
                                     {(localStorage.getItem('user') === '["ADMIN"]') ?
                                         <TextareaAutosize
                                             aria-label="minimum height"
