@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
-import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem, Menu } from '@mui/material'
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
@@ -28,47 +28,21 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
-import { MenuButton, MenuLink, MenuList } from '@reach/menu-button'
-import { CSVLink } from 'react-csv';
 var QRCode = require('qrcode.react')
 
 export const Visites = (props) => {
 
-    const [visiteur, setVisiteur] = React.useState("");
-    const [visites, setVisites] = React.useState([]);
-    const [formErrors, setFormErrors] = useState({});
-    const [loading, setLoading] = React.useState(true);
-    const [commentsApp, setCommentsApp] = React.useState([])
-    const [date, setDate] = React.useState(new Date())
-    const [search, setSearch] = React.useState('');
-    const [showDialog, setShowDialog] = useState(false);
-    const [csvData, setCsvData] = React.useState([['Prenom', 'Nom', 'numPiece', 'Entree', 'Sortie', 'Type']]);
+  const [visiteur, setVisiteur] = React.useState("");
+  const [visites, setVisites] = React.useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [loading, setLoading] = React.useState(true);
+  const [commentsApp, setCommentsApp] = React.useState([])
+  const [date, setDate] = React.useState(new Date())
+  const [search, setSearch] = React.useState('');
+  const [showDialog, setShowDialog] = useState(false);
 
-    // Configuration du button Impression
-    const [anchorEl, setAnchorEl] = React.useState(null);
-    const openImpression = Boolean(anchorEl);
+  const isBlank = require('is-blank')
 
-    const handleClickImpression = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleCloseImpression = e => {
-        console.log(e.target.innerText); // => This logs menu item text.
-
-        if (e.target.innerText === "PDF") {
-            exportPDF();
-        }
-        setAnchorEl(null)
-    }
-
-    // const csvData = [
-    //     { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
-    //     { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
-    //     { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
-    // ];
-
-
-    const isBlank = require('is-blank')
 
 
   const [values, setValues] = React.useState({
@@ -115,59 +89,7 @@ export const Visites = (props) => {
     })
   }
 
-<<<<<<< HEAD
   // Custom Datagrid No Rows show
-=======
-    React.useEffect(() => {
-        ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-            setVisites(res.data.reverse());
-            // console.log(res.data.reverse());
-            res.data.reverse().map((visite) => {
-
-                if (visite.apprenant === null) {
-                    const newvalue = [visite.visiteur.prenom, visite.visiteur.nom, visite.visiteur.numPiece, visite.dateEntree, visite.dateSortie, 'Visiteur']
-                    // setCsvData({...csvData, newvalue})
-                    csvData.push(newvalue);
-                }
-                //  else {
-                //      const newvalue =[visite.apprenant.prenom, visite.apprenant.nom, visite.apprenant.numPiece, visite.dateEntree, visite.dateSortie, 'Apprenant'];
-                //     setCsvData({...csvData, newvalue})
-
-                // }
-            });
-            setLoading(false);
-        })
-    }, [date])
-
-    const commenter = () => {
-        SaveCommentApp(comment).then(() => {
-            setComment({
-                commentaire: '',
-                apprenant: {
-                    id: 0
-                }
-            })
-        })
-    }
-
-    const findComments = (id) => {
-        ListCommentsApp(id).then((res) => {
-            setCommentsApp(res.data);
-        })
-    }
-
-    // Custom Datagrid No Rows show
-
-    function CustomNoRowsOverlay() {
-        return (
-
-            <Grid sx={{ display: "flex", justifyContent: "center", }}>
-                <div>
-                    <Box sx={{ mt: 1, fontWeight: "bold", fontSize: "20px" }}>
-                        Tableau Vide
-                    </Box>
-                    <Box sx={{ width: "80px" }} >
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
 
   function CustomNoRowsOverlay() {
     return (
@@ -214,7 +136,6 @@ export const Visites = (props) => {
     )
   }
 
-<<<<<<< HEAD
   function buttonSortir(donnees) {
     if (donnees.apprenant != null) {
       setLoading(true);
@@ -226,21 +147,6 @@ export const Visites = (props) => {
       SortieVisiteur(donnees).then(() => {
         chargerVisites(date, visiteur)
       })
-=======
-    const updateValues = (data, id) => {
-        setLoading(true)
-        updateVisiteur(data, id).then(() => {
-            chargerVisites(date, visiteur);
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Modifier avec success',
-                showConfirmButton: false,
-                timer: 1500
-            })
-        })
-        setLoading(false);
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
     }
   }
 
@@ -409,148 +315,7 @@ export const Visites = (props) => {
       }
     },
 
-<<<<<<< HEAD
   ]
-=======
-    const columns = [
-        {
-            field: 'prenom',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Prénom',
-            flex: 1,
-            minWidth: 150,
-            valueGetter: (params) => {
-                if (params.row.visiteur) {
-                    return params.row.visiteur.prenom
-                } else if (params.row.apprenant) {
-                    return params.row.apprenant.prenom
-                }
-            },
-            editable: (params) => params.row.visiteur,
-            renderEditCell: (params) => (
-                <FormControl fullWidth>
-                    <OutlinedInput
-                        id="ok"
-                        name="prenom"
-                        required
-                        type="text"
-                        variant="outlined"
-                        onChange={(event) => {
-                            setValues({ ...values, prenom: event.target.value, typePiece: "" })
-                        }}
-                        value={values.prenom === "" ? params.value : values.prenom}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                updateValues(values, params.row.visiteur.id)
-                            }
-                        }}
-                    />
-                </FormControl>
-            )
-        },
-        {
-            field: 'nom',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Nom',
-            flex: 1,
-            minWidth: 150,
-            valueGetter: (params) => {
-                if (params.row.visiteur) {
-                    return params.row.visiteur.nom
-                } else if (params.row.apprenant) {
-                    return params.row.apprenant.nom
-                }
-            },
-            editable: (params) => params.row.visiteur,
-            renderEditCell: (params) => (
-                <FormControl fullWidth>
-                    <OutlinedInput
-                        id="ok"
-                        name="nom"
-                        required
-                        type="text"
-                        variant="outlined"
-                        onChange={(event) => {
-                            setValues({ ...values, nom: event.target.value, typePiece: "" })
-                        }}
-                        value={values.nom === "" ? params.value : values.nom}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                updateValues(values, params.row.visiteur.id)
-                            }
-                        }}
-                    />
-                </FormControl>
-            )
-        },
-        {
-            field: 'numPiece',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'numPiece',
-            flex: 1,
-            minWidth: 150,
-            valueGetter: (params) => {
-                if (params.row.visiteur) {
-                    return params.row.visiteur.numPiece
-                } else if (params.row.apprenant) {
-                    return params.row.apprenant.numPiece
-                }
-            },
-            editable: (params) => params.row.visiteur,
-            renderEditCell: (params) => (
-                <FormControl fullWidth>
-                    <OutlinedInput
-                        id="ok"
-                        name="numPiece"
-                        required
-                        type="text"
-                        variant="outlined"
-                        onChange={(event) => {
-                            setValues({ ...values, numPiece: event.target.value, typePiece: "" })
-                        }}
-                        value={values.numPiece === "" ? params.value : values.numPiece}
-                        onKeyDown={(event) => {
-                            if (event.key === 'Enter') {
-                                updateValues(values, params.row.visiteur.id)
-                            }
-                        }}
-                    />
-                </FormControl>
-            )
-        },
-        {
-            field: 'dateEntree',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Entree',
-            flex: 1,
-            minWidth: 150,
-            valueGetter: (params) => {
-                if (params.row.dateEntree) {
-                    return params.row.dateEntree.substr(11, 5)
-                }
-            }
-        },
-        {
-            field: 'dateSortie',
-            headerClassName: 'super-app-theme--header',
-            headerName: 'Sortie',
-            flex: 1,
-            minWidth: 150,
-            renderCell: (cellvalue) => {
-                if (cellvalue.row.dateSortie == null) {
-                    return <Button
-                        sx={{
-                            backgroundColor: '#FF6600',
-                            color: "#000000",
-                            fontWeight: "bolder",
-                            '&:hover': {
-                                backgroundColor: '#000000',
-                                color: "#FFFFFF"
-                            }
-                        }}
-                        onClick={() => buttonSortir(cellvalue.row)}
-                    >
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
 
 
   function addWaterMark(doc) {
@@ -648,7 +413,6 @@ export const Visites = (props) => {
         handleClose()
         downloadQRCode();
         setLoading(true);
-<<<<<<< HEAD
         if (visiteur === "") {
           ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
             setVisites(res.data);
@@ -664,99 +428,6 @@ export const Visites = (props) => {
             setVisites(res.data);
             setLoading(false);
           })
-=======
-        if (value === "") {
-            ListAllVisite(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data);
-                setLoading(false);
-            })
-        } else if (value === "apprenant") {
-            ListVisitesApp(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data);
-                setLoading(false);
-            })
-        } else if (value === "visiteur") {
-            ListVisitesVisteur(ndate.toLocaleDateString("fr-CA")).then(res => {
-                setVisites(res.data);
-                setLoading(false);
-            })
-        }
-    };
-
-
-    // fONCTION POURGENERE PDF
-    const AjouterVisites = () => {
-        setFormErrors(validateVisite(values));
-        if (Object.keys(validateVisite(values)).length === 0) {
-            SaveVisitesVisieur({ 'visiteur': values }).then(res => {
-                handleClose()
-                downloadQRCode();
-                setLoading(true);
-                if (visiteur === "") {
-                    ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
-                        setVisites(res.data);
-                        setLoading(false);
-                    })
-                } else if (visiteur === "apprenant") {
-                    ListVisitesApp(date.toLocaleDateString("fr-CA")).then(res => {
-                        setVisites(res.data);
-                        setLoading(false);
-                    })
-                } else if (visiteur === "visiteur") {
-                    ListVisitesVisteur(date.toLocaleDateString("fr-CA")).then(res => {
-                        setVisites(res.data);
-                        setLoading(false);
-                    })
-                }
-                if (res.status === 200) {
-                    Swal.fire(
-                        'Succes!',
-                        'Enregistrer avec succes.',
-                        'success'
-                    ).then((res) => {
-                        setValues({
-                            numPiece: '',
-                            prenom: '',
-                            nom: '',
-                            numTelephone: '',
-
-                        })
-                    })
-                }
-            }).catch(
-                (error) => {
-                    console.log(error);
-                }
-            )
-        }
-    }
-
-    const downloadQRCode = () => {
-        // Generate download with use canvas and stream
-        const canvas = document.getElementById("qr-gen");
-        const pngUrl = canvas
-            .toDataURL("image/png")
-            .replace("image/png", "image/octet-stream");
-        let downloadLink = document.createElement("a");
-        downloadLink.href = pngUrl;
-        downloadLink.download = "qrcode_" + values.prenom + "_" + values.nom + ".png";
-        document.body.appendChild(downloadLink);
-        downloadLink.click();
-        document.body.removeChild(downloadLink);
-    };
-
-    const validateVisite = (val) => {
-        const errors = {};
-        if (isBlank(val.prenom)) {
-            errors.prenom = "prenom est requis"
-        } else if (val.prenom.length < 3) {
-            errors.prenom = "le prenom doit comporter plus de 3 caractères";
-        }
-        if (isBlank(val.nom)) {
-            errors.nom = "nom est requis"
-        } else if (val.nom.length < 2) {
-            errors.nom = "le nom doit comporter plus de 2 caractères";
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
         }
         if (res.status === 200) {
           Swal.fire(
@@ -777,7 +448,6 @@ export const Visites = (props) => {
         (error) => {
           console.log(error);
         }
-<<<<<<< HEAD
       )
     }
   }
@@ -808,14 +478,6 @@ export const Visites = (props) => {
     } else if (val.nom.length < 2) {
       errors.nom = "le nom doit comporter plus de 2 caractères";
     }
-=======
-        return errors;
-    };
-
-    function loadMoreItems(event) {
-        if (event.target.scrollTop === event.target.scrollHeight) {
-            // TODO document why this block is empty
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
 
     if (isBlank(val.numTelephone)) {
       errors.numTelephone = "le numéro de télephone est requis"
@@ -929,279 +591,11 @@ export const Visites = (props) => {
                         id="search"
                         placeholder="rechercher"
                         style={{
-<<<<<<< HEAD
                           fontWeight: "bolder",
                           color: "#000000",
                           '&:focus': {
                             borderColor: "#FF6600",
                           },
-=======
-                            marginBottom: "20px",
-                            borderLeft: "6px solid #000000",
-                            color: "#000000",
-                            paddingLeft: "20px",
-                            fontWeight: "bolder"
-                        }}>
-                        LISTE DES VISITEURS
-                    </Typography>
-                    <Box sx={{}} className={classes.visitePage} >
-
-                        <Box style={{ width: "100%" }}>
-                            <Box
-                                className={classes.filtre}
-                            >
-
-                                <Grid direction="row" spacing={5} alignItems="center" className={classes.champfiltre}>
-                                    <div
-                                        style={{
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            flexWrap: 'wrap',
-                                            color: "gray"
-                                        }}
-                                        className={classes.champtextfiltre}
-                                    >
-                                        <FilterAltOutlined></FilterAltOutlined>
-                                        Filtre
-                                    </div>
-
-                                    <div
-                                        className={classes.visiteur}
-                                    >
-
-                                        <LocalizationProvider dateAdapter={AdapterDateFns} >
-                                            <DatePicker
-
-                                                inputFormat="dd/MM/yyy"
-                                                value={date}
-                                                onChange={(newValue) => {
-                                                    chargerVisites(newValue, visiteur)
-                                                }}
-                                                renderInput={(params) => {
-                                                    return (
-                                                        <TextField
-                                                            size="small"
-                                                            {...params}
-                                                            sx={{
-                                                                svg: { color: "#000000" },
-                                                                input: { color: "#000000", fontWeight: "bold" },
-                                                                label: { color: "#44C3CF" },
-                                                                width: "100%",
-                                                            }}
-                                                        />
-                                                    )
-                                                }}
-                                            />
-                                        </LocalizationProvider>
-                                    </div>
-                                    <div
-                                        className={classes.visiteur}
-                                    >
-                                        <Select
-                                            size='small'
-                                            value={visiteur}
-                                            style={{ fontWeight: "bolder", width: "100%", borderRadius: "10px" }}
-                                            onChange={(event) => chargerVisites(date, event.target.value)}
-
-
-                                            startAdornment={
-                                                <InputAdornment position="start">
-                                                    <PersonOutline sx={{ color: "#000000" }}  ></PersonOutline>
-                                                </InputAdornment>}
-
-                                        >
-                                            <MenuItem value={""}>
-                                                <em>Tous</em>
-                                            </MenuItem>
-                                            <MenuItem value={"apprenant"}>Apprenant</MenuItem>
-                                            <MenuItem value={"visiteur"}>Visiteur</MenuItem>
-                                        </Select>
-                                    </div>
-                                    <div className={classes.mysearch}>
-                                        <FormControl sx={{ m: 1, width: "100%" }} className={classes.mytextsearch} >
-                                            <OutlinedInput
-                                                size='small'
-                                                id="search"
-                                                placeholder="rechercher"
-                                                style={{
-                                                    fontWeight: "bolder",
-                                                    color: "#000000",
-                                                    '&:focus': {
-                                                        borderColor: "#FF6600",
-                                                    },
-                                                }}
-
-                                                startAdornment={
-                                                    <InputAdornment position="start">
-                                                        <SearchOutlined sx={{ color: "#000000" }} ></SearchOutlined>
-                                                    </InputAdornment>
-                                                }
-                                                onChange={(event) => {
-                                                    setSearch(event.target.value);
-                                                }}
-                                            />
-                                        </FormControl>
-                                    </div>
-                                </Grid>
-                                <div
-                                    className={classes.ajoutScan}
-
-                                >
-                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
-                                        <Button
-                                            variant="contained"
-                                            endIcon={<AddCircleOutlined />}
-                                            onClick={handleClickOpen}
-                                            sx={{
-                                                backgroundColor: "#FF6600",
-                                                fontFamily: "Arial",
-                                                fontSize: "16px",
-                                                color: "#000000",
-                                                marginRight: "10px",
-                                                fontWeight: "bold",
-                                                '&:hover': {
-                                                    backgroundColor: "#000000",
-                                                    pointer: "cursor",
-                                                    color: "white"
-
-                                                }
-                                            }}
-                                        >
-                                            AJOUTER
-                                        </Button> : null
-                                    }
-
-                                    <Button
-                                        id="basic-button"
-                                        aria-controls={openImpression ? 'basic-menu' : undefined}
-                                        aria-haspopup="true"
-                                        aria-expanded={openImpression ? 'true' : undefined}
-                                        onClick={handleClickImpression}
-                                        variant="contained"
-                                        endIcon={<DocumentScannerOutlined />}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: '#000000',
-                                                color: "white"
-                                            }
-                                        }}
-                                    >
-                                        Imprimer
-                                    </Button>
-                                    <Menu
-                                        id="basic-menu"
-                                        anchorEl={anchorEl}
-                                        open={openImpression}
-                                        onClose={handleCloseImpression}
-                                        MenuListProps={{
-                                            'aria-labelledby': 'basic-button',
-                                        }}
-                                    >
-
-                                        <MenuItem onClick={handleCloseImpression}>PDF</MenuItem>
-                                        <CSVLink filename={'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} data={csvData}> <MenuItem onClick={handleCloseImpression}>EXCEL</MenuItem></CSVLink>
-                                    </Menu>
-                                    {/* <Button
-                                        variant="contained"
-                                        endIcon={<DocumentScannerOutlined />}
-                                        onClick={(params, event) => {
-                                            exportPDF()
-                                        }}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: '#000000',
-                                                color: "white"
-                                            }
-                                        }}
-                                    >
-                                        Impression
-                                    </Button> */}
-
-                                </div>
-
-                            </Box>
-
-                            <Box sx={{
-                                boxShadow: 1, borderRadius: "10px", paddingBottom: "20px",
-                                '& .super-app-theme--header': {
-                                    backgroundColor: '#696969',
-                                    color: "#FFFFFF",
-                                    fontWeight: "bold",
-                                    textTransform: "uppercase"
-                                },
-                            }} className={classes.tableau}>
-
-                                <div style={{ width: "100%" }}>
-                                    <h2 style={{ color: "#FF6600" }}> Liste du {date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}</h2>
-                                    <DataGrid
-                                        sx={{ boxShadow: "30px", width: "100%" }}
-                                        autoHeight
-                                        pageSize={10}
-                                        rowsPerPageOptions={[5, 10, 20]}
-                                        components={{
-                                            Pagination: CustomPagination,
-                                            NoRowsOverlay: CustomNoRowsOverlay,
-                                            // Toolbar: CustomToolbar,
-                                        }}
-                                        loading={loading}
-                                        rows={
-                                            visites.filter((val) => {
-                                                if (search === "") {
-                                                    return val;
-                                                } else if (val.visiteur?.prenom.toLowerCase().includes(search.toLowerCase()) || val.visiteur?.nom.toLowerCase().includes(search.toLowerCase())
-                                                    || val.visiteur?.numPiece.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.prenom.toLowerCase().includes(search.toLowerCase()) || val.apprenant?.nom.toLowerCase().includes(search.toLowerCase())
-                                                    || val.apprenant?.numPiece.toLowerCase().includes(search.toLowerCase())) {
-
-                                                    return val;
-                                                }
-                                            }).map((row) => {
-                                                return row;
-                                            })
-                                        }
-                                        columns={columns}
-                                        onRowClick={(params, event) => {
-                                            setComment({ ...comment, apprenant: params.row.apprenant })
-                                            if (params.row.apprenant) {
-                                                findComments(params.row.apprenant.id);
-                                                setShowDialog(true)
-                                            }
-
-                                        }}
-                                        disableVirtualization
-                                    >
-                                    </DataGrid>
-                                </div>
-
-                            </Box>
-
-                        </Box>
-                    </Box>
-
-                    <QRCode
-                        hidden
-                        id="qr-gen"
-                        value={'{ "numPiece":"' + values.numPiece + '", \n "prenom":"' + values.prenom + '", \n "nom":"' + values.nom + '", \n "date": "' + dateTime({ date: new Date() }) + '"}'}
-                        size={400}
-                        level={"H"}
-                        includeMargin={true}
-                        bgColor={"#ffffff"}
-                        fgColor={"#138A8A"}
-                        imageSettings={{
-                            src: `${logosonatel}`,
-                            x: null,
-                            y: null,
-                            height: 30,
-                            width: 30,
-                            excavate: false,
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
                         }}
 
                         startAdornment={
@@ -1535,7 +929,6 @@ export const Visites = (props) => {
                       value={comment.commentaire}
                     /> :
                     <div>
-<<<<<<< HEAD
                       {
                         commentsApp.map((row) => (
                           <Typography key={row.id} variant='h6' style={{ color: 'white' }}>
@@ -1543,90 +936,6 @@ export const Visites = (props) => {
                           </Typography>
                         ))
                       }
-=======
-                        <Dialog open={showDialog} onClose={handleClose}
-                            PaperProps={{
-                                style: {
-                                    backgroundColor: ' #000000',
-                                    boxShadow: 'none',
-                                    height: "85%",
-                                    left: '40%'
-                                },
-                            }} className={classes.dialog}>
-                            <DialogTitle variant="h4" className={classes.textTypo} style={{ color: "#FFFFFF", paddingLeft: "20px" }}>
-                                COMMENTAIRE
-                                <IconButton
-                                    aria-label="close"
-                                    onClick={handleClose}
-                                    sx={{
-                                        position: 'absolute',
-                                        right: 8,
-                                        top: 8,
-                                        float: 'right'
-                                    }}
-                                    style={{ color: '#FFFFFF' }}
-                                >
-                                    <CloseIcon />
-                                </IconButton>
-                            </DialogTitle>
-                            <hr style={{ borderTop: " 4px solid #F48322", width: "20%", float: "left", marginLeft: "15px" }} />
-                            <DialogContent>
-                                <Grid container
-                                    onScroll={loadMoreItems}
-                                    style={{
-                                        maxHeight: 950,
-                                        overflowY: 'auto',
-                                    }}
-                                >
-
-                                    {(localStorage.getItem('user') === '["ADMIN"]') ?
-                                        <TextareaAutosize
-                                            aria-label="minimum height"
-                                            minRows={15}
-                                            placeholder="comment"
-                                            style={{ width: 300, borderRadius: '5px' }}
-                                            onChange={(event) => {
-                                                setComment({ ...comment, commentaire: event.target.value })
-                                            }}
-                                            value={comment.commentaire}
-                                        /> :
-                                        <div>
-                                            {
-                                                commentsApp.map((row) => (
-                                                    <Typography key={row.id} variant='h6' style={{ color: 'white' }}>
-                                                        {row.commentaire}
-                                                    </Typography>
-                                                ))
-                                            }
-                                        </div>
-                                    }
-                                </Grid>
-                                {(localStorage.getItem('user') === '["ADMIN"]') ?
-                                    <DialogActions>
-                                        <Button
-                                            sx={{
-                                                backgroundColor: "#FF6600",
-                                                fontFamily: "Arial",
-                                                fontSize: "16px",
-                                                color: "#000000",
-                                                fontWeight: "bold",
-                                                right: "80px",
-                                                marginTop: "15px",
-                                                '&:hover': {
-                                                    backgroundColor: "#FFFFFF",
-                                                    pointer: "cursor",
-                                                    color: "#000000"
-                                                }
-                                            }}
-                                            onClick={commenter}
-                                        >
-                                            COMMENTER
-                                        </Button>
-                                    </DialogActions> : null
-                                }
-                            </DialogContent>
-                        </Dialog>
->>>>>>> ab072799d7bc7f2d03137aaf4eafeb59cf9f4e62
                     </div>
                   }
                 </Grid>

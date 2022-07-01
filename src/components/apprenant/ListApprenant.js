@@ -58,7 +58,7 @@ export const ListApprenant = () => {
   // Initialiser Liste Promos
   const [promos, setPromos] = React.useState([]);
 
-  // Initialiser Referentiel 
+  // Initialiser Referentiel
   const [referentiel, setReferentiel] = React.useState("");
 
   // Absences et Retards
@@ -492,7 +492,7 @@ export const ListApprenant = () => {
                     }
                   }}
                   autoHeight
-                  pageSize={10} 
+                  pageSize={10}
                   rowsPerPageOptions={[5, 10, 20]}
 
                   onRowClick={(params, event) => {
