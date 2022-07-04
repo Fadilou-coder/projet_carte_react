@@ -15,9 +15,9 @@ import Stack from '@mui/material/Stack';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import Avatar from '@mui/material/Avatar';
 import Layout from "../layout/Layout";
-import { listAllReferentiels, saveApprenant, sendCarte, ListPromos } from "./ApprenantService";
+import { listAllReferentiels, saveApprenant, sendCarte, ListPromos, saveApprenantByExel } from "./ApprenantService";
 import Swal from "sweetalert2";
-
+import { AiOutlineDownload } from "react-icons/ai";
 import logosonatel from "../../assets/images/logoSA.png";
 
 
@@ -58,6 +58,10 @@ export const AddApprenant = () => {
         promo: '',
 
 
+    });
+
+    const [valueExcell, setValueExcell] = React.useState({
+        file: new File([], '')
     });
 
     const [newApp, setnewApp] = React.useState({
@@ -129,60 +133,87 @@ export const AddApprenant = () => {
             valide = false;
         }
         if (valide) {
-            if(Object.keys(validateApprenant(value)).length === 0)
-            saveApprenant(formData).then((res) => {
-                if (res.status === 200) {
-                    setnewApp(res.data);
-                    const canvas = document.getElementById("qr-gen");
+            if (Object.keys(validateApprenant(value)).length === 0)
+                saveApprenant(formData).then((res) => {
+                    if (res.status === 200) {
+                        setnewApp(res.data);
+                        const canvas = document.getElementById("qr-gen");
 
-                    canvas.toBlob(function (blob) {
-                        const formData = new FormData();
-                        formData.append('file', blob, 'qrcode.png');
-                        formData.append('prenom', value.prenom);
-                        formData.append('nom', value.nom);
-                        formData.append('email', value.email);
+                        canvas.toBlob(function (blob) {
+                            const formData = new FormData();
+                            formData.append('file', blob, 'qrcode.png');
+                            formData.append('prenom', value.prenom);
+                            formData.append('nom', value.nom);
+                            formData.append('email', value.email);
 
-                        sendCarte(formData);
-                    });
-                    Swal.fire(
-                        'Succes!',
-                        'Enregistrer avec succes.',
-                        'success'
-                    ).then(() => {
-                        setValue({
-                            prenom: '',
-                            nom: '',
-                            email: '',
-                            phone: '',
-                            adresse: '',
-                            typePiece: 'CNI',
-                            numPiece: '',
-                            referentiel: '',
-                            dateNaissance: '',
-                            lieuNaissance: '',
-                            promo: '',
-                            numTuteur: '',
-                            avatar: new File([], ''),
+                            sendCarte(formData);
+                        });
+                        Swal.fire(
+                            'Succes!',
+                            'Enregistrer avec succes.',
+                            'success'
+                        ).then(() => {
+                            setValue({
+                                prenom: '',
+                                nom: '',
+                                email: '',
+                                phone: '',
+                                adresse: '',
+                                typePiece: 'CNI',
+                                numPiece: '',
+                                referentiel: '',
+                                dateNaissance: '',
+                                lieuNaissance: '',
+                                promo: '',
+                                numTuteur: '',
+                                avatar: new File([], ''),
+                            })
+                            setImage("")
                         })
-                        setImage("")
-                    })
-                }
-            }).catch(
-                (error) => {
-                    const err = {}
-                    for (let index = 0; index < error.response.data.errors.length; index++){
-                        if(error.response.data.errors[index].includes("email"))
-                            err.email = error.response.data.errors[index];
-                        if(error.response.data.errors[index].includes("telephone"))
-                            err.phone = error.response.data.errors[index];
-                        if(error.response.data.errors[index].includes("num"))
-                            err.numPiece = error.response.data.errors[index];
                     }
-                    setFormErrors(err);
-                }
-            )
+                }).catch(
+                    (error) => {
+                        const err = {}
+                        for (let index = 0; index < error.response.data.errors.length; index++) {
+                            if (error.response.data.errors[index].includes("email"))
+                                err.email = error.response.data.errors[index];
+                            if (error.response.data.errors[index].includes("telephone"))
+                                err.phone = error.response.data.errors[index];
+                            if (error.response.data.errors[index].includes("num"))
+                                err.numPiece = error.response.data.errors[index];
+                        }
+                        setFormErrors(err);
+                    }
+                )
         }
     }
+
+    // Ajouter apprenant par fichier excell
+    const PostApprenantByExcell = () => {
+        let formData = new FormData();
+        const data = ["file"]
+        data.forEach((app) => {
+            if (value[app] !== '') {
+                formData.append(app, value[app]);
+            }
+        })
+        formData.append('file', value.file);
+        saveApprenantByExel(formData).then(res => {
+            console.log(formData);
+            if (res.status === 200) {
+                Swal.fire(
+                    'Succes!',
+                    'La liste apprenant enregistrer avec succes.',
+                    'success'
+                ).then(() => {
+                    setValueExcell({
+                        file: new File([], '')
+                    })
+                })
+            }
+            })
+    }
+    
 
     const [formErrors, setFormErrors] = useState([]);
 
@@ -252,11 +283,53 @@ export const AddApprenant = () => {
         <Layout>
             <Box>
                 <Grid container spacing={2} >
-                    <Grid item xs={12} sm={12} md={12}>
-                        <Typography variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
-                            AJOUTER UN APPRENANT
-                        </Typography>
-                        <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float: "left", marginLeft: "15px" }} />
+                    <Grid item xs={12} sm={12} md={12} style={{ display:"flex", justifyContent:"space-between" }}>
+                        <Grid xs={12} sm={12} md={6}>
+                            <Typography variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
+                                AJOUTER UN APPRENANT
+                            </Typography>
+                            <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float: "left", marginLeft: "15px" }} />
+
+                        </Grid>
+
+                        {/* Ajouter apprenant par fichier excell */}
+                        <Grid xs={12} sm={12} md={3} style={{ display: "flex",  }}>
+                            <Grid style={{ marginTop: "15px" }}>
+                                <Button
+                                    variant="contained"
+                                    component="label"
+                                    style={{ backgroundColor: "#FFC145", fontFamily: "Arial", fontSize: "20px" }}
+                                >
+                                    <input
+                                        name="file"
+                                        id="file"
+                                        type="file"
+                                        onChange={e => {
+                                            setValueExcell({ ...valueExcell, file: e.target.files[0] })
+                                            let files = e.target.files;
+                                            if (files.length === 0) {
+                                                alert("please add files exccel only");
+                                            }
+                                        }}
+                                        hidden
+                                    />
+                                    <AiOutlineDownload style={{ fontSize: "32px" }} />
+                                </Button>
+                            </Grid>
+                            <Grid style={{ marginTop: "5px", marginLeft: "5px" }}>
+                                <Button variant="contained" sx={{
+                                    backgroundColor: "#05888A",
+                                    fontFamily: "Arial", fontSize: "20px",
+                                    marginTop: "10px",
+                                    '&:hover': {
+                                        backgroundColor: "#F48322",
+                                        pointer: "cursor"
+                                    }
+                                }}
+                                    onClick={() => PostApprenantByExcell()}
+                                >AJOUTER</Button>
+                            </Grid>
+                        </Grid>
                     </Grid>
                     <Grid container className={classes.subContainer}>
                         <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
@@ -603,6 +676,10 @@ export const AddApprenant = () => {
                                 onClick={() => PostApprenant()}
                             >Enregistrer et Imprimer carte</Button>
                         </Grid>
+
+
+
+
                     </Grid>
                 </Grid>
                 <div>
