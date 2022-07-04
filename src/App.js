@@ -17,6 +17,7 @@ import Referentiel from './components/referentiel/Referentiel';
 import Superviseur from './components/superviseur/Superviseur';
 import Device from './components/devices/Devices';
 import AddSuperViseur from "./components/superviseur/AddSuperViseur";
+import CarteApprenant from './components/apprenant/CarteApprenant';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Switch>
                   <Route exact path="/" component={Login}/>
                   <Route  path="/login" component={Login}/>
+                  <Route path="/apprenant/:code" component={CarteApprenant} />
                   <PrivateRoute path="/layout" component={Layout}/>
                   <PrivateRoute  path="/visites" component={Visites}/>
                   <PrivateRoute  path="/admins" component={Admin}/>

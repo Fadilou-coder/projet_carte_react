@@ -18,6 +18,7 @@ import {
 import {DataGrid, gridPageCountSelector, gridPageSelector, useGridApiContext, useGridSelector} from "@mui/x-data-grid";
 import {useHistory} from "react-router-dom";
 import {ListAllSuperViseur, editSuperViseur} from "./SuperviseurService";
+import Swal from "sweetalert2";
 
 const Superviseur = () => {
 
@@ -71,6 +72,13 @@ const Superviseur = () => {
       editSuperViseur(data, id).then(() => {
         ListAllSuperViseur().then(res => {
           setAdmin(res.data);
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Modifier avec success',
+                showConfirmButton: false,
+                timer: 1500
+            })
         })
       })
       setIsLoaded(false);
@@ -308,7 +316,6 @@ const Superviseur = () => {
                             <DataGrid
 
                                 sx={{ boxShadow: "30px", width: "100%" }}
-
                                 autoHeight
                                 pageSize={10}
                                 rowsPerPageOptions={[5, 10, 20]}
