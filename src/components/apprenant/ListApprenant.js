@@ -31,11 +31,9 @@ import logosonatel from "../../assets/images/logoSA.png";
 import sacademy from "../../assets/images/logoODC.png";
 import { useHistory } from "react-router-dom";
 import { Typography } from '@material-ui/core';
-import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo, nbRetartdsApprenant } from './ApprenantService';
+import { ListAllApprenant, putApprenant, ListApprenantsByReferentielByPromo, listAllReferentiels, ListPromos, ListApprenantsByPromo } from './ApprenantService';
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
-import ReactBoxFlip from 'react-box-flip';
-import { nbAbsencesApprenant } from './ApprenantService';
 
 var QRCode = require('qrcode.react');
 
@@ -58,13 +56,8 @@ export const ListApprenant = () => {
   // Initialiser Liste Promos
   const [promos, setPromos] = React.useState([]);
 
-  // Initialiser Referentiel
+
   const [referentiel, setReferentiel] = React.useState("");
-
-  // Absences et Retards
-  const [nbrAbsences, setNbrAbsences] = React.useState(0);
-  const [nbrRetards, setNbrRetards] = React.useState(0);
-
 
   // Initialiser Liste Promos
   const [promo, setPromo] = React.useState("");
@@ -84,43 +77,6 @@ export const ListApprenant = () => {
   });
 
 
-  // Déclarer tous les mois
-  const months = [
-    'Janvier',
-    'Fevrier',
-    'Mars',
-    'Avril',
-    'Mai',
-    'Juin',
-    'Juillet',
-    'Aout',
-    'Septembre',
-    'Octobre',
-    'Novembre',
-    'Decembre'
-  ];
-
-
-  // Gerer le flip de la carte
-  const [isFlipped, setIsFlipped] = React.useState(false);
-
-  function flipClick() {
-    setIsFlipped(!isFlipped);
-    getAbsencesRetard(apprenant.id, '2022-0' + (new Date().getMonth() + 1) + '-01', '2022-0' + (new Date().getMonth() + 2) + '-01');
-  }
-
-  function getAbsencesRetard(id, datedebut, datefin) {
-    nbAbsencesApprenant(id, datedebut, datefin).then(res => {
-      setNbrAbsences(res.data);
-    });
-
-    nbRetartdsApprenant(id, datedebut, datefin).then(res => {
-      setNbrRetards(res.data);
-    })
-  }
-
-
-
 
   React.useEffect(() => {
 
@@ -135,11 +91,11 @@ export const ListApprenant = () => {
         if (response.data.length > 0) {
           setApprenants(response.data)
           setApprenant(response.data[0]);
-          console.log(response.data);
         }
         setLoading(false);
       })
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -241,17 +197,6 @@ export const ListApprenant = () => {
     },
   ]
 
-
-  function _base64ToArrayBuffer(base64) {
-    var binary_string = window.atob(base64);
-    var len = binary_string.length;
-    var bytes = new Uint8Array(len);
-    for (var i = 0; i < len; i++) {
-      bytes[i] = binary_string.charCodeAt(i);
-    }
-    return new File([bytes], 'photo');
-  }
-
   function update() {
     let newApp = new FormData();
     newApp.append('prenom', apprenant.prenom);
@@ -264,25 +209,11 @@ export const ListApprenant = () => {
     newApp.append('dateNaissance', apprenant.dateNaissance);
     newApp.append('lieuNaissance', apprenant.lieuNaissance);
     newApp.append('numTuteur', apprenant.numTuteur);
-    newApp.append('referentiel', Number(apprenant.referentiel.id));
-
-    // console.log(apprenant.referentiel.id)
-    // for (var value of newApp.values()) {
-    //   console.log(value);
-    // }
-
     if (apprenant.avatar !== null) {
-      // if (apprenant.avatar.length === 0) {
-      //   newApp.append('avatar', new File([], ''));
-      // } else {
-      newApp.append('avatar', _base64ToArrayBuffer(apprenant.avatar));
-      console.log(newApp);
-      // }
+      newApp.append('avatar', apprenant.avatar);
     }
     else
       newApp.append('avatar', new File([], ''));
-
-
 
     putApprenant(newApp, apprenant.id).then(res => {
       if (res.status === 200) {
@@ -497,13 +428,7 @@ export const ListApprenant = () => {
 
                   onRowClick={(params, event) => {
                     if (!event.ctrlKey) {
-
                       if (apprenant.id !== params.row.id) {
-
-                        console.log(apprenant);
-                        if(isFlipped===true){
-                          flipClick();
-                        }
                         if (isSelection === false) {
                           setApprenant(params.row);
                         } else {
@@ -570,342 +495,262 @@ export const ListApprenant = () => {
               }}
               className={classes1.detailUser}
             >
-              <Grid
+              <Box
                 sx={{
                   width: "100%",
                   height: "100%",
-                  position: "relative"
-                }}>
-                <button style={{ marginBottom: "10px" }} onClick={flipClick}> Voir details Présence :  </button>
-                <ReactBoxFlip isFlipped={isFlipped}>
-                  <Box
-                    sx={{
-                      width: "94%",
-                      height: "100%",
-                      borderRadius: "10px",
-                      border: "1px solid #138A8A",
-                      boxShadow: "2",
-                      padding: "2px 10px 10px 20px",
+                  borderRadius: "10px",
+                  border: "1px solid #138A8A",
+                  boxShadow: "2",
+                  padding: "2px 10px 10px 20px",
 
-                    }}
-                    style={{ backgroundColor: "white" }}
+                }}
+                style={{ backgroundColor: "white" }}
 
-                  >
-                    <Grid ref={componentRef}>
-                      <div className={classes1.avatarApprenant} >
-                        <img src={odc} alt="" style={{ width: "30%" }} />
-                        <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
-                        />
-                      </div>
-                      <div className={classes1.infoUser}>
-                        <div style={{ width: "70%", backgroundColor: "white" }}>
-                          <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
-                            {/* Ahmed BA */}
-                            <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.nom}
-                                onSave={(val) => {
-                                  apprenant.nom = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.prenom}
-                                onSave={(val) => {
-                                  apprenant.prenom = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-                          </Typography>
-                          <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                            <Stack direction="row" spacing={1} >
-                              <div>
-                                Numero d'etudiant:
-                              </div>
-                              <div>
-                                {apprenant.code}
-                              </div>
-                            </Stack>
-                          </Typography>
-                          <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
-                            <Stack direction="row" spacing={1} >
-                              <div>
-                                Email:
-                              </div>
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.email}
-                                onSave={(val) => {
-                                  apprenant.email = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-                          </Typography>
-
-                          <Typography style={{ fontWeight: "normal" }}>
-                            <Stack spacing={1} direction="row">
-                              <div>Réferentiel:</div>
-                              <EasyEdit
-                                type="select"
-                                options={[
-                                  { label: 'Developpeur Web et Mobile', value: '1' },
-                                  { label: 'Data Scientist', value: '2' },
-                                  { label: 'Reference Digital', value: '3' }
-
-                                ]}
-                                value={apprenant.referentiel.libelle}
-                                onSave={(val) => {
-                                  apprenant.referentiel.id = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-                          </Typography>
-                          <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
-
-                            <Stack spacing={1} direction="row">
-                              <div>
-                                Date de naissance:
-
-                              </div>
-                              <EasyEdit
-                                type="date"
-                                value={apprenant.dateNaissance}
-                                onSave={(val) => {
-                                  apprenant.dateNaissance = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.lieuNaissance}
-                                onSave={(val) => {
-                                  apprenant.lieuNaissance = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-                          </Typography>
-                          <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
-                            <Stack spacing={1} direction="row">
-                              <div>
-                                Adresse:
-                              </div>
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.addresse}
-                                onSave={(val) => {
-                                  apprenant.addresse = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-
-                          </Typography>
-                          <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
-                            <Stack spacing={1} direction="row">
-                              <div>
-                                Telephone:
-                              </div>
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.phone}
-                                onSave={(val) => {
-                                  apprenant.phone = val;
-                                  setApprenant(apprenant);
-                                  setIsSelection(true);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-
-                          </Typography>
-
-
-                        </div>
-                        <div>
-                          <Avatar
-                            src={`data:image/jpg;base64,${apprenant.avatar}`}
-                            sx={{ width: 120, height: 125, marginTop: 4, marginRight: 3 }}
-                            variant="square"
+              >
+                <Grid ref={componentRef}>
+                  <div className={classes1.avatarApprenant} >
+                    <img src={odc} alt="" style={{ width: "30%" }} />
+                    <img src={sacademy} alt="" style={{ height: "100%", width: "25%" }}
+                    />
+                  </div>
+                  <div className={classes1.infoUser}>
+                    <div style={{ width: "70%", backgroundColor: "white" }}>
+                      <Typography variant="h4" style={{ fontWeight: "bold", backgroundColor: "white" }}>
+                        {/* Ahmed BA */}
+                        <Stack spacing={2} direction="row" style={{ backgroundColor: "white" }}>
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.nom}
+                            onSave={(val) => {
+                              apprenant.nom = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
                           />
-                        </div>
-                      </div>
-                      <div style={{
-                        display: "flex",
-                        justifyContent: "space-between",
+
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.prenom}
+                            onSave={(val) => {
+                              apprenant.prenom = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+                      </Typography>
+                      <Typography style={{ fontWeight: "normal", marginBottom: "2px" }}>
+                        <Stack direction="row" spacing={1} >
+                          <div>
+                            Numero d'etudiant:
+                          </div>
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.code}
+                            onSave={(val) => {
+                              apprenant.code = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+                      </Typography>
+
+                      <Typography style={{ fontWeight: "normal" }}>
+                        <Stack spacing={1} direction="row">
+                          <div>Réferentiel:</div>
+                          <EasyEdit
+                            type="select"
+                            options={[
+                              { label: 'Developpeur Web et Mobile', value: 'one' },
+                              { label: 'Data Scientist', value: 'two' },
+                              { label: 'Reference Digital', value: 'trois' }
+
+                            ]}
+                            value={apprenant.referentiel.libelle}
+                            onSave={(val) => {
+                              apprenant.referentiel.libelle = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+                      </Typography>
+                      <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
+
+                        <Stack spacing={1} direction="row">
+                          <div>
+                            Date de naissance:
+
+                          </div>
+                          <EasyEdit
+                            type="date"
+                            value={apprenant.dateNaissance}
+                            onSave={(val) => {
+                              apprenant.dateNaissance = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.lieuNaissance}
+                            onSave={(val) => {
+                              apprenant.lieuNaissance = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+                      </Typography>
+                      <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
+                        <Stack spacing={1} direction="row">
+                          <div>
+                            Adresse:
+                          </div>
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.addresse}
+                            onSave={(val) => {
+                              apprenant.addresse = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+
+                      </Typography>
+                      <Typography style={{ fontWeight: "normal", marginBottom: "2px", backgroundColor: "white" }}>
+                        <Stack spacing={1} direction="row">
+                          <div>
+                            Telephone:
+                          </div>
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.phone}
+                            onSave={(val) => {
+                              apprenant.phone = val;
+                              setApprenant(apprenant);
+                              setIsSelection(true);
+                            }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
+                          />
+                        </Stack>
+
+                      </Typography>
+
+
+                    </div>
+                    <div>
+                      <Avatar
+                        src={`data:image/jpg;base64,${apprenant.avatar}`}
+                        sx={{ width: 120, height: 125, marginTop: 4, marginRight: 3 }}
+                        variant="square"
+                      />
+                    </div>
+                  </div>
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    backgroundColor: "white"
+                  }}>
+                    <div
+                      style={{
+                        width: "70%",
+                        backgroundColor: "white"
+
+                      }} >
+                      <Typography style={{
+                        fontWeight: "bold",
+                        fontStyle: "italic",
+                        paddingTop: "6vh",
                         backgroundColor: "white"
                       }}>
-                        <div
-                          style={{
-                            width: "70%",
-                            backgroundColor: "white"
-
-                          }} >
-                          <Typography style={{
-                            fontWeight: "bold",
-                            fontStyle: "italic",
-                            paddingTop: "6vh",
-                            backgroundColor: "white"
-                          }}>
-                            <Stack spacing={1} direction="row">
-                              <div>
-                                Numero de contact d'urgence:
-                              </div>
-                              <EasyEdit
-                                type={Types.TEXT}
-                                value={apprenant.numTuteur}
-                                onSave={(val) => {
-                                  apprenant.numTuteur = val;
-                                  setApprenant(apprenant);
-                                }}
-                                saveButtonLabel={<Check></Check>}
-                                cancelButtonLabel={<Close />}
-                              />
-                            </Stack>
-                          </Typography>
-                        </div>
-                        <div
-                          style={{
-                            width: "30%",
-                            textAlign: "center",
-                            backgroundColor: "white"
-
-                          }}
-                        >
-                          {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
-                          <QRCode
-                            value={ValueQR}
-                            size={90}
-                            bgColor={"#ffffff"}
-                            fgColor={"#138A8A"}
-                            level={"H"}
-                            includeMargin={false}
-                            renderAs={"svg"}
-                            imageSettings={{
-                              src: `${logosonatel}`,
-                              x: null,
-                              y: null,
-                              height: 30,
-                              width: 30,
-                              excavate: false,
+                        <Stack spacing={1} direction="row">
+                          <div>
+                            Numero de contact d'urgence:
+                          </div>
+                          <EasyEdit
+                            type={Types.TEXT}
+                            value={apprenant.numTuteur}
+                            onSave={(val) => {
+                              apprenant.numTuteur = val;
+                              setApprenant(apprenant);
                             }}
+                            saveButtonLabel={<Check></Check>}
+                            cancelButtonLabel={<Close />}
                           />
-
-                          <QRCode
-                            hidden
-                            id="qr-gen"
-                            value={ValueQR}
-                            size={400}
-                            level={"H"}
-                            includeMargin={true}
-                            bgColor={"#ffffff"}
-                            fgColor={"#138A8A"}
-                            imageSettings={{
-                              src: `${logosonatel}`,
-                              x: null,
-                              y: null,
-                              height: 30,
-                              width: 30,
-                              excavate: false,
-                            }}
-                          />
-                        </div>
-
-
-                      </div>
-                    </Grid>
-                  </Box>
-
-                  <Box
-                    sx={{
-                      width: "94%",
-                      height: "100%",
-                      borderRadius: "10px",
-                      border: "1px solid #138A8A",
-                      boxShadow: "2",
-                      padding: "2px 10px 10px 20px",
-
-                    }}
-                    style={{
-                      backgroundColor: "white",
-                      display: "flex",
-                      justifyContent: " center",
-                      flexDirection: "column"
-                    }}
-                  >
-
-                    <h1 style={{ textAlign: "center" }} > {apprenant.prenom} {apprenant.nom} </h1>
-
-
-                    <div style={{ textAlign: "center" }}>
-
-                      <Select
-                        defaultValue={new Date().getMonth() + 1}
-                        onChange={(event) => {
-                          console.log(event.target.value);
-                          getAbsencesRetard(apprenant.id, '2022-0' + event.target.value + '-01', '2022-0' + (Number(event.target.value) + 1) + '-01')
-                        }}
-                        size='small'
-                        sx={{
-                          width: "50%",
-
-                        }}
-                      >
-                        {
-                          months.map((element, index) => {
-                            return (<MenuItem value={Number(index) + 1} key={Number(index) + 1} > {element} </MenuItem>)
-                          })
-                        }
-
-                      </Select>
+                        </Stack>
+                      </Typography>
                     </div>
+                    <div
+                      style={{
+                        width: "30%",
+                        textAlign: "center",
+                        backgroundColor: "white"
 
-                    <div style={{ display: "flex", justifyContent: "space-around", marginTop: "20px" }}>
+                      }}
+                    >
+                      {/* <img src={codeqr} alt="" style={{ width: "50%", backgroundColor: "red" }} /> */}
+                      <QRCode
+                        value={ValueQR}
+                        size={90}
+                        bgColor={"#ffffff"}
+                        fgColor={"#138A8A"}
+                        level={"H"}
+                        includeMargin={false}
+                        renderAs={"svg"}
+                        imageSettings={{
+                          src: `${logosonatel}`,
+                          x: null,
+                          y: null,
+                          height: 30,
+                          width: 30,
+                          excavate: false,
+                        }}
+                      />
 
-                      <div style={{ textAlign: "center" }}> Nombre d'heures de retard :  <hr />
-                        <h1>{nbrRetards}</h1>
-                      </div>
-                      <div style={{ textAlign: "center" }}> Nombre de jours d'Absences :  <hr />
-                        <h1>{nbrAbsences}</h1>
-                      </div>
-
+                      <QRCode
+                        hidden
+                        id="qr-gen"
+                        value={ValueQR}
+                        size={400}
+                        level={"H"}
+                        includeMargin={true}
+                        bgColor={"#ffffff"}
+                        fgColor={"#138A8A"}
+                        imageSettings={{
+                          src: `${logosonatel}`,
+                          x: null,
+                          y: null,
+                          height: 30,
+                          width: 30,
+                          excavate: false,
+                        }}
+                      />
                     </div>
 
 
-                  </Box>
-
-                </ReactBoxFlip>
-              </Grid>
-
-              <Grid sx={{ display: "flex", justifyContent: "space-evenly", marginTop: "400px" }} marginTop="20px">
+                  </div>
+                </Grid>
+              </Box>
+              <Grid sx={{ display: "flex", justifyContent: "space-evenly" }} marginTop="20px">
                 <Button
                   variant="contained"
                   sx={{

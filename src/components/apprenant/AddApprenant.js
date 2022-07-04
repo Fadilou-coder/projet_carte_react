@@ -22,689 +22,687 @@ import logosonatel from "../../assets/images/logoSA.png";
 
 
 export const AddApprenant = () => {
-    var QRCode = require('qrcode.react');
+  var QRCode = require('qrcode.react');
 
-    const [referentiel, setReferentiel] = React.useState([]);
-    const [promos, setPromos] = React.useState([]);
+  const [referentiel, setReferentiel] = React.useState([]);
+  const [promos, setPromos] = React.useState([]);
 
-    const isBlank = require('is-blank')
+  const isBlank = require('is-blank')
 
-    const classes = ApprenantStyle();
-    const useStyles = makeStyles((theme) => ({
-        gridStyle: {
-            marginLeft: "50px",
-            [theme.breakpoints.down("sm")]: {
-                marginLeft: "0px",
-                marginTop: "20px"
-            }
-        }
-    }));
-    const styles = useStyles();
+  const classes = ApprenantStyle();
+  const useStyles = makeStyles((theme) => ({
+    gridStyle: {
+      marginLeft: "50px",
+      [theme.breakpoints.down("sm")]: {
+        marginLeft: "0px",
+        marginTop: "20px"
+      }
+    }
+  }));
+  const styles = useStyles();
 
-    const [value, setValue] = React.useState({
-        prenom: '',
-        nom: '',
-        email: '',
-        phone: '',
-        adresse: '',
-        sexe: '',
-        typePiece: 'CNI',
-        numPiece: '',
-        referentiel: '',
-        dateNaissance: '',
-        lieuNaissance: '',
-        numTuteur: '',
-        avatar: new File([], ''),
-        promo: '',
+  const [value, setValue] = React.useState({
+    prenom: '',
+    nom: '',
+    email: '',
+    phone: '',
+    adresse: '',
+    sexe: '',
+    typePiece: 'CNI',
+    numPiece: '',
+    referentiel: '',
+    dateNaissance: '',
+    lieuNaissance: '',
+    numTuteur: '',
+    avatar: new File([], ''),
+    promo: '',
 
 
+  });
+
+  const [valueExcell, setValueExcell] = React.useState({
+    file: new File([], '')
+  });
+
+  const [newApp, setnewApp] = React.useState({
+    code: ''
+  })
+
+  const [valueQrCode, setValueQrCode] = React.useState("");
+
+  React.useEffect(() => {
+    listAllReferentiels().then((res) => {
+      setReferentiel(res.data)
     });
 
-    const [valueExcell, setValueExcell] = React.useState({
-        file: new File([], '')
+    ListPromos().then((res) => {
+      setPromos(res.data);
     });
 
-    const [newApp, setnewApp] = React.useState({
-        code: ''
+  }, []);
+
+  function formatDate(date) {
+    let d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+    if (month.length < 2)
+      month = '0' + month;
+    if (day.length < 2)
+      day = '0' + day;
+
+    return [year, month, day].join('-');
+  }
+
+  const [image, setImage] = React.useState("");
+  const wrapperRef = useRef(null);
+
+  const validateImage = e =>
+    e.target.files[0].type === "image/png" ||
+    e.target.files[0].type === "image/jpg" ||
+    e.target.files[0].type === "image/jpeg" ||
+    e.target.files[0].type === "image/gif";
+  const upload = e => {
+    if (e.target.files[0].size <= 2000000) {
+      let file = e.target.files[0];
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        setImage(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      e.target.value = "";
+      alert("please upload less than 2MB")
+    }
+  };
+
+  const PostApprenant = () => {
+    setFormErrors(validateApprenant(value));
+    let formData = new FormData();
+    const data = ["prenom", "nom", "email", "phone", "adresse", "sexe", "typePiece", "numPiece", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
+    var valide = true;
+    data.forEach((app) => {
+      if (value[app] !== '') {
+        formData.append(app, value[app]);
+      }
+      if (validateApprenant(value)[app]) {
+        valide = false;
+      }
     })
-
-    React.useEffect(() => {
-        listAllReferentiels().then((res) => {
-            setReferentiel(res.data)
-        });
-
-        ListPromos().then((res) => {
-            setPromos(res.data);
-        });
-
-    }, []);
-
-    function formatDate(date) {
-        let d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
-
-        return [year, month, day].join('-');
+    formData.append("dateNaissance", formatDate(value.dateNaissance));
+    if (validateApprenant(value).dateNaissance) {
+      valide = false;
     }
+    if (valide) {
+      if (Object.keys(validateApprenant(value)).length === 0)
+        saveApprenant(formData).then((res) => {
+          if (res.status === 200) {
+            setnewApp(res.data);
+            const canvas = document.getElementById("qr-gen");
 
-    const [image, setImage] = React.useState("");
-    const wrapperRef = useRef(null);
+            canvas.toBlob(function (blob) {
+              const formData = new FormData();
+              formData.append('file', blob, 'qrcode.png');
+              formData.append('prenom', value.prenom);
+              formData.append('nom', value.nom);
+              formData.append('email', value.email);
 
-    const validateImage = e =>
-        e.target.files[0].type === "image/png" ||
-        e.target.files[0].type === "image/jpg" ||
-        e.target.files[0].type === "image/jpeg" ||
-        e.target.files[0].type === "image/gif";
-    const upload = e => {
-        if (e.target.files[0].size <= 2000000) {
-            let file = e.target.files[0];
-            let reader = new FileReader();
-            reader.onload = function (e) {
-                setImage(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            e.target.value = "";
-            alert("please upload less than 2MB")
-        }
-    };
-
-    const PostApprenant = () => {
-        setFormErrors(validateApprenant(value));
-        let formData = new FormData();
-        const data = ["prenom", "nom", "email", "phone", "adresse", "sexe", "typePiece", "numPiece", "referentiel", "lieuNaissance", "promo", "numTuteur", "avatar"];
-        var valide = true;
-        data.forEach((app) => {
-            if (value[app] !== '') {
-                formData.append(app, value[app]);
-            }
-            if (validateApprenant(value)[app]) {
-                valide = false;
-            }
-        })
-        formData.append("dateNaissance", formatDate(value.dateNaissance));
-        if (validateApprenant(value).dateNaissance) {
-            valide = false;
-        }
-        if (valide) {
-            if (Object.keys(validateApprenant(value)).length === 0)
-                saveApprenant(formData).then((res) => {
-                    if (res.status === 200) {
-                        setnewApp(res.data);
-                        const canvas = document.getElementById("qr-gen");
-
-                        canvas.toBlob(function (blob) {
-                            const formData = new FormData();
-                            formData.append('file', blob, 'qrcode.png');
-                            formData.append('prenom', value.prenom);
-                            formData.append('nom', value.nom);
-                            formData.append('email', value.email);
-
-                            sendCarte(formData);
-                        });
-                        Swal.fire(
-                            'Succes!',
-                            'Enregistrer avec succes.',
-                            'success'
-                        ).then(() => {
-                            setValue({
-                                prenom: '',
-                                nom: '',
-                                email: '',
-                                phone: '',
-                                adresse: '',
-                                typePiece: 'CNI',
-                                numPiece: '',
-                                referentiel: '',
-                                dateNaissance: '',
-                                lieuNaissance: '',
-                                promo: '',
-                                numTuteur: '',
-                                avatar: new File([], ''),
-                            })
-                            setImage("")
-                        })
-                    }
-                }).catch(
-                    (error) => {
-                        const err = {}
-                        for (let index = 0; index < error.response.data.errors.length; index++) {
-                            if (error.response.data.errors[index].includes("email"))
-                                err.email = error.response.data.errors[index];
-                            if (error.response.data.errors[index].includes("telephone"))
-                                err.phone = error.response.data.errors[index];
-                            if (error.response.data.errors[index].includes("num"))
-                                err.numPiece = error.response.data.errors[index];
-                        }
-                        setFormErrors(err);
-                    }
-                )
-        }
-    }
-
-    // Ajouter apprenant par fichier excell
-    const PostApprenantByExcell = () => {
-        let formData = new FormData();
-        const data = ["file"]
-        data.forEach((app) => {
-            if (value[app] !== '') {
-                formData.append(app, value[app]);
-            }
-        })
-        formData.append('file', value.file);
-        saveApprenantByExel(formData).then(res => {
-            console.log(formData);
-            if (res.status === 200) {
-                Swal.fire(
-                    'Succes!',
-                    'La liste apprenant enregistrer avec succes.',
-                    'success'
-                ).then(() => {
-                    setValueExcell({
-                        file: new File([], '')
-                    })
-                })
-            }
+              sendCarte(formData);
+            });
+            Swal.fire(
+              'Succes!',
+              'Enregistrer avec succes.',
+              'success'
+            ).then(() => {
+              setValue({
+                prenom: '',
+                nom: '',
+                email: '',
+                phone: '',
+                adresse: '',
+                typePiece: 'CNI',
+                numPiece: '',
+                referentiel: '',
+                dateNaissance: '',
+                lieuNaissance: '',
+                promo: '',
+                numTuteur: '',
+                avatar: new File([], ''),
+              })
+              setImage("")
             })
-    }
-    
-
-    const [formErrors, setFormErrors] = useState([]);
-
-
-    const validateApprenant = (val) => {
-        let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
-        const errors = {};
-        if (isBlank(val.prenom)) {
-            errors.prenom = "prenom est requis"
-        } else if (val.prenom.length < 3) {
-            errors.prenom = "le prenom doit comporter plus de 3 caractères";
-        }
-        if (isBlank(val.nom)) {
-            errors.nom = "nom est requis"
-        } else if (val.nom.length < 2) {
-            errors.nom = "le nom doit comporter plus de 2 caractères";
-        }
-        if (isBlank(val.email)) {
-            errors.email = "le mail est requis"
-        } else if (!regexMail.test(val.email)) {
-            errors.email = "le format Email n'est pas valide";
-        }
-        if (isBlank(val.phone)) {
-            errors.phone = "le numéro de télephone est requis"
-        }
-        if (isBlank(val.adresse)) {
-            errors.adresse = "l'adresse est requis"
-        }
-        if (isBlank(val.sexe)) {
-            errors.sexe = "Choisissez le sexe"
-        }
-        if (isBlank(val.numPiece)) {
-            errors.numPiece = "le numéro de carte d'identité est requis"
-        }
-        if (!val.dateNaissance) {
-            errors.dateNaissance = "date de naissance est requis"
-        }
-        else {
-            const dateAtNow = new Date();
-            if (dateAtNow.getFullYear() - val.dateNaissance.getFullYear() <= 18) {
-                errors.dateNaissance = "l'apprenant doit avoir au moins 18 ans";
+          }
+        }).catch(
+          (error) => {
+            const err = {}
+            for (let index = 0; index < error.response.data.errors.length; index++) {
+              if (error.response.data.errors[index].includes("email"))
+                err.email = error.response.data.errors[index];
+              if (error.response.data.errors[index].includes("telephone"))
+                err.phone = error.response.data.errors[index];
+              if (error.response.data.errors[index].includes("num"))
+                err.numPiece = error.response.data.errors[index];
             }
-        }
-        if (isBlank(val.lieuNaissance)) {
-            errors.lieuNaissance = "lieu de naissance est requis"
-        } else if (val.lieuNaissance.length < 3) {
-            errors.lieuNaissance = "lieu de naissance doit comporter plus de 3 caractères";
-        }
-        if (isBlank(val.numTuteur)) {
-            errors.numTuteur = "le numéro de Tuteur est requis"
-        }
-        if (val.numTuteur === val.phone) {
-            errors.numTuteur = "le numéro de Tuteur ne pas coorespondre au numéro de l'apprenant est requis"
-            errors.phone = "le numéro de Tuteur ne pas coorespondre au numéro de l'apprenant est requis"
-        }
-        if (isBlank(val.referentiel)) {
-            errors.referentiel = "veuilez sélectionner un referentiel"
-        }
-        if (isBlank(val.promo)) {
-            errors.promo = "veuilez sélectionner une promo"
-        }
+            setFormErrors(err);
+          }
+        )
+    }
+  }
 
-        return errors;
-    };
-
-    return (
-        <Layout>
-            <Box>
-                <Grid container spacing={2} >
-                    <Grid item xs={12} sm={12} md={12} style={{ display:"flex", justifyContent:"space-between" }}>
-                        <Grid xs={12} sm={12} md={6}>
-                            <Typography variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
-                                AJOUTER UN APPRENANT
-                            </Typography>
-                            <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float: "left", marginLeft: "15px" }} />
-
-                        </Grid>
-
-                        {/* Ajouter apprenant par fichier excell */}
-                        <Grid xs={12} sm={12} md={3} style={{ display: "flex",  }}>
-                            <Grid style={{ marginTop: "15px" }}>
-                                <Button
-                                    variant="contained"
-                                    component="label"
-                                    style={{ backgroundColor: "#FFC145", fontFamily: "Arial", fontSize: "20px" }}
-                                >
-                                    <input
-                                        name="file"
-                                        id="file"
-                                        type="file"
-                                        onChange={e => {
-                                            setValueExcell({ ...valueExcell, file: e.target.files[0] })
-                                            let files = e.target.files;
-                                            if (files.length === 0) {
-                                                alert("please add files exccel only");
-                                            }
-                                        }}
-                                        hidden
-                                    />
-                                    <AiOutlineDownload style={{ fontSize: "32px" }} />
-                                </Button>
-                            </Grid>
-                            <Grid style={{ marginTop: "5px", marginLeft: "5px" }}>
-                                <Button variant="contained" sx={{
-                                    backgroundColor: "#05888A",
-                                    fontFamily: "Arial", fontSize: "20px",
-                                    marginTop: "10px",
-                                    '&:hover': {
-                                        backgroundColor: "#F48322",
-                                        pointer: "cursor"
-                                    }
-                                }}
-                                    onClick={() => PostApprenantByExcell()}
-                                >AJOUTER</Button>
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid container className={classes.subContainer}>
-                        <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
-                            <Grid xs={12} sm={12} md={4} className={styles.marginAlll} spacing={5} item>
-                                <FormControl fullWidth>
-                                    <label className={classes.labelText}>Prénom<span style={{ color: 'red' }}>*</span> </label>
-                                    <OutlinedInput
-                                        id="nom"
-                                        type="text"
-                                        variant="outlined"
-                                        placeholder="prenom"
-                                        onChange={(event) => {
-                                            setFormErrors({ ...formErrors, prenom: null })
-                                            setValue({ ...value, prenom: event.target.value })
-                                        }}
-                                        name="prenom"
-                                        value={value.prenom}
-                                        error={formErrors.prenom}
-                                    />
-                                </FormControl>
-                                <p className={classes.formError}>{formErrors.prenom}</p>
-                            </Grid>
-                            <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                <FormControl fullWidth>
-                                    <label className={classes.labelText}>Nom<span style={{ color: 'red' }}>*</span> </label>
-                                    <OutlinedInput
-                                        id="nom"
-                                        type="text"
-                                        variant="outlined"
-                                        placeholder="nom"
-                                        onChange={(event) => {
-                                            setFormErrors({ ...formErrors, nom: null })
-                                            setValue({ ...value, nom: event.target.value })
-                                        }}
-                                        name="nom"
-                                        value={value.nom}
-                                        error={formErrors.nom}
-                                    />
-                                </FormControl>
-                                <p className={classes.formError}>{formErrors.nom}</p>
-                            </Grid>
-                        </Grid>
+  // Ajouter apprenant par fichier excell
+  const PostApprenantByExcell = () => {
+    let formData = new FormData();
+    formData.append('file', valueExcell.file);
+    saveApprenantByExel(formData).then(res => {
+      if (res.status === 200) {
+        Swal.fire(
+          'Succes!',
+          'La liste apprenant enregistrer avec succes.',
+          'success'
+        ).then(() => {
+          setValueExcell({
+            file: new File([], '')
+          })
+        })
+      }
+    }).catch(
+      (error) => {
+        console.log(error.response.data);
+      })
+  }
 
 
-                        <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                            <Grid xs={12} sm={12} md={4} item>
-                                <FormControl fullWidth>
-                                    <label className={classes.labelText}>Date de naissance<span style={{ color: 'red' }}>*</span> </label>
-                                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                                        <Stack>
-                                            <DatePicker
-                                                inputFormat="dd/MM/yyyy"
-                                                name="dateNaissance"
-                                                id="dateNaissance"
-                                                value={value.dateNaissance}
-                                                onChange={(event) => {
-                                                    setFormErrors({ ...formErrors, dateNaissance: null })
-                                                    setValue({ ...value, dateNaissance: event })
-                                                }}
-                                                defaultValue={null}
-                                                renderInput={(params) => <TextField {...params} error={formErrors.dateNaissance} />}
-                                            />
-                                        </Stack>
-                                    </LocalizationProvider>
-                                </FormControl>
-                                <p className={classes.formError}>{formErrors.dateNaissance}</p>
-                            </Grid>
-                            <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                <FormControl fullWidth>
-                                    <label className={classes.labelText}>Lieu de naissance<span style={{ color: 'red' }}>*</span> </label>
-                                    <OutlinedInput
-                                        id="lieunaiss"
-                                        type="text"
-                                        variant="outlined"
-                                        placeholder="lieu de Naissance"
-                                        onChange={(event) => {
-                                            setFormErrors({ ...formErrors, lieuNaissance: null })
-                                            setValue({ ...value, lieuNaissance: event.target.value })
-                                        }}
-                                        name="lieuNaissance"
-                                        value={value.lieuNaissance}
-                                        error={formErrors.lieuNaissance}
-                                    />
-                                </FormControl>
-                                <p className={classes.formError}>{formErrors.lieuNaissance}</p>
-                            </Grid>
+  const [formErrors, setFormErrors] = useState([]);
 
 
-                            <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Grid xs={12} sm={12} md={4} item>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Adresse<span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="adresse"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="adresse"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, adresse: null })
-                                                setValue({ ...value, adresse: event.target.value })
-                                            }}
-                                            name="adresse"
-                                            value={value.adresse}
-                                            error={formErrors.adresse}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.adresse}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            placeholder="typePiece"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, typePiece: null })
-                                                setValue({ ...value, typePiece: event.target.value })
-                                            }}
-                                            name="typePiece"
-                                            value={value.typePiece}
-                                        >
-                                            <MenuItem key="1" value="CNI"> CNI </MenuItem>
-                                            <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.typePiece}</p>
-                                </Grid>
-                            </Grid>
+  const validateApprenant = (val) => {
+    let regexMail = new RegExp("^[a-z0-9.-]+@[a-z0-9.-]{2,}\\.[a-z]{2,4}$");
+    const errors = {};
+    if (isBlank(val.prenom)) {
+      errors.prenom = "prenom est requis"
+    } else if (val.prenom.length < 3) {
+      errors.prenom = "le prenom doit comporter plus de 3 caractères";
+    }
+    if (isBlank(val.nom)) {
+      errors.nom = "nom est requis"
+    } else if (val.nom.length < 2) {
+      errors.nom = "le nom doit comporter plus de 2 caractères";
+    }
+    if (isBlank(val.email)) {
+      errors.email = "le mail est requis"
+    } else if (!regexMail.test(val.email)) {
+      errors.email = "le format Email n'est pas valide";
+    }
+    if (isBlank(val.phone)) {
+      errors.phone = "le numéro de télephone est requis"
+    }
+    if (isBlank(val.adresse)) {
+      errors.adresse = "l'adresse est requis"
+    }
+    if (isBlank(val.sexe)) {
+      errors.sexe = "Choisissez le sexe"
+    }
+    if (isBlank(val.numPiece)) {
+      errors.numPiece = "le numéro de carte d'identité est requis"
+    }
+    if (!val.dateNaissance) {
+      errors.dateNaissance = "date de naissance est requis"
+    }
+    else {
+      const dateAtNow = new Date();
+      if (dateAtNow.getFullYear() - val.dateNaissance.getFullYear() <= 18) {
+        errors.dateNaissance = "l'apprenant doit avoir au moins 18 ans";
+      }
+    }
+    if (isBlank(val.lieuNaissance)) {
+      errors.lieuNaissance = "lieu de naissance est requis"
+    } else if (val.lieuNaissance.length < 3) {
+      errors.lieuNaissance = "lieu de naissance doit comporter plus de 3 caractères";
+    }
+    if (isBlank(val.numTuteur)) {
+      errors.numTuteur = "le numéro de Tuteur est requis"
+    }
+    if (val.numTuteur === val.phone) {
+      errors.numTuteur = "le numéro de Tuteur ne pas coorespondre au numéro de l'apprenant est requis"
+      errors.phone = "le numéro de Tuteur ne pas coorespondre au numéro de l'apprenant est requis"
+    }
+    if (isBlank(val.referentiel)) {
+      errors.referentiel = "veuilez sélectionner un referentiel"
+    }
+    if (isBlank(val.promo)) {
+      errors.promo = "veuilez sélectionner une promo"
+    }
+
+    return errors;
+  };
+
+  return (
+    <Layout>
+      <Box>
+        <Grid container spacing={2} >
+          <Grid item xs={12} sm={12} md={12} style={{ display: "flex", justifyContent: "space-between" }}>
+            <Grid xs={12} sm={12} md={6}>
+              <Typography variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
+                AJOUTER UN APPRENANT
+              </Typography>
+              <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float: "left", marginLeft: "15px" }} />
+
+            </Grid>
+
+            {/* Ajouter apprenant par fichier excell */}
+            <Grid xs={12} sm={12} md={3} style={{ display: "flex", }}>
+              <Grid style={{ marginTop: "15px" }}>
+                <Button
+                  variant="contained"
+                  component="label"
+                  style={{ backgroundColor: "#FFC145", fontFamily: "Arial", fontSize: "20px" }}
+                >
+                  <input
+                    name="file"
+                    id="file"
+                    type="file"
+                    onChange={e => {
+                      setValueExcell({ ...valueExcell, file: e.target.files[0] })
+                      let files = e.target.files;
+                      if (files.length === 0) {
+                        alert("please add files exccel only");
+                      }
+                    }}
+                    hidden
+                  />
+                  <AiOutlineDownload style={{ fontSize: "32px" }} />
+                </Button>
+              </Grid>
+              <Grid style={{ marginTop: "5px", marginLeft: "5px" }}>
+                <Button variant="contained" sx={{
+                  backgroundColor: "#05888A",
+                  fontFamily: "Arial", fontSize: "20px",
+                  marginTop: "10px",
+                  '&:hover': {
+                    backgroundColor: "#F48322",
+                    pointer: "cursor"
+                  }
+                }}
+                  onClick={() => PostApprenantByExcell()}
+                >AJOUTER</Button>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container className={classes.subContainer}>
+            <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center" }}>
+              <Grid xs={12} sm={12} md={4} className={styles.marginAlll} spacing={5} item>
+                <FormControl fullWidth>
+                  <label className={classes.labelText}>Prénom<span style={{ color: 'red' }}>*</span> </label>
+                  <OutlinedInput
+                    id="nom"
+                    type="text"
+                    variant="outlined"
+                    placeholder="prenom"
+                    onChange={(event) => {
+                      setFormErrors({ ...formErrors, prenom: null })
+                      setValue({ ...value, prenom: event.target.value })
+                    }}
+                    name="prenom"
+                    value={value.prenom}
+                    error={formErrors.prenom}
+                  />
+                </FormControl>
+                <p className={classes.formError}>{formErrors.prenom}</p>
+              </Grid>
+              <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                <FormControl fullWidth>
+                  <label className={classes.labelText}>Nom<span style={{ color: 'red' }}>*</span> </label>
+                  <OutlinedInput
+                    id="nom"
+                    type="text"
+                    variant="outlined"
+                    placeholder="nom"
+                    onChange={(event) => {
+                      setFormErrors({ ...formErrors, nom: null })
+                      setValue({ ...value, nom: event.target.value })
+                    }}
+                    name="nom"
+                    value={value.nom}
+                    error={formErrors.nom}
+                  />
+                </FormControl>
+                <p className={classes.formError}>{formErrors.nom}</p>
+              </Grid>
+            </Grid>
 
 
-                            <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Grid xs={12} sm={12} md={4} spacing={5} item>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Référentiel<span style={{ color: 'red' }}>*</span> </label>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            placeholder="referentiel"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, referentiel: null })
-                                                setValue({ ...value, referentiel: event.target.value })
-                                            }}
-                                            value={value.referentiel}
-                                            name="referentiel"
-                                            error={formErrors.referentiel}
-                                        >
-                                            {
-                                                referentiel.map((row) =>
-                                                    <MenuItem key={row.id}
-                                                        value={row.libelle}
-                                                    >{row.libelle}</MenuItem>
-                                                )
-                                            }
-                                        </Select>
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.referentiel}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>N° Pièce<span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="numPiece"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="numPiece"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, numPiece: null })
-                                                setValue({ ...value, numPiece: event.target.value })
-                                            }}
-                                            name="numPiece"
-                                            value={value.numPiece}
-                                            error={formErrors.numPiece}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.numPiece}</p>
-                                </Grid>
-                            </Grid>
-
-
-                            <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Grid xs={12} sm={12} md={4} spacing={5} item>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Téléphone<span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="telephone"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="numéro télephone"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, phone: null })
-                                                setValue({ ...value, phone: event.target.value })
-                                            }}
-                                            name="phone"
-                                            value={value.phone}
-                                            error={formErrors.phone}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.phone}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Email<span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="email"
-                                            type="email"
-                                            variant="outlined"
-                                            placeholder="email"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, email: null })
-                                                setValue({ ...value, email: event.target.value })
-                                            }}
-                                            name="email"
-                                            value={value.email}
-                                            error={formErrors.email}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.email}</p>
-                                </Grid>
-                            </Grid>
-
-
-                            <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Grid xs={12} sm={12} md={4} spacing={5} item>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Promo<span style={{ color: 'red' }}>*</span> </label>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            placeholder="promo"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, promo: null })
-                                                setValue({ ...value, promo: event.target.value })
-                                            }}
-                                            name="promo"
-                                            error={formErrors.promo}
-                                            value={value.promo}
-                                        >
-                                            {
-                                                promos.map((row) =>
-                                                    <MenuItem key={row.id}
-                                                        value={row.libelle}
-                                                    >{row.libelle}</MenuItem>
-                                                )
-                                            }
-                                        </Select>
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.promo}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Téléphone tuteur<span style={{ color: 'red' }}>*</span> </label>
-                                        <OutlinedInput
-                                            id="teltuteur"
-                                            type="text"
-                                            variant="outlined"
-                                            placeholder="numéro de tuteur"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, numTuteur: null })
-                                                setValue({ ...value, numTuteur: event.target.value })
-                                            }}
-                                            name="numTuteur"
-                                            value={value.numTuteur}
-                                            error={formErrors.numTuteur}
-                                        />
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.numTuteur}</p>
-                                </Grid>
-                            </Grid>
-
-                            <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center" }}>
-                                <Grid xs={12} sm={12} md={4} item style={{ justifyContent: "center", marginTop: "25px", marginLeft: "15px" }}>
-                                    <FormControl fullWidth>
-                                        <label className={classes.labelText}>Sexe<span style={{ color: 'red' }}>*</span> </label>
-                                        <Select
-                                            labelId="demo-simple-select-label"
-                                            id="demo-simple-select"
-                                            placeholder="sexe"
-                                            onChange={(event) => {
-                                                setFormErrors({ ...formErrors, sexe: null })
-                                                setValue({ ...value, sexe: event.target.value })
-                                            }}
-                                            name="sexe"
-                                            error={formErrors.sexe}
-                                            value={value.sexe}
-                                        >
-                                            <MenuItem key="1" value="M"> M </MenuItem>
-                                            <MenuItem key="2" value="F"> F </MenuItem>
-                                        </Select>
-                                    </FormControl>
-                                    <p className={classes.formError}>{formErrors.sexe}</p>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
-                                </Grid>
-                            </Grid>
-
-
-                            <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
-                                <Grid xs={12} sm={12} md={4} item style={{ justifyContent: "center", marginTop: "25px", marginLeft: "15px" }}>
-                                    <Button
-                                        variant="contained"
-                                        component="label"
-                                        style={{ backgroundColor: "#FFC145", fontFamily: "Arial", fontSize: "20px" }}
-                                    >
-                                        Importer image
-                                        <input
-                                            id="file"
-                                            type="file"
-                                            onChange={e => {
-                                                setValue({ ...value, avatar: e.target.files[0] })
-                                                let files = e.target.files;
-                                                if (files.length === 1 && validateImage(e)) {
-                                                    upload(e);
-                                                } else {
-                                                    e.target.value = "";
-                                                    alert("please add image only");
-                                                }
-                                            }}
-                                            ref={wrapperRef}
-                                            accept="image/gif, image/jpeg, image/png, image/jpg"
-                                            hidden
-                                        />
-                                        <CameraAltIcon />
-                                    </Button>
-                                </Grid>
-                                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
-                                    <Avatar
-                                        alt=""
-                                        src={image}
-                                        sx={{ width: 100, height: 100 }}
-                                    />
-                                </Grid>
-                            </Grid>
-
-                            <Button variant="contained" sx={{
-                                backgroundColor: "#05888A",
-                                fontFamily: "Arial", fontSize: "20px",
-                                marginTop: "10px",
-                                '&:hover': {
-                                    backgroundColor: "#F48322",
-                                    pointer: "cursor"
-                                }
-                            }}
-                                onClick={() => PostApprenant()}
-                            >Enregistrer et Imprimer carte</Button>
-                        </Grid>
-
-
-
-
-                    </Grid>
-                </Grid>
-                <div>
-                    <QRCode
-                        hidden
-                        id="qr-gen"
-                        value={valueQrCode}
-                        size={400}
-                        level={"H"}
-                        includeMargin={true}
-                        bgColor={"#ffffff"}
-                        fgColor={"#138A8A"}
-                        imageSettings={{
-                            src: `${logosonatel}`,
-                            x: null,
-                            y: null,
-                            height: 30,
-                            width: 30,
-                            excavate: false,
+            <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+              <Grid xs={12} sm={12} md={4} item>
+                <FormControl fullWidth>
+                  <label className={classes.labelText}>Date de naissance<span style={{ color: 'red' }}>*</span> </label>
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Stack>
+                      <DatePicker
+                        inputFormat="dd/MM/yyyy"
+                        name="dateNaissance"
+                        id="dateNaissance"
+                        value={value.dateNaissance}
+                        onChange={(event) => {
+                          setFormErrors({ ...formErrors, dateNaissance: null })
+                          setValue({ ...value, dateNaissance: event })
                         }}
+                        defaultValue={null}
+                        renderInput={(params) => <TextField {...params} error={formErrors.dateNaissance} />}
+                      />
+                    </Stack>
+                  </LocalizationProvider>
+                </FormControl>
+                <p className={classes.formError}>{formErrors.dateNaissance}</p>
+              </Grid>
+              <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                <FormControl fullWidth>
+                  <label className={classes.labelText}>Lieu de naissance<span style={{ color: 'red' }}>*</span> </label>
+                  <OutlinedInput
+                    id="lieunaiss"
+                    type="text"
+                    variant="outlined"
+                    placeholder="lieu de Naissance"
+                    onChange={(event) => {
+                      setFormErrors({ ...formErrors, lieuNaissance: null })
+                      setValue({ ...value, lieuNaissance: event.target.value })
+                    }}
+                    name="lieuNaissance"
+                    value={value.lieuNaissance}
+                    error={formErrors.lieuNaissance}
+                  />
+                </FormControl>
+                <p className={classes.formError}>{formErrors.lieuNaissance}</p>
+              </Grid>
+
+
+              <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <Grid xs={12} sm={12} md={4} item>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Adresse<span style={{ color: 'red' }}>*</span> </label>
+                    <OutlinedInput
+                      id="adresse"
+                      type="text"
+                      variant="outlined"
+                      placeholder="adresse"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, adresse: null })
+                        setValue({ ...value, adresse: event.target.value })
+                      }}
+                      name="adresse"
+                      value={value.adresse}
+                      error={formErrors.adresse}
                     />
-                </div>
-            </Box>
-        </Layout >
-    )
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.adresse}</p>
+                </Grid>
+                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Type de Pièce<span style={{ color: 'red' }}>*</span> </label>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      placeholder="typePiece"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, typePiece: null })
+                        setValue({ ...value, typePiece: event.target.value })
+                      }}
+                      name="typePiece"
+                      value={value.typePiece}
+                    >
+                      <MenuItem key="1" value="CNI"> CNI </MenuItem>
+                      <MenuItem key="2" value="PassPort"> PassPort </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.typePiece}</p>
+                </Grid>
+              </Grid>
+
+
+              <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <Grid xs={12} sm={12} md={4} spacing={5} item>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Référentiel<span style={{ color: 'red' }}>*</span> </label>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      placeholder="referentiel"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, referentiel: null })
+                        setValue({ ...value, referentiel: event.target.value })
+                      }}
+                      value={value.referentiel}
+                      name="referentiel"
+                      error={formErrors.referentiel}
+                    >
+                      {
+                        referentiel.map((row) =>
+                          <MenuItem key={row.id}
+                            value={row.libelle}
+                          >{row.libelle}</MenuItem>
+                        )
+                      }
+                    </Select>
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.referentiel}</p>
+                </Grid>
+                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>N° Pièce<span style={{ color: 'red' }}>*</span> </label>
+                    <OutlinedInput
+                      id="numPiece"
+                      type="text"
+                      variant="outlined"
+                      placeholder="numPiece"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, numPiece: null })
+                        setValue({ ...value, numPiece: event.target.value })
+                      }}
+                      name="numPiece"
+                      value={value.numPiece}
+                      error={formErrors.numPiece}
+                    />
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.numPiece}</p>
+                </Grid>
+              </Grid>
+
+
+              <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <Grid xs={12} sm={12} md={4} spacing={5} item>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Téléphone<span style={{ color: 'red' }}>*</span> </label>
+                    <OutlinedInput
+                      id="telephone"
+                      type="text"
+                      variant="outlined"
+                      placeholder="numéro télephone"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, phone: null })
+                        setValue({ ...value, phone: event.target.value })
+                      }}
+                      name="phone"
+                      value={value.phone}
+                      error={formErrors.phone}
+                    />
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.phone}</p>
+                </Grid>
+                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Email<span style={{ color: 'red' }}>*</span> </label>
+                    <OutlinedInput
+                      id="email"
+                      type="email"
+                      variant="outlined"
+                      placeholder="email"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, email: null })
+                        setValue({ ...value, email: event.target.value })
+                      }}
+                      name="email"
+                      value={value.email}
+                      error={formErrors.email}
+                    />
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.email}</p>
+                </Grid>
+              </Grid>
+
+
+              <Grid xs={12} md={12} sm={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <Grid xs={12} sm={12} md={4} spacing={5} item>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Promo<span style={{ color: 'red' }}>*</span> </label>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      placeholder="promo"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, promo: null })
+                        setValue({ ...value, promo: event.target.value })
+                      }}
+                      name="promo"
+                      error={formErrors.promo}
+                      value={value.promo}
+                    >
+                      {
+                        promos.map((row) =>
+                          <MenuItem key={row.id}
+                            value={row.libelle}
+                          >{row.libelle}</MenuItem>
+                        )
+                      }
+                    </Select>
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.promo}</p>
+                </Grid>
+                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle}>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Téléphone tuteur<span style={{ color: 'red' }}>*</span> </label>
+                    <OutlinedInput
+                      id="teltuteur"
+                      type="text"
+                      variant="outlined"
+                      placeholder="numéro de tuteur"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, numTuteur: null })
+                        setValue({ ...value, numTuteur: event.target.value })
+                      }}
+                      name="numTuteur"
+                      value={value.numTuteur}
+                      error={formErrors.numTuteur}
+                    />
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.numTuteur}</p>
+                </Grid>
+              </Grid>
+
+              <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center" }}>
+                <Grid xs={12} sm={12} md={4} item style={{ justifyContent: "center", marginTop: "25px", marginLeft: "15px" }}>
+                  <FormControl fullWidth>
+                    <label className={classes.labelText}>Sexe<span style={{ color: 'red' }}>*</span> </label>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      placeholder="sexe"
+                      onChange={(event) => {
+                        setFormErrors({ ...formErrors, sexe: null })
+                        setValue({ ...value, sexe: event.target.value })
+                      }}
+                      name="sexe"
+                      error={formErrors.sexe}
+                      value={value.sexe}
+                    >
+                      <MenuItem key="1" value="M"> M </MenuItem>
+                      <MenuItem key="2" value="F"> F </MenuItem>
+                    </Select>
+                  </FormControl>
+                  <p className={classes.formError}>{formErrors.sexe}</p>
+                </Grid>
+                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
+                </Grid>
+              </Grid>
+
+
+              <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
+                <Grid xs={12} sm={12} md={4} item style={{ justifyContent: "center", marginTop: "25px", marginLeft: "15px" }}>
+                  <Button
+                    variant="contained"
+                    component="label"
+                    style={{ backgroundColor: "#FFC145", fontFamily: "Arial", fontSize: "20px" }}
+                  >
+                    Importer image
+                    <input
+                      id="file"
+                      type="file"
+                      onChange={e => {
+                        setValue({ ...value, avatar: e.target.files[0] })
+                        let files = e.target.files;
+                        if (files.length === 1 && validateImage(e)) {
+                          upload(e);
+                        } else {
+                          e.target.value = "";
+                          alert("please add image only");
+                        }
+                      }}
+                      ref={wrapperRef}
+                      accept="image/gif, image/jpeg, image/png, image/jpg"
+                      hidden
+                    />
+                    <CameraAltIcon />
+                  </Button>
+                </Grid>
+                <Grid xs={12} sm={12} md={4} item className={styles.gridStyle} style={{ display: "flex", justifyContent: "center", marginTop: "15px" }}>
+                  <Avatar
+                    alt=""
+                    src={image}
+                    sx={{ width: 100, height: 100 }}
+                  />
+                </Grid>
+              </Grid>
+
+              <Button variant="contained" sx={{
+                backgroundColor: "#05888A",
+                fontFamily: "Arial", fontSize: "20px",
+                marginTop: "10px",
+                '&:hover': {
+                  backgroundColor: "#F48322",
+                  pointer: "cursor"
+                }
+              }}
+                onClick={() => PostApprenant()}
+              >Enregistrer et Imprimer carte</Button>
+            </Grid>
+
+
+
+
+          </Grid>
+        </Grid>
+        <div>
+          <QRCode
+            hidden
+            id="qr-gen"
+            value={valueQrCode}
+            size={400}
+            level={"H"}
+            includeMargin={true}
+            bgColor={"#ffffff"}
+            fgColor={"#138A8A"}
+            imageSettings={{
+              src: `${logosonatel}`,
+              x: null,
+              y: null,
+              height: 30,
+              width: 30,
+              excavate: false,
+            }}
+          />
+        </div>
+      </Box>
+    </Layout >
+  )
 
 }
 
