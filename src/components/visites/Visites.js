@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import { DocumentScannerOutlined, FilterAltOutlined, PersonOutline } from '@mui/icons-material'
-import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem } from '@mui/material'
+import { Box, Grid, OutlinedInput, InputAdornment, MenuItem, Select, Button, Pagination, PaginationItem, Menu } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import AdapterDateFns from '@mui/lab/AdapterDateFns'
 import LocalizationProvider from '@mui/lab/LocalizationProvider'
@@ -28,6 +28,8 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
+import { ExportCSV } from "./ExportCSV";
+
 var QRCode = require('qrcode.react')
 
 export const Visites = (props) => {
@@ -40,9 +42,36 @@ export const Visites = (props) => {
   const [date, setDate] = React.useState(new Date())
   const [search, setSearch] = React.useState('');
   const [showDialog, setShowDialog] = useState(false);
+  const [viewers,] = React.useState([]);
+
+  var fileName = 'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+
+  // Configuration du button Impression
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openImpression = Boolean(anchorEl);
+
+  const handleClickImpression = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseImpression = e => {
+    console.log(e.target.innerText); // => This logs menu item text.
+
+
+    if (e.target.innerText === "PDF") {
+      exportPDF();
+    } else {
+      fileName = 'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+    }
+    setAnchorEl(null)
+  }
+
+
+
 
   const isBlank = require('is-blank')
-
 
 
   const [values, setValues] = React.useState({
@@ -67,15 +96,42 @@ export const Visites = (props) => {
   React.useEffect(() => {
     ListAllVisite(date.toLocaleDateString("fr-CA")).then(res => {
       setVisites(res.data.reverse());
+      // console.log(res.data.reverse());
+      res.data.reverse().map((visite) => {
+
+        if (visite.apprenant === null) {
+          const newvalue = {
+            nom: visite.visiteur.prenom,
+            prenom: visite.visiteur.nom,
+            numPiece: visite.visiteur.numPiece,
+            dateEntree: visite.dateEntree ? visite.dateEntree.substr(11, 5) : null,
+            dateSortie: visite.dateSortie ? visite.dateSortie.substr(11, 5) : null,
+            type: 'Visiteur'
+          };
+          viewers.push(newvalue);
+
+        } else {
+          const newvalue = {
+            nom: visite.apprenant.prenom,
+            prenom: visite.apprenant.nom,
+            numPiece: visite.apprenant.numPiece,
+            dateEntree: visite.dateEntree ? visite.dateEntree.substr(11, 5) : null,
+            dateSortie: visite.dateSortie ? visite.dateSortie.substr(11, 5) : null,
+            type: 'Apprenant'
+          };
+          viewers.push(newvalue);
+        }
+
+      });
+      console.log(viewers);
       setLoading(false);
     })
-  }, [date])
+  }, [date, viewers])
 
   const commenter = () => {
     SaveCommentApp(comment).then(() => {
       setComment({
         commentaire: '',
-        date: date.toLocaleDateString("en-CA"),
         apprenant: {
           id: 0
         }
@@ -637,12 +693,15 @@ export const Visites = (props) => {
                       AJOUTER
                     </Button> : null
                   }
+
                   <Button
+                    id="basic-button"
+                    aria-controls={openImpression ? 'basic-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={openImpression ? 'true' : undefined}
+                    onClick={handleClickImpression}
                     variant="contained"
                     endIcon={<DocumentScannerOutlined />}
-                    onClick={(params, event) => {
-                      exportPDF()
-                    }}
                     sx={{
                       backgroundColor: "#FF6600",
                       fontSize: "16px",
@@ -654,8 +713,22 @@ export const Visites = (props) => {
                       }
                     }}
                   >
-                    Impression
+                    Imprimer
                   </Button>
+                  <Menu
+                    id="basic-menu"
+                    anchorEl={anchorEl}
+                    open={openImpression}
+                    onClose={handleCloseImpression}
+                    MenuListProps={{
+                      'aria-labelledby': 'basic-button',
+                    }}
+                  >
+
+                    <MenuItem onClick={handleCloseImpression}>PDF</MenuItem>
+                    <MenuItem onClick={handleCloseImpression}> <ExportCSV csvData={viewers} fileName={fileName} />ExcelFormat</MenuItem>
+                    {/* <CSVLink filename={'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} data={csvData}> <MenuItem onClick={handleCloseImpression}>EXCEL</MenuItem></CSVLink> */}
+                  </Menu>
 
                 </div>
 
@@ -917,6 +990,7 @@ export const Visites = (props) => {
                     overflowY: 'auto',
                   }}
                 >
+
                   {(localStorage.getItem('user') === '["ADMIN"]') ?
                     <TextareaAutosize
                       aria-label="minimum height"

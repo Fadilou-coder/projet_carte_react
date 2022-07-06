@@ -72,7 +72,7 @@ export const ListApprenant = () => {
     referentiel: { id: 0, libelle: '', },
     date_naiss: '00/00/0000',
     addresse: '',
-    telephone: '77 777 77 77'
+    telephone: ''
 
   });
 
@@ -108,17 +108,41 @@ export const ListApprenant = () => {
     setLoading(true);
     if (idRef === "") {
       ListApprenantsByPromo(idPr).then(res => {
+        setApprenants(res.data)
         if (res.data.length > 0) {
-          setApprenants(res.data)
           setApprenant(res.data[0]);
+        } else {
+          setApprenant({
+            id: 0,
+            nom: '',
+            prenom: '',
+            code: '',
+            referentiel: { id: 0, libelle: '', },
+            date_naiss: '00/00/0000',
+            addresse: '',
+            telephone: ''
+
+          })
         }
         setLoading(false);
       })
     } else {
       ListApprenantsByReferentielByPromo(idRef, idPr).then(res => {
+        setApprenants(res.data)
         if (res.data.length > 0) {
-          setApprenants(res.data)
           setApprenant(res.data[0]);
+        }else{
+          setApprenant({
+            id: 0,
+            nom: '',
+            prenom: '',
+            code: '',
+            referentiel: { id: 0, libelle: '', },
+            date_naiss: '00/00/0000',
+            addresse: '',
+            telephone: ''
+
+          })
         }
         setLoading(false);
       })

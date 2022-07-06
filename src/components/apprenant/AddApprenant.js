@@ -64,11 +64,7 @@ export const AddApprenant = () => {
     file: new File([], '')
   });
 
-  const [newApp, setnewApp] = React.useState({
-    code: ''
-  })
-
-  const [valueQrCode, setValueQrCode] = React.useState("");
+  const [valueQrCode, ] = React.useState("");
 
   React.useEffect(() => {
     listAllReferentiels().then((res) => {
@@ -138,7 +134,6 @@ export const AddApprenant = () => {
       if (Object.keys(validateApprenant(value)).length === 0)
         saveApprenant(formData).then((res) => {
           if (res.status === 200) {
-            setnewApp(res.data);
             const canvas = document.getElementById("qr-gen");
 
             canvas.toBlob(function (blob) {
@@ -674,10 +669,6 @@ export const AddApprenant = () => {
                 onClick={() => PostApprenant()}
               >Enregistrer et Imprimer carte</Button>
             </Grid>
-
-
-
-
           </Grid>
         </Grid>
         <div>
