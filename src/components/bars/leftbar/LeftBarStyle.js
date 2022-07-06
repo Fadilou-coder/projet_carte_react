@@ -24,7 +24,7 @@ export const LeftBarStyle = makeStyles(theme => ({
     logoDiv: {
         borderBottom: '1px solid ##000000',
         marginBottom: '3em',
-        padding: "45px 5px 30px 5px",
+        padding: "45px 5px 0px 5px",
         "& .MuiAvatar-img": {
             color: 'transparent',
             width: "100%",

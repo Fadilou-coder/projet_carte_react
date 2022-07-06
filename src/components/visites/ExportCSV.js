@@ -24,6 +24,6 @@ export const ExportCSV = ({ csvData, fileName }) => {
   };
 
   return (
-    <span onClick={(e) => exportToCSV(csvData, fileName)}>Export</span>
+    <span onClick={(e) => exportToCSV(csvData, fileName)}> Excel </span>
   );
 };

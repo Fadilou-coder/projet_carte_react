@@ -726,7 +726,7 @@ export const Visites = (props) => {
                   >
 
                     <MenuItem onClick={handleCloseImpression}>PDF</MenuItem>
-                    <MenuItem onClick={handleCloseImpression}> <ExportCSV csvData={viewers} fileName={fileName} />ExcelFormat</MenuItem>
+                    <MenuItem onClick={handleCloseImpression}> <ExportCSV csvData={viewers} fileName={fileName} /></MenuItem>
                     {/* <CSVLink filename={'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} data={csvData}> <MenuItem onClick={handleCloseImpression}>EXCEL</MenuItem></CSVLink> */}
                   </Menu>
 
