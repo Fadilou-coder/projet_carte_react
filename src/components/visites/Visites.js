@@ -28,8 +28,8 @@ import jsPDF from "jspdf"
 import "jspdf-autotable"
 import Swal from "sweetalert2";
 import { SearchOutlined } from '@mui/icons-material';
-import { MenuButton, MenuLink, MenuList } from '@reach/menu-button'
-import { CSVLink } from 'react-csv';
+import { ExportCSV } from "./ExportCSV";
+
 var QRCode = require('qrcode.react')
 
 export const Visites = (props) => {
@@ -42,7 +42,10 @@ export const Visites = (props) => {
     const [date, setDate] = React.useState(new Date())
     const [search, setSearch] = React.useState('');
     const [showDialog, setShowDialog] = useState(false);
-    const [csvData, setCsvData] = React.useState([['Prenom', 'Nom', 'numPiece', 'Entree', 'Sortie', 'Type']]);
+    const [viewers, setViewers] = React.useState([]);
+
+    var fileName = 'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
 
     // Configuration du button Impression
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -55,17 +58,17 @@ export const Visites = (props) => {
     const handleCloseImpression = e => {
         console.log(e.target.innerText); // => This logs menu item text.
 
+
         if (e.target.innerText === "PDF") {
             exportPDF();
+        } else {
+            fileName = 'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
         }
         setAnchorEl(null)
     }
 
-    // const csvData = [
-    //     { firstname: "Ahmed", lastname: "Tomi", email: "ah@smthing.co.com" },
-    //     { firstname: "Raed", lastname: "Labes", email: "rl@smthing.co.com" },
-    //     { firstname: "Yezzi", lastname: "Min l3b", email: "ymin@cocococo.com" }
-    // ];
+
 
 
     const isBlank = require('is-blank')
@@ -97,16 +100,30 @@ export const Visites = (props) => {
             res.data.reverse().map((visite) => {
 
                 if (visite.apprenant === null) {
-                    const newvalue = [visite.visiteur.prenom, visite.visiteur.nom, visite.visiteur.numPiece, visite.dateEntree, visite.dateSortie, 'Visiteur']
-                    // setCsvData({...csvData, newvalue})
-                    csvData.push(newvalue);
-                }
-                //  else {
-                //      const newvalue =[visite.apprenant.prenom, visite.apprenant.nom, visite.apprenant.numPiece, visite.dateEntree, visite.dateSortie, 'Apprenant'];
-                //     setCsvData({...csvData, newvalue})
+                    const newvalue = {
+                        nom: visite.visiteur.prenom,
+                        prenom: visite.visiteur.nom,
+                        numPiece: visite.visiteur.numPiece,
+                        dateEntree: visite.dateEntree ? visite.dateEntree.substr(11, 5) : null,
+                        dateSortie: visite.dateSortie ? visite.dateSortie.substr(11, 5) : null,
+                        type: 'Visiteur'
+                    };
+                    viewers.push(newvalue);
 
-                // }
+                } else {
+                    const newvalue = {
+                        nom: visite.apprenant.prenom,
+                        prenom: visite.apprenant.nom,
+                        numPiece: visite.apprenant.numPiece,
+                        dateEntree: visite.dateEntree ? visite.dateEntree.substr(11, 5) : null,
+                        dateSortie: visite.dateSortie ? visite.dateSortie.substr(11, 5) : null,
+                        type: 'Apprenant'
+                    };
+                    viewers.push(newvalue);
+                }
+
             });
+            console.log(viewers);
             setLoading(false);
         })
     }, [date])
@@ -709,27 +726,9 @@ export const Visites = (props) => {
                                     >
 
                                         <MenuItem onClick={handleCloseImpression}>PDF</MenuItem>
-                                        <CSVLink filename={'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} data={csvData}> <MenuItem onClick={handleCloseImpression}>EXCEL</MenuItem></CSVLink>
+                                        <MenuItem onClick={handleCloseImpression}> <ExportCSV csvData={viewers} fileName={fileName} /></MenuItem>
+                                        {/* <CSVLink filename={'Rapport du ' + date.toLocaleDateString("fr-FR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })} data={csvData}> <MenuItem onClick={handleCloseImpression}>EXCEL</MenuItem></CSVLink> */}
                                     </Menu>
-                                    {/* <Button
-                                        variant="contained"
-                                        endIcon={<DocumentScannerOutlined />}
-                                        onClick={(params, event) => {
-                                            exportPDF()
-                                        }}
-                                        sx={{
-                                            backgroundColor: "#FF6600",
-                                            fontSize: "16px",
-                                            color: "#000000",
-                                            fontWeight: "bold",
-                                            '&:hover': {
-                                                backgroundColor: '#000000',
-                                                color: "white"
-                                            }
-                                        }}
-                                    >
-                                        Impression
-                                    </Button> */}
 
                                 </div>
 
