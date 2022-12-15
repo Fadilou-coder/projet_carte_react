@@ -64,7 +64,7 @@ export const AddApprenant = () => {
     file: new File([], '')
   });
 
-  const [valueQrCode, ] = React.useState("");
+  const [valueQrCode,] = React.useState("");
 
   React.useEffect(() => {
     listAllReferentiels().then((res) => {
@@ -619,7 +619,7 @@ export const AddApprenant = () => {
                 </Grid>
               </Grid>
 
-
+              {/* 
               <Grid xs={12} sm={12} md={12} container style={{ display: "flex", justifyContent: "center", marginTop: "20px" }}>
                 <Grid xs={12} sm={12} md={4} item style={{ justifyContent: "center", marginTop: "25px", marginLeft: "15px" }}>
                   <Button
@@ -655,7 +655,7 @@ export const AddApprenant = () => {
                     sx={{ width: 100, height: 100 }}
                   />
                 </Grid>
-              </Grid>
+              </Grid> */}
 
               <Button variant="contained" sx={{
                 backgroundColor: "#05888A",
