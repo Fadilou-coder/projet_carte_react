@@ -124,6 +124,8 @@ const Dashbord = () =>{
 
         }
 
+        console.log(absences);
+
     }
 
 

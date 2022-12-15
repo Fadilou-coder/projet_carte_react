@@ -85,15 +85,18 @@ export const ListApprenant = () => {
     });
 
     ListPromos().then(res => {
-      setPromos(res.data);
-      setPromo(res.data[res.data.length - 1].id);
-      ListApprenantsByPromo(res.data[res.data.length - 1].id).then(response => {
-        if (response.data.length > 0) {
-          setApprenants(response.data)
-          setApprenant(response.data[0]);
-        }
+      if (res.data.length > 0){
+        setPromos(res.data);
+        setPromo(res.data[res.data.length - 1].id);
+        ListApprenantsByPromo(res.data[res.data.length - 1].id).then(response => {
+          if (response.data.length > 0) {
+            setApprenants(response.data)
+            setApprenant(response.data[0]);
+          }
+          setLoading(false);
+        })
+      }else
         setLoading(false);
-      })
     });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
