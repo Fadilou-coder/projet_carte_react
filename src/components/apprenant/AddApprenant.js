@@ -176,7 +176,7 @@ export const AddApprenant = () => {
                 err.email = error.response.data.errors[index];
               if (error.response.data.errors[index].includes("telephone"))
                 err.phone = error.response.data.errors[index];
-              if (error.response.data.errors[index].includes("num"))
+              if (error.response.data.errors[index].includes("num de Piece"))
                 err.numPiece = error.response.data.errors[index];
             }
             setFormErrors(err);
@@ -259,8 +259,8 @@ export const AddApprenant = () => {
       errors.numTuteur = "le numéro de Tuteur est requis"
     }
     if (val.numTuteur === val.phone) {
-      errors.numTuteur = "le numéro de Tuteur ne pas coorespondre au numéro de l'apprenant est requis"
-      errors.phone = "le numéro de Tuteur ne pas coorespondre au numéro de l'apprenant est requis"
+      errors.numTuteur = "le numéro de Tuteur ne peut pas coorespondre au numéro de l'apprenant"
+      errors.phone = "le numéro de Tuteur ne peut pas coorespondre au numéro de l'apprenant"
     }
     if (isBlank(val.referentiel)) {
       errors.referentiel = "veuilez sélectionner un referentiel"

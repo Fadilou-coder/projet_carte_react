@@ -241,7 +241,7 @@ export const Referentiel = () => {
                                     placeholder="libelle"
                                     onChange={(event) => {
                                         setFormErrors({ ...formErrors, libelle: null })
-                                        setReferentiel({ ...referentiel, libelle: event.target.value.replace(/\s/g, '') })
+                                        setReferentiel({ ...referentiel, libelle: event.target.value })
                                     }}
 
                                     style={{ width: "100%", marginBottom: "20px" }}
