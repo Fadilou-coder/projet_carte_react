@@ -201,6 +201,11 @@ export const AddApprenant = () => {
       }
     }).catch(
       (error) => {
+        Swal.fire(
+          ''+error.response.data.code,
+          ''+error.response.data.message,
+          'error'
+        )
         console.log(error.response.data);
       })
   }
@@ -284,7 +289,7 @@ export const AddApprenant = () => {
             </Grid>
 
             {/* Ajouter apprenant par fichier excell */}
-            <Grid xs={12} sm={12} md={3} style={{ display: "flex", }}>
+            <Grid style={{ display: "flex", }}>
               <Grid style={{ marginTop: "15px" }}>
                 <Button
                   variant="contained"
@@ -302,7 +307,7 @@ export const AddApprenant = () => {
                         alert("please add files exccel only");
                       }
                     }}
-                    hidden
+                    // hidden
                   />
                   <AiOutlineDownload style={{ fontSize: "32px" }} />
                 </Button>
