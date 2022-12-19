@@ -12,8 +12,6 @@ import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import DatePicker from '@mui/lab/DatePicker';
 import Stack from '@mui/material/Stack';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import Avatar from '@mui/material/Avatar';
 import Layout from "../layout/Layout";
 import { listAllReferentiels, saveApprenant, sendCarte, ListPromos, saveApprenantByExel } from "./ApprenantService";
 import Swal from "sweetalert2";
@@ -64,7 +62,7 @@ export const AddApprenant = () => {
     file: new File([], '')
   });
 
-  const [valueQrCode, ] = React.useState("");
+  const [valueQrCode,] = React.useState("");
 
   React.useEffect(() => {
     listAllReferentiels().then((res) => {
