@@ -24,9 +24,9 @@ const ApprenantStyle = makeStyles((theme) => ({
         gap: "10px",
         width: "100%",
         [theme.breakpoints.down('sm')]: {
-            display:"block",
+            display: "block",
             '& div': {
-                margin:"3px 0 0 0"
+                margin: "3px 0 0 0"
             },
         },
 
@@ -107,8 +107,8 @@ const ApprenantStyle = makeStyles((theme) => ({
             width: "80% !important",
             margin: "0 auto !important",
             [theme.breakpoints.down(600)]: {
-              width: "90% !important",
-              margin: "2% !important"
+                width: "90% !important",
+                margin: "2% !important"
             },
 
         },
@@ -118,7 +118,10 @@ const ApprenantStyle = makeStyles((theme) => ({
     ,
 
     subContainer: {
-        padding: themeGeneral.spacing(1),
+        // padding: themeGeneral.spacing(1),
+        paddingTop: "100px",
+        paddingBottom:"20px",
+        marginBottom:"10px",
         border: "2px solid #E5E5E5",
         backgroundColor: themeGeneral.palette.primary.white,
         borderRadius: "20px",
@@ -192,9 +195,9 @@ const ApprenantStyle = makeStyles((theme) => ({
         display: "flex",
         justifyContent: "space-between",
         backgroundColor: "white",
-      [theme.breakpoints.down(600)]: {
-        fontSize: "10px !important"
-      },
+        [theme.breakpoints.down(600)]: {
+            fontSize: "10px !important"
+        },
 
     },
     input: {

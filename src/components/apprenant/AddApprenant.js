@@ -89,27 +89,27 @@ export const AddApprenant = () => {
     return [year, month, day].join('-');
   }
 
-/*  const [image, setImage] = React.useState("");
-  const wrapperRef = useRef(null);
-
-  const validateImage = e =>
-    e.target.files[0].type === "image/png" ||
-    e.target.files[0].type === "image/jpg" ||
-    e.target.files[0].type === "image/jpeg" ||
-    e.target.files[0].type === "image/gif";
-  const upload = e => {
-    if (e.target.files[0].size <= 2000000) {
-      let file = e.target.files[0];
-      let reader = new FileReader();
-      reader.onload = function (e) {
-        setImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      e.target.value = "";
-      alert("please upload less than 2MB")
-    }
-  }; */
+  /*  const [image, setImage] = React.useState("");
+    const wrapperRef = useRef(null);
+  
+    const validateImage = e =>
+      e.target.files[0].type === "image/png" ||
+      e.target.files[0].type === "image/jpg" ||
+      e.target.files[0].type === "image/jpeg" ||
+      e.target.files[0].type === "image/gif";
+    const upload = e => {
+      if (e.target.files[0].size <= 2000000) {
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        reader.onload = function (e) {
+          setImage(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        e.target.value = "";
+        alert("please upload less than 2MB")
+      }
+    }; */
 
   const PostApprenant = () => {
     setFormErrors(validateApprenant(value));
@@ -202,8 +202,8 @@ export const AddApprenant = () => {
     }).catch(
       (error) => {
         Swal.fire(
-          ''+error.response.data.code,
-          ''+error.response.data.message,
+          '' + error.response.data.code,
+          '' + error.response.data.message,
           'error'
         )
         console.log(error.response.data);
@@ -281,8 +281,16 @@ export const AddApprenant = () => {
         <Grid container spacing={2} >
           <Grid item xs={12} sm={12} md={12} style={{ display: "flex", justifyContent: "space-between" }}>
             <Grid xs={12} sm={12} md={6}>
-              <Typography variant="h4" className={classes.textTypo} style={{ color: "gray", paddingLeft: "20px" }}>
-                AJOUTER UN APPRENANT
+
+              <Typography variant='h5'
+                style={{
+                  marginBottom: "20px",
+                  borderLeft: "6px solid #000000",
+                  color: "#000000",
+                  paddingLeft: "20px",
+                  fontWeight: "bolder"
+                }}>
+                AJOUTER APPRENANT
               </Typography>
               <hr style={{ marginTop: "5px", borderTop: " 4px solid #138A8A", width: "10%", float: "left", marginLeft: "15px" }} />
 
@@ -307,7 +315,7 @@ export const AddApprenant = () => {
                         alert("please add files exccel only");
                       }
                     }}
-                    // hidden
+                  // hidden
                   />
                   <AiOutlineDownload style={{ fontSize: "32px" }} />
                 </Button>
