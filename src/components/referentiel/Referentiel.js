@@ -127,7 +127,13 @@ export const Referentiel = () => {
 
 
     const handleSubmit = (event) => {
-        setFormErrors(validateRef(referentiel))
+      var valide = true;
+      setFormErrors(validateRef(referentiel))
+      if (validateRef(referentiel).libelle) {
+        valide = false;
+      }
+      if (valide) {
+        if (Object.keys(validateRef(referentiel)).length === 0)
         AddReferentiel(referentiel).then(res => {
             if (res.status === 200) {
                 Swal.fire(
@@ -139,13 +145,15 @@ export const Referentiel = () => {
                         libelle: '',
                     })
                 })
+              setLoading(true);
+              ListAllReferentiel().then(res => {
+                setReferentiels(res.data);
+                setLoading(false);
+              })
             }
-            setLoading(true);
-            }).catch(
-                (error) => {
-                    setErrorPage(true);
-                }
-            )
+
+            })
+        }
     };
 
     const updateReferentiels = (promo, id) => {

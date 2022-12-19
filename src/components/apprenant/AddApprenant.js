@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { Grid } from "@material-ui/core";
 import Box from '@mui/material/Box';
 import { FormControl, Typography } from "@material-ui/core";
@@ -89,7 +89,7 @@ export const AddApprenant = () => {
     return [year, month, day].join('-');
   }
 
-  const [image, setImage] = React.useState("");
+/*  const [image, setImage] = React.useState("");
   const wrapperRef = useRef(null);
 
   const validateImage = e =>
@@ -109,7 +109,7 @@ export const AddApprenant = () => {
       e.target.value = "";
       alert("please upload less than 2MB")
     }
-  };
+  }; */
 
   const PostApprenant = () => {
     setFormErrors(validateApprenant(value));
@@ -163,7 +163,7 @@ export const AddApprenant = () => {
                 numTuteur: '',
                 avatar: new File([], ''),
               })
-              setImage("")
+              //setImage("")
             })
           }
         }).catch(

@@ -73,28 +73,39 @@ export const Promos = () => {
     const handleSubmit = (event) => {
         setFormErrors(validatePromo(promo))
         event.preventDefault();
-        AddPromo(promo).then(res => {
-            handleClose()
-            if (res.status === 200) {
+        var valide = true
+        if (validatePromo(promo).libelle) {
+          valide = false;
+        }
+        if (valide) {
+          if (Object.keys(validatePromo(promo)).length === 0)
+            AddPromo(promo).then(res => {
+              handleClose()
+              if (res.status === 200) {
                 Swal.fire(
-                    'Succes!',
-                    'Enregistrer avec succes.',
-                    'success'
+                  'Succes!',
+                  'Enregistrer avec succes.',
+                  'success'
                 ).then((res) => {
-                    setPromos({
-                        libelle: '',
-                        dateDebut: '',
-                        dateFin: '',
-                    })
+                  setPromos({
+                    libelle: '',
+                    dateDebut: '',
+                    dateFin: '',
+                  })
+                  setIsLoading(true);
+                  ListAllPromo().then(res => {
+                    setPromos(res.data);
+                    setIsLoading(false);
+                  })
                 })
-            }
-            setIsLoading(true);
-        }).catch(
-            (error) => {
+              }
+            }).catch(
+              (error) => {
                 setErrorPage(true);
                 console.log(error);
-            }
-        )
+              }
+            )
+        }
     };
 
     const updatePromos = (promo, id) => {
